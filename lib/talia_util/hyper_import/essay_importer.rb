@@ -3,13 +3,14 @@ module TaliaUtil
   module HyperImporter
     
     # Import class for paragraphs
-    class EditionImporter < ContributionImporter
+    class EssayImporter < ContributionImporter
       
-      source_type 'hyper:Edition'
+      source_type 'hyper:Essay'
       
       def import!
         contribution_import!
         import_curators!
+        add_rel_from(@element_xml, "abstract")
       end
       
     end

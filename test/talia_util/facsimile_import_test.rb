@@ -16,7 +16,7 @@ module TaliaUtil
     include UtilTestMethods
     
     # Establish the database connection for the test
-    TaliaCore::TestHelper.startup 
+    TaliaCore::TestHelper.startup
     
     
     # Flush RDF before each test
@@ -24,7 +24,7 @@ module TaliaUtil
       setup_once(:src) do
         TaliaCore::TestHelper.flush_rdf
         TaliaCore::TestHelper.flush_db
-        HyperImporter::Importer.import(load_doc('edition'))
+        HyperImporter::Importer.import(load_doc('facsimile'))
       end
     end
     
@@ -35,22 +35,22 @@ module TaliaUtil
     
     # Test if the types were imported correctly
     def test_types
-      assert_types(@src, N::HYPER + "Edition", N::HYPER + "TEI")
+      assert_types(@src, N::HYPER + "Facsimile", N::HYPER + "Color")
     end
     
     # Test the title property
     def test_title
-      assert_property(@src.dcns::title, "edition")
+      assert_property(@src.dcns::title)
     end
     
     # Test source name
     def test_siglum
-      assert_equal(N::LOCAL + "kbrunkhorst-93", @src.uri)
+      assert_equal(N::LOCAL + "egrepalysviola-3259", @src.uri)
     end
     
     # Test the publishing date
     def test_pubdate
-      assert_property(@src.dcns::date, "2007-11-28")
+      assert_property(@src.dcns::date, "2003-06-24")
     end
     
     # Test the publisher
@@ -60,19 +60,13 @@ module TaliaUtil
 
     # Test if the curator was imported correctly
     def test_curator
-      assert_property(@src.hyper::curator, N::LOCAL::kbrunkhorst)
+      assert_property(@src.hyper::curator, N::LOCAL::sviola, N::LOCAL::egrepaly)
     end
     
     # Test if the data file was imported
     def test_data
       assert_equal(1, @src.data_records.size)
-      assert_kind_of(TaliaCore::XmlData, @src.data_records[0])
-    end
-    
-    # Test if the doucument data is valid XML
-    def test_data_integrity
-      xdoc = REXML::Document.new(@src.data_records[0].content_string)
-      assert_equal("TEI", xdoc.root.name)
+      assert_kind_of(TaliaCore::ImageData, @src.data_records[0])
     end
    
     # And now: already_published
@@ -82,4 +76,3 @@ module TaliaUtil
     
   end
 end
-

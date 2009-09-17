@@ -22,7 +22,7 @@ module TaliaCore
             raise(JobBlockedError, "Tried to create another job with tag #{tag}.") unless(tagged.size == 1)
           end
           # Update the environment so the runner can find the job id
-          job.env['JOB_ID'] = job.id.to_s
+          job.env['JOB_ID'] ||= job.id.to_s
           job.save! 
           job
         end
@@ -33,7 +33,7 @@ module TaliaCore
       # clean. The with_progress job can only be used inside this.
       def self.run_progress_job
         job_id = ENV['JOB_ID']
-        raise(RuntimeError, 'Cannot run job: Job id not given or non-existent') unless(job_id && Bj.table.job.exists?(job_id))
+        raise(RuntimeError, "Cannot run job: Job id not given or non-existent (#{job_i})") unless(job_id && Bj.table.job.exists?(job_id))
         ProgressJob.create_progress!(job_id) unless(ProgressJob.exists?(:job_id => job_id))
         yield
       ensure

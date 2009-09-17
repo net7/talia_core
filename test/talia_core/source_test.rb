@@ -18,7 +18,8 @@ module TaliaCore
     N::Namespace.shortcut(:meetest, "http://www.meetest.org/me/")
     N::URI.shortcut(:test_uri, "http://www.testuri.com/bar")
     N::Predicate.shortcut(:test_predicate, "http://www.meetest.org/my_predicate")
-    N::Namespace.shortcut(:foaf, "http://www.foaf.org/")
+    N::Namespace.shortcut(:foafx, "http://www.foafx.org/")
+    N::Namespace.shortcut(:foo, "http://foo.com/") unless(N::URI.shortcut_exists?(:foo))
     
     def setup
       @predicates_attributes = [
@@ -104,21 +105,21 @@ module TaliaCore
     # Test if a source object can be created correctly
     def test_types
       # rec = SourceRecord.new
-      source = make_dummy_source("http://www.newstuff.org/createtypes", N::FOAF.Person, N::FOAF.Foe)
+      source = make_dummy_source("http://www.newstuff.org/createtypes", N::FOAFX.Person, N::FOAFX.Foe)
       assert_not_nil(source)
       assert_equal(2, source.types.size)
-      assert_not_nil(source.types.each { |type| type.to_s == N::FOAF.Person.to_s} )
+      assert_not_nil(source.types.each { |type| type.to_s == N::FOAFX.Person.to_s} )
     end
     
     # test grouping by types
     def test_grouping
-      make_dummy_source("http://groupme/source1", N::FOAF.Goat, N::FOAF.Bee)
-      make_dummy_source("http://groupme/source2", N::FOAF.Goat)
-      make_dummy_source("http://groupme/source3", N::FOAF.Bee)
-      results = Source.groups_by_property(:type, [ N::FOAF.Goat, N::FOAF.Bee ])
+      make_dummy_source("http://groupme/source1", N::FOAFX.Goat, N::FOAFX.Bee)
+      make_dummy_source("http://groupme/source2", N::FOAFX.Goat)
+      make_dummy_source("http://groupme/source3", N::FOAFX.Bee)
+      results = Source.groups_by_property(:type, [ N::FOAFX.Goat, N::FOAFX.Bee ])
       assert_equal(2, results.size)
-      assert_equal(2, results[N::FOAF.Goat].size)
-      assert_equal(2, results[N::FOAF.Bee].size)
+      assert_equal(2, results[N::FOAFX.Goat].size)
+      assert_equal(2, results[N::FOAFX.Bee].size)
     end
     
     # Tests if the ActiveRecord validation works

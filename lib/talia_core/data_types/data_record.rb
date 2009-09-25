@@ -10,11 +10,12 @@ module TaliaCore
    
     # ActiveRecord interface to the data record in the database
     class DataRecord < ActiveRecord::Base
-      
-      
+      # Attention: These need to come before the extends, otherwise it'll blow the
+      # tests
       belongs_to :source, :class_name => 'TaliaCore::Source'
-    
       before_create :set_mime_type # Mime type must be saved before the record is written
+      
+      extend MimeMapping
 
       # Declaration of main abstract methods ======================
       # Some notes: every subclasses of DataRecord must implement
@@ -56,15 +57,14 @@ module TaliaCore
         # types supported by Rails' Mime class.
         Mime::Type.lookup_by_extension((File.extname(location).downcase)[1..-1]).to_s
       end
-    
-      # class methods ============================================
       
       def mime_type
         self.mime
       end
     
       attr_accessor :temp_path
-   
+      
+      # class methods ============================================
       class << self
 
         # Find all data records about a specified source    
@@ -82,26 +82,7 @@ module TaliaCore
           raise ActiveRecord::RecordNotFound if source_data.nil?
           source_data
         end
-        
-        # Return the class name associated to the given mime-type. 
-        # TODO: We should provide a kind of registration of subclasses, 
-        # because now associations are hardcoded. 
-        def class_type_from(content_type) 
-          case Mime::Type.lookup(content_type).to_sym 
-          when :text:             'SimpleText' 
-          when :jpg, :jpeg, :gif, 
-              :png, :tiff, :bmp:    'ImageData' 
-          when :xml:              'XmlData' 
-          when :pdf:              'PdfData' 
-          else name.demodulize 
-          end 
-        end 
 
-      end
-
-      # Assign the STI subclass, perfoming a mime-type lookup.
-      def assign_type(content_type)
-        self.type = self.class.class_type_from(content_type)
       end
 
       private
@@ -112,10 +93,11 @@ module TaliaCore
         self.class.name.demodulize
       end
     
-      # set mime type 
+      
+      # set mime type if it hasn't been assigned already
       def set_mime_type
-        assit_not_nil(self.location, "Location for #{self} should not be nil")
-        if !self.location.nil?
+        assit(!self.location.blank?, "Location for #{self} should not be blank")
+        if(!self.location.blank? && self.mime.blank?)
           # Set mime type for the record
           self.mime = extract_mime_type(self.location)
           assit_not_nil(self.mime, "Mime should not be nil (location was #{self.location})!")

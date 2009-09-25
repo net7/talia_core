@@ -273,6 +273,11 @@ module TaliaCore
       end
     end
 
+    # Not here
+    def attach_files(files)
+      raise(RuntimeError, 'The base ActiveSource class does not allow attaching files' )
+    end
+    
     private
     
     # Extracts the semantic attributes from the attribute hash and passes them

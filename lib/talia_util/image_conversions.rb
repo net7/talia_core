@@ -61,8 +61,9 @@ module TaliaUtil
       # Transforms the given image into a PNG image. Note that the .png suffix
       # will automatically added to the destination name
       def to_png(source, destination)
-        convert_line = "#{convert_command} \"#{source}\" \"#{destination}.png\""
-        execute_command(convert_line, "#{destination}.png")
+        destination = "#{destination}.png" unless(File.extname(destination) == '.png')
+        convert_line = "#{convert_command} \"#{source}\" \"#{destination}\""
+        execute_command(convert_line, destination)
       end
 
       private

@@ -12,6 +12,10 @@ module TaliaCore
       include TempFileHandling
       extend TempFileHandling::ClassMethods
       
+      include DataLoader
+      extend DataLoader::ClassMethods
+      extend IipLoader
+      
       after_save :save_attachment, :write_file_after_save
       
       before_destroy :destroy_attachment

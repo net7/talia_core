@@ -14,12 +14,17 @@ module TaliaCore
       #
       # Note that any semantic properties that were passed in to the constructor will be assigned
       # *after* the ActiveRecord "create" callbacks have been called.
+      #
+      # The option hash may contain a "files" option, which can be used to add data files directly
+      # on creation. This will call the attach_files method on the object.
       def new(*args)
         the_source = if((args.size == 1) && (args.first.is_a?(Hash)))
           # We have an option hash to init the source
+          files = args.first.delete(:files) || args.first.delete('files')
           attributes = split_attribute_hash(args.first)
           the_source = super(attributes[:db_attributes])
           the_source.add_semantic_attributes(false, attributes[:semantic_attributes])
+          the_source.attach_files(files) if(files)
           the_source
         elsif(args.size == 1 && ( uri_s = uri_string_for(args[0]))) # One string argument should be the uri
           # Either the current object from the db, or a new one if it doesn't exist in the db
@@ -34,10 +39,9 @@ module TaliaCore
 
       # Retrieves a new source with the given type. This gets a propety hash
       # like #new, but it will correctly initialize a source of the type given
-      # in the hash.
+      # in the hash. If no type is given, this will create a plain ActiveSource.
       def create_source(args)
-        type = args.delete(:type) || args.delete('type')
-        raise(ArgumentError, "Not type given") unless(type)
+        type = args.delete(:type) || args.delete('type') || 'ActiveSource'
         klass = "TaliaCore::#{type}".constantize
         klass.new(args)
       end
@@ -46,8 +50,9 @@ module TaliaCore
       # of sources, depending on wether the XML contains multiple sources.
       #
       # The resulting source objects will be plain from #new, unsaved.
-      def create_from_xml(xml)
-        source_properties = ActiveSourceParts::Xml::SourceReader.sources_from(xml)
+      def create_from_xml(xml, reader = "TaliaCore::ActiveSourceParts::Xml::SourceReader")
+        reader = reader.to_s.classify.constantize
+        source_properties = reader.sources_from(xml)
         sources = source_properties.collect { |props| ActiveSource.create_source(props) }
         (sources.size == 1) ? sources.first : sources
       end

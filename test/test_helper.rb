@@ -24,6 +24,9 @@ module TaliaCore
         TaliaCore::Initializer.environment = "test"
         # run the initializer
         TaliaCore::Initializer.run("talia_core")
+        true
+      else
+        false
       end
     end
     
@@ -50,13 +53,13 @@ module TaliaCore
     
   end
   
-  TestHelper.startup
+  started = TestHelper.startup
   Test::Unit::TestCase.fixture_path=File.join(File.dirname(__FILE__), 'fixtures')
   Test::Unit::TestCase.set_fixture_class :active_sources => TaliaCore::ActiveSource,
     :semantic_properties => TaliaCore::SemanticProperty,
     :semantic_relations => TaliaCore::SemanticRelation,
     :sources => TaliaCore::Source,
     :data_records => TaliaCore::DataTypes::DataRecord
-  TestHelper.create_data_dir
+  TestHelper.create_data_dir if(started)
 
 end

@@ -1,0 +1,7 @@
+config/*.yml
+test/config/*.yml
+db/
+log/
+test/log
+test/data_for_test
+test/iip_root

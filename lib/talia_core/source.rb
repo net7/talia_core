@@ -89,6 +89,27 @@ module TaliaCore
       results
     end
     
+    # Attaches files from the given hash. See the new method on ActiveSource for the
+    # details.
+    #
+    # The call in this case should look like this:
+    #
+    #  attach_files([{ url => 'url_or_filename', :options => { .. }}, ...])
+    # 
+    # Have a look at the DataLoader module to see how the options work. You may also provide
+    # a single hash for :files (instead of an array) if you have just one file. Files will
+    # be saved immediately.
+    def attach_files(files)
+      files = [ files ] unless(files.is_a?(Array))
+      files.each do |file|
+        filename = file[:url] || file['url']
+        assit(filename)
+        options = file[:options] || file['options'] || {}
+        records = DataTypes::FileRecord.create_from_url(filename, options)
+        records.each { |rec| self.data_records << rec }
+      end
+    end
+    
     # Try to find a source for the given uri, if not exists it instantiate
     # a new one, combining the N::LOCAL namespace and the given local name
     #

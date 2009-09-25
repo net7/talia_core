@@ -70,7 +70,7 @@ module TaliaCore
       def file=(file_data)
         return nil if file_data.nil? || file_data.size == 0 
         self.assign_type file_data.content_type
-        self.location = file_data.original_filename if respond_to?(:location)
+        self.location = file_data.original_filename
         if file_data.is_a?(StringIO)
           file_data.rewind
           self.temp_data = file_data.read
@@ -110,10 +110,16 @@ module TaliaCore
       def is_file_open?
         (@file_handle != nil)
       end
-
+       
+      
+      # Assign the STI subclass, perfoming a mime-type lookup.
+      def assign_type(content_type)
+        self.type = self.class.class_type_from(content_type).name
+      end
+      
+      
       # private methods ==================================================================
       private
-  
       
       # This saves the cached data from the file creation
       def save_cached_data

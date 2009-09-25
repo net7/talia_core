@@ -518,6 +518,19 @@ module TaliaCore
       assert(ActiveSource.exists?(uri + '_target'))
     end
     
+    def test_create_with_file
+      test_file = File.join(Test::Unit::TestCase.fixture_path, 'generic_test.xml')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', 'type' => 'Source', 'files' => {'url' => test_file })
+      assert_equal(1, src.data_records.size)
+      src.save!
+      assert(!src.data_records.first.new_record?)
+      assert_kind_of(DataTypes::XmlData, src.data_records.first)
+      File.open(test_file) do |io|
+        assert_equal(src.data_records.first.all_text, io.read)
+      end
+    end
+    
+    
   end
 end
  

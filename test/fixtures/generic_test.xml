@@ -1,0 +1,14 @@
+<!-- Dummy XML import for generic importer -->
+<dummy_import>
+	<test_a url="http://fooobar.com">
+		<valuator>valueX</valuator>
+		<refigator>http://www.refthing.com/</refigator>
+	</test_a>
+	<dummything>
+		<test_b type="TaliaCore::Source">
+			<url>http://www.otherfoo.com/</url>
+			<test_a url="http://first_sub/X" />
+			<test_c url="http://first_sub/Y" />
+		</test_b>
+	</dummything>
+</dummy_import>

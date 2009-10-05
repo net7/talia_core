@@ -18,6 +18,19 @@ module TaliaCore
         TaliaUtil::Util.flush_rdf
         true
       end
+      
+      setup_once(:data_source) do
+        data_source = ActiveSource.new("http://www.test.org/source_with_data")
+        text = DataTypes::SimpleText.new
+        text.location = "text.txt"
+        image = DataTypes::ImageData.new
+        image.location = "image.jpg"
+        data_source.data_records << text
+        data_source.data_records << image
+        data_source.save!
+        data_source
+      end
+      
     end
 
     def test_has_type
@@ -525,18 +538,93 @@ module TaliaCore
       assert_property(src.types, N::TALIA.foo)
     end
     
-    def test_xml_forth_and_back
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'SingularAccessorTest')
+    def test_create_for_existing
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_existing', ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'SingularAccessorTest')
+      src.save!
+      assert_equal('valueFOOOO', src[N::LOCAL.localthi].first)
       xml = src.to_xml
+      # Quickly change something inside, but leave the URL
+      xml.gsub!('valueFOOOO', 'valorz')
+      new_src = ActiveSource.create_from_xml(xml)
+      # Now test as above
+      assert_equal(src.uri.to_s, new_src.uri.to_s)
+      assert_equal('valorz', new_src[N::LOCAL.localthi].first)
+      assert_property(new_src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
+      assert_property(new_src.types, N::TALIA.foo)
+    end
+    
+    def test_create_multi
+      src_attribs = [
+        { :uri => N::LOCAL.test_create_multi_stuff, 'rdf:relatit' => [ "<#{N::LOCAL.test_create_multi_stuff_two}>" ], 'type' => 'SingularAccessorTest' },
+        { :uri => N::LOCAL.test_create_multi_stuff_two, ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<#{N::LOCAL.test_create_multi_stuff}>"], 'type' => 'SingularAccessorTest' }
+      ]
+      ActiveSource.create_multi_from(src_attribs)
+      src = TaliaCore::ActiveSource.find(N::LOCAL.test_create_multi_stuff)
+      src_two = TaliaCore::ActiveSource.find(N::LOCAL.test_create_multi_stuff_two)
+      assert(src && src_two)
+      assert_kind_of(SingularAccessorTest, src)
+      assert_kind_of(SingularAccessorTest, src_two)
+      assert_property(src_two[N::RDF.relatit], N::LOCAL.test_create_multi_stuff)
+      assert_property(src[N::RDF.relatit], N::LOCAL.test_create_multi_stuff_two)
+      assert_property(src_two[N::LOCAL.localthi], 'valueFOOOO')
+    end
+    
+    
+    def test_xml_forth_and_back
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'DummySource')
+      xml = src.to_xml
+      assert_kind_of(TaliaCore::DummySource, src)
       # Quickly change the URI for the new thing
       xml.gsub!(src.uri.to_s, 'http://as_test/create_forth_and_forth')
+      xml.gsub!('DummySource', 'SingularAccessorTest')
       new_src = ActiveSource.create_from_xml(xml)
+      assert_kind_of(TaliaCore::SingularAccessorTest, new_src)
       # Now test as above
       assert_equal('http://as_test/create_forth_and_forth', new_src.uri.to_s)
       assert_equal('value', new_src[N::LOCAL.localthi].first)
       assert_property(new_src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
       assert_property(new_src.types, N::TALIA.foo)
     end
+    
+    def test_create_with_file
+      test_file = File.join(Test::Unit::TestCase.fixture_path, 'generic_test.xml')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', 'type' => 'Source', 'files' => {'url' => test_file })
+      assert_equal(1, src.data_records.size)
+      src.save!
+      assert(!src.data_records.first.new_record?)
+      assert_kind_of(DataTypes::XmlData, src.data_records.first)
+      File.open(test_file) do |io|
+        assert_equal(src.data_records.first.all_text, io.read)
+      end
+    end
+    
+    # Test if accessing the data on a Source works
+    def test_data_access
+      data = @data_source.data
+      assert_equal(2, data.size)
+    end
+    
+    # Test if accessing the data on a Source works
+    def test_data_access_by_type
+      data = @data_source.data("SimpleText")
+      assert_equal(1, data.size)
+      assert_kind_of(DataTypes::SimpleText, data.first)
+    end
+    
+    # Test if accessing the data on a Source works
+    def test_data_access_by_type_and_location
+      data = @data_source.data("ImageData", "image.jpg")
+      assert_kind_of(DataTypes::ImageData, data)
+    end
+    
+    # Test accessing inexistent data
+    def test_data_access_inexistent
+      data = @data_source.data("Foo")
+      assert_equal(0, data.size)
+      data = @data_source.data("SimpleText", "noop.txt")
+      assert_nil(data)
+    end 
+    
     
   end
   

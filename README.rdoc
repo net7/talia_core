@@ -6,6 +6,9 @@ be used with Ruby on Rails, or as a standalone package.
 More documentation can be found on the Talia website: 
 http:///trac.talia.discovery-project.eu/
 
+The RDoc documentation may be created directly from the sources, or you can find
+it at http://net7.github.com/talia_core/
+
 = Installation
 
 If you have the Talia files on your sytem, you're almost there. For now,

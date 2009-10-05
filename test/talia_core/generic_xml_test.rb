@@ -28,11 +28,17 @@ module TaliaCore
   class GenericXmlTest < Test::Unit::TestCase
     
     def setup
+      setup_once(:flush) do
+        TaliaUtil::Util.flush_rdf
+        true
+      end
+      
       setup_once(:test_xml) do
-        File.open(File.join(File.dirname(__FILE__), '..', 'fixtures', 'generic_test.xml')) { |io| io.read }
+        File.open(TestHelper.fixture_file('generic_test.xml')) { |io| io.read }
       end
       setup_once(:imported) do
-        GenericImporterTest.sources_from(@test_xml)
+        import = GenericImporterTest.sources_from(@test_xml)
+        import
       end
       setup_once(:sources) do
         sources = {}

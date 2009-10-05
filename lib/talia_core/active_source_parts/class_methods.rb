@@ -49,12 +49,48 @@ module TaliaCore
       # Create sources from XML. The result is either a single source or an Array
       # of sources, depending on wether the XML contains multiple sources.
       #
-      # The resulting source objects will be plain from #new, unsaved.
-      def create_from_xml(xml, reader = "TaliaCore::ActiveSourceParts::Xml::SourceReader")
-        reader = reader.to_s.classify.constantize
-        source_properties = reader.sources_from(xml)
-        sources = source_properties.collect { |props| ActiveSource.create_source(props) }
-        (sources.size == 1) ? sources.first : sources
+      # The imported sources will be saved during import, to ensure that relations
+      # between them are resolved correctly. If one of the imported elements
+      # does already exist, the existing source will be rewritten using ActiveSource#rewrite_attributes
+      #
+      # The options may contain:
+      #
+      #  [*reader*] - The reader class that the import should use
+      #  [*progressor*] - The progress reporting object, which must respond to run_with_progress(message, size, &block)
+      def create_from_xml(xml, options = {})
+        reader = options[:reader] ? options[:reader].to_s.classify.constantize : TaliaCore::ActiveSourceParts::Xml::SourceReader
+        source_properties = reader.sources_from(xml, options[:progressor])
+        self.progressor = options[:progressor]
+        sources = create_multi_from(source_properties)
+        (sources.size > 1) ? sources : sources.first
+      end
+      
+      # Creates multiple sources from the given array of attribute hashes. The
+      # sources are saved during import, ensuring that the relations are resolved
+      # correctly
+      def create_multi_from(sources)
+        source_objects = []
+        run_with_progress('Writing imported', sources.size) do |progress|
+          source_objects = sources.collect do |props| 
+            src = if(src = ActiveSource.find(:first, :conditions => { :uri => (props[:uri] || props['uri']) }))
+              # Deal with already existing sources
+              src.rewrite_attributes(props)
+              # Rewrite the type, if neccessary
+              type = props[:type] || props['type']
+              switch_type = type && (src.type != type)
+              # Warn to the log if we have a problematic type change
+              TaliaCore.logger.warn("WARNING: Type change from #{src.type} to #{type}") if(switch_type && !src.is_a?(DummySource))
+              src.type = type if(switch_type)
+              src
+            else
+              ActiveSource.create_source(props)
+            end
+            progress.inc
+            src.save!
+            src
+          end
+        end
+        source_objects
       end
 
       # This method is slightly expanded to allow passing uris and uri objects

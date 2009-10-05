@@ -66,9 +66,9 @@ module TaliaCore
         file_ext = File.extname(url)
         file_base = File.basename(url, file_ext)
 
-        thumb_file = File.join(import_options[:prepared_images], 'thumbs', "#{file_base}.gif")
-        pyramid_file = File.join(import_options[:prepared_images], 'pyramids', "#{file_base}.tif")
-        orig_file_pattern = File.join(import_options[:prepared_images], 'originals', "#{file_base}.*")
+        thumb_file = File.join( ENV['prepared_images'], 'thumbs', "#{file_base}.gif")
+        pyramid_file = File.join( ENV['prepared_images'], 'pyramids', "#{file_base}.tif")
+        orig_file_pattern = File.join(ENV['prepared_images'], 'originals', "#{file_base}.*")
         # We need to fix the pattern, also the Dir[] doesn't like unescaped brackets
         orig_file_pattern.gsub!(/\[/, '\\[')
           orig_file_pattern.gsub!(/\]/, '\\]')

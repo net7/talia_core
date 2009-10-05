@@ -35,11 +35,24 @@ module TaliaCore
       # remain unchanged. This means that writing will be faster if a predicate
       # will not changed, but if database objects were not added through the
       # standard API they'll be missed
-      def create_rdf(force = false)
+      #
+      # The force option may have three values: :false for normal operation,
+      # :force for forcing a complete rewrite and :create - the latter will
+      # avoid the cleaning of the elements in the RDF store in case the
+      # source is completely new and no triples exist.
+      def create_rdf(force = :false)
         self.class.benchmark("\033[32m\033[4m\033[1mActiveSource::RD\033[0m Creating RDF for source", Logger::DEBUG, false) do
           assit(!new_record?, "Record must exist here: #{self.uri}")
           # Get the stuff to write. This will also erase the old data
-          s_rels = force ? prepare_all_predicates_to_write : prepare_predicates_to_write
+          
+          s_rels = case force 
+            when :force 
+              prepare_all_predicates_to_write 
+            when :create
+              prepare_predicates_to_create
+            else
+              prepare_predicates_to_write
+            end
           s_rels.each do |sem_ref|
             # We pass the object on. If it's a SemanticProperty, we need to add
             # the value. If not the RDF handler will detect the #uri method and
@@ -88,11 +101,29 @@ module TaliaCore
         my_rdf.clear_rdf # TODO: Not using contexts here
         SemanticRelation.find(:all, :conditions => { :subject_id => self.id })
       end
-
-      def auto_create_rdf
-        if(autosave_rdf?)
-          create_rdf
+      
+      # ATTENTION: This is a speed hack that avoids the usual checks based
+      # on the assumption that this source was created from scratch, 
+      # no attributes are in the store and all attributes are in-memory.
+      def prepare_predicates_to_create
+        preds_to_create = []
+        each_cached_wrapper do |wrap|
+          next if(wrap.clean?)
+          # Evil, we get the items directly to avoid a useless load
+          items = wrap.instance_variable_get(:@items)
+          items.each { |it| preds_to_create << it.relation }
         end
+        preds_to_create
+      end
+      
+      def auto_update_rdf
+        create_rdf if(autosave_rdf?)
+      end
+
+      # On creation we force the full write, there's no use 
+      # doing all checks if we know that nothing exists
+      def auto_create_rdf
+        create_rdf(:create) if(autosave_rdf?)
       end
 
     end

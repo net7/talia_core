@@ -9,6 +9,8 @@ module TaliaCore
   # don't use the configuration file supplied with Talia
   class InitializerTest < Test::Unit::TestCase
 
+    fixtures :active_sources
+
     # Test it
     def test_initialized
       assert(TaliaCore::Initializer.initialized)
@@ -24,7 +26,7 @@ module TaliaCore
     
     # Test the datase connection
     def test_db_connection
-      assert(Source.exists?( N::LOCAL.something))
+      assert(Source.exists?(N::LOCAL.something))
     end
     
     def test_core_ext_loading

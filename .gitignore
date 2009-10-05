@@ -5,3 +5,5 @@ log/
 test/log
 test/data_for_test
 test/iip_root
+.gh_pages
+html

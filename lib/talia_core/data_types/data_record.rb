@@ -1,7 +1,3 @@
-require 'initializer'
-require File.join('talia_core', 'data_types', 'file_store')
-
-
 module TaliaCore
   
   # Contains all data types that are handled by the Talia system. All data elements
@@ -12,7 +8,7 @@ module TaliaCore
     class DataRecord < ActiveRecord::Base
       # Attention: These need to come before the extends, otherwise it'll blow the
       # tests
-      belongs_to :source, :class_name => 'TaliaCore::Source'
+      belongs_to :source, :class_name => 'TaliaCore::ActiveSource'
       before_create :set_mime_type # Mime type must be saved before the record is written
       
       extend MimeMapping

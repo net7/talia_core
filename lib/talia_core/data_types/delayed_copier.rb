@@ -22,6 +22,12 @@ module TaliaCore
       end
       
       def self.cp(source, target)
+        unless(dir_seen?(File.expand_path(target)))
+          mkdir_string = 'mkdir -vp "'
+          mkdir_string << File.dirname(File.expand_path(target))
+          mkdir_string << '"'
+          delayed_copy_file.puts(mkdir_string)
+        end
         cp_string = 'cp -v "'
         cp_string << File.expand_path(source)
         cp_string << '" "'
@@ -40,6 +46,14 @@ module TaliaCore
       end
       
       private
+      
+      
+      def self.dir_seen?(directory)
+        @seen_dirs = {}
+        return true if(@seen_dirs[directory])
+        @seen_dirs[directory] = true
+        false
+      end
       
       # The file name for the delayed copy
       def self.delay_file_name

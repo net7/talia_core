@@ -30,6 +30,13 @@ module TaliaCore
       assert_kind_of(DataTypes::XmlData, loaded.first)
     end
 
+    def test_options
+      loaded = DataTypes::FileRecord.create_from_url(fixture_file('generic_test.xml'), :location => 'foo.xml', :mime_type => 'application/pdf')
+      assert_equal(1, loaded.size)
+      assert_equal('foo.xml', loaded.first.location)
+      assert_equal('application/pdf', loaded.first.mime)
+    end
+
     def test_data_loaded
       loaded = DataTypes::FileRecord.create_from_url(fixture_file('generic_test.xml')).first
       loaded.source = active_sources(:something)

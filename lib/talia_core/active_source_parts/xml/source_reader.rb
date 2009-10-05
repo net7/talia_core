@@ -10,6 +10,7 @@ module TaliaCore
             add from_element(:predicate), all_elements(:value)
             add_rel from_element(:predicate), all_elements(:object)
           end
+          add_file all_elements(:file)
         end
 
       end

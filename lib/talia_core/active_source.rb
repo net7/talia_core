@@ -28,15 +28,20 @@ module TaliaCore
     include ActiveSourceParts::PredicateHandler
     extend ActiveSourceParts::PredicateHandler::ClassMethods
     include ActiveSourceParts::Rdf
+    extend TaliaUtil::Progressable # Progress for import methods on class
     
     # Set the handlers for the callbacks defined in the other modules. The
     # order matters here.
-    after_save :auto_create_rdf
+    after_update :auto_update_rdf
+    after_create :auto_create_rdf
     after_save :save_wrappers # Save the cache wrappers
 
     
     # Relations where this source is the subject of the triple
     has_many :semantic_relations, :foreign_key => 'subject_id', :class_name => 'TaliaCore::SemanticRelation', :dependent => :destroy
+    
+    # Data records attached to the active source
+    has_many :data_records, :class_name => 'TaliaCore::DataTypes::DataRecord', :dependent => :destroy, :foreign_key => 'source_id'
            
     # Relations where this source is the object of the relation
     has_many :related_subjects,
@@ -266,6 +271,7 @@ module TaliaCore
     #
     # This will check the existing types to avoid duplication
     def add_additional_rdf_types
+      return if(self.class.additional_rdf_types.size == 0) # Avoid database access if there's nothing to do
       type_hash = {}
       self.types.each { |type| type_hash[type.respond_to?(:uri) ? type.uri.to_s : type.to_s] = true }
       self.class.additional_rdf_types.each do |type|
@@ -273,9 +279,37 @@ module TaliaCore
       end
     end
 
-    # Not here
+    # Attaches files from the given hash. See the new method on ActiveSource for the
+    # details.
+    #
+    # The call in this case should look like this:
+    #
+    #  attach_files([{ url => 'url_or_filename', :options => { .. }}, ...])
+    # 
+    # Have a look at the DataLoader module to see how the options work. You may also provide
+    # a single hash for :files (instead of an array) if you have just one file. Files will
+    # be saved immediately.
     def attach_files(files)
-      raise(RuntimeError, 'The base ActiveSource class does not allow attaching files' )
+      files = [ files ] unless(files.is_a?(Array))
+      files.each do |file|
+        filename = file[:url] || file['url']
+        assit(filename)
+        options = file[:options] || file['options'] || {}
+        records = DataTypes::FileRecord.create_from_url(filename, options)
+        records.each { |rec| self.data_records << rec }
+      end
+    end
+    
+    # This will return a list of DataRecord objects. Without parameters, this
+    # returns all data elements on the source. If a type is given, it will
+    # return only the elements of the given type. If both type and location are
+    # given, it will retrieve only the specified data element
+    def data(type = nil, location= nil)
+      find_type = location ? :first : :all # Find just one element if a location is given
+      options = {}
+      options[:conditions] = [ "type = ?", type ] if(type && !location)
+      options[:conditions] = [ "type = ? AND location = ?", type, location ] if(type && location)
+      data_records.find(find_type, options)
     end
     
     private

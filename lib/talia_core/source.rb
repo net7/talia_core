@@ -19,8 +19,7 @@ module TaliaCore
   # * To ensure that the data is written, the save method should be called as 
   #   necessary.
   class Source < ActiveSource
- 
-    has_many :data_records, :class_name => 'TaliaCore::DataTypes::DataRecord', :dependent => :destroy
+    
     has_one :workflow, :class_name => 'TaliaCore::Workflow::Base', :dependent => :destroy
     
     # The uri will be wrapped into an object
@@ -87,27 +86,6 @@ module TaliaCore
       end
       
       results
-    end
-    
-    # Attaches files from the given hash. See the new method on ActiveSource for the
-    # details.
-    #
-    # The call in this case should look like this:
-    #
-    #  attach_files([{ url => 'url_or_filename', :options => { .. }}, ...])
-    # 
-    # Have a look at the DataLoader module to see how the options work. You may also provide
-    # a single hash for :files (instead of an array) if you have just one file. Files will
-    # be saved immediately.
-    def attach_files(files)
-      files = [ files ] unless(files.is_a?(Array))
-      files.each do |file|
-        filename = file[:url] || file['url']
-        assit(filename)
-        options = file[:options] || file['options'] || {}
-        records = DataTypes::FileRecord.create_from_url(filename, options)
-        records.each { |rec| self.data_records << rec }
-      end
     end
     
     # Try to find a source for the given uri, if not exists it instantiate
@@ -208,17 +186,6 @@ module TaliaCore
       end
     end
 
-    # This will return a list of DataRecord objects. Without parameters, this
-    # returns all data elements on the source. If a type is given, it will
-    # return only the elements of the given type. If both type and location are
-    # given, it will retrieve only the specified data element
-    def data(type = nil, location= nil)
-      find_type = location ? :first : :all # Find just one element if a location is given
-      options = {}
-      options[:conditions] = [ "type = ?", type ] if(type && !location)
-      options[:conditions] = [ "type = ? AND location = ?", type, location ] if(type && location)
-      data_records.find(find_type, options)
-    end
     
     # Returns an array of labels for this source. You may give the name of the
     # property that is used as a label, by default it uses rdf:label(s). If

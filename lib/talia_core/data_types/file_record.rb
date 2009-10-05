@@ -15,6 +15,7 @@ module TaliaCore
       include DataLoader
       extend DataLoader::ClassMethods
       extend IipLoader
+      extend TaliaUtil::IoHelper # Data IO for class methods
       
       after_save :save_attachment, :write_file_after_save
       

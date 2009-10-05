@@ -64,19 +64,6 @@ module TaliaCore
         end
       end
       
-      setup_once(:data_source) do
-        data_source = Source.new("http://www.test.org/source_with_data")
-        data_source.primary_source = false
-        text = DataTypes::SimpleText.new
-        text.location = "text.txt"
-        image = DataTypes::ImageData.new
-        image.location = "image.jpg"
-        data_source.data_records << text
-        data_source.data_records << image
-        data_source.save!
-        data_source
-      end
-      
       setup_once(:test_type) do
         type = ActiveSource.new('http://www.type.test/the_type')
         type.save!
@@ -468,33 +455,6 @@ module TaliaCore
       assert_equal("I should be safe!", safe.foo::some_property[0])
     end
     
-    # Test if accessing the data on a Source works
-    def test_data_access
-      data = @data_source.data
-      assert_equal(2, data.size)
-    end
-    
-    # Test if accessing the data on a Source works
-    def test_data_access_by_type
-      data = @data_source.data("SimpleText")
-      assert_equal(1, data.size)
-      assert_kind_of(DataTypes::SimpleText, data.first)
-    end
-    
-    # Test if accessing the data on a Source works
-    def test_data_access_by_type_and_location
-      data = @data_source.data("ImageData", "image.jpg")
-      assert_kind_of(DataTypes::ImageData, data)
-    end
-    
-    # Test accessing inexistent data
-    def test_data_access_inexistent
-      data = @data_source.data("Foo")
-      assert_equal(0, data.size)
-      data = @data_source.data("SimpleText", "noop.txt")
-      assert_nil(data)
-    end 
-    
     # Test foreign Source
     def test_foreign
       foreign = Source.new("http://www.hypernietzsche.org/ontology/Dossier")
@@ -516,18 +476,6 @@ module TaliaCore
       src.save!
       assert(ActiveSource.exists?(uri))
       assert(ActiveSource.exists?(uri + '_target'))
-    end
-    
-    def test_create_with_file
-      test_file = File.join(Test::Unit::TestCase.fixture_path, 'generic_test.xml')
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', 'type' => 'Source', 'files' => {'url' => test_file })
-      assert_equal(1, src.data_records.size)
-      src.save!
-      assert(!src.data_records.first.new_record?)
-      assert_kind_of(DataTypes::XmlData, src.data_records.first)
-      File.open(test_file) do |io|
-        assert_equal(src.data_records.first.all_text, io.read)
-      end
     end
     
     

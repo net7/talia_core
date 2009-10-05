@@ -51,6 +51,9 @@ module TaliaCore
       end
     end
     
+    def self.fixture_file(filename)
+      File.join(Test::Unit::TestCase.fixture_path, filename)
+    end
   end
   
   started = TestHelper.startup

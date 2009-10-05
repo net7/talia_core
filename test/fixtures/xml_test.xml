@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<sources>
+	<source>
+		<attribute>
+			<predicate>created_at </predicate>
+			<value>Wed Sep 30 15:49:46 +0200 2009</value>
+		</attribute>
+		<attribute>
+			<predicate>type</predicate>
+			<value>DummySource</value>
+		</attribute>
+		<attribute>
+			<predicate>uri</predicate>
+			<value>http://xml_test/from_file</value>
+		</attribute>
+		<attribute>
+			<predicate>http://localnode.org/localthi</predicate>
+			<value>value</value>
+		</attribute>
+		<attribute>
+			<predicate>http://www.w3.org/1999/02/22-rdf-syntax-ns#relatit</predicate>
+			<object>http://localnode.org/as_create_attr_dummy_1</object>
+			<object>http://localnode.org/as_create_attr_dummy_2</object>
+		</attribute>
+	</source>
+</sources>

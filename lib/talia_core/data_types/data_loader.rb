@@ -1,5 +1,3 @@
-require 'open-uri'
-
 module TaliaCore
   module DataTypes
 
@@ -28,17 +26,23 @@ module TaliaCore
         # will *always* attempt to determine the mime type through the location parameter, unless
         # an explicit mime type is given.
         def create_from_url(uri, options = {})
+          mime_type = options[:mime_type] || options['mime_type']
+          location = options[:location] || options['location']
           # If a Mime type is given, use that.
-          if(mime_type = options[:mime_type])
-            mime_type = Mime::Type.lookup(mime_type).to_sym if(mime_type.is_a?(String))
-          elsif(location = options[:location])
+          if(mime_type)
+            mime_type = Mime::Type.lookup(mime_type) if(mime_type.is_a?(String))
+          elsif(location)
             mime_type = Mime::Type.lookup_by_extension(File.extname(location)[1..-1])
           end
 
           data_records = []
 
           # Remove file:// from URIs to allow standard file URIs
-          uri.gsub!(/\Afile:\/\//, '')
+          uri = file_url(uri)
+          
+          # We have diffent code paths for local and remote files. This is mainly because
+          # the system will try to not open local files at all and just copy them around -
+          # which will greatly speed up the operation.
           is_file = File.exist?(uri)
 
           location ||= File.basename(uri) if(is_file)
@@ -79,24 +83,7 @@ module TaliaCore
           end
         end
 
-        # Opens the given (web) URL, using URL encoding and necessary substitutions.
-        # The user must pass a block which will receive the io object from
-        # the url
-        def open_from_url(url, credentials = nil)
-          url = URI.encode(url)
-          url.gsub!(/\[/, '%5B') # URI class doesn't like unescaped brackets
-          url.gsub!(/\]/, '%5D')
-          open_args = [ url ]
-          open_args << credentials if(credentials)
 
-          begin
-            open(*open_args) do |io|
-              yield(io)
-            end
-          rescue Exception => e
-            raise(IOError, "Error loading #{url} (when file: #{url}, open_args: [#{open_args.join(', ')}]) #{e}")
-          end
-        end
         
       end # Class methods end
       

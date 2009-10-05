@@ -1,3 +1,5 @@
+require 'hpricot'
+
 module TaliaCore
   module ActiveSourceParts
     module Xml
@@ -12,9 +14,9 @@ module TaliaCore
       # present. If attributes for one source are imported in more than one place, all
       # subsequent calls will merge the newly imported attributes with the existing ones.
       class GenericReader
-
-        include ReaderBase
-        extend ReaderBase::ClassMethods
+        
+        extend TaliaUtil::IoHelper
+        include TaliaUtil::Progressable
 
         # Helper class for state
         class State
@@ -22,6 +24,18 @@ module TaliaCore
         end
 
         class << self
+
+          # See the IoHelper class for help on the options. A progressor may
+          # be supplied on which the importer will report it's progress.
+          def sources_from_url(url, options = nil, progressor = nil)
+            open_generic(url, options) { |io| sources_from(io, progressor) }
+          end
+
+          def sources_from(source, progressor = nil)
+            reader = self.new(source)
+            reader.progressor = progressor
+            reader.sources
+          end
 
           # Create a handler for an element from which a source will be created
           def element(element_name, &handler_block)
@@ -32,6 +46,17 @@ module TaliaCore
           # no source will be created
           def plain_element(element_name, &handler_block)
             element_handler(element_name, false, &handler_block)
+          end
+
+          # Set the reader to allow the use of root elements for import
+          def can_use_root
+            @use_root = true
+          end
+
+          # True if the reader should also check the root element, instead of
+          # only checking the children
+          def use_root
+            @use_root || false
           end
 
           # Returns the registered handlers
@@ -52,16 +77,77 @@ module TaliaCore
           end
         end # End class methods
 
+        def initialize(source)
+          @doc = Hpricot.XML(source)
+        end
+
+        def sources
+          return @sources if(@sources)
+          @sources = {}
+          if(use_root && self.respond_to?("#{@doc.root.name}_handler".to_sym))
+            run_with_progress('XmlRead', 1) { read_source(@doc.root) }
+          else
+            read_children_of(@doc.root)
+          end
+          @sources.values
+        end
+
+        def add_source_with_check(source_attribs)
+          if((uri = source_attribs['uri']).blank?)
+            raise(RuntimeError, "Problem reading from XML: Source without URI (#{source_attribs.inspect})")
+          else
+            uri = irify(uri)
+            source_attribs['uri'] = uri
+            @sources[uri] ||= {} 
+            @sources[uri].each do |key, value|
+              next unless(new_value = source_attribs.delete(key))
+
+              assit(key.to_sym != :type, "Type should not change during import, may be a format problem")
+              if(new_value.is_a?(Array) && value.is_a?(Array))
+                # If both are Array-types, the new elements will be appended
+                # and duplicates nwill be removed
+                @sources[key] = (value + new_value).uniq
+              else
+                # Otherwise just replace
+                @sources[key] = new_value
+              end
+            end
+            # Now merge in everything else
+            @sources[uri].merge!(source_attribs)
+          end
+        end
+
         def create_handlers
           @handlers ||= (self.class.create_handlers || {})
         end
 
-        def read_source(element)
-          attribs = call_handler(element)
+        def read_source(element, &block)
+          attribs = call_handler(element, &block)
           add_source_with_check(attribs) if(attribs)
+        end
+        
+        def read_children_of(element, &block)
+          run_with_progress('Xml Read', element.children.size) do |prog|
+            element.children.each do |element|
+              prog.inc
+              next unless(element.is_a?(Hpricot::Elem))
+              read_source(element, &block)
+            end
+          end
+        end
+
+        def use_root
+          self.class.use_root
         end
 
         private
+        
+
+        # Removes all characters that are illegal in IRIs, so that the
+        # URIs can be imported
+        def irify(uri)
+          N::URI.new(uri.to_s.gsub( /[{}|\\^`\s]/, '+')).to_s
+        end
 
         # Call the handler method for the given element. If a block is given, that
         # will be called instead
@@ -102,30 +188,46 @@ module TaliaCore
 
         # Adds a relation for the given predicate
         def add_rel(predicate, object, required = false)
+          object = check_objects(object)
+          if(!object)
+            raise(ArgumentError, "Relation with empty object on #{predicate} (#{@current.attributes['uri']}).") if(required)
+            return
+          end
           if(object.kind_of?(Array))
             object.each do |obj| 
               raise(ArgumentError, "Cannot add relation on database field") if(ActiveSource.db_attr?(predicate))
-              set_element(predicate, "<#{obj}>", required) 
+              set_element(predicate, "<#{irify(obj)}>", required) 
             end
           else
             raise(ArgumentError, "Cannot add relation on database field") if(ActiveSource.db_attr?(predicate))
-            set_element(predicate, "<#{object}>", required)
+            set_element(predicate, "<#{irify(object)}>", required)
           end
         end
 
+        # Add a file to the source being imported
+        def add_file(urls, options = {})
+          return if(urls.blank?)
+          urls = [ urls ] unless(urls.is_a?(Array))
+          files = urls.collect { |url| { :url => url.to_s, :options => options } }
+          @current.attributes[:files] = files if(files.size > 0)
+        end
+
         # Returns true if the given source was already imported. This can return false
-        # false if you call this for the currently importing source
+        # if you call this for the currently importing source. 
         def source_exists?(uri)
           !@sources[uri].blank?
         end
 
         # Adds a source from the given sub-element. You may either pass a block with
-        # the code to import or the name of an already registered element
+        # the code to import or the name of an already registered element. If the
+        # special value :from_all_sources is given, it will read from all sub-elements for which
+        # there are registered handlers
         def add_source(sub_element = nil, &block)
           if(sub_element)
-            (@current.element/sub_element).each do |sub_elem|
-              attribs = call_handler(sub_elem, &block)
-              add_source_with_check(attribs) if(attribs)
+            if(sub_element == :from_all_sources)
+              read_children_of(@current.element)
+            else
+              (@current.element/sub_element).each { |sub_elem| read_source(sub_elem, &block) }
             end
           else
             raise(ArgumentError, "When adding elements on the fly, you must use a block") unless(block)
@@ -133,14 +235,14 @@ module TaliaCore
             add_source_with_check(attribs) if(attribs)
           end
         end
-        
+
         # Returns true if the currently imported element already contains type information
         # AND is of the given type.
         def current_is_a?(type)
           assit_kind_of(Class, type)
-          @current.attributes[:type] && ("TaliaCore::#{@current.attributes[:type]}".constantize <= type)
+          @current.attributes['type'] && ("TaliaCore::#{@current.attributes['type']}".constantize <= type)
         end
-        
+
         # Adds a nested element. This will not change the currently importing source, but
         # it will set the currently active element to the nested element. 
         # A block must be given, it will execute for each of the nested elements that
@@ -174,11 +276,14 @@ module TaliaCore
         # Add a property to the source currently being imported
         def set_element(predicate, object, required)
           chk_create
-          if(required && (!object || (object.kind_of?(Array) && object.size == 0)))
-            raise(ArgumentError, "No object given, but is required for #{predicate}.") 
+          object = check_objects(object)
+          if(!object)
+            raise(ArgumentError, "No object given, but is required for #{predicate}.") if(required)
+            return
           end
           predicate = predicate.respond_to?(:uri) ? predicate.uri.to_s : predicate.to_s
           if(ActiveSource.db_attr?(predicate))
+            assit(!object.is_a?(Array))
             @current.attributes[predicate] = object
           else
             @current.attributes[predicate] ||= []
@@ -186,16 +291,28 @@ module TaliaCore
           end
         end
 
+        # Check the objects and sort out the blank ones (which should not be used).
+        # If no usable object 
+        def check_objects(objects)
+          if(objects.kind_of?(Array))
+            objects.reject! { |obj| obj.blank? }
+            (objects.size == 0) ? nil : objects
+          else
+            objects.blank? ? nil : objects
+          end
+        end
+
         # Get an attribute from the current xml element
         def from_attribute(attrib)
           @current.element[attrib]
         end
-        
+
         # Get the content of exactly one child element of type "elem" of the
         # currently importing element.
         def from_element(elem)
           elements = all_elements(elem)
-          raise(ArgumentError, "Nore than one elements o #{elem}") unless(elements.size <= 1)
+          elements = elements.uniq if(elements.size > 1) # Try to ignore dupes
+          raise(ArgumentError, "More than one element of #{elem}") if(elements.size > 1)
           elements.first
         end
 
@@ -203,7 +320,7 @@ module TaliaCore
         # importing element
         def all_elements(elem)
           result = []
-          (@current.element/elem).each { |el| result << el.inner_html.strip }
+          (@current.element/elem).each { |el| result << el.inner_text.strip }
           result
         end
       end

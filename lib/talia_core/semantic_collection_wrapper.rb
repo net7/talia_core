@@ -151,7 +151,7 @@ module TaliaCore
 
     # This attempts to save the items to the database
     def save_items!
-      return if(clean?) # If nothing was loaded, nothing was modified
+      return if(clean?) # If there are no items, nothing was modified
       @assoc_source.save! unless(@assoc_source.id)
       @items.each do |item|
         next if(item.fat_relation) # we skip the fat relations, they are never new and never saveable

@@ -3,6 +3,7 @@
 # in Rails and in standalone mode.
 
 require 'fileutils'
+require 'gokdok'
 require 'rake/gempackagetask'
 
 $: << File.join(File.dirname(__FILE__))
@@ -116,6 +117,10 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
+end
+
+Gokdok::Dokker.new do |gd|
+  gd.remote_path = ''
 end
 
 desc 'Default: run unit tests.'

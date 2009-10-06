@@ -227,7 +227,7 @@ module TaliaCore
             if(sub_element == :from_all_sources)
               read_children_of(@current.element)
             else
-              (@current.element/sub_element).each { |sub_elem| read_source(sub_elem, &block) }
+              @current.element.search("/#{sub_element}").each { |sub_elem| read_source(sub_elem, &block) }
             end
           else
             raise(ArgumentError, "When adding elements on the fly, you must use a block") unless(block)
@@ -250,7 +250,7 @@ module TaliaCore
         def nested(sub_element)
           original_element = @current.element
           begin
-            (@current.element/sub_element).each do |sub_elem|
+            @current.element.search("#{sub_element}").each do |sub_elem|
               @current.element = sub_elem
               yield
             end
@@ -263,7 +263,7 @@ module TaliaCore
         # a part of the current one
         def add_part(sub_element = nil, &block)
           raise(RuntimeError, "Cannot add child before having an uri to refer to.") unless(@current.attributes['uri'])
-          (@current.element/sub_element).each do |sub_elem|
+          @current.element.search("/#{sub_element}").each do |sub_elem|
             attribs = call_handler(sub_elem, &block)
             if(attribs)
               attribs[N::TALIA.part_of.to_s] ||= []
@@ -312,7 +312,7 @@ module TaliaCore
         def from_element(elem)
           elements = all_elements(elem)
           elements = elements.uniq if(elements.size > 1) # Try to ignore dupes
-          raise(ArgumentError, "More than one element of #{elem}") if(elements.size > 1)
+          raise(ArgumentError, "More than one element of #{elem} in #{@current.element.inspect}") if(elements.size > 1)
           elements.first
         end
 
@@ -320,7 +320,7 @@ module TaliaCore
         # importing element
         def all_elements(elem)
           result = []
-          (@current.element/elem).each { |el| result << el.inner_text.strip }
+          @current.element.search("/#{elem}").each { |el| result << el.inner_text.strip }
           result
         end
       end

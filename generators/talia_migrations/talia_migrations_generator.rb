@@ -1,6 +1,7 @@
 class TaliaMigrationsGenerator < Rails::Generator::Base
   def manifest
     record do |m|
+      m.directory 'db/migrate'
       m.file "constraint_migration.rb", "db/migrate/constraint_migration.rb" 
       make_migration m, "create_sessions.rb"
       make_migration m, "create_users.rb"

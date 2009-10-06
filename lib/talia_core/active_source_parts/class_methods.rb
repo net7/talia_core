@@ -268,6 +268,14 @@ module TaliaCore
         @singular_props << prop_name
         true
       end
+      
+      # Helper to creat an accessor for the given predicate. This will shortcut
+      # the prop_name method to self[property]
+      def simple_property(prop_name, property)
+        define_meth(prop_name) do
+          self[property]
+        end
+      end
 
       # This gets the URI string from the given value. This will just return
       # the value if it's a string. It will return the result of value.uri, if

@@ -93,6 +93,7 @@ module TaliaCore
         end
 
         def add_source_with_check(source_attribs)
+          assit_kind_of(Hash, source_attribs)
           if((uri = source_attribs['uri']).blank?)
             raise(RuntimeError, "Problem reading from XML: Source without URI (#{source_attribs.inspect})")
           else
@@ -102,14 +103,14 @@ module TaliaCore
             @sources[uri].each do |key, value|
               next unless(new_value = source_attribs.delete(key))
 
-              assit(key.to_sym != :type, "Type should not change during import, may be a format problem")
+              assit(!((key.to_sym == :type) && (value != 'TaliaCore::DummySource') && (value != new_value)), "Type should not change during import, may be a format problem. (From #{value} to #{new_value})")
               if(new_value.is_a?(Array) && value.is_a?(Array))
                 # If both are Array-types, the new elements will be appended
                 # and duplicates nwill be removed
-                @sources[key] = (value + new_value).uniq
+                @sources[uri][key] = (value + new_value).uniq
               else
                 # Otherwise just replace
-                @sources[key] = new_value
+                @sources[uri][key] = new_value
               end
             end
             # Now merge in everything else

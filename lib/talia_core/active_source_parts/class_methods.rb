@@ -71,7 +71,7 @@ module TaliaCore
       def create_multi_from(sources)
         source_objects = []
         run_with_progress('Writing imported', sources.size) do |progress|
-          source_objects = sources.collect do |props| 
+          source_objects = sources.collect do |props|
             src = if(src = ActiveSource.find(:first, :conditions => { :uri => (props[:uri] || props['uri']) }))
               # Deal with already existing sources
               src.rewrite_attributes(props)

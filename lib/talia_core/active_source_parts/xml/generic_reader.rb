@@ -14,7 +14,7 @@ module TaliaCore
       # present. If attributes for one source are imported in more than one place, all
       # subsequent calls will merge the newly imported attributes with the existing ones.
       class GenericReader
-        
+
         extend TaliaUtil::IoHelper
         include TaliaUtil::Progressable
 
@@ -87,7 +87,7 @@ module TaliaCore
           if(use_root && self.respond_to?("#{@doc.root.name}_handler".to_sym))
             run_with_progress('XmlRead', 1) { read_source(@doc.root) }
           else
-            read_children_of(@doc.root)
+            read_children_with_progress(@doc.root)
           end
           @sources.values
         end
@@ -126,14 +126,18 @@ module TaliaCore
           attribs = call_handler(element, &block)
           add_source_with_check(attribs) if(attribs)
         end
-        
-        def read_children_of(element, &block)
+
+        def read_children_with_progress(element, &block)
           run_with_progress('Xml Read', element.children.size) do |prog|
-            element.children.each do |element|
-              prog.inc
-              next unless(element.is_a?(Hpricot::Elem))
-              read_source(element, &block)
-            end
+            read_children_of(element, prog, &block)
+          end
+        end
+
+        def read_children_of(element, progress = nil, &block)
+          element.children.each do |element|
+            progress.inc if(progress)
+            next unless(element.is_a?(Hpricot::Elem))
+            read_source(element, &block)
           end
         end
 
@@ -142,7 +146,7 @@ module TaliaCore
         end
 
         private
-        
+
 
         # Removes all characters that are illegal in IRIs, so that the
         # URIs can be imported

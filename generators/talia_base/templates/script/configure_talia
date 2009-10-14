@@ -1,0 +1,284 @@
+#!/bin/env ruby
+
+require 'rubygems'
+gem 'activerecord'
+require 'active_record'
+require 'fileutils'
+
+rails_dir = File.join(File.dirname(__FILE__), '..')
+talia_dir = File.join(rails_dir, 'vendor', 'plugins', 'talia_core')
+ActiveSupport::Dependencies.load_paths << File.join(talia_dir, 'lib')
+
+config_dir = File.join(rails_dir, 'config')
+config_template_dir = File.join(talia_dir, 'config')
+
+
+
+def readl(required = false)
+  result = gets.chomp.strip
+  while(result == '' && required)
+    print 'Must enter a value, retry: '
+    result = gets.chomp.strip
+  end
+  result
+end
+
+def read_yn(question)
+  question = question + " (yn) "
+  print question
+  while(!(result = readl) || result == '') 
+    print question
+  end
+  (result[0..0].downcase == 'y')
+end
+
+puts
+puts "Talia Configuration"
+puts
+puts "This script will assist you in the basic setup of Talia"
+puts
+
+puts "Enter the location of the mysql sock file."
+puts "For the self-installed mySQL version on MacOS enter /tmp/mysql.sock"
+puts "Keep the default if you use the builtin mySQL of MacOS X Server."
+puts "For Linux this depends on your distribution."
+print "MySQL sock file (/var/mysql/mysql.sock): "
+sock_file = readl
+sock_file = '/var/mysql/mysql.sock' if(sock_file == '')
+puts
+
+mysql_setup = TaliaUtil::Configuration::MysqlDatabaseSetup.new
+mysql_setup.host = 'localhost'
+mysql_setup.app_name = 'talia'
+mysql_setup.sock = sock_file
+
+print "Enter the mySQL root pasword: "
+root_pw = readl
+mysql_setup.root_credentials('root', root_pw)
+if(root_pw == '')
+  puts 
+  puts "Your root password is empty. This is not good."
+  if(read_yn("Do you want to set a new one?"))
+    print "Enter new root password: "
+    new_root_pw = readl
+    if(mysql_setup.assign_root_pw(new_root_pw)) 
+      puts "... password successfully changed."
+    else
+      puts "... seems there was a problem changing the password."
+      exit 1
+    end
+  end
+end
+
+puts
+puts "Enter the mySQL username for your application. This account will be created automatically."
+print "mySQL account for the application: "
+while((rails_user = readl(true)).size > 16)
+  puts "User name cannot have more than 16 characters"
+  print "mySQL account for the application: "
+end
+print "Enter the password for this account: "
+rails_pw = readl(true)
+
+puts
+print "Enter a database prefix (if you have more than one installation): "
+db_prefix = readl
+
+mysql_setup.rails_credentials(rails_user, rails_pw)
+mysql_setup.db_prefix = db_prefix
+
+puts
+if(read_yn("Do you want to create the databases now?"))
+  puts
+  print "Creating databases..."
+  mysql_setup.create_default_databases
+  mysql_setup.execute
+  puts " done."
+end
+
+print "Loading the configuration templates..."
+db_config = TaliaUtil::Configuration::DatabaseConfig.new(File.join(config_template_dir, 'database.yml.example'))
+rdf_config = TaliaUtil::Configuration::ConfigFile.new(File.join(config_template_dir, 'rdfstore.yml.example'))
+talia_config = TaliaUtil::Configuration::ConfigFile.new(File.join(config_template_dir, 'talia_core.yml.example'))
+talia_test_config = TaliaUtil::Configuration::ConfigFile.new(File.join(talia_dir, 'test', 'config', 'talia_core.yml_example'))
+puts " done."
+
+puts
+print "Enter the sql driver you want to use (e.g. jdbcmysql, mysql, ...) [jdbcmysql]: "
+adapter = readl
+adapter = (adapter == '') ? 'jdbcmysql' : adapter
+
+
+db_config.set_adapter(adapter)
+db_config.set_credentials(rails_user, rails_pw)
+db_config.set_database_names("#{db_prefix}talia")
+# Don't set socket for jdbcmysql
+# db_config.set_socket(sock_file)
+
+puts
+print "Enter the site name (it will appear in the window title): "
+talia_config.site_name = readl
+
+puts
+print "Enter the URI for your site: "
+site_url = readl(true)
+
+if(read_yn('Do you want to use the IIP image server?'))
+  puts
+  print "Enter the URL of your IIP server, or the port number (for default URL on localhost): "
+  iip_url = readl
+
+  # If only numerals, we'll create the URL
+  if(iip_url =~ /^\d*$/)
+    iip_url = "http://localhost:#{iip_url}/fcgi-bin/iipsrv.fcgi"
+  end
+  puts "Setting IIP URL to: #{iip_url}"
+
+  talia_config.iip_server_uri = iip_url
+
+  puts
+  print "Enter the path to store the IIP image files (return for default): "
+  iip_directory = readl
+end
+
+puts
+puts "Configuring the Sesame RDF store (change the config by hand for stores other than Sesame)"
+puts
+backends = %w(native memory rdbms http)
+print "Enter the sesame backend to use (#{backends.join('|')}): "
+while(!(backends.include?(backend = readl)))
+  puts "#{backend} is not a valid backend"
+  print "Enter the backend (#{backends.join('|')}: )"
+end
+
+%w(production test development).each do |env|
+  rdf_config[env]['type'] = 'sesame'
+  rdf_config[env]['backend'] = backend
+end
+
+case backend
+when 'native':
+  print "Enter the directory to store the Sesame RDF databases (return for default): "
+  sesame_directory = readl
+  sesame_directory = '.' if(sesame_directory == '')
+  %w(production test development).each do |env|
+    rdf_config[env]['location'] = File.join(sesame_directory, "sesame_#{env}.db")
+  end
+when 'memory':
+  puts "Memory backend configured. WARNING: Data will be lost on each restart of the runtime"
+when 'rdbms':
+  print "Enter the JDBC driver you want to use for the database connection: "
+  driver = readl(true)
+  print "Enter the username for the connection: "
+  user = readl
+  pass = ''
+  if(user != '')
+    print "Enter the password for the connection: "
+    pass = readl
+  end
+  %(production test development).each do |env|
+    rdf_config[env]['driver'] = driver
+    rdf_config[env]['user'] = user
+    rdf_config[env]['pass'] = pass
+    print "Enter the JDBC URL for the '#{env}' environment: "
+    rdf_config[env]['url'] = readl(true)
+  end
+when 'http':
+  print "Enter the username for the connection: "
+  user = readl
+  pass = ''
+  if(user != '')
+    print "Enter the password for the connection: "
+    pass = readl
+  end
+  %(production test development).each do |env|
+    rdf_config[env]['driver'] = driver
+    rdf_config[env]['user'] = user
+    rdf_config[env]['pass'] = pass
+    print "Enter the URL for the '#{env}' environment: "
+    rdf_config[env]['url'] = readl(true)
+  end
+else
+  puts "ERROR: ILLEGAL BACKEND #{backend} - you shouldn't see this..."
+end
+
+if(iip_directory != '')
+  talia_config.iip_root_directory_location = iip_directory
+end
+
+print "Enter the path to store the data files (return for default): "
+data_directory = readl
+
+if(data_directory != '')
+  talia_config.data_directory_location = data_directory
+end
+
+puts
+print "Enter the prefix/URL where static pages will be loaded (return for internal handler): "
+static_prefix = readl
+talia_config.static_data_prefix = static_prefix if(static_prefix != '')
+
+talia_config.local_uri = site_url
+
+# These are the locations containing config files
+locations = [config_dir, File.join(talia_dir, 'config'), File.join(talia_dir, 'test', 'config')]
+
+if(read_yn("Do you want to write the configuration now? (Overwrites the existing config!)"))
+  print "Writing config files..."
+  # Writing database and rdf config to all locations
+  locations.each do |dir| 
+    db_config.write(File.join(dir, 'database.yml')) 
+    rdf_config.write(File.join(dir, 'rdfstore.yml'))
+  end
+  # Write the talia configurations
+  talia_config.write(File.join(config_dir, 'talia_core.yml'))
+  talia_config.write(File.join(talia_dir, 'config', 'talia_core.yml'))
+  talia_test_config.rdf_connection = nil
+  talia_test_config.rdf_connection_file = 'rdfstore'
+  talia_test_config.write(File.join(talia_dir, 'test', 'config', 'talia_core.yml'))
+  puts " done."
+else
+  puts "Writing config samples to config dir."
+  talia_config.write(File.join(config_dir, 'talia_core_auto.yml'))
+  rdf_config.write(File.join(config_dir, 'rdfstore_auto.yml'))
+  db_config.write(File.join(config_dir, 'database_auto.yml'))
+end
+
+puts 
+puts "Now migrating the databases"
+%w(test development production).each do |env|
+  raise("Error migrating #{env}") unless(system("rake db:migrate RAILS_ENV=#{env}"))
+  # raise("Error creating globalize tables in #{env}") unless(system("rake globalize:setup RAILS_ENV=#{env}"))
+  puts "Migrated #{env}"
+end
+
+puts "Importing ontologies"
+system('rake talia_core:rdf_import files=ontologies/*.owl rdf_syntax=rdfxml')
+system('rake talia_core:owl_to_rdfs_update')
+
+# print "Importing language files..."
+# Dir[File.join(rails_dir, 'languages', '*_glob.csv')].each do |lang_file|
+#   language = File.basename(lang_file)[0..1] # first two chars are the lang code
+#   print " #{language}"
+#   raise("Error importing language #{language}") unless(system("rake discovery:import_language language=#{language} file=#{File.expand_path(lang_file)}"))
+# end
+# puts " ... done."
+# puts
+
+puts "Customize the start page. The following custom start pages are available:"
+cust_pages = Dir[File.join(rails_dir, 'customization_files', 'start_page', '_start_page_*.html.erb')]
+cust_pages.each do |cust_page|
+  # Get the descriptive name
+  md = /_start_page_(.*)\.html\.erb/.match(cust_page)
+  puts "#{cust_pages.index(cust_page)} - #{md[1]}"
+end
+
+if(read_yn('Do you want to build a war file now?'))
+  puts
+  puts "Building the war file"
+  system("warble")
+end
+
+puts
+puts "Configuration complete"
+puts

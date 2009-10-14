@@ -1,0 +1,100 @@
+#!/bin/env ruby
+
+# Image conversion tools and options
+VIPS_COMMAND='/opt/local/bin/vips'
+CONVERT_COMMAND='/opt/local/bin/convert'
+THUMB_OPTIONS = { 'width' => '80', 'height' => '120' }
+
+$: << File.join(File.dirname(__FILE__), '..', '..', 'vendor', 'plugins', 'talia_core', 'lib')
+require 'fileutils'
+require 'progressbar'
+require File.join('talia_util', 'image_conversions')
+
+begin
+  require 'optiflag'
+rescue LoadError
+  require 'rubygems'
+  gem 'optiflag'
+  require 'optiflag'
+end
+
+module CommandLineFlags extend OptiFlagSet
+
+  flag 'input' do
+    alternate_forms 'i'
+    description 'Input Directory'
+  end
+
+  optional_flag 'output' do
+    alternate_forms 'o'
+    description 'Output Directory - default: "iip_staging" inside the input dir'
+  end
+
+  optional_switch_flag 'force' do
+    description 'Force overwriting of existing files'
+  end
+
+  and_process!
+end
+
+# Create the thumbnail by running the configured creation command.
+def create_thumb(source, destination, force = false)
+  return if(File.exists?(destination) && !force)
+  TaliaUtil::ImageConversions.create_thumb(source, destination)
+end
+      
+# Creates the pyramid image for IIP by running the configured system
+# command. This automatically creates the file in the correct location 
+# (IIP root)
+def create_pyramid(source, destination, force = false)
+  return if(File.exists?(destination) && !force)
+  TaliaUtil::ImageConversions.create_pyramid(source, destination)
+end
+
+# Creates the original image file. If the source file is already a JPG or PNG
+# file, the original is just copied. Otherwise it will be converted into a
+# PNG file.
+def create_original(source, destination, force = false)
+  return if(File.exists?(destination) && !force)
+  ext = File.extname(source).downcase
+  if((ext == '.jpg') || (ext == '.jpeg') || (ext == '.png'))
+    # Call the copy as an external command. This is to work around the
+    # crashes that occurred using the builtin copy
+    from_file = File.expand_path(source)
+    to_file = File.expand_path(destination)
+    system_success = system("cp #{from_file} #{to_file}")
+    raise(IOError, "copy error #{from_file} #{to_file}") unless system_success
+  else
+    destination = File.join(File.dirname(destination), File.basename(destination, File.extname(destination)))
+    TaliaUtil::ImageConversions.to_png(source, destination)
+  end
+end
+
+flags = CommandLineFlags.flags
+
+source_dir = flags.input
+destination = flags.output ? File.expand_path(flags.output) : File.join(source_dir, 'iip_staging')
+
+files = Dir["#{source_dir}/*.{jpg,JPG,gif,GIF,png,PNG,tif,TIF,jpeg,JPEG}"]
+
+puts "Will process #{files.size} files."
+
+progress = ProgressBar.new('Processing', files.size)
+# create data directory path
+FileUtils.mkdir_p(destination) 
+FileUtils.mkdir_p(File.join(destination, 'pyramids'))
+FileUtils.mkdir_p(File.join(destination, 'thumbs'))
+FileUtils.mkdir_p(File.join(destination, 'originals'))
+
+
+files.each do |file|
+  file_base = File.basename(file, File.extname(file))
+  create_original(file, File.join(destination, 'originals', File.basename(file)), flags.force)
+  create_thumb(file, File.join(destination, 'thumbs', "#{file_base}.gif"), flags.force)
+  create_pyramid(file, File.join(destination, 'pyramids', "#{file_base}.tif"), flags.force)
+  progress.inc
+end
+
+progress.finish
+puts "Finished"
+

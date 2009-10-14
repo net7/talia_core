@@ -22,9 +22,9 @@ namespace :talia_core do
     TLoad::force_rails_parts
     Util::talia_config if(Util::flag?('verbose'))
     # Add load paths to allow autoloading of all class from this tasks
-    Dependencies.load_paths << File.join(TALIA_ROOT, 'lib')
+    ActiveSupport::Dependencies.load_paths << File.join(TALIA_ROOT, 'lib')
     model_path = File.join(TALIA_ROOT, 'app', 'models')
-    Dependencies.load_paths << model_path if(File.directory?(model_path))
+    ActiveSupport::Dependencies.load_paths << model_path if(File.directory?(model_path))
   end
   
   # Removes all data

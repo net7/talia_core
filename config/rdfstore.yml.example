@@ -1,0 +1,9 @@
+# RDF store setup blank template
+development:
+	type: sesame
+test:
+	type: sesame
+production:
+	type: sesame
+
+

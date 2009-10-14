@@ -7,3 +7,5 @@ test/data_for_test
 test/iip_root
 .gh_pages
 html
+sesame*.db
+pkg/

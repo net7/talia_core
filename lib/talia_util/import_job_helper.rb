@@ -72,17 +72,22 @@ module TaliaUtil
         TaliaUtil::Util.full_reset
         puts "Data Store has been completely reset"
       end
+      errors = []
       run_callback(:before_import)
       if(index_data)
-        import_from_index
+        import_from_index(errors)
       else
         puts "Importing from single data file."
-        TaliaCore::ActiveSource.create_from_xml(xml_data, :progressor => progressor, :reader => importer)
+        TaliaCore::ActiveSource.create_from_xml(xml_data, :progressor => progressor, :reader => importer, :errors => errors)
+      end
+      if(errors.size > 0)
+        puts "WARNING: #{errors.size} errors during import:"
+        errors.each { |e| puts e }
       end
       run_callback(:after_import)
     end
 
-    def import_from_index
+    def import_from_index(errors)
       doc = Hpricot.XML(index_data)
       hyper_format = (doc.root.name == 'sigla')
       elements = hyper_format ? (doc/:siglum) : (doc/:url)
@@ -107,7 +112,7 @@ module TaliaUtil
       end
       # Write the data
       TaliaCore::ActiveSource.progressor = progressor
-      TaliaCore::ActiveSource.create_multi_from(source_attributes)
+      TaliaCore::ActiveSource.create_multi_from(source_attributes, :errors => errors)
     end
 
     def make_url_from(url)

@@ -1,0 +1,5 @@
+Installs the base elements of a Talia application. This will install the migrations,
+the base controllers, ontologies and scripts. You should also install talia's route.rb
+file when asked.
+
+After you ran this task, you can run script/configure_talia to generate a first configuration.

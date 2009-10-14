@@ -18,6 +18,10 @@ module TaliaUtil
         open(file, 'w') { |io| io.puts(@config_doc.to_yaml) }
       end
       
+      def [](id)
+        @config_doc[id]
+      end
+      
       # Automatically creates "accessors" for the config properties.
       def method_missing(method, *params)
         method = method.to_s

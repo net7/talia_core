@@ -1,7 +1,7 @@
 module TaliaCore
   module ActiveSourceParts
     module ClassMethods
-      
+
       # Accessor for addtional rdf types that will automatically be added to each
       # object of that Source class
       def additional_rdf_types 
@@ -42,7 +42,7 @@ module TaliaCore
       # in the hash. If no type is given, this will create a plain ActiveSource.
       def create_source(args)
         type = args.delete(:type) || args.delete('type') || 'ActiveSource'
-        klass = "TaliaCore::#{type}".constantize
+        klass = type.constantize
         klass.new(args)
       end
 
@@ -55,8 +55,10 @@ module TaliaCore
       #
       # The options may contain:
       #
-      #  [*reader*] - The reader class that the import should use
-      #  [*progressor*] - The progress reporting object, which must respond to run_with_progress(message, size, &block)
+      # [*reader*] The reader class that the import should use
+      # [*progressor*] The progress reporting object, which must respond to run_with_progress(message, size, &block)
+      # [*errors*] If given, all erors will be looged to this array instead of raising
+      #            an exception
       def create_from_xml(xml, options = {})
         reader = options[:reader] ? options[:reader].to_s.classify.constantize : TaliaCore::ActiveSourceParts::Xml::SourceReader
         source_properties = reader.sources_from(xml, options[:progressor])
@@ -64,29 +66,43 @@ module TaliaCore
         sources = create_multi_from(source_properties)
         (sources.size > 1) ? sources : sources.first
       end
-      
+
       # Creates multiple sources from the given array of attribute hashes. The
       # sources are saved during import, ensuring that the relations are resolved
-      # correctly
-      def create_multi_from(sources)
+      # correctly.
+      #
+      # Options:
+      # [*errors*] If given, all erors will be looged to this array instead of raising
+      #            an exception
+      def create_multi_from(sources, options = {})
         source_objects = []
         run_with_progress('Writing imported', sources.size) do |progress|
           source_objects = sources.collect do |props|
-            src = if(src = ActiveSource.find(:first, :conditions => { :uri => (props[:uri] || props['uri']) }))
-              # Deal with already existing sources
-              src.rewrite_attributes(props)
-              # Rewrite the type, if neccessary
-              type = props[:type] || props['type']
-              switch_type = type && (src.type != type)
-              # Warn to the log if we have a problematic type change
-              TaliaCore.logger.warn("WARNING: Type change from #{src.type} to #{type}") if(switch_type && !src.is_a?(DummySource))
-              src.type = type if(switch_type)
-              src
-            else
-              ActiveSource.create_source(props)
+            src = nil
+            begin
+              if(src = ActiveSource.find(:first, :conditions => { :uri => (props[:uri] || props['uri']) }))
+                # Deal with already existing sources
+                src.rewrite_attributes(props)
+                # Rewrite the type, if neccessary
+                type = props[:type] || props['type']
+                switch_type = type && (src.type != type)
+                # Warn to the log if we have a problematic type change
+                TaliaCore.logger.warn("WARNING: Type change from #{src.type} to #{type}") if(switch_type && !src.is_a?(DummySource))
+                src.type = type if(switch_type)
+                src
+              else
+                src = ActiveSource.create_source(props)
+              end
+              src.save!
+            rescue Exception => e
+              if(options[:errors]) 
+                options[:errors] << "ERROR during import of #{props['uri'] || props[:uri]}: #{e.message}" 
+                TALIA_CORE.logger.warn("Problems importing #{props['uri'] || props[:uri]} (logged): #{e.message}")
+              else
+                raise
+              end
             end
             progress.inc
-            src.save!
             src
           end
         end
@@ -137,7 +153,7 @@ module TaliaCore
 
         result
       end
-      
+
       # Semantic version of ActiveRecord::Base#update - the id may be a record id or an URL,
       # and the attributes may contain semantic attributes. See the update_attributes method
       # for details on how the semantic attributes behave.
@@ -146,7 +162,7 @@ module TaliaCore
         raise(ActiveRecord::RecordNotFound) unless(record)
         record.update_attributes(attributes)
       end
-      
+
       # Like update, only that it will overwrite the given attributes instead
       # of adding to them
       def rewrite(id, attributes)
@@ -167,12 +183,12 @@ module TaliaCore
       def value_for(thing)
         thing.is_a?(SemanticProperty) ? thing.value : thing
       end
-      
+
       # Returns true if the given attribute is one that is stored in the database
       def db_attr?(attribute)
         db_attributes.include?(attribute.to_s)
       end
-      
+
       # Tries to expand a generic URI value that is either given as a full URL
       # or a namespace:name value.
       #
@@ -189,7 +205,7 @@ module TaliaCore
         return uri if(uri.include?(':/'))
         N::URI.make_uri(uri).to_s
       end
-      
+
       # Splits the attribute hash that is given for new, update and the like. This
       # will return another hash, where result[:db_attributes] will contain the
       # hash of the database attributes while result[:semantic_attributes] will
@@ -212,14 +228,14 @@ module TaliaCore
         end
         { :semantic_attributes => semantic_attributes, :db_attributes => db_attributes }
       end
-      
+
       private
-      
+
       # The attributes stored in the database
       def db_attributes
         @db_attributes ||= ActiveSource.new.attribute_names
       end
-      
+
       # Helper to define a "additional type" in subclasses which will 
       # automatically be added on Object creation
       def has_rdf_type(*types)
@@ -268,11 +284,11 @@ module TaliaCore
         @singular_props << prop_name
         true
       end
-      
+
       # Helper to creat an accessor for the given predicate. This will shortcut
       # the prop_name method to self[property]
       def simple_property(prop_name, property)
-        define_meth(prop_name) do
+        define_method(prop_name) do
           self[property]
         end
       end
@@ -356,7 +372,7 @@ module TaliaCore
           check_for_find_through!(options)
         end
       end
-      
+
     end
   end
 end

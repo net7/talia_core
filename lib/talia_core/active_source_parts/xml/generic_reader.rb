@@ -186,6 +186,27 @@ module TaliaCore
             set_element(predicate, object.to_s, required)
           end
         end
+        
+        # Adds a date field. This will attempt to parse the original string
+        # and write the result as an ISO 8061 compliant date string. Note
+        # that this won't be able to parse everything you throw at it, though.
+        def add_date(predicate, date, required = false, fmt = nil)
+          add(predicate, parse_date(date, fmt), required)
+        end
+        
+        # Adds a date interval as an ISO 8061 compliant date string. See
+        # add_date for more info. If only one of the dates is given this
+        # will add a normal date string instead of an interval.
+        def add_date_interval(predicate, start_date, end_date, fmt = nil)
+          return if(start_date.blank? && end_date.blank?)
+          if(start_date.blank?)
+            add_date(predicate, start_date, true, fmt)
+          elsif(end_date.blank?)
+            add_date(predicate, end_date, true, fmt)
+          else
+            add(predicate, "#{parse_date(start_date, fmt)}/#{parse_date(end_date, fmt)}", required)
+          end
+        end
 
         # Adds a relation for the given predicate
         def add_rel(predicate, object, required = false)
@@ -246,14 +267,16 @@ module TaliaCore
 
         # Adds a nested element. This will not change the currently importing source, but
         # it will set the currently active element to the nested element. 
-        # A block must be given, it will execute for each of the nested elements that
-        # are found
-        def nested(sub_element)
+        # If a block is given, it will execute for each of the nested elements that
+        # are found. Otherwise, a method name must be given, and that method will
+        # be executed instead of the block
+        def nested(sub_element, handler_method = nil)
           original_element = @current.element
           begin
             @current.element.search("#{sub_element}").each do |sub_elem|
               @current.element = sub_elem
-              yield
+              assit(block_given? ^ (handler_method.is_a?(Symbol)), 'Must have either a handler (x)or a block.')
+              block_given? ? yield : self.send(handler_method)
             end
           ensure
             @current.element = original_element
@@ -324,6 +347,15 @@ module TaliaCore
           @current.element.search("/#{elem}").each { |el| result << el.inner_text.strip }
           result
         end
+        
+        # Parses the given string and returns it as a date object
+        def parse_date(date, fmt = nil)
+          return nil if(date.blank?)
+          return DateTime.strptime(date, fmt) if(fmt) # format given
+          return DateTime.new(date.to_i) if(date.size < 5) # this short should be a year
+          DateTime.parse(date)
+        end
+        
       end
 
     end

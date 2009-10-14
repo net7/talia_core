@@ -3,8 +3,6 @@
 # in Rails and in standalone mode.
 
 require 'fileutils'
-require 'gokdok'
-require 'rake/gempackagetask'
 
 $: << File.join(File.dirname(__FILE__))
 
@@ -29,101 +27,44 @@ task :migrate => "talia_core:talia_init" do
 end  
 
 
-# DEVELOPMENT TASKS
-
-# Describes the Talia requirements. This is only user information
-def create_requirements(gemspec)
-  gemspec.requirements << "rdflib (Redland RDF) + Ruby bindings (for Redland store)"
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |s|
+    s.name = "talia_core"
+    s.summary = "The core elements of the Talia Digital Library system"
+    s.email = "ghub@limitedcreativity.org"
+    s.homepage = "http://trac.talia.discovery-project.eu/"
+    s.description = "This is the core plugin for building a digital library with Talia/Rails."
+    s.required_ruby_version = '>= 1.8.6'
+    s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Daniel Hahn"]
+    s.files = FileList["{lib}/**/*"]
+    s.extra_rdoc_files = ["README.rdoc", "CHANGES", "LICENSE"]
+    s.add_dependency('activerecord', '>= 2.0.5')
+    s.add_dependency('activesupport', '>= 2.0.5')
+    s.add_dependency('activerdf_net7', '>= 1.6.11')
+    s.add_dependency('assit', '>= 0.1.2')
+    s.add_dependency('semantic_naming', '>= 2.0.0')
+    s.add_dependency('averell23-bj', '>= 1.0.2')
+    s.add_dependency('hpricot', '>= 0.8.1')
+    s.add_dependency('oai', '>= 0.0.12')
+    s.add_dependency('ruby-openid', '>= 2.1.7')
+    s.add_dependency('builder', '>= 2.1.2')
+    s.add_dependency('optiflag', '>= 0.6.5')
+    s.add_dependency('rake', '>= 0.7.1')
+    s.add_dependency('json', '>= 1.1.0')
+    s.requirements << "rdflib (Redland RDF) + Ruby bindings (for Redland store)"
+  end
+  Jeweler::GemcutterTasks.new
+rescue LoadError
+  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-# Describes the Talia core dependencies on the given gem spec.
-# There may be additional dependencies for each gem
-def create_deps(gemspec)
-  gemspec.add_dependency('builder', '>= 2.1.2')
-  gemspec.add_dependency('optiflag', '>= 0.6.5')
-  gemspec.add_dependency('rake', '>= 0.7.1')
-  gemspec.add_dependency('json', '>= 1.1.0')
+
+begin
+  require 'gokdok'
+  Gokdok::Dokker.new do |gd|
+    gd.remote_path = ''
+  end
+rescue LoadError
+  puts "Gokdoc not available. Install it with: gem install gokdok"
 end
-
-# Adds the things that are common for all gems
-def create_common_gemspec(gemspec)
-  gemspec.author = "Talia Development Team"
-  gemspec.email = "hahn@netseven.it"
-  gemspec.homepage = "http://talia.discovery-project.eu/"
-  gemspec.required_ruby_version = '>= 1.8.6'
-  gemspec.date = Time.now
-  create_requirements(gemspec)
-  create_deps(gemspec)
-end
-
-# Gem spec for the developer gem
-developer_spec = Gem::Specification.new do |spec|
-  spec.name = "talia-dev"
-  spec.summary = "Set up the development dependencies for talia."
-  spec.version = TaliaCore::Version::STRING
-  spec.author = "Talia dev team"
-  spec.platform = Gem::Platform::RUBY
-  
-  create_common_gemspec(spec)
-
-  # Additional requirements for development
-  spec.add_dependency('meta_project', '>= 0.4.15')
-  spec.requirements << "Talia source code from http://talia.discovery-project.eu/svn/talia/repository/..."
-  
-  # Install the console
-  spec.executables << 'talia'
-end
-
-# Rake tasks
-Rake::GemPackageTask.new(developer_spec) do |pkg|
-  pkg.need_tar = true
-end
-
-# Gem spec for the standard talia gem
-talia_spec = Gem::Specification.new do |spec|
-  spec.name = "talia-core"
-  spec.summary = "Talia Digital Library. Core components."
-  spec.description = "Talia is a digital library system, developed for the Discovery project. This package contains the core API for accessing a Talia database. It's completely independent from Rails."
-  spec.version = TaliaCore::Version::STRING
-  spec.platform = Gem::Platform::RUBY
-  
-  create_common_gemspec(spec)
-  
-  # Install the console
-  spec.executables << 'talia'
-  
-  # Additional dependencies
-  spec.requirements << "Install additional gems for activerdf adapters."
-  spec.add_dependency('activerecord', '>= 1.99.1')
-  spec.add_dependency('activesupport', '>= 1.99.1')
-  spec.add_dependency('activerdf', '>= 1.7.0')
-  spec.add_dependency('assit', '>= 0.0.1')
-  spec.add_dependency('semantic_naming', '>= 0.0.1')
-  
-  # Files
-  spec.files = FileList["{lib}/**/*"].to_a
-  spec.require_path = "lib"
-  spec.test_files = FileList["{test}/**/*test.rb"].to_a
-end
-
-# Rake tasks
-Rake::GemPackageTask.new(talia_spec) do |pkg|
-  pkg.need_tar = true
-end
-
-desc 'Generate documentation for the talia_core plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.title    = 'TaliaCore'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README.rdoc')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
-
-Gokdok::Dokker.new do |gd|
-  gd.remote_path = ''
-end
-
-desc 'Default: run unit tests.'
-task :default => 'cruise'
-
-task :cruise => ['environment', 'migrate', 'talia_core:test', 'talia_core:rdoc']

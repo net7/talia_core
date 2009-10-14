@@ -51,7 +51,6 @@ begin
     s.add_dependency('builder', '>= 2.1.2')
     s.add_dependency('optiflag', '>= 0.6.5')
     s.add_dependency('rake', '>= 0.7.1')
-    s.add_dependency('json', '>= 1.1.0')
     s.requirements << "rdflib (Redland RDF) + Ruby bindings (for Redland store)"
   end
   Jeweler::GemcutterTasks.new

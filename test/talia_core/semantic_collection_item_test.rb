@@ -4,16 +4,12 @@ require File.join(File.dirname(__FILE__), '..', 'test_helper')
 module TaliaCore
 
   # Test the ActiveSource
-  class OrderedSourceTest < Test::Unit::TestCase
+  class SemanticCollectionItemTest < Test::Unit::TestCase
 
     #    fixtures :active_sources, :semantic_properties, :semantic_relations
 
     def setup
-      setup_once(:flush) do
-        TaliaUtil::Util.flush_db
-        TaliaUtil::Util.flush_rdf
-        true
-      end
+      setup_once(:flush) { TestHelper::flush_store }
 
       setup_once(:fat_object_item) do
         attributes = {
@@ -29,7 +25,7 @@ module TaliaCore
           'property_value' => nil,
           'object_created_at' => '2009-02-27 00:00:03',
           'object_updated_at' => '2009-02-27 00:00:04',
-          'object_realtype' => 'Source',
+          'object_realtype' => 'TaliaCore::Source',
           'object_uri' => 'http://myobject/uri',
         }
         fat_rel = SemanticRelation.send(:instantiate, attributes)

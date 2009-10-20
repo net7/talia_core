@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), '..', '..', 'test_helper')
 
 module TaliaCore
   # Test the DataRecord storage class
-  class DataLoaderTest < Test::Unit::TestCase
+  class DataLoaderTest < ActiveSupport::TestCase
 
     fixtures :active_sources, :data_records
 
@@ -116,7 +116,7 @@ module TaliaCore
     private
 
     def fixture_file(name)
-      @fixture_files = File.join(Test::Unit::TestCase.fixture_path, name)
+      @fixture_files = File.join(ActiveSupport::TestCase.fixture_path, name)
     end
 
   end

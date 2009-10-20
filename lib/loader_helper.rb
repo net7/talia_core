@@ -45,6 +45,15 @@ module TLoad
     ActiveSupport::Dependencies.load_paths << TLoad.start_dir unless(ActiveSupport::Dependencies.load_paths.include?(TLoad.start_dir))
   end
   
+  # Sets up the ActiveSupport autoload path
+  def self.setup_load_path
+    # set up the load path to talia
+    root_dir = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+    Kernel.const_set(:TALIA_CODE_ROOT, root_dir) unless(defined?(TALIA_CODE_ROOT))
+    lib_dir = File.join(root_dir, 'lib')
+    ActiveSupport::Dependencies.load_paths << lib_dir unless(ActiveSupport::Dependencies.load_paths.include?(lib_dir))
+  end
+  
   private
   
   def self.load_from_gem(gem_name, local_name, gem_version)

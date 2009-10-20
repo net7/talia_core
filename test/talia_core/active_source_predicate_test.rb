@@ -7,11 +7,7 @@ module TaliaCore
   class ActiveSourcePredicateTest < Test::Unit::TestCase
 
     def setup
-      setup_once(:flush) do
-        TaliaUtil::Util.flush_rdf
-        TaliaUtil::Util.flush_db
-        true
-      end
+      setup_once(:flush) { TestHelper::flush_store }
     end
 
     def test_each_cached

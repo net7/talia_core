@@ -97,20 +97,20 @@ find_through_type:
 
 something:
   uri: http://localnode.org/something
-  type: Source
+  type: TaliaCore::Source
 
 otherthing:
   uri: http://localnode.org/otherthing
-  type: Source
+  type: TaliaCore::Source
   
 first_book:
   uri: http://localnode.org/firstbook
-  type: Source
+  type: TaliaCore::Source
   
 second_book:
   uri: http://localnode.org/secondbook
-  type: Source
+  type: TaliaCore::Source
   
 third_book:
   uri: http://localnode.org/thirdbook
-  type: Source
+  type: TaliaCore::Source

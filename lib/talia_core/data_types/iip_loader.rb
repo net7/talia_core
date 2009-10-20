@@ -1,3 +1,5 @@
+require 'tmpdir'
+
 module TaliaCore
   module DataTypes
 

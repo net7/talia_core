@@ -8,37 +8,21 @@ module TaliaCore
   end
   
   # Test the ActiveSource
-  class ActiveSourceTest < Test::Unit::TestCase
-    fixtures :active_sources, :semantic_properties, :semantic_relations
+  class ActiveSourceTest < ActiveSupport::TestCase
+    fixtures :active_sources, :semantic_properties, :semantic_relations, :data_records
     
     N::Namespace.shortcut(:as_test_preds, 'http://testvalue.org/')
-    
-    def setup
-      setup_once(:flush) do
-        TaliaUtil::Util.flush_rdf
-        true
-      end
-      
-      setup_once(:data_source) do
-        data_source = ActiveSource.new("http://www.test.org/source_with_data")
-        text = DataTypes::SimpleText.new
-        text.location = "text.txt"
-        image = DataTypes::ImageData.new
-        image.location = "image.jpg"
-        data_source.data_records << text
-        data_source.data_records << image
-        data_source.save!
-        data_source
-      end
-      
-    end
 
     def test_has_type
-      facs = ActiveSource.new('http://facsimile/has_type_test')
-      facs.types << N::HYPER.testtype
-      assert(facs.has_type?(N::HYPER.testtype))
+      src = ActiveSource.new('http://xsource/has_type_test')
+      src.types << N::HYPER.testtype
+      assert(src.has_type?(N::HYPER.testtype))
     end
-
+    
+    def test_type_field
+      src = DummySource.new('http://xsource/has_type_test')
+      assert_equal(src.type, 'TaliaCore::DummySource')
+    end
 
     def test_exists
       assert_not_nil(ActiveSource.find(:first))
@@ -495,13 +479,13 @@ module TaliaCore
     
     def test_rewrite_type
       src = ActiveSource.new('http://as_test/test_update_rewrite_type')
-      src.rewrite_attributes!({}) { |src| src.type = 'SingularAccessorTest' }
+      src.rewrite_attributes!({}) { |src| src.type = 'TaliaCore::SingularAccessorTest' }
       assert_kind_of(SingularAccessorTest, ActiveSource.find(src.uri))
     end
     
     def test_rewrite_type
       src = ActiveSource.new('http://as_test/test_update_type')
-      src.update_attributes!({}) { |src| src.type = 'SingularAccessorTest' }
+      src.update_attributes!({}) { |src| src.type = 'TaliaCore::SingularAccessorTest' }
       assert_kind_of(SingularAccessorTest, ActiveSource.find(src.uri))
     end
     
@@ -531,7 +515,7 @@ module TaliaCore
     end
     
     def test_create_source
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_with_type', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'SingularAccessorTest')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_with_type', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::SingularAccessorTest')
       assert_kind_of(SingularAccessorTest, src)
       assert_equal('value', src[N::LOCAL.localthi].first)
       assert_property(src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
@@ -539,7 +523,7 @@ module TaliaCore
     end
     
     def test_create_for_existing
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_existing', ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'SingularAccessorTest')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_existing', ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::SingularAccessorTest')
       src.save!
       assert_equal('valueFOOOO', src[N::LOCAL.localthi].first)
       xml = src.to_xml
@@ -555,8 +539,8 @@ module TaliaCore
     
     def test_create_multi
       src_attribs = [
-        { :uri => N::LOCAL.test_create_multi_stuff, 'rdf:relatit' => [ "<#{N::LOCAL.test_create_multi_stuff_two}>" ], 'type' => 'SingularAccessorTest' },
-        { :uri => N::LOCAL.test_create_multi_stuff_two, ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<#{N::LOCAL.test_create_multi_stuff}>"], 'type' => 'SingularAccessorTest' }
+        { :uri => N::LOCAL.test_create_multi_stuff, 'rdf:relatit' => [ "<#{N::LOCAL.test_create_multi_stuff_two}>" ], 'type' => 'TaliaCore::SingularAccessorTest' },
+        { :uri => N::LOCAL.test_create_multi_stuff_two, ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<#{N::LOCAL.test_create_multi_stuff}>"], 'type' => 'TaliaCore::SingularAccessorTest' }
       ]
       ActiveSource.create_multi_from(src_attribs)
       src = TaliaCore::ActiveSource.find(N::LOCAL.test_create_multi_stuff)
@@ -571,7 +555,7 @@ module TaliaCore
     
     
     def test_xml_forth_and_back
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'DummySource')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::DummySource')
       xml = src.to_xml
       assert_kind_of(TaliaCore::DummySource, src)
       # Quickly change the URI for the new thing
@@ -587,8 +571,8 @@ module TaliaCore
     end
     
     def test_create_with_file
-      test_file = File.join(Test::Unit::TestCase.fixture_path, 'generic_test.xml')
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', 'type' => 'Source', 'files' => {'url' => test_file })
+      test_file = File.join(ActiveSupport::TestCase.fixture_path, 'generic_test.xml')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_with_file', 'type' => 'TaliaCore::Source', 'files' => {'url' => test_file })
       assert_equal(1, src.data_records.size)
       src.save!
       assert(!src.data_records.first.new_record?)
@@ -600,30 +584,45 @@ module TaliaCore
     
     # Test if accessing the data on a Source works
     def test_data_access
-      data = @data_source.data
+      data = make_data_source.data
       assert_equal(2, data.size)
     end
     
     # Test if accessing the data on a Source works
     def test_data_access_by_type
-      data = @data_source.data("SimpleText")
+      data = make_data_source.data("TaliaCore::DataTypes::SimpleText")
       assert_equal(1, data.size)
       assert_kind_of(DataTypes::SimpleText, data.first)
     end
     
     # Test if accessing the data on a Source works
     def test_data_access_by_type_and_location
-      data = @data_source.data("ImageData", "image.jpg")
+      data = make_data_source.data("TaliaCore::DataTypes::ImageData", "image.jpg")
       assert_kind_of(DataTypes::ImageData, data)
     end
     
     # Test accessing inexistent data
     def test_data_access_inexistent
-      data = @data_source.data("Foo")
+      data_source = make_data_source
+      data = data_source.data("Foo")
       assert_equal(0, data.size)
-      data = @data_source.data("SimpleText", "noop.txt")
+      data = data_source.data("SimpleText", "noop.txt")
       assert_nil(data)
     end 
+    
+    private
+    
+    def make_data_source
+      data_source = ActiveSource.new("http://www.test.org/source_with_data")
+      text = DataTypes::SimpleText.new
+      text.location = "text.txt"
+      image = DataTypes::ImageData.new
+      image.location = "image.jpg"
+      data_source.data_records << text
+      data_source.data_records << image
+      data_source.save!
+      data_source
+    end
     
     
   end

@@ -6,14 +6,15 @@ require File.join(File.dirname(__FILE__), '..', '..', 'test_helper')
 module TaliaCore
 
   # Test the DataRecord storage class
-  class XmlDataTest < Test::Unit::TestCase
+  class XmlDataTest < ActiveSupport::TestCase
     
     fixtures :active_sources, :data_records
      
     def setup
+      Fixtures.reset_cache
       # Sets the file that is used by one test
       setup_once(:tmp_file) { File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'data_for_test', 'XmlData', 'temp0.xhtml')) }
-      setup_once(:flush) do
+      setup_once(:erase) do
         # If the temp file already exists, it must be deleted
         File.delete(@tmp_file) if(File.exist?(@tmp_file))
         true

@@ -31,6 +31,7 @@ module TaliaCore
           # Set all as loaded
           sources.each do |src|
             src.each_cached_wrapper { |wrap| wrap.instance_variable_set(:'@loaded', true) }
+            src.instance_variable_set(:'@prefetched', true)
           end
         end
 
@@ -40,15 +41,26 @@ module TaliaCore
       def types
         get_objects_on(N::RDF.type.to_s)
       end
+      
+      # Returns if the Facsimile is of the given type
+      def has_type?(type)
+        (self.types.include?(type))
+      end
 
       # Returns the objects on the given predicate. This will be cached internally
       # so that the object will always be the same as long as the parent source
       # lives.
       def get_objects_on(predicate)
+        TaliaCore::logger.warn "GETTING OBJECTS (#{predicate}) #{@type_cache.inspect}"
         @type_cache ||= {}
         active_wrapper = @type_cache[predicate.to_s]
 
+
         if(active_wrapper.nil?)
+          # If this is a prefetched source we have everything - no use looking further
+          # TODO: Returns an Array instead of a wrapper
+          return [] if(@prefetched)
+          
           active_wrapper = SemanticCollectionWrapper.new(self, predicate)
           @type_cache[predicate.to_s] = active_wrapper
         end

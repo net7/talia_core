@@ -5,6 +5,14 @@ class TaliaBaseGenerator < Rails::Generator::Base
   include GeneratorHelpers
   
   def manifest
+    puts "Trying to install the plugins before generation"
+    plugin_script = File.join(RAILS_ROOT, 'script', 'plugin')
+    c = ::Config::CONFIG
+    ruby = File.join(c['bindir'], c['ruby_install_name']) << c['EXEEXT']
+    
+    system("#{ruby} #{plugin_script} install git://github.com/activescaffold/active_scaffold.git")
+    system("#{ruby} #{plugin_script} install git://github.com/timcharper/role_requirement.git")
+    
     record do |m|
       # Some initialization stuff
       m.directory 'config/initializers'
@@ -23,6 +31,12 @@ class TaliaBaseGenerator < Rails::Generator::Base
       # The default ontologies
       files_in m, 'ontologies'
       
+      # Set up the rake tasks, only if we come from a gem
+      if(Gem.source_index.find_name('talia_core').first)
+        m.directory 'lib/tasks'
+        m.file 'tasks/talia_core.rk', 'lib/tasks/talia_core.rake'
+      end
+      
       # Add the migrations
       m.directory 'db/migrate'
       m.file "migrations/constraint_migration.rb", "db/migrate/constraint_migration.rb"
@@ -40,6 +54,7 @@ class TaliaBaseGenerator < Rails::Generator::Base
       make_migration m, "upgrade_relations.rb"
       make_migration m, "create_progress_jobs.rb"
       make_migration m, "bj_migration.rb"
+      
     end
   end
   

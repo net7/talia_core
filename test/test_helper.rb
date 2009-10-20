@@ -4,9 +4,16 @@ require 'test/unit'
 require 'core_ext'
 require "talia_core"
 require "talia_util/test_helpers"
-require 'active_support/testing'
 require 'active_support/test_case'
 require 'active_record/fixtures'
+
+class ActiveSupport::TestCase
+  include ActiveRecord::TestFixtures
+  self.fixture_path=File.join(File.dirname(__FILE__), 'fixtures')
+  self.use_instantiated_fixtures  = false
+  self.use_transactional_fixtures = true
+end
+
 
 module TaliaCore
   #  class Source
@@ -45,20 +52,27 @@ module TaliaCore
         end
       end
       unless(File.exist?(ddir))
-        fixture_dir = File.join(Test::Unit::TestCase.fixture_path, 'data_for_test')
+        fixture_dir = File.join(ActiveSupport::TestCase.fixture_path, 'data_for_test')
         puts "Copying fixture data to data directory #{ddir} -> #{fixture_dir}"
         FileUtils.cp_r(fixture_dir, ddir)
       end
     end
     
     def self.fixture_file(filename)
-      File.join(Test::Unit::TestCase.fixture_path, filename)
+      File.join(ActiveSupport::TestCase.fixture_path, filename)
+    end
+    
+    def self.flush_store
+      TaliaUtil::Util.flush_rdf
+      TaliaUtil::Util.flush_db
+      Fixtures.reset_cache if(@@new_ar)
+      true
     end
   end
   
+  ActiveRecord::Base.store_full_sti_class = true
   started = TestHelper.startup
-  Test::Unit::TestCase.fixture_path=File.join(File.dirname(__FILE__), 'fixtures')
-  Test::Unit::TestCase.set_fixture_class :active_sources => TaliaCore::ActiveSource,
+  ActiveSupport::TestCase.set_fixture_class :active_sources => TaliaCore::ActiveSource,
     :semantic_properties => TaliaCore::SemanticProperty,
     :semantic_relations => TaliaCore::SemanticRelation,
     :sources => TaliaCore::Source,

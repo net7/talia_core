@@ -217,11 +217,6 @@ module TaliaCore
       rels = SemanticRelation.find_by_sql("SELECT DISTINCT predicate_uri FROM semantic_relations WHERE object_id = #{self.id}")
       rels.collect { |rel| N::Predicate.new(rel.predicate_uri) }
     end
-
-    # Returns if the Facsimile is of the given type
-    def has_type?(type)
-      (self.types.include?(type))
-    end
     
     # True if the given attribute is a database attribute
     def db_attr?(attribute)

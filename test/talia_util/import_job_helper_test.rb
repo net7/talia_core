@@ -7,11 +7,7 @@ module TaliaCore
   class ImportJobHelperTest < Test::Unit::TestCase
     
     def setup
-      setup_once(:flush) do
-        TaliaUtil::Util.flush_db
-        TaliaUtil::Util.flush_rdf
-        true
-      end
+      setup_once(:flush) { TestHelper::flush_store }
       
       setup_once(:job) do
         Bj::Table::Job.delete_all

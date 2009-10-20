@@ -1,5 +1,6 @@
 require 'test/unit'
 require 'fileutils'
+require 'tempfile'
 
 # Load the helper class
 require File.join(File.dirname(__FILE__), '..', '..', 'test_helper')
@@ -17,7 +18,7 @@ end
 module TaliaCore
 
   # Test the DataRecord storage class
-  class FileRecordTest < Test::Unit::TestCase
+  class FileRecordTest < ActiveSupport::TestCase
   
     fixtures :active_sources, :data_records
     
@@ -59,7 +60,7 @@ module TaliaCore
     
     def test_full_filename
       data_record = DataTypes::FileRecord.new do |dr|
-        dr.source_id = 1
+        dr.source = active_sources(:something)
         dr.location  = 'image.jpg'
         dr.assign_type 'image/jpeg'
       end
@@ -141,7 +142,7 @@ module TaliaCore
     
     
     def source_id
-      Source.find(:first)[:id]
+      active_sources(:something).id
     end
 
     def create_from(expected_content = 'abc')

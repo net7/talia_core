@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), '..', '..', 'test_helper')
 
 module TaliaCore
   # Test the DataRecord storage class
-  class DataRecordTest < Test::Unit::TestCase
+  class DataRecordTest < ActiveSupport::TestCase
 
     fixtures :active_sources, :data_records
 

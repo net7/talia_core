@@ -11,7 +11,7 @@ module TaliaCore
     singular_property :description, N::DCNS.description
     simple_property :publishers, N::DCNS.publisher
     singular_property :language, N::DCNS.language
-    simple_property :subjects, N::DCNS.subject
+    simple_property :dc_subjects, N::DCNS.subject
     singular_property :rights, N::DCNS.rights
     singular_property :title, N::DCNS.title
     

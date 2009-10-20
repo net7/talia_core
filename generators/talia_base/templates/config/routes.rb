@@ -76,8 +76,12 @@ ActionController::Routing::Routes.draw do |map|
   # Routes for import
   map.connect 'import/:action', :controller => 'import', :action => 'start_import'
 
-  map.connect ':controller/:action/:id.:format'
-  map.connect ':controller/:action/:id'  
+  # Default semantic dispatch
+  map.connect ':dispatch_uri', :controller => 'sources', :action => 'dispatch',
+    :requirements => { :dispatch_uri => /.*/ }
+
+  # map.connect ':controller/:action/:id.:format'
+  # map.connect ':controller/:action/:id'  
   
   
 end

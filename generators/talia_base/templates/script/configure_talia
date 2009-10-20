@@ -4,15 +4,20 @@ require 'rubygems'
 gem 'activerecord'
 require 'active_record'
 require 'fileutils'
+require 'rubygems'
 
 rails_dir = File.join(File.dirname(__FILE__), '..')
-talia_dir = File.join(rails_dir, 'vendor', 'plugins', 'talia_core')
-ActiveSupport::Dependencies.load_paths << File.join(talia_dir, 'lib')
+plugin_path = File.join(rails_dir, 'vendor', 'plugins', 'talia_core')
+from_gem = true
+if(File.exist?(plugin_path))
+  from_gem = false
+  $: << File.join(plugin_path, 'lib')
+end
+require 'talia_core'
+talia_dir = TALIA_CODE_ROOT
 
 config_dir = File.join(rails_dir, 'config')
 config_template_dir = File.join(talia_dir, 'config')
-
-
 
 def readl(required = false)
   result = gets.chomp.strip
@@ -100,7 +105,7 @@ print "Loading the configuration templates..."
 db_config = TaliaUtil::Configuration::DatabaseConfig.new(File.join(config_template_dir, 'database.yml.example'))
 rdf_config = TaliaUtil::Configuration::ConfigFile.new(File.join(config_template_dir, 'rdfstore.yml.example'))
 talia_config = TaliaUtil::Configuration::ConfigFile.new(File.join(config_template_dir, 'talia_core.yml.example'))
-talia_test_config = TaliaUtil::Configuration::ConfigFile.new(File.join(talia_dir, 'test', 'config', 'talia_core.yml_example'))
+talia_test_config = TaliaUtil::Configuration::ConfigFile.new(File.join(talia_dir, 'test', 'config', 'talia_core.yml_example')) unless(from_gem)
 puts " done."
 
 puts
@@ -221,7 +226,8 @@ talia_config.static_data_prefix = static_prefix if(static_prefix != '')
 talia_config.local_uri = site_url
 
 # These are the locations containing config files
-locations = [config_dir, File.join(talia_dir, 'config'), File.join(talia_dir, 'test', 'config')]
+locations = [ config_dir ]
+locations += [ File.join(talia_dir, 'config'), File.join(talia_dir, 'test', 'config') ] unless(from_gem)
 
 if(read_yn("Do you want to write the configuration now? (Overwrites the existing config!)"))
   print "Writing config files..."
@@ -232,10 +238,12 @@ if(read_yn("Do you want to write the configuration now? (Overwrites the existing
   end
   # Write the talia configurations
   talia_config.write(File.join(config_dir, 'talia_core.yml'))
-  talia_config.write(File.join(talia_dir, 'config', 'talia_core.yml'))
-  talia_test_config.rdf_connection = nil
-  talia_test_config.rdf_connection_file = 'rdfstore'
-  talia_test_config.write(File.join(talia_dir, 'test', 'config', 'talia_core.yml'))
+  unless(from_gem)
+    talia_config.write(File.join(talia_dir, 'config', 'talia_core.yml')) 
+    talia_test_config.rdf_connection = nil
+    talia_test_config.rdf_connection_file = 'rdfstore'
+    talia_test_config.write(File.join(talia_dir, 'test', 'config', 'talia_core.yml'))
+  end
   puts " done."
 else
   puts "Writing config samples to config dir."

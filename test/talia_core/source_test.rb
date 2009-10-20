@@ -28,11 +28,7 @@ module TaliaCore
       
       @params = {"uri"=>"#{N::LOCAL}Guinigi_family", "predicates_attributes"=>@predicates_attributes }
         
-      setup_once(:flush) do
-        TaliaUtil::Util.flush_rdf
-        TaliaUtil::Util.flush_db
-        true
-      end
+      setup_once(:flush) { TestHelper::flush_store }
       
       setup_once(:test_source) do
         Source.new("http://www.test.org/test/")

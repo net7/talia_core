@@ -7,7 +7,7 @@ module TaliaCore
   module DataType
     
     # Test the DataRecord storage class
-    class IipDataTest < Test::Unit::TestCase
+    class IipDataTest < ActiveSupport::TestCase
     
       fixtures :active_sources, :data_records
   
@@ -105,7 +105,7 @@ module TaliaCore
       def creation_test
         new_record = DataTypes::IipData.new
         new_record.location = ''
-        new_record.source_id = "something"
+        new_record.source = active_sources(:something)
         yield(new_record)
         new_record.save!
         

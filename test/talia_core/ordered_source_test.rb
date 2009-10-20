@@ -9,11 +9,7 @@ module TaliaCore
     #    fixtures :active_sources, :semantic_properties, :semantic_relations
      
     def setup
-      setup_once(:flush) do
-        TaliaUtil::Util.flush_db
-        TaliaUtil::Util.flush_rdf
-        true
-      end
+      setup_once(:flush) { TestHelper::flush_store }
     end
     
     def test_resource_type

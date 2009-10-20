@@ -13,6 +13,20 @@ module TaliaCore
     def setup
       @user = User.new
       @user_without_autorization = UserWithoutAuthorization.new
+      
+      setup_once(:flush) { TestHelper::flush_store }
+      
+      setup_once(:src) do
+        src = TaliaCore::ActiveSource.new(:uri => 'http://publicationworkflowtest')
+        src.save!
+        src
+      end
+      
+      setup_once(:src2) do
+        src = TaliaCore::ActiveSource.new(:uri => 'http://publicationworkflowtest2')
+        src.save!
+        src
+      end
     end
     
     def test_initial_state_value
@@ -25,7 +39,7 @@ module TaliaCore
     
     def test_initial_state
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       assert_equal :submitted, record.current_state
       assert record.submitted?
     end
@@ -38,7 +52,7 @@ module TaliaCore
     
     def test_event_methods_created
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       %w(vote! direct_publish! publish!).each do |event|
         assert record.respond_to?(event)
       end
@@ -46,7 +60,7 @@ module TaliaCore
     
     def test_query_methods_created
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       %w(submitted? accepted? rejected? published?).each do |event|
         assert record.respond_to?(event)
       end
@@ -62,20 +76,20 @@ module TaliaCore
     
     def test_next_state_for_event
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       assert_equal :submitted, record.next_state_for_event(:vote)
     end
       
     def test_loopback_event
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       record.vote! @user, 1
       assert record.submitted?
     end
       
     def test_can_go_to_accepted
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       record.vote!(@user, 10)
       assert_equal :accepted, record.current_state
       assert_equal 10, record.state_properties[:vote]
@@ -83,7 +97,7 @@ module TaliaCore
             
     def test_can_go_to_rejected
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       record.vote!(@user, -10)
       assert_equal :rejected, record.current_state
       assert_equal(-10, record.state_properties[:vote])
@@ -91,7 +105,7 @@ module TaliaCore
 
     def test_ignore_invalid_events
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       # this is an invalid event for submitted state
       record.publish!(@user)
       assert_equal :submitted, record.current_state
@@ -99,7 +113,7 @@ module TaliaCore
     
     def test_direct_publish_event
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       record.direct_publish!(@user)
       assert_equal :published, record.current_state
       assert_equal 0, record.state_properties[:vote]
@@ -107,7 +121,7 @@ module TaliaCore
     
     def test_vote_and_publish_event
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       # go to accepted state
       record.vote! @user, 10
       assert_equal :accepted, record.current_state
@@ -131,7 +145,7 @@ module TaliaCore
     def test_find_first_in_state
       # clear all records and create a new record
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       
       # move current record to publish
       record.vote! @user, 10
@@ -146,7 +160,7 @@ module TaliaCore
     def test_find_all_in_state
       # clear all records and create a new record
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
       
       # move current record to publish
       record.vote! @user, 10
@@ -161,34 +175,33 @@ module TaliaCore
     def test_find_all_in_state_with_conditions
       # clear all records and create a new record
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
-      TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 2)
+      TaliaCore::Workflow::PublicationWorkflow.create(:source_id => @src.id)
+      TaliaCore::Workflow::PublicationWorkflow.create(:source_id =>  @src2.id)
       
       # find all with conditions
       records = TaliaCore::Workflow::PublicationWorkflow.find_in_state(:all, :submitted, :conditions => ['source_id > ?', '0'])
         
       assert_equal 2, records.size
-      assert_equal 1, records.first.source_id
+      assert_equal  @src.id, records.first.source_id
     end
       
     def test_find_first_in_state_with_conditions
       # clear all records and create a new record
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
-      TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 2)
+      TaliaCore::Workflow::PublicationWorkflow.create(:source_id =>  @src.id)
+      TaliaCore::Workflow::PublicationWorkflow.create(:source_id =>  @src2.id)
       
       # find all with conditions
-      records = TaliaCore::Workflow::PublicationWorkflow.find_in_state(:first, :submitted, :conditions => ['source_id = ?', '1'])
+      records = TaliaCore::Workflow::PublicationWorkflow.find_in_state(:first, :submitted, :conditions => ['source_id = ?',  @src.id.to_s])
       
-              
-      assert_equal 1, records.source_id
+      assert_equal  @src.id, records.source_id
     end
       
     def test_count_in_state_with_conditions
       # clear all records and create a new record
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
-      TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 2)
+      TaliaCore::Workflow::PublicationWorkflow.create(:source_id =>  @src.id)
+      TaliaCore::Workflow::PublicationWorkflow.create(:source_id =>  @src2.id)
       
       cnt0 = TaliaCore::Workflow::PublicationWorkflow.count(:conditions => ['state = ?', 'submitted'])
       cnt  = TaliaCore::Workflow::PublicationWorkflow.count_in_state(:submitted)
@@ -212,7 +225,7 @@ module TaliaCore
     def test_not_authorized_user_raises_exception
       # clear all records and create a new record
       TaliaCore::Workflow::PublicationWorkflow.delete_all 
-      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id => 1)
+      record = TaliaCore::Workflow::PublicationWorkflow.create(:source_id =>  @src.id)
       
       # call vote without user parameter
       assert_raise(ArgumentError) {

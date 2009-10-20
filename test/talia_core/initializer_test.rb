@@ -7,7 +7,7 @@ module TaliaCore
   
   # Just test if the initializer has works correctly. These tests will fail if you 
   # don't use the configuration file supplied with Talia
-  class InitializerTest < Test::Unit::TestCase
+  class InitializerTest < ActiveSupport::TestCase
 
     fixtures :active_sources
 

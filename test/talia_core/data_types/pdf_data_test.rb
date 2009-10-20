@@ -7,7 +7,7 @@ module TaliaCore
   module DataType
     
     # Test the DataRecord storage class
-    class PdfDataTest < Test::Unit::TestCase
+    class PdfDataTest < ActiveSupport::TestCase
     
       fixtures :active_sources, :data_records
   

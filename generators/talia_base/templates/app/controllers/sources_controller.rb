@@ -1,7 +1,7 @@
 class SourcesController < ApplicationController
   include TaliaCore
   
-  before_filter :setup_format
+  before_filter :setup_format, :except => [ 'dispatch' ]
   
   PER_PAGE = 10
   
@@ -41,6 +41,11 @@ class SourcesController < ApplicationController
       status = '404 Not Found'
     end
     render :text => predicates, :status => status
+  end
+  
+  # Semantic dispatch
+  def dispatch
+    render :text => "WE HAVE A DISPATCH - #{params[:dispatch_uri]}"
   end
   
   private 

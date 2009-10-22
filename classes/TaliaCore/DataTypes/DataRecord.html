@@ -92,17 +92,17 @@ ActiveRecord interface to the data record in the database
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000156">all_bytes</a>&nbsp;&nbsp;
-      <a href="#M000157">content_string</a>&nbsp;&nbsp;
-      <a href="#M000163">extract_mime_type</a>&nbsp;&nbsp;
-      <a href="#M000166">find_by_type_and_location!</a>&nbsp;&nbsp;
-      <a href="#M000165">find_data_records</a>&nbsp;&nbsp;
-      <a href="#M000158">get_byte</a>&nbsp;&nbsp;
-      <a href="#M000164">mime_type</a>&nbsp;&nbsp;
-      <a href="#M000159">position</a>&nbsp;&nbsp;
-      <a href="#M000162">reset</a>&nbsp;&nbsp;
-      <a href="#M000160">seek</a>&nbsp;&nbsp;
-      <a href="#M000161">size</a>&nbsp;&nbsp;
+      <a href="#M000157">all_bytes</a>&nbsp;&nbsp;
+      <a href="#M000158">content_string</a>&nbsp;&nbsp;
+      <a href="#M000164">extract_mime_type</a>&nbsp;&nbsp;
+      <a href="#M000167">find_by_type_and_location!</a>&nbsp;&nbsp;
+      <a href="#M000166">find_data_records</a>&nbsp;&nbsp;
+      <a href="#M000159">get_byte</a>&nbsp;&nbsp;
+      <a href="#M000165">mime_type</a>&nbsp;&nbsp;
+      <a href="#M000160">position</a>&nbsp;&nbsp;
+      <a href="#M000163">reset</a>&nbsp;&nbsp;
+      <a href="#M000161">seek</a>&nbsp;&nbsp;
+      <a href="#M000162">size</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -137,19 +137,19 @@ ActiveRecord interface to the data record in the database
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000166" class="method-detail">
-        <a name="M000166"></a>
+      <div id="method-M000167" class="method-detail">
+        <a name="M000167"></a>
 
         <div class="method-heading">
-          <a href="#M000166" class="method-signature">
+          <a href="#M000167" class="method-signature">
           <span class="method-name">find_by_type_and_location!</span><span class="method-args">(source_data_type, location)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000166-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000166-source">
+            onclick="toggleCode('M000167-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000167-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 71</span>
 71:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_by_type_and_location!</span>(<span class="ruby-identifier">source_data_type</span>, <span class="ruby-identifier">location</span>)
@@ -167,11 +167,11 @@ ActiveRecord interface to the data record in the database
         </div>
       </div>
 
-      <div id="method-M000165" class="method-detail">
-        <a name="M000165"></a>
+      <div id="method-M000166" class="method-detail">
+        <a name="M000166"></a>
 
         <div class="method-heading">
-          <a href="#M000165" class="method-signature">
+          <a href="#M000166" class="method-signature">
           <span class="method-name">find_data_records</span><span class="method-args">(id)</span>
           </a>
         </div>
@@ -181,8 +181,8 @@ ActiveRecord interface to the data record in the database
 Find all data records about a specified source
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000165-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000165-source">
+            onclick="toggleCode('M000166-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000166-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 67</span>
 67:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_data_records</span>(<span class="ruby-identifier">id</span>)
@@ -195,11 +195,11 @@ Find all data records about a specified source
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000156" class="method-detail">
-        <a name="M000156"></a>
+      <div id="method-M000157" class="method-detail">
+        <a name="M000157"></a>
 
         <div class="method-heading">
-          <a href="#M000156" class="method-signature">
+          <a href="#M000157" class="method-signature">
           <span class="method-name">all_bytes</span><span class="method-args">()</span>
           </a>
         </div>
@@ -209,8 +209,8 @@ Find all data records about a specified source
 returns all bytes in the object as an array of unsigned integers
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000156-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000156-source">
+            onclick="toggleCode('M000157-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000157-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 22</span>
 22:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_bytes</span>
@@ -220,22 +220,22 @@ returns all bytes in the object as an array of unsigned integers
         </div>
       </div>
 
-      <div id="method-M000157" class="method-detail">
-        <a name="M000157"></a>
+      <div id="method-M000158" class="method-detail">
+        <a name="M000158"></a>
 
         <div class="method-heading">
-          <a href="#M000157" class="method-signature">
+          <a href="#M000158" class="method-signature">
           <span class="method-name">content_string</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns <a href="DataRecord.html#M000156">all_bytes</a> as an binary string
+Returns <a href="DataRecord.html#M000157">all_bytes</a> as an binary string
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000157-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000157-source">
+            onclick="toggleCode('M000158-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000158-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 26</span>
 26:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content_string</span>
@@ -246,19 +246,19 @@ Returns <a href="DataRecord.html#M000156">all_bytes</a> as an binary string
         </div>
       </div>
 
-      <div id="method-M000163" class="method-detail">
-        <a name="M000163"></a>
+      <div id="method-M000164" class="method-detail">
+        <a name="M000164"></a>
 
         <div class="method-heading">
-          <a href="#M000163" class="method-signature">
+          <a href="#M000164" class="method-signature">
           <span class="method-name">extract_mime_type</span><span class="method-args">(location)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000163-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000163-source">
+            onclick="toggleCode('M000164-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000164-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 50</span>
 50:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_mime_type</span>(<span class="ruby-identifier">location</span>)
@@ -272,11 +272,11 @@ Returns <a href="DataRecord.html#M000156">all_bytes</a> as an binary string
         </div>
       </div>
 
-      <div id="method-M000158" class="method-detail">
-        <a name="M000158"></a>
+      <div id="method-M000159" class="method-detail">
+        <a name="M000159"></a>
 
         <div class="method-heading">
-          <a href="#M000158" class="method-signature">
+          <a href="#M000159" class="method-signature">
           <span class="method-name">get_byte</span><span class="method-args">(close_after_single_read=false)</span>
           </a>
         </div>
@@ -286,8 +286,8 @@ Returns <a href="DataRecord.html#M000156">all_bytes</a> as an binary string
 returns the next byte from the object, or nil at EOS
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000158-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000158-source">
+            onclick="toggleCode('M000159-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000159-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 31</span>
 31:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_byte</span>(<span class="ruby-identifier">close_after_single_read</span>=<span class="ruby-keyword kw">false</span>)
@@ -297,19 +297,19 @@ returns the next byte from the object, or nil at EOS
         </div>
       </div>
 
-      <div id="method-M000164" class="method-detail">
-        <a name="M000164"></a>
+      <div id="method-M000165" class="method-detail">
+        <a name="M000165"></a>
 
         <div class="method-heading">
-          <a href="#M000164" class="method-signature">
+          <a href="#M000165" class="method-signature">
           <span class="method-name">mime_type</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000164-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000164-source">
+            onclick="toggleCode('M000165-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000165-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 57</span>
 57:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_type</span>
@@ -320,23 +320,23 @@ returns the next byte from the object, or nil at EOS
         </div>
       </div>
 
-      <div id="method-M000159" class="method-detail">
-        <a name="M000159"></a>
+      <div id="method-M000160" class="method-detail">
+        <a name="M000160"></a>
 
         <div class="method-heading">
-          <a href="#M000159" class="method-signature">
+          <a href="#M000160" class="method-signature">
           <span class="method-name">position</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-returns the current <a href="DataRecord.html#M000159">position</a> of the
+returns the current <a href="DataRecord.html#M000160">position</a> of the
 read cursor
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000159-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000159-source">
+            onclick="toggleCode('M000160-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000160-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 35</span>
 35:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">position</span>
@@ -346,52 +346,26 @@ read cursor
         </div>
       </div>
 
-      <div id="method-M000162" class="method-detail">
-        <a name="M000162"></a>
+      <div id="method-M000163" class="method-detail">
+        <a name="M000163"></a>
 
         <div class="method-heading">
-          <a href="#M000162" class="method-signature">
+          <a href="#M000163" class="method-signature">
           <span class="method-name">reset</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="DataRecord.html#M000162">reset</a> the cursor to the initial state
+<a href="DataRecord.html#M000163">reset</a> the cursor to the initial state
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000162-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000162-source">
+            onclick="toggleCode('M000163-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000163-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 47</span>
 47:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>
 48:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000160" class="method-detail">
-        <a name="M000160"></a>
-
-        <div class="method-heading">
-          <a href="#M000160" class="method-signature">
-          <span class="method-name">seek</span><span class="method-args">(new_position)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-adjust the <a href="DataRecord.html#M000159">position</a> of the read
-cursor
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000160-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000160-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 39</span>
-39:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seek</span>(<span class="ruby-identifier">new_position</span>)
-40:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -402,18 +376,44 @@ cursor
 
         <div class="method-heading">
           <a href="#M000161" class="method-signature">
+          <span class="method-name">seek</span><span class="method-args">(new_position)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+adjust the <a href="DataRecord.html#M000160">position</a> of the read
+cursor
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000161-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000161-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 39</span>
+39:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seek</span>(<span class="ruby-identifier">new_position</span>)
+40:       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000162" class="method-detail">
+        <a name="M000162"></a>
+
+        <div class="method-heading">
+          <a href="#M000162" class="method-signature">
           <span class="method-name">size</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-returns the <a href="DataRecord.html#M000161">size</a> of the object in
+returns the <a href="DataRecord.html#M000162">size</a> of the object in
 bytes
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000161-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000161-source">
+            onclick="toggleCode('M000162-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000162-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 43</span>
 43:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>

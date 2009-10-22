@@ -87,7 +87,7 @@ namespaces, etc.
 <p>
 The basic mechanism works like the Rails initializer: Options can be added
 to the Hash in a block that is passed to the <a
-href="Initializer.html#M000228">run</a> method of the intializers.
+href="Initializer.html#M000229">run</a> method of the intializers.
 </p>
 <p>
 There are two settings that can be made before the configuration is
@@ -142,24 +142,24 @@ file is passed to the initializer.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000241">config_data_directory</a>&nbsp;&nbsp;
-      <a href="#M000237">config_db</a>&nbsp;&nbsp;
-      <a href="#M000242">config_iip_root_directory</a>&nbsp;&nbsp;
-      <a href="#M000240">config_namespaces</a>&nbsp;&nbsp;
-      <a href="#M000239">config_rdf</a>&nbsp;&nbsp;
-      <a href="#M000235">connection_opts</a>&nbsp;&nbsp;
-      <a href="#M000230">create_default_config</a>&nbsp;&nbsp;
-      <a href="#M000236">db_connection_opts</a>&nbsp;&nbsp;
-      <a href="#M000232">default_log_level</a>&nbsp;&nbsp;
-      <a href="#M000244">load_core_ext</a>&nbsp;&nbsp;
-      <a href="#M000243">load_ontologies</a>&nbsp;&nbsp;
-      <a href="#M000238">rdf_connection_opts</a>&nbsp;&nbsp;
-      <a href="#M000245">register_mime_types</a>&nbsp;&nbsp;
-      <a href="#M000228">run</a>&nbsp;&nbsp;
-      <a href="#M000234">set_environment</a>&nbsp;&nbsp;
-      <a href="#M000231">set_logger</a>&nbsp;&nbsp;
-      <a href="#M000233">set_talia_root</a>&nbsp;&nbsp;
-      <a href="#M000229">talia_logger</a>&nbsp;&nbsp;
+      <a href="#M000242">config_data_directory</a>&nbsp;&nbsp;
+      <a href="#M000238">config_db</a>&nbsp;&nbsp;
+      <a href="#M000243">config_iip_root_directory</a>&nbsp;&nbsp;
+      <a href="#M000241">config_namespaces</a>&nbsp;&nbsp;
+      <a href="#M000240">config_rdf</a>&nbsp;&nbsp;
+      <a href="#M000236">connection_opts</a>&nbsp;&nbsp;
+      <a href="#M000231">create_default_config</a>&nbsp;&nbsp;
+      <a href="#M000237">db_connection_opts</a>&nbsp;&nbsp;
+      <a href="#M000233">default_log_level</a>&nbsp;&nbsp;
+      <a href="#M000245">load_core_ext</a>&nbsp;&nbsp;
+      <a href="#M000244">load_ontologies</a>&nbsp;&nbsp;
+      <a href="#M000239">rdf_connection_opts</a>&nbsp;&nbsp;
+      <a href="#M000246">register_mime_types</a>&nbsp;&nbsp;
+      <a href="#M000229">run</a>&nbsp;&nbsp;
+      <a href="#M000235">set_environment</a>&nbsp;&nbsp;
+      <a href="#M000232">set_logger</a>&nbsp;&nbsp;
+      <a href="#M000234">set_talia_root</a>&nbsp;&nbsp;
+      <a href="#M000230">talia_logger</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -181,11 +181,11 @@ file is passed to the initializer.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000228" class="method-detail">
-        <a name="M000228"></a>
+      <div id="method-M000229" class="method-detail">
+        <a name="M000229"></a>
 
         <div class="method-heading">
-          <a href="#M000228" class="method-signature">
+          <a href="#M000229" class="method-signature">
           <span class="method-name">run</span><span class="method-args">(config_file = nil, &amp;initializer)</span>
           </a>
         </div>
@@ -193,7 +193,7 @@ file is passed to the initializer.
         <div class="method-description">
           <p>
 Runs the initialization. You can pass a block to this method, which is <a
-href="Initializer.html#M000228">run</a> with one parameter: A hash
+href="Initializer.html#M000229">run</a> with one parameter: A hash
 containing the configuration.
 </p>
 <p>
@@ -206,8 +206,8 @@ For now, the values are documented in the code below and in the default
 configuration file.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000228-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000228-source">
+            onclick="toggleCode('M000229-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000229-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 82</span>
  82:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">config_file</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">initializer</span>)
@@ -282,19 +282,19 @@ configuration file.
         </div>
       </div>
 
-      <div id="method-M000229" class="method-detail">
-        <a name="M000229"></a>
+      <div id="method-M000230" class="method-detail">
+        <a name="M000230"></a>
 
         <div class="method-heading">
-          <a href="#M000229" class="method-signature">
+          <a href="#M000230" class="method-signature">
           <span class="method-name">talia_logger</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000229-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000229-source">
+            onclick="toggleCode('M000230-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000230-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 150</span>
 150:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">talia_logger</span>
@@ -307,11 +307,11 @@ configuration file.
 
       <h3 class="section-bar">Protected Class methods</h3>
 
-      <div id="method-M000241" class="method-detail">
-        <a name="M000241"></a>
+      <div id="method-M000242" class="method-detail">
+        <a name="M000242"></a>
 
         <div class="method-heading">
-          <a href="#M000241" class="method-signature">
+          <a href="#M000242" class="method-signature">
           <span class="method-name">config_data_directory</span><span class="method-args">()</span>
           </a>
         </div>
@@ -321,8 +321,8 @@ configuration file.
 Configure the data directory
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000241-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000241-source">
+            onclick="toggleCode('M000242-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000242-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 333</span>
 333:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_data_directory</span>
@@ -340,11 +340,11 @@ Configure the data directory
         </div>
       </div>
 
-      <div id="method-M000237" class="method-detail">
-        <a name="M000237"></a>
+      <div id="method-M000238" class="method-detail">
+        <a name="M000238"></a>
 
         <div class="method-heading">
-          <a href="#M000237" class="method-signature">
+          <a href="#M000238" class="method-signature">
           <span class="method-name">config_db</span><span class="method-args">()</span>
           </a>
         </div>
@@ -354,8 +354,8 @@ Configure the data directory
 Configure the database connection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000237-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000237-source">
+            onclick="toggleCode('M000238-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000238-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 275</span>
 275:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_db</span>
@@ -379,11 +379,11 @@ Configure the database connection
         </div>
       </div>
 
-      <div id="method-M000242" class="method-detail">
-        <a name="M000242"></a>
+      <div id="method-M000243" class="method-detail">
+        <a name="M000243"></a>
 
         <div class="method-heading">
-          <a href="#M000242" class="method-signature">
+          <a href="#M000243" class="method-signature">
           <span class="method-name">config_iip_root_directory</span><span class="method-args">()</span>
           </a>
         </div>
@@ -393,8 +393,8 @@ Configure the database connection
 Configure the data directory
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000242-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000242-source">
+            onclick="toggleCode('M000243-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000243-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 345</span>
 345:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_iip_root_directory</span>
@@ -412,11 +412,11 @@ Configure the data directory
         </div>
       </div>
 
-      <div id="method-M000240" class="method-detail">
-        <a name="M000240"></a>
+      <div id="method-M000241" class="method-detail">
+        <a name="M000241"></a>
 
         <div class="method-heading">
-          <a href="#M000240" class="method-signature">
+          <a href="#M000241" class="method-signature">
           <span class="method-name">config_namespaces</span><span class="method-args">()</span>
           </a>
         </div>
@@ -426,8 +426,8 @@ Configure the data directory
 Configure the namespaces
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000240-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000240-source">
+            onclick="toggleCode('M000241-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000241-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 311</span>
 311:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_namespaces</span>
@@ -455,11 +455,11 @@ Configure the namespaces
         </div>
       </div>
 
-      <div id="method-M000239" class="method-detail">
-        <a name="M000239"></a>
+      <div id="method-M000240" class="method-detail">
+        <a name="M000240"></a>
 
         <div class="method-heading">
-          <a href="#M000239" class="method-signature">
+          <a href="#M000240" class="method-signature">
           <span class="method-name">config_rdf</span><span class="method-args">()</span>
           </a>
         </div>
@@ -469,8 +469,8 @@ Configure the namespaces
 Configure the RDF connection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000239-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000239-source">
+            onclick="toggleCode('M000240-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000240-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 303</span>
 303:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_rdf</span>
@@ -484,11 +484,11 @@ Configure the RDF connection
         </div>
       </div>
 
-      <div id="method-M000235" class="method-detail">
-        <a name="M000235"></a>
+      <div id="method-M000236" class="method-detail">
+        <a name="M000236"></a>
 
         <div class="method-heading">
-          <a href="#M000235" class="method-signature">
+          <a href="#M000236" class="method-signature">
           <span class="method-name">connection_opts</span><span class="method-args">(default_opts, config_file)</span>
           </a>
         </div>
@@ -500,8 +500,8 @@ will be used if no file is given. If both file and default are given, the
 method will overwrite the defaults.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000235-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000235-source">
+            onclick="toggleCode('M000236-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000236-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 252</span>
 252:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">connection_opts</span>(<span class="ruby-identifier">default_opts</span>, <span class="ruby-identifier">config_file</span>)
@@ -524,11 +524,11 @@ method will overwrite the defaults.
         </div>
       </div>
 
-      <div id="method-M000230" class="method-detail">
-        <a name="M000230"></a>
+      <div id="method-M000231" class="method-detail">
+        <a name="M000231"></a>
 
         <div class="method-heading">
-          <a href="#M000230" class="method-signature">
+          <a href="#M000231" class="method-signature">
           <span class="method-name">create_default_config</span><span class="method-args">()</span>
           </a>
         </div>
@@ -538,8 +538,8 @@ method will overwrite the defaults.
 Creates the default values for the config hash
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000230-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000230-source">
+            onclick="toggleCode('M000231-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000231-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 157</span>
 157:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_default_config</span>
@@ -586,11 +586,11 @@ Creates the default values for the config hash
         </div>
       </div>
 
-      <div id="method-M000236" class="method-detail">
-        <a name="M000236"></a>
+      <div id="method-M000237" class="method-detail">
+        <a name="M000237"></a>
 
         <div class="method-heading">
-          <a href="#M000236" class="method-signature">
+          <a href="#M000237" class="method-signature">
           <span class="method-name">db_connection_opts</span><span class="method-args">()</span>
           </a>
         </div>
@@ -600,8 +600,8 @@ Creates the default values for the config hash
 The connection options for the standalone database connection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000236-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000236-source">
+            onclick="toggleCode('M000237-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000237-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 269</span>
 269:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">db_connection_opts</span>
@@ -612,11 +612,11 @@ The connection options for the standalone database connection
         </div>
       </div>
 
-      <div id="method-M000232" class="method-detail">
-        <a name="M000232"></a>
+      <div id="method-M000233" class="method-detail">
+        <a name="M000233"></a>
 
         <div class="method-heading">
-          <a href="#M000232" class="method-signature">
+          <a href="#M000233" class="method-signature">
           <span class="method-name">default_log_level</span><span class="method-args">()</span>
           </a>
         </div>
@@ -626,8 +626,8 @@ The connection options for the standalone database connection
 Get the default log level for the standalone log
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000232-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000232-source">
+            onclick="toggleCode('M000233-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000233-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 214</span>
 214:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_log_level</span>
@@ -643,19 +643,19 @@ Get the default log level for the standalone log
         </div>
       </div>
 
-      <div id="method-M000244" class="method-detail">
-        <a name="M000244"></a>
+      <div id="method-M000245" class="method-detail">
+        <a name="M000245"></a>
 
         <div class="method-heading">
-          <a href="#M000244" class="method-signature">
+          <a href="#M000245" class="method-signature">
           <span class="method-name">load_core_ext</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000244-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000244-source">
+            onclick="toggleCode('M000245-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000245-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 387</span>
 387:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_core_ext</span>
@@ -667,11 +667,11 @@ Get the default log level for the standalone log
         </div>
       </div>
 
-      <div id="method-M000243" class="method-detail">
-        <a name="M000243"></a>
+      <div id="method-M000244" class="method-detail">
+        <a name="M000244"></a>
 
         <div class="method-heading">
-          <a href="#M000243" class="method-signature">
+          <a href="#M000244" class="method-signature">
           <span class="method-name">load_ontologies</span><span class="method-args">()</span>
           </a>
         </div>
@@ -681,8 +681,8 @@ Get the default log level for the standalone log
 Autoload ontologies, if configured
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000243-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000243-source">
+            onclick="toggleCode('M000244-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000244-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 357</span>
 357:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_ontologies</span>
@@ -719,11 +719,11 @@ Autoload ontologies, if configured
         </div>
       </div>
 
-      <div id="method-M000238" class="method-detail">
-        <a name="M000238"></a>
+      <div id="method-M000239" class="method-detail">
+        <a name="M000239"></a>
 
         <div class="method-heading">
-          <a href="#M000238" class="method-signature">
+          <a href="#M000239" class="method-signature">
           <span class="method-name">rdf_connection_opts</span><span class="method-args">()</span>
           </a>
         </div>
@@ -733,8 +733,8 @@ Autoload ontologies, if configured
 Get the RDF configuration options
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000238-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000238-source">
+            onclick="toggleCode('M000239-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000239-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 293</span>
 293:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rdf_connection_opts</span>
@@ -750,11 +750,11 @@ Get the RDF configuration options
         </div>
       </div>
 
-      <div id="method-M000245" class="method-detail">
-        <a name="M000245"></a>
+      <div id="method-M000246" class="method-detail">
+        <a name="M000246"></a>
 
         <div class="method-heading">
-          <a href="#M000245" class="method-signature">
+          <a href="#M000246" class="method-signature">
           <span class="method-name">register_mime_types</span><span class="method-args">()</span>
           </a>
         </div>
@@ -764,8 +764,8 @@ Get the RDF configuration options
 Register the default mime types
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000245-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000245-source">
+            onclick="toggleCode('M000246-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000246-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 393</span>
 393:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register_mime_types</span>
@@ -799,11 +799,11 @@ Register the default mime types
         </div>
       </div>
 
-      <div id="method-M000234" class="method-detail">
-        <a name="M000234"></a>
+      <div id="method-M000235" class="method-detail">
+        <a name="M000235"></a>
 
         <div class="method-heading">
-          <a href="#M000234" class="method-signature">
+          <a href="#M000235" class="method-signature">
           <span class="method-name">set_environment</span><span class="method-args">()</span>
           </a>
         </div>
@@ -813,8 +813,8 @@ Register the default mime types
 Set the environmet to be used for config selection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000234-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000234-source">
+            onclick="toggleCode('M000235-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000235-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 238</span>
 238:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_environment</span>
@@ -832,11 +832,11 @@ Set the environmet to be used for config selection
         </div>
       </div>
 
-      <div id="method-M000231" class="method-detail">
-        <a name="M000231"></a>
+      <div id="method-M000232" class="method-detail">
+        <a name="M000232"></a>
 
         <div class="method-heading">
-          <a href="#M000231" class="method-signature">
+          <a href="#M000232" class="method-signature">
           <span class="method-name">set_logger</span><span class="method-args">()</span>
           </a>
         </div>
@@ -847,8 +847,8 @@ Creates a logger if no logger is defined At the moment, this just creates a
 logger to the default director
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000231-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000231-source">
+            onclick="toggleCode('M000232-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000232-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 200</span>
 200:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_logger</span>
@@ -868,11 +868,11 @@ logger to the default director
         </div>
       </div>
 
-      <div id="method-M000233" class="method-detail">
-        <a name="M000233"></a>
+      <div id="method-M000234" class="method-detail">
+        <a name="M000234"></a>
 
         <div class="method-heading">
-          <a href="#M000233" class="method-signature">
+          <a href="#M000234" class="method-signature">
           <span class="method-name">set_talia_root</span><span class="method-args">()</span>
           </a>
         </div>
@@ -883,8 +883,8 @@ Set the Talia root directory first. Use the configured directory if given,
 otherwise go for the RAILS_ROOT/current directory.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000233-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000233-source">
+            onclick="toggleCode('M000234-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000234-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 225</span>
 225:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_talia_root</span>

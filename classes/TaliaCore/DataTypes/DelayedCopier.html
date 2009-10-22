@@ -96,9 +96,9 @@ operation and be potentially faster than using the builtin copy operations
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000169">close</a>&nbsp;&nbsp;
-      <a href="#M000168">cp</a>&nbsp;&nbsp;
-      <a href="#M000167">delayed_copy_file</a>&nbsp;&nbsp;
+      <a href="#M000170">close</a>&nbsp;&nbsp;
+      <a href="#M000169">cp</a>&nbsp;&nbsp;
+      <a href="#M000168">delayed_copy_file</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -120,11 +120,11 @@ operation and be potentially faster than using the builtin copy operations
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000169" class="method-detail">
-        <a name="M000169"></a>
+      <div id="method-M000170" class="method-detail">
+        <a name="M000170"></a>
 
         <div class="method-heading">
-          <a href="#M000169" class="method-signature">
+          <a href="#M000170" class="method-signature">
           <span class="method-name">close</span><span class="method-args">()</span>
           </a>
         </div>
@@ -134,16 +134,51 @@ operation and be potentially faster than using the builtin copy operations
 Close the delayed copy file
 </p>
           <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000170-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000170-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/delayed_copier.rb, line 41</span>
+41:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">close</span>
+42:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@delayed_copy_file</span>)
+43:           <span class="ruby-ivar">@delayed_copy_file</span>.<span class="ruby-identifier">close</span>
+44:           <span class="ruby-ivar">@delayed_copy_file</span> = <span class="ruby-keyword kw">nil</span>
+45:         <span class="ruby-keyword kw">end</span>
+46:       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000169" class="method-detail">
+        <a name="M000169"></a>
+
+        <div class="method-heading">
+          <a href="#M000169" class="method-signature">
+          <span class="method-name">cp</span><span class="method-args">(source, target)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000169-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000169-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/delayed_copier.rb, line 40</span>
-40:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">close</span>
-41:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@delayed_copy_file</span>)
-42:           <span class="ruby-ivar">@delayed_copy_file</span>.<span class="ruby-identifier">close</span>
-43:           <span class="ruby-ivar">@delayed_copy_file</span> = <span class="ruby-keyword kw">nil</span>
-44:         <span class="ruby-keyword kw">end</span>
-45:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/delayed_copier.rb, line 24</span>
+24:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">target</span>)
+25:         <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">dir_seen?</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">target</span>)))
+26:           <span class="ruby-identifier">mkdir_string</span> = <span class="ruby-value str">'mkdir -vp &quot;'</span>
+27:           <span class="ruby-identifier">mkdir_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">target</span>))
+28:           <span class="ruby-identifier">mkdir_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&quot;'</span>
+29:           <span class="ruby-identifier">delayed_copy_file</span>.<span class="ruby-identifier">puts</span>(<span class="ruby-identifier">mkdir_string</span>)
+30:         <span class="ruby-keyword kw">end</span>
+31:         <span class="ruby-identifier">cp_string</span> = <span class="ruby-value str">'cp -v &quot;'</span>
+32:         <span class="ruby-identifier">cp_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">source</span>)
+33:         <span class="ruby-identifier">cp_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&quot; &quot;'</span>
+34:         <span class="ruby-identifier">cp_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">target</span>)
+35:         <span class="ruby-identifier">cp_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&quot;'</span>
+36:         <span class="ruby-identifier">delayed_copy_file</span>.<span class="ruby-identifier">puts</span>(<span class="ruby-identifier">cp_string</span>)
+37:         <span class="ruby-identifier">delayed_copy_file</span>.<span class="ruby-identifier">flush</span>
+38:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -154,40 +189,6 @@ Close the delayed copy file
 
         <div class="method-heading">
           <a href="#M000168" class="method-signature">
-          <span class="method-name">cp</span><span class="method-args">(source, target)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000168-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000168-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/delayed_copier.rb, line 24</span>
-24:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">target</span>)
-25:         <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">dir_seen?</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">target</span>)))
-26:           <span class="ruby-identifier">mkdir_string</span> = <span class="ruby-value str">'mkdir -vp &quot;'</span>
-27:           <span class="ruby-identifier">mkdir_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">target</span>))
-28:           <span class="ruby-identifier">mkdir_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&quot;'</span>
-29:         <span class="ruby-keyword kw">end</span>
-30:         <span class="ruby-identifier">cp_string</span> = <span class="ruby-value str">'cp -v &quot;'</span>
-31:         <span class="ruby-identifier">cp_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">source</span>)
-32:         <span class="ruby-identifier">cp_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&quot; &quot;'</span>
-33:         <span class="ruby-identifier">cp_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">target</span>)
-34:         <span class="ruby-identifier">cp_string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&quot;'</span>
-35:         <span class="ruby-identifier">delayed_copy_file</span>.<span class="ruby-identifier">puts</span>(<span class="ruby-identifier">cp_string</span>)
-36:         <span class="ruby-identifier">delayed_copy_file</span>.<span class="ruby-identifier">flush</span>
-37:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000167" class="method-detail">
-        <a name="M000167"></a>
-
-        <div class="method-heading">
-          <a href="#M000167" class="method-signature">
           <span class="method-name">delayed_copy_file</span><span class="method-args">()</span>
           </a>
         </div>
@@ -198,8 +199,8 @@ Returns (and creates, if necessary) the file to write the delayed copy
 operations to
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000167-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000167-source">
+            onclick="toggleCode('M000168-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000168-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/delayed_copier.rb, line 15</span>
 15:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">delayed_copy_file</span>

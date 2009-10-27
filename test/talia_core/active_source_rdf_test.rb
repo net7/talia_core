@@ -31,11 +31,11 @@ module TaliaCore
       src[N::RDF.rew] << 'value'
       src.save!
       # Test that there is 1 element now
-      assert_equal(1, (vals = SemanticRelation.find(:all, :conditions => {'subject_id' => src.id })).size, "Expected 1 value, got [#{print_rels(vals)}]")
-      assert_equal(1, src.semantic_relations.size)
+      assert_equal(2, (vals = SemanticRelation.find(:all, :conditions => {'subject_id' => src.id })).size, "Expected 1 value, got [#{print_rels(vals)}]")
+      assert_equal(2, src.semantic_relations.size)
       # Test if the element can be removed
       src[N::RDF.rew].remove
-      assert_equal(0, (vals = SemanticRelation.find(:all, :conditions => {'subject_id' => src.id })).size, "Expected 0 values, got [#{print_rels(vals)}]")
+      assert_equal(1, (vals = SemanticRelation.find(:all, :conditions => {'subject_id' => src.id })).size, "Expected 0 values, got [#{print_rels(vals)}]")
       assert_equal(0, src[N::RDF.rew].size)
     end
     
@@ -82,7 +82,11 @@ module TaliaCore
     protected
     
     def print_rels(relations)
-      relations.collect { |relation| "<#{relation.subject.uri} - #{relation.predicate_uri} - #{relation.object.is_a?(ActiveSource) ? relation.object.uri : relation.object.value}> | " }
+      begin
+        relations.collect { |relation| "<#{relation.subject.uri} - #{relation.predicate_uri} - #{relation.object.is_a?(ActiveSource) ? relation.object.uri : relation.object.value}> | " }
+      rescue
+        relations.inspect
+      end
     end
     
   end

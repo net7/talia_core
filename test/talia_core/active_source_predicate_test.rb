@@ -17,7 +17,7 @@ module TaliaCore
       src.each_cached_wrapper do |w|
         cached << w
       end
-      assert_equal(1, cached.size)
+      assert_equal(2, cached.size)
     end
     
     def test_cached_predicate

@@ -19,6 +19,26 @@ module GeneratorHelpers
     m.migration_template "migrations/#{template_name}", "db/migrate", :migration_file_name => template_name.gsub(/\.rb\Z/, '')
   end
   
+  # This is more of a quick hack, but the functionality requires extra plugins
+  # and by installing them from the generator everything can be done with
+  # one single command
+  def install_plugin(plugin_url)
+    system("#{ruby_bin} #{plugin_script} install #{plugin_url}")
+  end
+  
+  # Path to the plugin (installer) script
+  def plugin_script
+    @plugin_script ||= File.join(RAILS_ROOT, 'script', 'plugin')
+  end
+  
+  # Path to the ruby binary that we're currently using
+  def ruby_bin
+    @ruby_bin ||= begin
+      c = ::Config::CONFIG
+      File.join(c['bindir'], c['ruby_install_name']) << c['EXEEXT']
+    end
+  end
+  
 end
 
 # This monkeypatches a problem in the generator that causes it to have 
@@ -32,15 +52,28 @@ module Rails
         
         alias :orig_migration_string :next_migration_string
         
+        def migration_xtime
+          @migration_xtime ||= Time.now
+        end
+        
+        def migration_time
+          @migration_time ||= migration_xtime.utc.strftime('%Y%m%d%H%M')
+        end
+        
         def migration_count
-          @m_count ||= 0
+          @m_count ||= begin
+            Dir.glob("#{RAILS_ROOT}/#{@migration_directory}/#{migration_time}*.rb").inject(migration_xtime.sec) do |max, file|
+              n = File.basename(file)[12..13].to_i
+              (n > max) ? n : max
+            end
+          end
           @m_count += 1
           @m_count
         end
 
         def next_migration_string(padding = 3)
           return orig_migration_string(padding) unless(ActiveRecord::Base.timestamped_migrations)
-          (Time.now.utc.strftime("%Y%m%d%H%M") + ("%.2d" % migration_count))
+          migration_time + ("%.2d" % migration_count)
         end
         
       end

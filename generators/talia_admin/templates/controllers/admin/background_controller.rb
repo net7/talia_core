@@ -1,3 +1,5 @@
+require 'bj'
+
 class Admin::BackgroundController < ApplicationController
   layout 'admin', :except => [:update_progress]
   require_role 'admin'

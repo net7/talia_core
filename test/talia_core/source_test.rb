@@ -82,7 +82,7 @@ module TaliaCore
       # rec = SourceRecord.new
       source = Source.new("http://www.newstuff.org/my_nuff")
       assert_not_nil(source)
-      assert_equal(0, source.types.size)
+      assert_property(source.types, N::TALIA.Source)
     end
     
     # Test if a source object can be created correctly
@@ -90,8 +90,7 @@ module TaliaCore
       # rec = SourceRecord.new
       source = make_dummy_source("http://www.newstuff.org/createtypes", N::FOAFX.Person, N::FOAFX.Foe)
       assert_not_nil(source)
-      assert_equal(2, source.types.size)
-      assert_not_nil(source.types.each { |type| type.to_s == N::FOAFX.Person.to_s} )
+      assert_property(source.types, N::FOAFX.Person, N::FOAFX.Foe, source.rdf_selftype)
     end
     
     # test grouping by types
@@ -236,9 +235,9 @@ module TaliaCore
       my_source.default::author << "napoleon"
       my_source.save!
       
-      # Expected size of direct predicates: One for the predicate set above
-      # and one for the default type
-      assert_equal(2, my_source.direct_predicates.size)
+      # Expected size of direct predicates: One for the predicate set above,
+      # one for the default type and one for the default type
+      assert_equal(3, my_source.direct_predicates.size, "Direct predicates expected to have 3 elements. Real value: #{my_source.direct_predicates.inspect}")
       assert(my_source.direct_predicates.include?(N::DEFAULT::author))
     end
     
@@ -267,7 +266,7 @@ module TaliaCore
 
       source.save!
       
-      assert_equal(2, source.grouped_direct_predicates.size)
+      assert_equal(3, source.grouped_direct_predicates.size)
       predicates = source.grouped_direct_predicates['default']
       predicates.each do |group, source_list|
         source_list.flatten.each do |source|

@@ -255,7 +255,7 @@ div.main_menu_box a{
 	float: left;
 	text-align:center;
 	padding: 0 20px;
-
+	margin-right: 30px;
 	font-size: 20px;
 	font-family:Georgia, "Times New Roman", Times, serif;
 }
@@ -267,14 +267,11 @@ div.main_menu_box a:hover{
 }
 
 #users_access a{
-	margin-right: 30px;
 }
 #sources_access a{
-	margin-right: 30px;
 }
 
 #custom_templates_access a{
-	margin-right: 30px;
 }
 
 #translations_access a{

@@ -1,4 +1,20 @@
 ActionController::Routing::Routes.draw do |map|
+  map.logout '/logout', :controller => 'sessions', :action => 'destroy'
+  map.login '/login', :controller => 'sessions', :action => 'new'
+  map.register '/register', :controller => 'users', :action => 'create'
+  map.signup '/signup', :controller => 'users', :action => 'new'
+  map.resources :users
+
+  map.resource :session
+
+  map.logout '/logout', :controller => 'sessions', :action => 'destroy'
+  map.login '/login', :controller => 'sessions', :action => 'new'
+  map.register '/register', :controller => 'users', :action => 'create'
+  map.signup '/signup', :controller => 'users', :action => 'new'
+  map.resources :users
+
+  map.resource :session
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -31,8 +47,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :admin do |admin|
     admin.resources :translations, :collection => { :search => :get }
-    admin.resources :users
-    admin.resources :sources
+    admin.resources :users, :active_scaffold => true
+    admin.resources :sources, :active_scaffold => true
     admin.resources :locales
     admin.resources :background, :active_scaffold => true
     admin.resources :custom_templates, :active_scaffold => true
@@ -77,11 +93,11 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'import/:action', :controller => 'import', :action => 'start_import'
 
   # Default semantic dispatch
-  map.connect ':dispatch_uri', :controller => 'sources', :action => 'dispatch',
-    :requirements => { :dispatch_uri => /.*/ }
+  map.connect ':dispatch_uri.:format', :controller => 'sources', :action => 'dispatch',
+    :requirements => { :dispatch_uri => /[^\.]+/ }
 
   # map.connect ':controller/:action/:id.:format'
-  # map.connect ':controller/:action/:id'  
+  map.connect ':controller/:action/:id'
   
   
 end

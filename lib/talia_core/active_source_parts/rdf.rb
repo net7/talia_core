@@ -61,7 +61,7 @@ module TaliaCore
             value = obj.is_a?(SemanticProperty) ? obj.value : obj
             my_rdf.direct_write_predicate(N::URI.new(sem_ref.predicate_uri), value)
           end
-          my_rdf.direct_write_predicate(N::RDF.type, (N::TALIA + self.class.name.demodulize))
+          my_rdf.direct_write_predicate(N::RDF.type, rdf_selftype)
           my_rdf.save
         end
       end

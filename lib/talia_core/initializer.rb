@@ -287,6 +287,8 @@ module TaliaCore
             ActiveRecord::Base.logger = talia_logger
           end
         end
+        talia_logger.info("Setting Active Record to full STI use.") unless(ActiveRecord::Base.store_full_sti_class)
+        ActiveRecord::Base.store_full_sti_class = true
       end
 
       # Get the RDF configuration options

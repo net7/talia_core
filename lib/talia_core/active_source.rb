@@ -266,9 +266,12 @@ module TaliaCore
     #
     # This will check the existing types to avoid duplication
     def add_additional_rdf_types
-      return if(self.class.additional_rdf_types.size == 0) # Avoid database access if there's nothing to do
+      # return if(self.class.additional_rdf_types.empty?)
       type_hash = {}
       self.types.each { |type| type_hash[type.respond_to?(:uri) ? type.uri.to_s : type.to_s] = true }
+      # Add the "class" default type type (unless this is the source for the self type itself).0
+      self.types << rdf_selftype unless(type_hash[rdf_selftype.to_s] || (rdf_selftype.to_s == self.uri.to_s))
+      # Add the user-configured types
       self.class.additional_rdf_types.each do |type|
         self.types << type unless(type_hash[type.respond_to?(:uri) ? type.uri.to_s : type.to_s])
       end
@@ -305,6 +308,11 @@ module TaliaCore
       options[:conditions] = [ "type = ?", type ] if(type && !location)
       options[:conditions] = [ "type = ? AND location = ?", type, location ] if(type && location)
       data_records.find(find_type, options)
+    end
+    
+    # The RDF type that is used for objects of the current class
+    def rdf_selftype
+      (N::TALIA + self.class.name.demodulize)
     end
     
     private

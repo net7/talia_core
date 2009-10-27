@@ -1,2 +1,13 @@
 <h1>Sources found: <%= @sources.total_entries  %></h1>
-<%= widget(:grouped_list, :id => 'main_list', :group_property => :type, :group_values => @types, :group_increment => @group_increment) %>
+
+<div class="tags">
+<% for type in @rdf_types %>
+  <span class="<%= current_filter?(type) ? 'tag_selected' : 'tag' %>"><%= filter_link_for(type) %></span>
+<% end %>
+</div>
+
+<% for source in @sources %>
+  <p><%= link_to title_for(source), source.uri.to_s %> (<%= source.class.name  %>)</p>
+<% end  %>
+
+<%= will_paginate @sources %>

@@ -18,7 +18,7 @@ namespace :talia_core do
   task :talia_init do
     Util::title
     Util::init_talia
-    TLoad::force_rails_parts
+    TLoad::force_rails_parts unless(defined?(ActiveRecord))
     Util::talia_config if(Util::flag?('verbose'))
     # Add load paths to allow autoloading of all class from this tasks
     ActiveSupport::Dependencies.load_paths << File.join(TALIA_ROOT, 'lib')

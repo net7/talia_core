@@ -126,7 +126,7 @@ module TaliaCore
       # [*:find_through*] accepts and array with an predicate name and an object
       #                   value/uri, to search for predicates that match the given predicate/value 
       #                   combination
-      # [*:type] specifically looks for sources with the given type.
+      # [*:type*] specifically looks for sources with the given type.
       # [*:find_through_inv*] like :find_through, but for the "inverse" lookup
       # [*:prefetch_relations*] if set to "true", this will pre-load all semantic
       #                         relations for the sources (experimental, not fully implemented yet)
@@ -298,6 +298,7 @@ module TaliaCore
       # that method exists; otherwise it'll return nil
       def uri_string_for(value)
         result = if value.is_a? String
+          return nil if(value  =~ /\A\d+\Z/) # This looks like a record id, encoded as a string
           # if this is a local name, prepend the local namespace
           (value =~ /:/) ? value : (N::LOCAL + value).uri
         elsif(value.respond_to?(:uri))

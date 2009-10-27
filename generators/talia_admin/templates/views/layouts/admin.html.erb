@@ -32,11 +32,11 @@
       
       <div id="menu">
         <ul>
-          <li><%= link_to('Home', '/') %>
-          <li><%= link_to('Users', :controller => 'admin/users')  %></li>
-          <li><%= link_to('Translations', :controller => 'admin/translations') %></li>
-		  <li><%= link_to('Templates', :controller => 'admin/custom_templates')%>
-          <li><%= link_to('Logout', '/logout') %></li>
+		  <li><%= link_to('Home', '/') %>
+		  <% for admin_page in active_pages %>
+		  <li><%= link_to(admin_page.titleize, :controller => "admin/#{admin_page}")%></li>
+		  <% end %>
+          <li><%= link_to('Logout', :controller => 'sessions', :action => 'destroy') %></li>
         </ul>
       </div>
       

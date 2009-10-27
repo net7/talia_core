@@ -221,6 +221,13 @@ module TaliaCore
       assert_equal(0, active_sources(:predicate_search_b).direct_predicates.size)
     end
     
+    def test_default_type
+      src = ActiveSource.new('http://testy.com/testme/test_default_type')
+      src.save!
+      assert_equal(1, src.types.size)
+      assert_property(src.types, src.rdf_selftype)
+    end
+    
     def test_types
       src = ActiveSource.new
       src.uri = 'http://testy.com/testme/type_test'
@@ -228,7 +235,7 @@ module TaliaCore
       src.types << N::SourceClass.new(active_sources(:type_a).uri)
       src.types << N::SourceClass.new(active_sources(:type_b).uri)
       src.save!
-      assert_equal(2, src.types.size)
+      assert_property(src.types, active_sources(:type_a).uri, active_sources(:type_b).uri, src.rdf_selftype)
       assert_kind_of(N::SourceClass, src.types[0])
       assert(src.types.include?(active_sources(:type_b).uri))
     end
@@ -519,7 +526,7 @@ module TaliaCore
       assert_kind_of(SingularAccessorTest, src)
       assert_equal('value', src[N::LOCAL.localthi].first)
       assert_property(src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
-      assert_property(src.types, N::TALIA.foo)
+      assert_property(src.types, N::TALIA.foo, src.rdf_selftype)
     end
     
     def test_create_for_existing
@@ -534,7 +541,7 @@ module TaliaCore
       assert_equal(src.uri.to_s, new_src.uri.to_s)
       assert_equal('valorz', new_src[N::LOCAL.localthi].first)
       assert_property(new_src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
-      assert_property(new_src.types, N::TALIA.foo)
+      assert_property(new_src.types, N::TALIA.foo, new_src.rdf_selftype)
     end
     
     def test_create_multi
@@ -567,7 +574,7 @@ module TaliaCore
       assert_equal('http://as_test/create_forth_and_forth', new_src.uri.to_s)
       assert_equal('value', new_src[N::LOCAL.localthi].first)
       assert_property(new_src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
-      assert_property(new_src.types, N::TALIA.foo)
+      assert_property(new_src.types, N::TALIA.foo, new_src.rdf_selftype)
     end
     
     def test_create_with_file

@@ -1,0 +1,15 @@
+
+The Core classes were successfully installed. You can now run
+
+script/configure_talia
+
+to set up the main configuration for database and RDF store. You can also 
+create the configuration by hand.
+
+WARNING: Talia can create HUGE loge files, depending on the level. It is
+highly recommended that you at least add something like this to your
+environment.rb file:
+
+config.logger = Logger.new("#{RAILS_ROOT}/log/#{RAILS_ENV}.log", 3, 104857600)
+
+After you are set up, you can start importing data.

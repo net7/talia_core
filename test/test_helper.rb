@@ -70,7 +70,6 @@ module TaliaCore
     end
   end
   
-  ActiveRecord::Base.store_full_sti_class = true
   started = TestHelper.startup
   ActiveSupport::TestCase.set_fixture_class :active_sources => TaliaCore::ActiveSource,
     :semantic_properties => TaliaCore::SemanticProperty,

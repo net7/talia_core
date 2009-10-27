@@ -13,6 +13,12 @@ class TaliaAdminGenerator < Rails::Generator::Base
       files_in m, 'controllers', 'app/'
       files_in m, 'public'
       files_in m, 'test'
+      
+      m.directory 'app/models'
+      m.file 'models/role.rb', 'app/models/role.rb', :collision => :force
+      
+      m.directory 'db/migrate'
+      make_migration m, "populate_users.rb"
     end
   end
 

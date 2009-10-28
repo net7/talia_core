@@ -155,9 +155,9 @@ module TaliaCore
     
     # Direct RDF property
     def test_rdf_direct_property
-      @valid_source.default::test_predicate << "moofoo"
-      assert_equal(@valid_source.default::test_predicate[0], "moofoo")
-      assert_equal(1, @valid_source.default::test_predicate.size)
+      @valid_source.talia::test_predicate << "moofoo"
+      assert_equal(@valid_source.talia::test_predicate[0], "moofoo")
+      assert_equal(1, @valid_source.talia::test_predicate.size)
     end
     
     # Namespaced RDF property
@@ -173,18 +173,18 @@ module TaliaCore
     
     # Relation properties
     def test_relations
-      @valid_source.default::rel_it << Source.new("http://foobar.com/")
-      assert_kind_of(SemanticCollectionWrapper, @valid_source.default::rel_it)
-      assert_kind_of(Source, @valid_source.default::rel_it[0])
-      assert_equal("http://foobar.com/", @valid_source.default::rel_it[0].uri.to_s)
+      @valid_source.talia::rel_it << Source.new("http://foobar.com/")
+      assert_kind_of(SemanticCollectionWrapper, @valid_source.talia::rel_it)
+      assert_kind_of(Source, @valid_source.talia::rel_it[0])
+      assert_equal("http://foobar.com/", @valid_source.talia::rel_it[0].uri.to_s)
     end
     
     # RDF load and save
     def test_rdf_save_load
-      @valid_source.default::hero << "napoleon"
+      @valid_source.talia::hero << "napoleon"
       @valid_source.save
       loaded = Source.find(@valid_source.uri)
-      assert_equal("napoleon", loaded.default::hero[0])
+      assert_equal("napoleon", loaded.talia::hero[0])
     end
     
     # Test limit
@@ -223,7 +223,7 @@ module TaliaCore
       source.types << @test_type
       source.primary_source = false
       source.save!
-      source.default::author << "napoleon"
+      source.talia::author << "napoleon"
       source.save!
       print source.to_xml
       print source.to_rdf # also check rdf
@@ -232,13 +232,13 @@ module TaliaCore
     # Test for direct predicates
     def test_direct_predicates
       my_source = make_dummy_source("http://direct_predicate_haver/")
-      my_source.default::author << "napoleon"
+      my_source.talia::author << "napoleon"
       my_source.save!
       
       # Expected size of direct predicates: One for the predicate set above,
       # one for the default type and one for the default type
       assert_equal(3, my_source.direct_predicates.size, "Direct predicates expected to have 3 elements. Real value: #{my_source.direct_predicates.inspect}")
-      assert(my_source.direct_predicates.include?(N::DEFAULT::author))
+      assert(my_source.direct_predicates.include?(N::TALIA::author))
     end
     
     # Test for inverse predicates
@@ -261,13 +261,13 @@ module TaliaCore
     
     def test_grouped_direct_predicates_should_collect_rdf_objects
       source = make_dummy_source("http://direct_predicate_for_napoleon/")
-      source.default::historical_character << Source.new("#{N::LOCAL}napoleon")
-      source.default::historical_character << "Giuseppe Garibaldi"
+      source.talia::historical_character << Source.new("#{N::LOCAL}napoleon")
+      source.talia::historical_character << "Giuseppe Garibaldi"
 
       source.save!
       
-      assert_equal(3, source.grouped_direct_predicates.size)
-      predicates = source.grouped_direct_predicates['default']
+      assert_equal(2, source.grouped_direct_predicates.size)
+      predicates = source.grouped_direct_predicates['talia']
       predicates.each do |group, source_list|
         source_list.flatten.each do |source|
           assert_kind_of(SourceTransferObject, source)
@@ -278,18 +278,18 @@ module TaliaCore
     
     def test_predicate_objects
       source = make_dummy_source("http://star-wars.org/")
-      source.default::jedi_knight << Source.new("http://star-wars.org/luke-skywalker")
-      source.default::jedi_knight << "Obi-Wan Kenobi"
+      source.talia::jedi_knight << Source.new("http://star-wars.org/luke-skywalker")
+      source.talia::jedi_knight << "Obi-Wan Kenobi"
 
-      assert_included source.predicate_objects('default', 'jedi_knight'), "http://star-wars.org/luke-skywalker"
-      assert_included source.predicate_objects('default', 'jedi_knight'), "Obi-Wan Kenobi"
+      assert_included source.predicate_objects('talia', 'jedi_knight'), "http://star-wars.org/luke-skywalker"
+      assert_included source.predicate_objects('talia', 'jedi_knight'), "Obi-Wan Kenobi"
     end
     
     def test_associated
       source = make_dummy_source("http://star-wars.org/")
       associated_source = Source.new("http://star-wars.org/luke-skywalker")
-      source.default::jedi_knight << associated_source
-      assert(source.associated?('default', 'jedi_knight', associated_source.to_s))
+      source.talia::jedi_knight << associated_source
+      assert(source.associated?('talia', 'jedi_knight', associated_source.to_s))
     end
     
     def test_predicates_attributes_setter

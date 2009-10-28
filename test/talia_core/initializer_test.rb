@@ -19,7 +19,6 @@ module TaliaCore
     # Test namespaces
     def test_namespaces
       assert(N::LOCAL.to_s, "http://localnode.org/")
-      assert_equal(N::DEFAULT.to_s, "http://default.talia.eu/")
       assert_equal(N::FOO.to_s, "http://foo.com/")
       assert_kind_of(N::Namespace, N::FOO)
     end

@@ -160,9 +160,6 @@ module TaliaCore
         # The name of the local node
         config["local_uri"] = "http://test.dummy/"
 
-        # The "default" namespace
-        config["default_namespace_uri"] = "http://default.dummy/"
-
         # Connect options for ActiveRDF
         # Defaults to in-memory RDFLite
         config["rdf_connection"] = {
@@ -314,10 +311,6 @@ module TaliaCore
         # Register the local name
         N::Namespace.shortcut(:local, @config["local_uri"])
         talia_logger.info("Local Domain: #{N::LOCAL}")
-
-        # Register the default name
-        N::Namespace.shortcut(:default, @config["default_namespace_uri"])
-        talia_logger.debug("Default Domain: #{N::DEFAULT}")
 
         # Register namespace for database dupes
         N::Namespace.shortcut(:talia, "http://talia.discovery-project.eu/wiki/TaliaInternal#")

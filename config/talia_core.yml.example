@@ -32,11 +32,13 @@ namespaces:
     # library.
     # HyperNietzsche namespace
     hyper: "http://www.hypernietzsche.org/ontology/"
+    # FOAF
+    foaf: http://xmlns.com/foaf/0.1/
     # DublinCore namespace
+    dct: http://purl.org/dc/terms/
+    dcmit: http://purl.org/dc/dcmitype/
     dcns:     "http://purl.org/dc/elements/1.1/"
-    dct:      "http://purl.org/dc/terms/"
-    dcmit:    "http://purl.org/dc/dcmitype/"
-
-
-
-
+    # Used in demo apps
+    luccadom: http://trac.talia.discovery-project.eu/wiki/LuccaOntology#
+    talias: http://trac.talia.discovery-project.eu/wiki/StructuralOntology#
+    taliadom: http://trac.talia.discovery-project.eu/wiki/SampleDomainOntology#

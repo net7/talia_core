@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Daniel Hahn"]
-  s.date = %q{2009-10-27}
+  s.date = %q{2009-10-28}
   s.default_executable = %q{talia}
   s.description = %q{This is the core plugin for building a digital library with Talia/Rails.}
   s.email = %q{ghub@limitedcreativity.org}
@@ -262,7 +262,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<averell23-bj>, [">= 1.0.2"])
       s.add_runtime_dependency(%q<hpricot>, [">= 0.6.1"])
       s.add_runtime_dependency(%q<oai>, [">= 0.0.12"])
-      s.add_runtime_dependency(%q<ruby-openid>, [">= 2.1.7"])
       s.add_runtime_dependency(%q<builder>, [">= 2.1.2"])
       s.add_runtime_dependency(%q<optiflag>, [">= 0.6.5"])
       s.add_runtime_dependency(%q<rake>, [">= 0.7.1"])
@@ -275,7 +274,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<averell23-bj>, [">= 1.0.2"])
       s.add_dependency(%q<hpricot>, [">= 0.6.1"])
       s.add_dependency(%q<oai>, [">= 0.0.12"])
-      s.add_dependency(%q<ruby-openid>, [">= 2.1.7"])
       s.add_dependency(%q<builder>, [">= 2.1.2"])
       s.add_dependency(%q<optiflag>, [">= 0.6.5"])
       s.add_dependency(%q<rake>, [">= 0.7.1"])
@@ -289,7 +287,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<averell23-bj>, [">= 1.0.2"])
     s.add_dependency(%q<hpricot>, [">= 0.6.1"])
     s.add_dependency(%q<oai>, [">= 0.0.12"])
-    s.add_dependency(%q<ruby-openid>, [">= 2.1.7"])
     s.add_dependency(%q<builder>, [">= 2.1.2"])
     s.add_dependency(%q<optiflag>, [">= 0.6.5"])
     s.add_dependency(%q<rake>, [">= 0.7.1"])

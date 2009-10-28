@@ -47,7 +47,6 @@ begin
     s.add_dependency('averell23-bj', '>= 1.0.2')
     s.add_dependency('hpricot', '>= 0.6.1')
     s.add_dependency('oai', '>= 0.0.12')
-    s.add_dependency('ruby-openid', '>= 2.1.7')
     s.add_dependency('builder', '>= 2.1.2')
     s.add_dependency('optiflag', '>= 0.6.5')
     s.add_dependency('rake', '>= 0.7.1')

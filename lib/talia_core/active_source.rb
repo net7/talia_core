@@ -49,7 +49,7 @@ module TaliaCore
       :class_name => 'TaliaCore::SemanticRelation'
     has_many :subjects, :through => :related_subjects
     
-    validates_format_of :uri, :with => /\A\S*:.*\Z/
+    validates_format_of :uri, :with => /\A\S*:.*\Z/, :message => '<{{value}}> does not look like an uri.'
     validates_uniqueness_of :uri
 
     before_destroy :remove_inverse_properties # Remove inverse properties when destroying an element

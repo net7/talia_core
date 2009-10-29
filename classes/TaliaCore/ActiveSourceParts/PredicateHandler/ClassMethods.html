@@ -87,7 +87,7 @@ that represent the properties/objects a class has for a given predicate
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000073">prefetch_relations_for</a>&nbsp;&nbsp;
+      <a href="#M000138">prefetch_relations_for</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -109,11 +109,11 @@ that represent the properties/objects a class has for a given predicate
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000073" class="method-detail">
-        <a name="M000073"></a>
+      <div id="method-M000138" class="method-detail">
+        <a name="M000138"></a>
 
         <div class="method-heading">
-          <a href="#M000073" class="method-signature">
+          <a href="#M000138" class="method-signature">
           <span class="method-name">prefetch_relations_for</span><span class="method-args">(sources, limit = 1024)</span>
           </a>
         </div>
@@ -129,8 +129,8 @@ accepted. (For a web application, if you go over the default, you&#8216;re
 probably doing it wrong).
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000073-source">
+            onclick="toggleCode('M000138-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000138-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 15</span>
 15:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prefetch_relations_for</span>(<span class="ruby-identifier">sources</span>, <span class="ruby-identifier">limit</span> = <span class="ruby-value">1024</span>)
@@ -152,8 +152,9 @@ probably doing it wrong).
 31:           <span class="ruby-comment cmt"># Set all as loaded</span>
 32:           <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">src</span><span class="ruby-operator">|</span>
 33:             <span class="ruby-identifier">src</span>.<span class="ruby-identifier">each_cached_wrapper</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">wrap</span><span class="ruby-operator">|</span> <span class="ruby-identifier">wrap</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value str">'@loaded'</span><span class="ruby-value str">'@loaded'</span>, <span class="ruby-keyword kw">true</span>) }
-34:           <span class="ruby-keyword kw">end</span>
-35:         <span class="ruby-keyword kw">end</span>
+34:             <span class="ruby-identifier">src</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value str">'@prefetched'</span><span class="ruby-value str">'@prefetched'</span>, <span class="ruby-keyword kw">true</span>)
+35:           <span class="ruby-keyword kw">end</span>
+36:         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

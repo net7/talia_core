@@ -80,9 +80,9 @@
 
     <div id="description">
       <p>
-Wraps the Array/Collection returned from the ActiveRecord, simply
-&quot;hiding&quot; the <a href="SemanticProperty.html">SemanticProperty</a>
-objects behind strings.
+Wraps the Array/<a href="Collection.html">Collection</a> returned from the
+ActiveRecord, simply &quot;hiding&quot; the <a
+href="SemanticProperty.html">SemanticProperty</a> objects behind strings.
 </p>
 
     </div>
@@ -94,30 +94,30 @@ objects behind strings.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000302">&lt;&lt;</a>&nbsp;&nbsp;
-      <a href="#M000290">[]</a>&nbsp;&nbsp;
-      <a href="#M000303">add_with_order</a>&nbsp;&nbsp;
-      <a href="#M000289">at</a>&nbsp;&nbsp;
-      <a href="#M000308">clean?</a>&nbsp;&nbsp;
-      <a href="#M000295">collect</a>&nbsp;&nbsp;
-      <a href="#M000294">each</a>&nbsp;&nbsp;
-      <a href="#M000296">each_item</a>&nbsp;&nbsp;
-      <a href="#M000309">empty?</a>&nbsp;&nbsp;
-      <a href="#M000291">first</a>&nbsp;&nbsp;
-      <a href="#M000293">get_item_at</a>&nbsp;&nbsp;
-      <a href="#M000301">include?</a>&nbsp;&nbsp;
-      <a href="#M000300">index</a>&nbsp;&nbsp;
-      <a href="#M000310">inject_fat_item</a>&nbsp;&nbsp;
-      <a href="#M000299">join</a>&nbsp;&nbsp;
-      <a href="#M000292">last</a>&nbsp;&nbsp;
-      <a href="#M000307">loaded?</a>&nbsp;&nbsp;
-      <a href="#M000288">new</a>&nbsp;&nbsp;
-      <a href="#M000305">remove</a>&nbsp;&nbsp;
-      <a href="#M000304">replace</a>&nbsp;&nbsp;
-      <a href="#M000306">save_items!</a>&nbsp;&nbsp;
-      <a href="#M000298">size</a>&nbsp;&nbsp;
-      <a href="#M000287">special_types</a>&nbsp;&nbsp;
-      <a href="#M000297">values</a>&nbsp;&nbsp;
+      <a href="#M000368">&lt;&lt;</a>&nbsp;&nbsp;
+      <a href="#M000356">[]</a>&nbsp;&nbsp;
+      <a href="#M000369">add_with_order</a>&nbsp;&nbsp;
+      <a href="#M000355">at</a>&nbsp;&nbsp;
+      <a href="#M000374">clean?</a>&nbsp;&nbsp;
+      <a href="#M000361">collect</a>&nbsp;&nbsp;
+      <a href="#M000360">each</a>&nbsp;&nbsp;
+      <a href="#M000362">each_item</a>&nbsp;&nbsp;
+      <a href="#M000375">empty?</a>&nbsp;&nbsp;
+      <a href="#M000357">first</a>&nbsp;&nbsp;
+      <a href="#M000359">get_item_at</a>&nbsp;&nbsp;
+      <a href="#M000367">include?</a>&nbsp;&nbsp;
+      <a href="#M000366">index</a>&nbsp;&nbsp;
+      <a href="#M000376">inject_fat_item</a>&nbsp;&nbsp;
+      <a href="#M000365">join</a>&nbsp;&nbsp;
+      <a href="#M000358">last</a>&nbsp;&nbsp;
+      <a href="#M000373">loaded?</a>&nbsp;&nbsp;
+      <a href="#M000354">new</a>&nbsp;&nbsp;
+      <a href="#M000371">remove</a>&nbsp;&nbsp;
+      <a href="#M000370">replace</a>&nbsp;&nbsp;
+      <a href="#M000372">save_items!</a>&nbsp;&nbsp;
+      <a href="#M000364">size</a>&nbsp;&nbsp;
+      <a href="#M000353">special_types</a>&nbsp;&nbsp;
+      <a href="#M000363">values</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -172,11 +172,11 @@ objects behind strings.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000288" class="method-detail">
-        <a name="M000288"></a>
+      <div id="method-M000354" class="method-detail">
+        <a name="M000354"></a>
 
         <div class="method-heading">
-          <a href="#M000288" class="method-signature">
+          <a href="#M000354" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(source, predicate)</span>
           </a>
         </div>
@@ -186,8 +186,8 @@ objects behind strings.
 Initialize the list
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000288-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000288-source">
+            onclick="toggleCode('M000354-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000354-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 21</span>
 21:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">predicate</span>)
@@ -205,11 +205,11 @@ Initialize the list
         </div>
       </div>
 
-      <div id="method-M000287" class="method-detail">
-        <a name="M000287"></a>
+      <div id="method-M000353" class="method-detail">
+        <a name="M000353"></a>
 
         <div class="method-heading">
-          <a href="#M000287" class="method-signature">
+          <a href="#M000353" class="method-signature">
           <span class="method-name">special_types</span><span class="method-args">()</span>
           </a>
         </div>
@@ -222,8 +222,8 @@ href="ActiveSource.html">ActiveSource</a> relations and all sources will be
 casted to the given type
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000287-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000287-source">
+            onclick="toggleCode('M000353-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000353-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 14</span>
 14:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">special_types</span>
@@ -238,11 +238,11 @@ casted to the given type
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000302" class="method-detail">
-        <a name="M000302"></a>
+      <div id="method-M000368" class="method-detail">
+        <a name="M000368"></a>
 
         <div class="method-heading">
-          <a href="#M000302" class="method-signature">
+          <a href="#M000368" class="method-signature">
           <span class="method-name">&lt;&lt;</span><span class="method-args">(value)</span>
           </a>
         </div>
@@ -253,8 +253,8 @@ Push to collection. Giving a string will create a property to be created,
 saved and associated.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000302-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000302-source">
+            onclick="toggleCode('M000368-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000368-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 108</span>
 108:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">value</span>)
@@ -265,8 +265,8 @@ saved and associated.
         </div>
       </div>
 
-      <div id="method-M000290" class="method-detail">
-        <a name="M000290"></a>
+      <div id="method-M000356" class="method-detail">
+        <a name="M000356"></a>
 
         <div class="method-heading">
           <span class="method-name">[]</span><span class="method-args">(index)</span>
@@ -274,16 +274,16 @@ saved and associated.
       
         <div class="method-description">
           <p>
-Alias for <a href="SemanticCollectionWrapper.html#M000289">at</a>
+Alias for <a href="SemanticCollectionWrapper.html#M000355">at</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000303" class="method-detail">
-        <a name="M000303"></a>
+      <div id="method-M000369" class="method-detail">
+        <a name="M000369"></a>
 
         <div class="method-heading">
-          <a href="#M000303" class="method-signature">
+          <a href="#M000369" class="method-signature">
           <span class="method-name">add_with_order</span><span class="method-args">(value, order)</span>
           </a>
         </div>
@@ -293,8 +293,8 @@ Alias for <a href="SemanticCollectionWrapper.html#M000289">at</a>
 Adds the object and gives the relation the given order.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000303-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000303-source">
+            onclick="toggleCode('M000369-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000369-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 114</span>
 114:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_with_order</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">order</span>)
@@ -312,11 +312,11 @@ Adds the object and gives the relation the given order.
         </div>
       </div>
 
-      <div id="method-M000289" class="method-detail">
-        <a name="M000289"></a>
+      <div id="method-M000355" class="method-detail">
+        <a name="M000355"></a>
 
         <div class="method-heading">
-          <a href="#M000289" class="method-signature">
+          <a href="#M000355" class="method-signature">
           <span class="method-name">at</span><span class="method-args">(index)</span>
           </a>
         </div>
@@ -324,12 +324,12 @@ Adds the object and gives the relation the given order.
         <div class="method-description">
           <p>
 Get the element &#8217;&#8217;&#8216;value&#8217;&#8217;&#8217; <a
-href="SemanticCollectionWrapper.html#M000289">at</a> the given <a
-href="SemanticCollectionWrapper.html#M000300">index</a>
+href="SemanticCollectionWrapper.html#M000355">at</a> the given <a
+href="SemanticCollectionWrapper.html#M000366">index</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000289-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000289-source">
+            onclick="toggleCode('M000355-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000355-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 33</span>
 33:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">at</span>(<span class="ruby-identifier">index</span>)
@@ -340,11 +340,11 @@ href="SemanticCollectionWrapper.html#M000300">index</a>
         </div>
       </div>
 
-      <div id="method-M000308" class="method-detail">
-        <a name="M000308"></a>
+      <div id="method-M000374" class="method-detail">
+        <a name="M000374"></a>
 
         <div class="method-heading">
-          <a href="#M000308" class="method-signature">
+          <a href="#M000374" class="method-signature">
           <span class="method-name">clean?</span><span class="method-args">()</span>
           </a>
         </div>
@@ -355,8 +355,8 @@ Indicates that the wraper is &quot;clean&quot;, that is it hasn&#8216;t
 been written to or read from
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000308-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000308-source">
+            onclick="toggleCode('M000374-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000374-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 181</span>
 181:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clean?</span>
@@ -367,11 +367,11 @@ been written to or read from
         </div>
       </div>
 
-      <div id="method-M000295" class="method-detail">
-        <a name="M000295"></a>
+      <div id="method-M000361" class="method-detail">
+        <a name="M000361"></a>
 
         <div class="method-heading">
-          <a href="#M000295" class="method-signature">
+          <a href="#M000361" class="method-signature">
           <span class="method-name">collect</span><span class="method-args">() {|item.value| ...}</span>
           </a>
         </div>
@@ -381,8 +381,8 @@ been written to or read from
 Collect method for the semantic wrapper
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000295-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000295-source">
+            onclick="toggleCode('M000361-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000361-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 59</span>
 59:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">collect</span>
@@ -393,24 +393,24 @@ Collect method for the semantic wrapper
         </div>
       </div>
 
-      <div id="method-M000294" class="method-detail">
-        <a name="M000294"></a>
+      <div id="method-M000360" class="method-detail">
+        <a name="M000360"></a>
 
         <div class="method-heading">
-          <a href="#M000294" class="method-signature">
+          <a href="#M000360" class="method-signature">
           <span class="method-name">each</span><span class="method-args">() {|item.value| ...}</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Iterates over <a href="SemanticCollectionWrapper.html#M000294">each</a>
+Iterates over <a href="SemanticCollectionWrapper.html#M000360">each</a>
 &#8217;&#8217;&#8216;value&#8217;&#8217;&#8217; of the items in the
 relation.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000294-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000294-source">
+            onclick="toggleCode('M000360-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000360-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 54</span>
 54:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>
@@ -421,26 +421,26 @@ relation.
         </div>
       </div>
 
-      <div id="method-M000296" class="method-detail">
-        <a name="M000296"></a>
+      <div id="method-M000362" class="method-detail">
+        <a name="M000362"></a>
 
         <div class="method-heading">
-          <a href="#M000296" class="method-signature">
+          <a href="#M000362" class="method-signature">
           <span class="method-name">each_item</span><span class="method-args">() {|item.object| ...}</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Iterates of <a href="SemanticCollectionWrapper.html#M000294">each</a>
+Iterates of <a href="SemanticCollectionWrapper.html#M000360">each</a>
 &#8217;&#8217;&#8216;target&#8217;&#8217;&#8217; of the items in the
 relation. (This will pass in <a
 href="SemanticProperty.html">SemanticProperty</a> objects instead of the
 value
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000296-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000296-source">
+            onclick="toggleCode('M000362-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000362-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 65</span>
 65:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_item</span>
@@ -451,19 +451,19 @@ value
         </div>
       </div>
 
-      <div id="method-M000309" class="method-detail">
-        <a name="M000309"></a>
+      <div id="method-M000375" class="method-detail">
+        <a name="M000375"></a>
 
         <div class="method-heading">
-          <a href="#M000309" class="method-signature">
+          <a href="#M000375" class="method-signature">
           <span class="method-name">empty?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000309-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000309-source">
+            onclick="toggleCode('M000375-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000375-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 185</span>
 185:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">empty?</span>
@@ -474,19 +474,19 @@ value
         </div>
       </div>
 
-      <div id="method-M000291" class="method-detail">
-        <a name="M000291"></a>
+      <div id="method-M000357" class="method-detail">
+        <a name="M000357"></a>
 
         <div class="method-heading">
-          <a href="#M000291" class="method-signature">
+          <a href="#M000357" class="method-signature">
           <span class="method-name">first</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000291-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000291-source">
+            onclick="toggleCode('M000357-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000357-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 38</span>
 38:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">first</span>
@@ -498,23 +498,23 @@ value
         </div>
       </div>
 
-      <div id="method-M000293" class="method-detail">
-        <a name="M000293"></a>
+      <div id="method-M000359" class="method-detail">
+        <a name="M000359"></a>
 
         <div class="method-heading">
-          <a href="#M000293" class="method-signature">
+          <a href="#M000359" class="method-signature">
           <span class="method-name">get_item_at</span><span class="method-args">(index)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Gets the value <a href="SemanticCollectionWrapper.html#M000289">at</a> the
-given <a href="SemanticCollectionWrapper.html#M000300">index</a>
+Gets the value <a href="SemanticCollectionWrapper.html#M000355">at</a> the
+given <a href="SemanticCollectionWrapper.html#M000366">index</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000293-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000293-source">
+            onclick="toggleCode('M000359-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000359-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 49</span>
 49:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_item_at</span>(<span class="ruby-identifier">index</span>)
@@ -525,11 +525,11 @@ given <a href="SemanticCollectionWrapper.html#M000300">index</a>
         </div>
       </div>
 
-      <div id="method-M000301" class="method-detail">
-        <a name="M000301"></a>
+      <div id="method-M000367" class="method-detail">
+        <a name="M000367"></a>
 
         <div class="method-heading">
-          <a href="#M000301" class="method-signature">
+          <a href="#M000367" class="method-signature">
           <span class="method-name">include?</span><span class="method-args">(value)</span>
           </a>
         </div>
@@ -539,8 +539,8 @@ given <a href="SemanticCollectionWrapper.html#M000300">index</a>
 Check if the collection includes the value
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000301-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000301-source">
+            onclick="toggleCode('M000367-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000367-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 100</span>
 100:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>)
@@ -551,11 +551,11 @@ Check if the collection includes the value
         </div>
       </div>
 
-      <div id="method-M000300" class="method-detail">
-        <a name="M000300"></a>
+      <div id="method-M000366" class="method-detail">
+        <a name="M000366"></a>
 
         <div class="method-heading">
-          <a href="#M000300" class="method-signature">
+          <a href="#M000366" class="method-signature">
           <span class="method-name">index</span><span class="method-args">(value)</span>
           </a>
         </div>
@@ -565,8 +565,8 @@ Check if the collection includes the value
 Index of the given value
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000300-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000300-source">
+            onclick="toggleCode('M000366-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000366-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 95</span>
 95:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>(<span class="ruby-identifier">value</span>)
@@ -577,11 +577,11 @@ Index of the given value
         </div>
       </div>
 
-      <div id="method-M000310" class="method-detail">
-        <a name="M000310"></a>
+      <div id="method-M000376" class="method-detail">
+        <a name="M000376"></a>
 
         <div class="method-heading">
-          <a href="#M000310" class="method-signature">
+          <a href="#M000376" class="method-signature">
           <span class="method-name">inject_fat_item</span><span class="method-args">(fat_rel)</span>
           </a>
         </div>
@@ -592,8 +592,8 @@ Injector for a fat relation. This must take place before flagging the
 source as &quot;loaded&quot;
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000310-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000310-source">
+            onclick="toggleCode('M000376-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000376-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 191</span>
 191:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inject_fat_item</span>(<span class="ruby-identifier">fat_rel</span>)
@@ -606,11 +606,11 @@ source as &quot;loaded&quot;
         </div>
       </div>
 
-      <div id="method-M000299" class="method-detail">
-        <a name="M000299"></a>
+      <div id="method-M000365" class="method-detail">
+        <a name="M000365"></a>
 
         <div class="method-heading">
-          <a href="#M000299" class="method-signature">
+          <a href="#M000365" class="method-signature">
           <span class="method-name">join</span><span class="method-args">(join_str = ', ')</span>
           </a>
         </div>
@@ -620,8 +620,8 @@ source as &quot;loaded&quot;
 Joins the elments into a string
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000299-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000299-source">
+            onclick="toggleCode('M000365-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000365-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 89</span>
 89:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">join</span>(<span class="ruby-identifier">join_str</span> = <span class="ruby-value str">', '</span>)
@@ -633,19 +633,19 @@ Joins the elments into a string
         </div>
       </div>
 
-      <div id="method-M000292" class="method-detail">
-        <a name="M000292"></a>
+      <div id="method-M000358" class="method-detail">
+        <a name="M000358"></a>
 
         <div class="method-heading">
-          <a href="#M000292" class="method-signature">
+          <a href="#M000358" class="method-signature">
           <span class="method-name">last</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000292-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000292-source">
+            onclick="toggleCode('M000358-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000358-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 43</span>
 43:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">last</span>
@@ -657,11 +657,11 @@ Joins the elments into a string
         </div>
       </div>
 
-      <div id="method-M000307" class="method-detail">
-        <a name="M000307"></a>
+      <div id="method-M000373" class="method-detail">
+        <a name="M000373"></a>
 
         <div class="method-heading">
-          <a href="#M000307" class="method-signature">
+          <a href="#M000373" class="method-signature">
           <span class="method-name">loaded?</span><span class="method-args">()</span>
           </a>
         </div>
@@ -671,8 +671,8 @@ Joins the elments into a string
 Indicates of the internal collection is loaded
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000307-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000307-source">
+            onclick="toggleCode('M000373-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000373-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 175</span>
 175:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded?</span>
@@ -683,11 +683,11 @@ Indicates of the internal collection is loaded
         </div>
       </div>
 
-      <div id="method-M000305" class="method-detail">
-        <a name="M000305"></a>
+      <div id="method-M000371" class="method-detail">
+        <a name="M000371"></a>
 
         <div class="method-heading">
-          <a href="#M000305" class="method-signature">
+          <a href="#M000371" class="method-signature">
           <span class="method-name">remove</span><span class="method-args">(*params)</span>
           </a>
         </div>
@@ -698,8 +698,8 @@ Remove the given value. With no parameters, the whole list will be cleared
 and the RDF will be updated immediately.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000305-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000305-source">
+            onclick="toggleCode('M000371-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000371-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 134</span>
 134:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">params</span>)
@@ -724,11 +724,11 @@ and the RDF will be updated immediately.
         </div>
       </div>
 
-      <div id="method-M000304" class="method-detail">
-        <a name="M000304"></a>
+      <div id="method-M000370" class="method-detail">
+        <a name="M000370"></a>
 
         <div class="method-heading">
-          <a href="#M000304" class="method-signature">
+          <a href="#M000370" class="method-signature">
           <span class="method-name">replace</span><span class="method-args">(old_value, new_value)</span>
           </a>
         </div>
@@ -736,11 +736,11 @@ and the RDF will be updated immediately.
         <div class="method-description">
           <p>
 Replace a value with a <a
-href="SemanticCollectionWrapper.html#M000288">new</a> one
+href="SemanticCollectionWrapper.html#M000354">new</a> one
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000304-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000304-source">
+            onclick="toggleCode('M000370-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000370-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 126</span>
 126:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">replace</span>(<span class="ruby-identifier">old_value</span>, <span class="ruby-identifier">new_value</span>)
@@ -753,11 +753,11 @@ href="SemanticCollectionWrapper.html#M000288">new</a> one
         </div>
       </div>
 
-      <div id="method-M000306" class="method-detail">
-        <a name="M000306"></a>
+      <div id="method-M000372" class="method-detail">
+        <a name="M000372"></a>
 
         <div class="method-heading">
-          <a href="#M000306" class="method-signature">
+          <a href="#M000372" class="method-signature">
           <span class="method-name">save_items!</span><span class="method-args">()</span>
           </a>
         </div>
@@ -767,8 +767,8 @@ href="SemanticCollectionWrapper.html#M000288">new</a> one
 This attempts to save the items to the database
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000306-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000306-source">
+            onclick="toggleCode('M000372-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000372-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 153</span>
 153:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save_items!</span>
@@ -796,11 +796,11 @@ This attempts to save the items to the database
         </div>
       </div>
 
-      <div id="method-M000298" class="method-detail">
-        <a name="M000298"></a>
+      <div id="method-M000364" class="method-detail">
+        <a name="M000364"></a>
 
         <div class="method-heading">
-          <a href="#M000298" class="method-signature">
+          <a href="#M000364" class="method-signature">
           <span class="method-name">size</span><span class="method-args">()</span>
           </a>
         </div>
@@ -810,8 +810,8 @@ This attempts to save the items to the database
 Size of the collection.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000298-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000298-source">
+            onclick="toggleCode('M000364-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000364-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 75</span>
 75:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>
@@ -831,11 +831,11 @@ Size of the collection.
         </div>
       </div>
 
-      <div id="method-M000297" class="method-detail">
-        <a name="M000297"></a>
+      <div id="method-M000363" class="method-detail">
+        <a name="M000363"></a>
 
         <div class="method-heading">
-          <a href="#M000297" class="method-signature">
+          <a href="#M000363" class="method-signature">
           <span class="method-name">values</span><span class="method-args">()</span>
           </a>
         </div>
@@ -843,11 +843,11 @@ Size of the collection.
         <div class="method-description">
           <p>
 Returns an array with all <a
-href="SemanticCollectionWrapper.html#M000297">values</a> in the collection
+href="SemanticCollectionWrapper.html#M000363">values</a> in the collection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000297-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000297-source">
+            onclick="toggleCode('M000363-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000363-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 70</span>
 70:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">values</span>

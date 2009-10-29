@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Mysql::Result</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Mysql::Result</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/mysql_rb.html">
+                lib/mysql.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000051">data_seek</a>&nbsp;&nbsp;
+      <a href="#M000065">each</a>&nbsp;&nbsp;
+      <a href="#M000066">each_hash</a>&nbsp;&nbsp;
+      <a href="#M000052">fetch_field</a>&nbsp;&nbsp;
+      <a href="#M000054">fetch_field_direct</a>&nbsp;&nbsp;
+      <a href="#M000053">fetch_fields</a>&nbsp;&nbsp;
+      <a href="#M000057">fetch_hash</a>&nbsp;&nbsp;
+      <a href="#M000055">fetch_lengths</a>&nbsp;&nbsp;
+      <a href="#M000056">fetch_row</a>&nbsp;&nbsp;
+      <a href="#M000058">field_seek</a>&nbsp;&nbsp;
+      <a href="#M000059">field_tell</a>&nbsp;&nbsp;
+      <a href="#M000060">free</a>&nbsp;&nbsp;
+      <a href="#M000067">inspect</a>&nbsp;&nbsp;
+      <a href="#M000050">new</a>&nbsp;&nbsp;
+      <a href="#M000061">num_fields</a>&nbsp;&nbsp;
+      <a href="#M000062">num_rows</a>&nbsp;&nbsp;
+      <a href="#M000063">row_seek</a>&nbsp;&nbsp;
+      <a href="#M000064">row_tell</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">eof</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000050" class="method-detail">
+        <a name="M000050"></a>
+
+        <div class="method-heading">
+          <a href="#M000050" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(mysql, fields, field_count, data=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000050-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 580</span>
+580:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">mysql</span>, <span class="ruby-identifier">fields</span>, <span class="ruby-identifier">field_count</span>, <span class="ruby-identifier">data</span>=<span class="ruby-keyword kw">nil</span>)
+581:       <span class="ruby-ivar">@handle</span> = <span class="ruby-identifier">mysql</span>
+582:       <span class="ruby-ivar">@fields</span> = <span class="ruby-identifier">fields</span>
+583:       <span class="ruby-ivar">@field_count</span> = <span class="ruby-identifier">field_count</span>
+584:       <span class="ruby-ivar">@data</span> = <span class="ruby-identifier">data</span>
+585:       <span class="ruby-ivar">@current_field</span> = <span class="ruby-value">0</span>
+586:       <span class="ruby-ivar">@current_row</span> = <span class="ruby-value">0</span>
+587:       <span class="ruby-ivar">@eof</span> = <span class="ruby-keyword kw">false</span>
+588:       <span class="ruby-ivar">@row_count</span> = <span class="ruby-value">0</span>
+589:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000051" class="method-detail">
+        <a name="M000051"></a>
+
+        <div class="method-heading">
+          <a href="#M000051" class="method-signature">
+          <span class="method-name">data_seek</span><span class="method-args">(n)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000051-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 592</span>
+592:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data_seek</span>(<span class="ruby-identifier">n</span>)
+593:       <span class="ruby-ivar">@current_row</span> = <span class="ruby-identifier">n</span>
+594:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000065" class="method-detail">
+        <a name="M000065"></a>
+
+        <div class="method-heading">
+          <a href="#M000065" class="method-signature">
+          <span class="method-name">each</span><span class="method-args">() {|row| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000065-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 676</span>
+676:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>()
+677:       <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">row</span> = <span class="ruby-identifier">fetch_row</span> <span class="ruby-keyword kw">do</span>
+678:         <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">row</span>
+679:       <span class="ruby-keyword kw">end</span>
+680:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000066" class="method-detail">
+        <a name="M000066"></a>
+
+        <div class="method-heading">
+          <a href="#M000066" class="method-signature">
+          <span class="method-name">each_hash</span><span class="method-args">(with_table=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000066-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 682</span>
+682:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_hash</span>(<span class="ruby-identifier">with_table</span>=<span class="ruby-keyword kw">nil</span>)
+683:       <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">fetch_hash</span>(<span class="ruby-identifier">with_table</span>) <span class="ruby-keyword kw">do</span>
+684:         <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">hash</span>
+685:       <span class="ruby-keyword kw">end</span>
+686:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000052" class="method-detail">
+        <a name="M000052"></a>
+
+        <div class="method-heading">
+          <a href="#M000052" class="method-signature">
+          <span class="method-name">fetch_field</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000052-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 596</span>
+596:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fetch_field</span>()
+597:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@current_field</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-ivar">@field_count</span>
+598:       <span class="ruby-identifier">f</span> = <span class="ruby-ivar">@fields</span>[<span class="ruby-ivar">@current_field</span>]
+599:       <span class="ruby-ivar">@current_field</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+600:       <span class="ruby-identifier">f</span>
+601:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000054" class="method-detail">
+        <a name="M000054"></a>
+
+        <div class="method-heading">
+          <a href="#M000054" class="method-signature">
+          <span class="method-name">fetch_field_direct</span><span class="method-args">(n)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000054-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 607</span>
+607:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fetch_field_direct</span>(<span class="ruby-identifier">n</span>)
+608:       <span class="ruby-ivar">@fields</span>[<span class="ruby-identifier">n</span>]
+609:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000053" class="method-detail">
+        <a name="M000053"></a>
+
+        <div class="method-heading">
+          <a href="#M000053" class="method-signature">
+          <span class="method-name">fetch_fields</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000053-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 603</span>
+603:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fetch_fields</span>()
+604:       <span class="ruby-ivar">@fields</span>
+605:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000057" class="method-detail">
+        <a name="M000057"></a>
+
+        <div class="method-heading">
+          <a href="#M000057" class="method-signature">
+          <span class="method-name">fetch_hash</span><span class="method-args">(with_table=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000057-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 636</span>
+636:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fetch_hash</span>(<span class="ruby-identifier">with_table</span>=<span class="ruby-keyword kw">nil</span>)
+637:       <span class="ruby-identifier">row</span> = <span class="ruby-identifier">fetch_row</span>
+638:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">row</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">nil</span>
+639:       <span class="ruby-identifier">hash</span> = {}
+640:       <span class="ruby-ivar">@fields</span>.<span class="ruby-identifier">each_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+641:         <span class="ruby-identifier">f</span> = <span class="ruby-identifier">with_table</span> <span class="ruby-value">? </span><span class="ruby-ivar">@fields</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">table</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;.&quot;</span><span class="ruby-operator">+</span><span class="ruby-ivar">@fields</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@fields</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">name</span>
+642:         <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">f</span>] = <span class="ruby-identifier">row</span>[<span class="ruby-identifier">i</span>]
+643:       <span class="ruby-keyword kw">end</span>
+644:       <span class="ruby-identifier">hash</span>
+645:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000055" class="method-detail">
+        <a name="M000055"></a>
+
+        <div class="method-heading">
+          <a href="#M000055" class="method-signature">
+          <span class="method-name">fetch_lengths</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000055-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 611</span>
+611:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fetch_lengths</span>()
+612:       <span class="ruby-ivar">@data</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@data</span>[<span class="ruby-ivar">@current_row</span>].<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-value">? </span><span class="ruby-identifier">i</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">:</span> <span class="ruby-value">0</span>} <span class="ruby-operator">:</span> <span class="ruby-ivar">@lengths</span>
+613:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
+
+        <div class="method-heading">
+          <a href="#M000056" class="method-signature">
+          <span class="method-name">fetch_row</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 615</span>
+615:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fetch_row</span>()
+616:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@data</span> <span class="ruby-keyword kw">then</span>
+617:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@current_row</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-ivar">@data</span>.<span class="ruby-identifier">length</span> <span class="ruby-keyword kw">then</span>
+618:           <span class="ruby-ivar">@handle</span>.<span class="ruby-identifier">status</span> = <span class="ruby-identifier">:STATUS_READY</span>
+619:           <span class="ruby-keyword kw">return</span>
+620:         <span class="ruby-keyword kw">end</span>
+621:         <span class="ruby-identifier">ret</span> = <span class="ruby-ivar">@data</span>[<span class="ruby-ivar">@current_row</span>]
+622:         <span class="ruby-ivar">@current_row</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+623:       <span class="ruby-keyword kw">else</span>
+624:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@eof</span>
+625:         <span class="ruby-identifier">ret</span> = <span class="ruby-ivar">@handle</span>.<span class="ruby-identifier">read_one_row</span> <span class="ruby-ivar">@field_count</span>
+626:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ret</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">then</span>
+627:           <span class="ruby-ivar">@eof</span> = <span class="ruby-keyword kw">true</span>
+628:           <span class="ruby-keyword kw">return</span>
+629:         <span class="ruby-keyword kw">end</span>
+630:         <span class="ruby-ivar">@lengths</span> = <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-value">? </span><span class="ruby-identifier">i</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">:</span> <span class="ruby-value">0</span>}
+631:         <span class="ruby-ivar">@row_count</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+632:       <span class="ruby-keyword kw">end</span>
+633:       <span class="ruby-identifier">ret</span>
+634:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000058" class="method-detail">
+        <a name="M000058"></a>
+
+        <div class="method-heading">
+          <a href="#M000058" class="method-signature">
+          <span class="method-name">field_seek</span><span class="method-args">(n)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000058-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000058-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 647</span>
+647:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">field_seek</span>(<span class="ruby-identifier">n</span>)
+648:       <span class="ruby-ivar">@current_field</span> = <span class="ruby-identifier">n</span>
+649:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000059" class="method-detail">
+        <a name="M000059"></a>
+
+        <div class="method-heading">
+          <a href="#M000059" class="method-signature">
+          <span class="method-name">field_tell</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000059-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000059-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 651</span>
+651:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">field_tell</span>()
+652:       <span class="ruby-ivar">@current_field</span>
+653:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000060" class="method-detail">
+        <a name="M000060"></a>
+
+        <div class="method-heading">
+          <a href="#M000060" class="method-signature">
+          <span class="method-name">free</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000060-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000060-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 655</span>
+655:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">free</span>()
+656:       <span class="ruby-ivar">@handle</span>.<span class="ruby-identifier">skip_result</span>
+657:       <span class="ruby-ivar">@handle</span> = <span class="ruby-ivar">@fields</span> = <span class="ruby-ivar">@data</span> = <span class="ruby-keyword kw">nil</span>
+658:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000067" class="method-detail">
+        <a name="M000067"></a>
+
+        <div class="method-heading">
+          <a href="#M000067" class="method-signature">
+          <span class="method-name">inspect</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000067-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 688</span>
+688:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>()
+689:       <span class="ruby-node">&quot;#&lt;#{self.class}&gt;&quot;</span>
+690:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000061" class="method-detail">
+        <a name="M000061"></a>
+
+        <div class="method-heading">
+          <a href="#M000061" class="method-signature">
+          <span class="method-name">num_fields</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000061-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 660</span>
+660:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">num_fields</span>()
+661:       <span class="ruby-ivar">@field_count</span>
+662:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000062" class="method-detail">
+        <a name="M000062"></a>
+
+        <div class="method-heading">
+          <a href="#M000062" class="method-signature">
+          <span class="method-name">num_rows</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000062-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000062-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 664</span>
+664:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">num_rows</span>()
+665:       <span class="ruby-ivar">@data</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@data</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@row_count</span>
+666:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000063" class="method-detail">
+        <a name="M000063"></a>
+
+        <div class="method-heading">
+          <a href="#M000063" class="method-signature">
+          <span class="method-name">row_seek</span><span class="method-args">(n)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000063-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 668</span>
+668:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">row_seek</span>(<span class="ruby-identifier">n</span>)
+669:       <span class="ruby-ivar">@current_row</span> = <span class="ruby-identifier">n</span>
+670:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000064" class="method-detail">
+        <a name="M000064"></a>
+
+        <div class="method-heading">
+          <a href="#M000064" class="method-signature">
+          <span class="method-name">row_tell</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000064-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/mysql.rb, line 672</span>
+672:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">row_tell</span>()
+673:       <span class="ruby-ivar">@current_row</span>
+674:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

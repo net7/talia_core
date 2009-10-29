@@ -5,10 +5,10 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>File: talia_cl.rb</title>
+  <title>File: rake_tasks.rb</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
-  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
   <script type="text/javascript">
   // <![CDATA[
 
@@ -47,16 +47,16 @@
 
 
   <div id="fileHeader">
-    <h1>talia_cl.rb</h1>
+    <h1>rake_tasks.rb</h1>
     <table class="header-table">
     <tr class="top-aligned-row">
       <td><strong>Path:</strong></td>
-      <td>lib/talia_cl.rb
+      <td>lib/talia_util/rake_tasks.rb
       </td>
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue Sep 15 13:29:55 +0200 2009</td>
+      <td>Thu Oct 29 13:32:28 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -70,21 +70,7 @@
 
     <div id="description">
       <p>
-This is the loader file for the Talia command line tool.
-</p>
-<p>
-The Talia command line works as follows: This file will load some helper
-methods that can be used to register subcommands for the command line tool.
-</p>
-<p>
-Each subcommand is registered with a name (as symbol), a description string
-and a block that will be run if the command is selected.
-</p>
-<p>
-If the command line processing is started, the first command line argument
-will be taken as the name of the command to be run. The argument will be
-removed from ARGV, and then the block belonging to the command will be
-executed.
+Rake tasks for the talia core
 </p>
 
     </div>
@@ -93,11 +79,13 @@ executed.
       <h3 class="section-bar">Required files</h3>
 
       <div class="name-list">
+      rake&nbsp;&nbsp;
+      yaml&nbsp;&nbsp;
       talia_core&nbsp;&nbsp;
       talia_util&nbsp;&nbsp;
-      command_line&nbsp;&nbsp;
-      core_commands&nbsp;&nbsp;
-      addon_commands&nbsp;&nbsp;
+      talia_util/util&nbsp;&nbsp;
+      rake/testtask&nbsp;&nbsp;
+      progressbar&nbsp;&nbsp;
       </div>
     </div>
 
@@ -107,7 +95,7 @@ executed.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000001">run_command_line</a>&nbsp;&nbsp;
+      <a href="#M000001">background_job</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -119,7 +107,7 @@ executed.
       <h3 class="section-bar">Included Modules</h3>
 
       <div id="includes-list">
-        <span class="include-name"><a href="../../classes/TaliaUtil.html">TaliaUtil</a></span>
+        <span class="include-name"><a href="../../../classes/TaliaUtil.html">TaliaUtil</a></span>
       </div>
     </div>
 
@@ -141,33 +129,27 @@ executed.
 
         <div class="method-heading">
           <a href="#M000001" class="method-signature">
-          <span class="method-name">run_command_line</span><span class="method-args">()</span>
+          <span class="method-name">background_job</span><span class="method-args">(job, options)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Runs the command line
+Queue the long-running task in the background processing queue. This will
+simply queue the job, and doesn&#8216;t start the runner by itself
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000001-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_cl.rb, line 34</span>
-34: <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_command_line</span>
-35:   <span class="ruby-constant">Util</span><span class="ruby-operator">::</span><span class="ruby-identifier">title</span>
-36:   
-37:   <span class="ruby-identifier">command</span> = <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">shift</span>
-38:   
-39:   <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">TaliaCommandLine</span><span class="ruby-operator">::</span><span class="ruby-identifier">command?</span>(<span class="ruby-identifier">command</span>))
-40:     <span class="ruby-constant">TaliaCommandLine</span><span class="ruby-operator">::</span><span class="ruby-identifier">run_command</span>(<span class="ruby-identifier">command</span>)
-41:   <span class="ruby-keyword kw">else</span>
-42:     <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Use talia &lt;command&gt; - possible commands:&quot;</span>
-43:     <span class="ruby-constant">TaliaCommandLine</span><span class="ruby-operator">::</span><span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">command</span>, <span class="ruby-identifier">description</span><span class="ruby-operator">|</span> 
-44:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{command}\t- #{description}&quot;</span>
-45:     <span class="ruby-keyword kw">end</span>
-46:   <span class="ruby-keyword kw">end</span>
-47: <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_util/rake_tasks.rb, line 214</span>
+214:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">background_job</span>(<span class="ruby-identifier">job</span>, <span class="ruby-identifier">options</span>)
+215:     <span class="ruby-comment cmt"># Use the current environment for the job</span>
+216:     <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:env</span>] = <span class="ruby-constant">ENV</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:env</span>] <span class="ruby-operator">||</span> {})
+217:     <span class="ruby-comment cmt"># Avoid &quot;tickling&quot; to start the background job from here</span>
+218:     <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:no_tickle</span>] = <span class="ruby-keyword kw">true</span>
+219:     <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">BackgroundJobs</span><span class="ruby-operator">::</span><span class="ruby-constant">Job</span>.<span class="ruby-identifier">submit_with_progress</span>(<span class="ruby-identifier">job</span>, <span class="ruby-identifier">options</span>)
+220:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

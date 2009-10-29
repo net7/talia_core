@@ -87,9 +87,10 @@ simple installations
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000359">file_url</a>&nbsp;&nbsp;
-      <a href="#M000358">open_from_url</a>&nbsp;&nbsp;
-      <a href="#M000357">open_generic</a>&nbsp;&nbsp;
+      <a href="#M000412">base_for</a>&nbsp;&nbsp;
+      <a href="#M000414">file_url</a>&nbsp;&nbsp;
+      <a href="#M000413">open_from_url</a>&nbsp;&nbsp;
+      <a href="#M000411">open_generic</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -111,11 +112,47 @@ simple installations
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000359" class="method-detail">
-        <a name="M000359"></a>
+      <div id="method-M000412" class="method-detail">
+        <a name="M000412"></a>
 
         <div class="method-heading">
-          <a href="#M000359" class="method-signature">
+          <a href="#M000412" class="method-signature">
+          <span class="method-name">base_for</span><span class="method-args">(url)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Will try to figure out the &quot;base&quot; (that is the parent directory
+or path) If the base is a directory, this will return the directory name,
+but if it is an URL, this will return an URI object.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000412-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000412-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_util/io_helper.rb, line 27</span>
+27:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">base_for</span>(<span class="ruby-identifier">url</span>)
+28:       <span class="ruby-identifier">url</span> = <span class="ruby-identifier">file_url</span>(<span class="ruby-identifier">url</span>)
+29:       <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">url</span>))
+30:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">url</span>))
+31:       <span class="ruby-keyword kw">else</span>
+32:         <span class="ruby-identifier">uri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">url</span>)
+33:         <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">path</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\/[^\/]+\Z/</span>, <span class="ruby-value str">'/'</span>)
+34:         <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">fragment</span> = <span class="ruby-keyword kw">nil</span>
+35:         <span class="ruby-identifier">uri</span>
+36:       <span class="ruby-keyword kw">end</span>
+37:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000414" class="method-detail">
+        <a name="M000414"></a>
+
+        <div class="method-heading">
+          <a href="#M000414" class="method-signature">
           <span class="method-name">file_url</span><span class="method-args">(uri)</span>
           </a>
         </div>
@@ -126,23 +163,23 @@ Get the &quot;file url&quot; for the given url, stripping a possible
 file:// from the front
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000359-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000359-source">
+            onclick="toggleCode('M000414-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000414-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_util/io_helper.rb, line 49</span>
-49:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file_url</span>(<span class="ruby-identifier">uri</span>)
-50:       <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\Afile:\/\//</span>, <span class="ruby-value str">''</span>)
-51:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_util/io_helper.rb, line 64</span>
+64:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file_url</span>(<span class="ruby-identifier">uri</span>)
+65:       <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\Afile:\/\//</span>, <span class="ruby-value str">''</span>)
+66:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000358" class="method-detail">
-        <a name="M000358"></a>
+      <div id="method-M000413" class="method-detail">
+        <a name="M000413"></a>
 
         <div class="method-heading">
-          <a href="#M000358" class="method-signature">
+          <a href="#M000413" class="method-signature">
           <span class="method-name">open_from_url</span><span class="method-args">(url, options = {}) {|io| ...}</span>
           </a>
         </div>
@@ -160,35 +197,35 @@ the documentation for open-uri for more information. Example for options:
   :http_basic_authentication =&gt; [login, password]
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000358-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000358-source">
+            onclick="toggleCode('M000413-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000413-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_util/io_helper.rb, line 32</span>
-32:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_from_url</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">options</span> = {})
-33:       <span class="ruby-identifier">url</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-identifier">url</span>)
-34:       <span class="ruby-identifier">url</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\[/</span>, <span class="ruby-value str">'%5B'</span>) <span class="ruby-comment cmt"># URI class doesn't like unescaped brackets</span>
-35:       <span class="ruby-identifier">url</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\]/</span>, <span class="ruby-value str">'%5D'</span>)
-36:       <span class="ruby-identifier">open_args</span> = [ <span class="ruby-identifier">url</span> ]
-37:       <span class="ruby-identifier">open_args</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">options</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>)
-38: 
-39:       <span class="ruby-keyword kw">begin</span>
-40:         <span class="ruby-identifier">open</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">open_args</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
-41:           <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">io</span>)
-42:         <span class="ruby-keyword kw">end</span>
-43:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-44:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">IOError</span>, <span class="ruby-node">&quot;Error loading #{url} (when file: #{url}, open_args: [#{open_args.join(', ')}]) #{e}&quot;</span>)
-45:       <span class="ruby-keyword kw">end</span>
-46:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_util/io_helper.rb, line 47</span>
+47:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_from_url</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">options</span> = {})
+48:       <span class="ruby-identifier">url</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-identifier">url</span>)
+49:       <span class="ruby-identifier">url</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\[/</span>, <span class="ruby-value str">'%5B'</span>) <span class="ruby-comment cmt"># URI class doesn't like unescaped brackets</span>
+50:       <span class="ruby-identifier">url</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\]/</span>, <span class="ruby-value str">'%5D'</span>)
+51:       <span class="ruby-identifier">open_args</span> = [ <span class="ruby-identifier">url</span> ]
+52:       <span class="ruby-identifier">open_args</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">options</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>)
+53: 
+54:       <span class="ruby-keyword kw">begin</span>
+55:         <span class="ruby-identifier">open</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">open_args</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
+56:           <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">io</span>)
+57:         <span class="ruby-keyword kw">end</span>
+58:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+59:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">IOError</span>, <span class="ruby-node">&quot;Error loading #{url} (when file: #{url}, open_args: [#{open_args.join(', ')}]) #{e}&quot;</span>)
+60:       <span class="ruby-keyword kw">end</span>
+61:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000357" class="method-detail">
-        <a name="M000357"></a>
+      <div id="method-M000411" class="method-detail">
+        <a name="M000411"></a>
 
         <div class="method-heading">
-          <a href="#M000357" class="method-signature">
+          <a href="#M000411" class="method-signature">
           <span class="method-name">open_generic</span><span class="method-args">(url, options = {}) {|io| ...}</span>
           </a>
         </div>
@@ -199,12 +236,12 @@ Generic &quot;open&quot; method for files and urls. This won&#8216;t choke
 on file:// URLs and will do some extra escaping on the URL.
 </p>
 <p>
-See <a href="IoHelper.html#M000358">open_from_url</a> for an explanation of
+See <a href="IoHelper.html#M000413">open_from_url</a> for an explanation of
 the options
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000357-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000357-source">
+            onclick="toggleCode('M000411-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000411-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_util/io_helper.rb, line 13</span>
 13:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_generic</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">options</span> = {})

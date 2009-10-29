@@ -5,10 +5,10 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>File: console_commands.rb</title>
+  <title>File: mysql.rb</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
-  <link rel="stylesheet" href="../../../../.././rdoc-style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
   <script type="text/javascript">
   // <![CDATA[
 
@@ -47,16 +47,16 @@
 
 
   <div id="fileHeader">
-    <h1>console_commands.rb</h1>
+    <h1>mysql.rb</h1>
     <table class="header-table">
     <tr class="top-aligned-row">
       <td><strong>Path:</strong></td>
-      <td>lib/talia_cl/commands/talia_console/console_commands.rb
+      <td>lib/mysql.rb
       </td>
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue Sep 15 13:29:55 +0200 2009</td>
+      <td>Tue Oct 27 15:07:44 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -70,11 +70,22 @@
 
     <div id="description">
       <p>
-This adds the console commands for the talia console
+$Id: mysql.rb,v 1.24 2005/02/12 11:37:15 tommy Exp $
+</p>
+<p>
+Copyright (C) 2003-2005 TOMITA Masahiro tommy@tmtm.org
 </p>
 
     </div>
 
+    <div id="requires-list">
+      <h3 class="section-bar">Required files</h3>
+
+      <div class="name-list">
+      socket&nbsp;&nbsp;
+      digest/sha1&nbsp;&nbsp;
+      </div>
+    </div>
 
    </div>
 
@@ -87,6 +98,34 @@ This adds the console commands for the talia console
     <div id="section">
 
 
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">MysqlRes</td>
+          <td>=</td>
+          <td class="context-item-value">Mysql::Result</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+for compatibility
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">MysqlField</td>
+          <td>=</td>
+          <td class="context-item-value">Mysql::Field</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">MysqlError</td>
+          <td>=</td>
+          <td class="context-item-value">Mysql::Error</td>
+        </tr>
+        </table>
+      </div>
+    </div>
 
 
 

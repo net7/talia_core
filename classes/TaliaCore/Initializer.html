@@ -87,7 +87,7 @@ namespaces, etc.
 <p>
 The basic mechanism works like the Rails initializer: Options can be added
 to the Hash in a block that is passed to the <a
-href="Initializer.html#M000229">run</a> method of the intializers.
+href="Initializer.html#M000295">run</a> method of the intializers.
 </p>
 <p>
 There are two settings that can be made before the configuration is
@@ -142,24 +142,24 @@ file is passed to the initializer.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000242">config_data_directory</a>&nbsp;&nbsp;
-      <a href="#M000238">config_db</a>&nbsp;&nbsp;
-      <a href="#M000243">config_iip_root_directory</a>&nbsp;&nbsp;
-      <a href="#M000241">config_namespaces</a>&nbsp;&nbsp;
-      <a href="#M000240">config_rdf</a>&nbsp;&nbsp;
-      <a href="#M000236">connection_opts</a>&nbsp;&nbsp;
-      <a href="#M000231">create_default_config</a>&nbsp;&nbsp;
-      <a href="#M000237">db_connection_opts</a>&nbsp;&nbsp;
-      <a href="#M000233">default_log_level</a>&nbsp;&nbsp;
-      <a href="#M000245">load_core_ext</a>&nbsp;&nbsp;
-      <a href="#M000244">load_ontologies</a>&nbsp;&nbsp;
-      <a href="#M000239">rdf_connection_opts</a>&nbsp;&nbsp;
-      <a href="#M000246">register_mime_types</a>&nbsp;&nbsp;
-      <a href="#M000229">run</a>&nbsp;&nbsp;
-      <a href="#M000235">set_environment</a>&nbsp;&nbsp;
-      <a href="#M000232">set_logger</a>&nbsp;&nbsp;
-      <a href="#M000234">set_talia_root</a>&nbsp;&nbsp;
-      <a href="#M000230">talia_logger</a>&nbsp;&nbsp;
+      <a href="#M000308">config_data_directory</a>&nbsp;&nbsp;
+      <a href="#M000304">config_db</a>&nbsp;&nbsp;
+      <a href="#M000309">config_iip_root_directory</a>&nbsp;&nbsp;
+      <a href="#M000307">config_namespaces</a>&nbsp;&nbsp;
+      <a href="#M000306">config_rdf</a>&nbsp;&nbsp;
+      <a href="#M000302">connection_opts</a>&nbsp;&nbsp;
+      <a href="#M000297">create_default_config</a>&nbsp;&nbsp;
+      <a href="#M000303">db_connection_opts</a>&nbsp;&nbsp;
+      <a href="#M000299">default_log_level</a>&nbsp;&nbsp;
+      <a href="#M000311">load_core_ext</a>&nbsp;&nbsp;
+      <a href="#M000310">load_ontologies</a>&nbsp;&nbsp;
+      <a href="#M000305">rdf_connection_opts</a>&nbsp;&nbsp;
+      <a href="#M000312">register_mime_types</a>&nbsp;&nbsp;
+      <a href="#M000295">run</a>&nbsp;&nbsp;
+      <a href="#M000301">set_environment</a>&nbsp;&nbsp;
+      <a href="#M000298">set_logger</a>&nbsp;&nbsp;
+      <a href="#M000300">set_talia_root</a>&nbsp;&nbsp;
+      <a href="#M000296">talia_logger</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -181,11 +181,11 @@ file is passed to the initializer.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000229" class="method-detail">
-        <a name="M000229"></a>
+      <div id="method-M000295" class="method-detail">
+        <a name="M000295"></a>
 
         <div class="method-heading">
-          <a href="#M000229" class="method-signature">
+          <a href="#M000295" class="method-signature">
           <span class="method-name">run</span><span class="method-args">(config_file = nil, &amp;initializer)</span>
           </a>
         </div>
@@ -193,7 +193,7 @@ file is passed to the initializer.
         <div class="method-description">
           <p>
 Runs the initialization. You can pass a block to this method, which is <a
-href="Initializer.html#M000229">run</a> with one parameter: A hash
+href="Initializer.html#M000295">run</a> with one parameter: A hash
 containing the configuration.
 </p>
 <p>
@@ -206,8 +206,8 @@ For now, the values are documented in the code below and in the default
 configuration file.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000229-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000229-source">
+            onclick="toggleCode('M000295-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000295-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 82</span>
  82:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">config_file</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">initializer</span>)
@@ -282,19 +282,19 @@ configuration file.
         </div>
       </div>
 
-      <div id="method-M000230" class="method-detail">
-        <a name="M000230"></a>
+      <div id="method-M000296" class="method-detail">
+        <a name="M000296"></a>
 
         <div class="method-heading">
-          <a href="#M000230" class="method-signature">
+          <a href="#M000296" class="method-signature">
           <span class="method-name">talia_logger</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000230-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000230-source">
+            onclick="toggleCode('M000296-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000296-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 150</span>
 150:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">talia_logger</span>
@@ -307,11 +307,11 @@ configuration file.
 
       <h3 class="section-bar">Protected Class methods</h3>
 
-      <div id="method-M000242" class="method-detail">
-        <a name="M000242"></a>
+      <div id="method-M000308" class="method-detail">
+        <a name="M000308"></a>
 
         <div class="method-heading">
-          <a href="#M000242" class="method-signature">
+          <a href="#M000308" class="method-signature">
           <span class="method-name">config_data_directory</span><span class="method-args">()</span>
           </a>
         </div>
@@ -321,30 +321,30 @@ configuration file.
 Configure the data directory
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000242-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000242-source">
+            onclick="toggleCode('M000308-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000308-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 333</span>
-333:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_data_directory</span>
-334:         <span class="ruby-identifier">data_directory</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'data_directory_location'</span>])
-335:           <span class="ruby-comment cmt"># Replace the data directory location variables</span>
-336:           <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;data_directory_location&quot;</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/TALIA_ROOT/</span>, <span class="ruby-constant">TALIA_ROOT</span>)
-337:         <span class="ruby-keyword kw">else</span>
-338:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'data'</span>)
-339:         <span class="ruby-keyword kw">end</span>
-340: 
-341:         <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'data_directory_location'</span>] = <span class="ruby-identifier">data_directory</span>
-342:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 328</span>
+328:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_data_directory</span>
+329:         <span class="ruby-identifier">data_directory</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'data_directory_location'</span>])
+330:           <span class="ruby-comment cmt"># Replace the data directory location variables</span>
+331:           <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;data_directory_location&quot;</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/TALIA_ROOT/</span>, <span class="ruby-constant">TALIA_ROOT</span>)
+332:         <span class="ruby-keyword kw">else</span>
+333:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'data'</span>)
+334:         <span class="ruby-keyword kw">end</span>
+335: 
+336:         <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'data_directory_location'</span>] = <span class="ruby-identifier">data_directory</span>
+337:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000238" class="method-detail">
-        <a name="M000238"></a>
+      <div id="method-M000304" class="method-detail">
+        <a name="M000304"></a>
 
         <div class="method-heading">
-          <a href="#M000238" class="method-signature">
+          <a href="#M000304" class="method-signature">
           <span class="method-name">config_db</span><span class="method-args">()</span>
           </a>
         </div>
@@ -354,36 +354,38 @@ Configure the data directory
 Configure the database connection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000238-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000238-source">
+            onclick="toggleCode('M000304-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000304-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 275</span>
-275:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_db</span>
-276:         <span class="ruby-comment cmt"># Initialize the database connection</span>
-277:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;standalone_db&quot;</span>])
-278:           <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-value str">&quot;TaliaCore using standalone database&quot;</span>)
-279: 
-280:           <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">configurations</span>[<span class="ruby-value str">'talia'</span>] = <span class="ruby-identifier">db_connection_opts</span>
-281:           <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">establish_connection</span>(<span class="ruby-identifier">:talia</span>)
-282:           <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">logger</span> = <span class="ruby-identifier">talia_logger</span>
-283:         <span class="ruby-keyword kw">else</span>
-284:           <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-value str">&quot;TaliaCore using exisiting database connection.&quot;</span>)
-285:           <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">logger</span>)
-286:             <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-value str">&quot;ActiveRecord logger not active, setting it to Talia logger&quot;</span>)
-287:             <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">logger</span> = <span class="ruby-identifier">talia_logger</span>
-288:           <span class="ruby-keyword kw">end</span>
-289:         <span class="ruby-keyword kw">end</span>
-290:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 272</span>
+272:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_db</span>
+273:         <span class="ruby-comment cmt"># Initialize the database connection</span>
+274:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;standalone_db&quot;</span>])
+275:           <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-value str">&quot;TaliaCore using standalone database&quot;</span>)
+276: 
+277:           <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">configurations</span>[<span class="ruby-value str">'talia'</span>] = <span class="ruby-identifier">db_connection_opts</span>
+278:           <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">establish_connection</span>(<span class="ruby-identifier">:talia</span>)
+279:           <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">logger</span> = <span class="ruby-identifier">talia_logger</span>
+280:         <span class="ruby-keyword kw">else</span>
+281:           <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-value str">&quot;TaliaCore using exisiting database connection.&quot;</span>)
+282:           <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">logger</span>)
+283:             <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-value str">&quot;ActiveRecord logger not active, setting it to Talia logger&quot;</span>)
+284:             <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">logger</span> = <span class="ruby-identifier">talia_logger</span>
+285:           <span class="ruby-keyword kw">end</span>
+286:         <span class="ruby-keyword kw">end</span>
+287:         <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-value str">&quot;Setting Active Record to full STI use.&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">store_full_sti_class</span>)
+288:         <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">store_full_sti_class</span> = <span class="ruby-keyword kw">true</span>
+289:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000243" class="method-detail">
-        <a name="M000243"></a>
+      <div id="method-M000309" class="method-detail">
+        <a name="M000309"></a>
 
         <div class="method-heading">
-          <a href="#M000243" class="method-signature">
+          <a href="#M000309" class="method-signature">
           <span class="method-name">config_iip_root_directory</span><span class="method-args">()</span>
           </a>
         </div>
@@ -393,30 +395,30 @@ Configure the database connection
 Configure the data directory
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000243-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000243-source">
+            onclick="toggleCode('M000309-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000309-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 345</span>
-345:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_iip_root_directory</span>
-346:         <span class="ruby-identifier">data_directory</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'iip_root_directory_location'</span>])
-347:           <span class="ruby-comment cmt"># Replace the iip root directory location variables</span>
-348:           <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;iip_root_directory_location&quot;</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/TALIA_ROOT/</span>, <span class="ruby-constant">TALIA_ROOT</span>)
-349:         <span class="ruby-keyword kw">else</span>
-350:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'iip_root'</span>)
-351:         <span class="ruby-keyword kw">end</span>
-352: 
-353:         <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'iip_root_directory_location'</span>] = <span class="ruby-identifier">data_directory</span>
-354:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 340</span>
+340:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_iip_root_directory</span>
+341:         <span class="ruby-identifier">data_directory</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'iip_root_directory_location'</span>])
+342:           <span class="ruby-comment cmt"># Replace the iip root directory location variables</span>
+343:           <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;iip_root_directory_location&quot;</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/TALIA_ROOT/</span>, <span class="ruby-constant">TALIA_ROOT</span>)
+344:         <span class="ruby-keyword kw">else</span>
+345:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'iip_root'</span>)
+346:         <span class="ruby-keyword kw">end</span>
+347: 
+348:         <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'iip_root_directory_location'</span>] = <span class="ruby-identifier">data_directory</span>
+349:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000241" class="method-detail">
-        <a name="M000241"></a>
+      <div id="method-M000307" class="method-detail">
+        <a name="M000307"></a>
 
         <div class="method-heading">
-          <a href="#M000241" class="method-signature">
+          <a href="#M000307" class="method-signature">
           <span class="method-name">config_namespaces</span><span class="method-args">()</span>
           </a>
         </div>
@@ -426,40 +428,36 @@ Configure the data directory
 Configure the namespaces
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000241-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000241-source">
+            onclick="toggleCode('M000307-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000307-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 311</span>
-311:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_namespaces</span>
-312:         <span class="ruby-comment cmt"># Register the local name</span>
-313:         <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Namespace</span>.<span class="ruby-identifier">shortcut</span>(<span class="ruby-identifier">:local</span>, <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;local_uri&quot;</span>])
-314:         <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;Local Domain: #{N::LOCAL}&quot;</span>)
-315: 
-316:         <span class="ruby-comment cmt"># Register the default name</span>
-317:         <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Namespace</span>.<span class="ruby-identifier">shortcut</span>(<span class="ruby-identifier">:default</span>, <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;default_namespace_uri&quot;</span>])
-318:         <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;Default Domain: #{N::DEFAULT}&quot;</span>)
-319: 
-320:         <span class="ruby-comment cmt"># Register namespace for database dupes</span>
-321:         <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Namespace</span>.<span class="ruby-identifier">shortcut</span>(<span class="ruby-identifier">:talia</span>, <span class="ruby-value str">&quot;http://talia.discovery-project.eu/wiki/TaliaInternal#&quot;</span>)
-322: 
-323:         <span class="ruby-comment cmt"># Register additional namespaces</span>
-324:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;namespaces&quot;</span>])
-325:           <span class="ruby-identifier">assit_kind_of</span>(<span class="ruby-constant">Hash</span>, <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;namespaces&quot;</span>])
-326:           <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;namespaces&quot;</span>].<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">shortcut</span>, <span class="ruby-identifier">uri</span><span class="ruby-operator">|</span>
-327:             <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Namespace</span>.<span class="ruby-identifier">shortcut</span>(<span class="ruby-identifier">shortcut</span>, <span class="ruby-identifier">uri</span>)
-328:           <span class="ruby-keyword kw">end</span>
-329:         <span class="ruby-keyword kw">end</span>
-330:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 310</span>
+310:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_namespaces</span>
+311:         <span class="ruby-comment cmt"># Register the local name</span>
+312:         <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Namespace</span>.<span class="ruby-identifier">shortcut</span>(<span class="ruby-identifier">:local</span>, <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;local_uri&quot;</span>])
+313:         <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;Local Domain: #{N::LOCAL}&quot;</span>)
+314: 
+315:         <span class="ruby-comment cmt"># Register namespace for database dupes</span>
+316:         <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Namespace</span>.<span class="ruby-identifier">shortcut</span>(<span class="ruby-identifier">:talia</span>, <span class="ruby-value str">&quot;http://talia.discovery-project.eu/wiki/TaliaInternal#&quot;</span>)
+317: 
+318:         <span class="ruby-comment cmt"># Register additional namespaces</span>
+319:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;namespaces&quot;</span>])
+320:           <span class="ruby-identifier">assit_kind_of</span>(<span class="ruby-constant">Hash</span>, <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;namespaces&quot;</span>])
+321:           <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;namespaces&quot;</span>].<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">shortcut</span>, <span class="ruby-identifier">uri</span><span class="ruby-operator">|</span>
+322:             <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Namespace</span>.<span class="ruby-identifier">shortcut</span>(<span class="ruby-identifier">shortcut</span>, <span class="ruby-identifier">uri</span>)
+323:           <span class="ruby-keyword kw">end</span>
+324:         <span class="ruby-keyword kw">end</span>
+325:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000240" class="method-detail">
-        <a name="M000240"></a>
+      <div id="method-M000306" class="method-detail">
+        <a name="M000306"></a>
 
         <div class="method-heading">
-          <a href="#M000240" class="method-signature">
+          <a href="#M000306" class="method-signature">
           <span class="method-name">config_rdf</span><span class="method-args">()</span>
           </a>
         </div>
@@ -469,26 +467,26 @@ Configure the namespaces
 Configure the RDF connection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000240-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000240-source">
+            onclick="toggleCode('M000306-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000306-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 303</span>
-303:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_rdf</span>
-304:         <span class="ruby-comment cmt"># Logginging goes to standard talia logger</span>
-305:         <span class="ruby-constant">ActiveRdfLogger</span>.<span class="ruby-identifier">logger</span> = <span class="ruby-identifier">talia_logger</span>
-306: 
-307:         <span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">add_data_source</span>(<span class="ruby-identifier">rdf_connection_opts</span>)
-308:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 302</span>
+302:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config_rdf</span>
+303:         <span class="ruby-comment cmt"># Logginging goes to standard talia logger</span>
+304:         <span class="ruby-constant">ActiveRdfLogger</span>.<span class="ruby-identifier">logger</span> = <span class="ruby-identifier">talia_logger</span>
+305: 
+306:         <span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">add_data_source</span>(<span class="ruby-identifier">rdf_connection_opts</span>)
+307:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000236" class="method-detail">
-        <a name="M000236"></a>
+      <div id="method-M000302" class="method-detail">
+        <a name="M000302"></a>
 
         <div class="method-heading">
-          <a href="#M000236" class="method-signature">
+          <a href="#M000302" class="method-signature">
           <span class="method-name">connection_opts</span><span class="method-args">(default_opts, config_file)</span>
           </a>
         </div>
@@ -500,35 +498,35 @@ will be used if no file is given. If both file and default are given, the
 method will overwrite the defaults.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000236-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000236-source">
+            onclick="toggleCode('M000302-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000302-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 252</span>
-252:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">connection_opts</span>(<span class="ruby-identifier">default_opts</span>, <span class="ruby-identifier">config_file</span>)
-253:         <span class="ruby-identifier">options</span> = <span class="ruby-identifier">default_opts</span>
-254: 
-255:         <span class="ruby-comment cmt"># First check for the file</span>
-256:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">config_file</span>)
-257:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">default_opts</span>)
-258:             <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-value str">&quot;Database options will be overwritten by config file values.&quot;</span>)
-259:           <span class="ruby-keyword kw">end</span>
-260: 
-261:           <span class="ruby-identifier">config_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'config'</span>, <span class="ruby-node">&quot;#{config_file}.yml&quot;</span>)
-262:           <span class="ruby-identifier">options</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">config_path</span>))[<span class="ruby-ivar">@environment</span>]
-263:         <span class="ruby-keyword kw">end</span>
-264: 
-265:         <span class="ruby-identifier">options</span>
-266:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 249</span>
+249:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">connection_opts</span>(<span class="ruby-identifier">default_opts</span>, <span class="ruby-identifier">config_file</span>)
+250:         <span class="ruby-identifier">options</span> = <span class="ruby-identifier">default_opts</span>
+251: 
+252:         <span class="ruby-comment cmt"># First check for the file</span>
+253:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">config_file</span>)
+254:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">default_opts</span>)
+255:             <span class="ruby-identifier">talia_logger</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-value str">&quot;Database options will be overwritten by config file values.&quot;</span>)
+256:           <span class="ruby-keyword kw">end</span>
+257: 
+258:           <span class="ruby-identifier">config_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'config'</span>, <span class="ruby-node">&quot;#{config_file}.yml&quot;</span>)
+259:           <span class="ruby-identifier">options</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">config_path</span>))[<span class="ruby-ivar">@environment</span>]
+260:         <span class="ruby-keyword kw">end</span>
+261: 
+262:         <span class="ruby-identifier">options</span>
+263:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000231" class="method-detail">
-        <a name="M000231"></a>
+      <div id="method-M000297" class="method-detail">
+        <a name="M000297"></a>
 
         <div class="method-heading">
-          <a href="#M000231" class="method-signature">
+          <a href="#M000297" class="method-signature">
           <span class="method-name">create_default_config</span><span class="method-args">()</span>
           </a>
         </div>
@@ -538,8 +536,8 @@ method will overwrite the defaults.
 Creates the default values for the config hash
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000231-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000231-source">
+            onclick="toggleCode('M000297-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000297-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 157</span>
 157:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_default_config</span>
@@ -548,49 +546,46 @@ Creates the default values for the config hash
 160:         <span class="ruby-comment cmt"># The name of the local node</span>
 161:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;local_uri&quot;</span>] = <span class="ruby-value str">&quot;http://test.dummy/&quot;</span>
 162: 
-163:         <span class="ruby-comment cmt"># The &quot;default&quot; namespace</span>
-164:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;default_namespace_uri&quot;</span>] = <span class="ruby-value str">&quot;http://default.dummy/&quot;</span>
-165: 
-166:         <span class="ruby-comment cmt"># Connect options for ActiveRDF</span>
-167:         <span class="ruby-comment cmt"># Defaults to in-memory RDFLite</span>
-168:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;rdf_connection&quot;</span>] = {
-169:           <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:rdflite</span>
-170:         }
-171: 
-172:         <span class="ruby-comment cmt"># Indicates if the DB backend (ActiveRecord) is </span>
-173:         <span class="ruby-comment cmt"># used &quot;standalone&quot;, which means &quot;outside&quot; a</span>
-174:         <span class="ruby-comment cmt"># rails application. </span>
-175:         <span class="ruby-comment cmt"># For the standalone case, the Talia</span>
-176:         <span class="ruby-comment cmt"># initializer will make the database connections.</span>
-177:         <span class="ruby-comment cmt"># Otherwise, Rails will handle that.</span>
-178:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;standalone_db&quot;</span>] = <span class="ruby-keyword kw">false</span>
+163:         <span class="ruby-comment cmt"># Connect options for ActiveRDF</span>
+164:         <span class="ruby-comment cmt"># Defaults to in-memory RDFLite</span>
+165:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;rdf_connection&quot;</span>] = {
+166:           <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:rdflite</span>
+167:         }
+168: 
+169:         <span class="ruby-comment cmt"># Indicates if the DB backend (ActiveRecord) is </span>
+170:         <span class="ruby-comment cmt"># used &quot;standalone&quot;, which means &quot;outside&quot; a</span>
+171:         <span class="ruby-comment cmt"># rails application. </span>
+172:         <span class="ruby-comment cmt"># For the standalone case, the Talia</span>
+173:         <span class="ruby-comment cmt"># initializer will make the database connections.</span>
+174:         <span class="ruby-comment cmt"># Otherwise, Rails will handle that.</span>
+175:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;standalone_db&quot;</span>] = <span class="ruby-keyword kw">false</span>
+176: 
+177:         <span class="ruby-comment cmt"># Configuration for standalone database connection</span>
+178:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;db_connection&quot;</span>] = <span class="ruby-keyword kw">nil</span>
 179: 
-180:         <span class="ruby-comment cmt"># Configuration for standalone database connection</span>
-181:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;db_connection&quot;</span>] = <span class="ruby-keyword kw">nil</span>
-182: 
-183:         <span class="ruby-comment cmt"># Additional namespaces that will be registered at </span>
-184:         <span class="ruby-comment cmt"># startup. If present, this is expected to be a Hash with </span>
-185:         <span class="ruby-comment cmt"># :shortcut =&gt; URI pairs</span>
-186:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;namespaces&quot;</span>] = <span class="ruby-keyword kw">nil</span>
+180:         <span class="ruby-comment cmt"># Additional namespaces that will be registered at </span>
+181:         <span class="ruby-comment cmt"># startup. If present, this is expected to be a Hash with </span>
+182:         <span class="ruby-comment cmt"># :shortcut =&gt; URI pairs</span>
+183:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;namespaces&quot;</span>] = <span class="ruby-keyword kw">nil</span>
+184: 
+185:         <span class="ruby-comment cmt"># Whether to set the $ASSERT flag that activates the simple assertions</span>
+186:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;assert&quot;</span>] = <span class="ruby-keyword kw">true</span>
 187: 
-188:         <span class="ruby-comment cmt"># Whether to set the $ASSERT flag that activates the simple assertions</span>
-189:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;assert&quot;</span>] = <span class="ruby-keyword kw">true</span>
+188:         <span class="ruby-comment cmt"># Where to find the data directory which will be contain the data</span>
+189:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;data_directory_location&quot;</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'data'</span>)
 190: 
-191:         <span class="ruby-comment cmt"># Where to find the data directory which will be contain the data</span>
-192:         <span class="ruby-identifier">config</span>[<span class="ruby-value str">&quot;data_directory_location&quot;</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'data'</span>)
-193: 
-194:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">config</span>
-195:       <span class="ruby-keyword kw">end</span>
+191:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">config</span>
+192:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000237" class="method-detail">
-        <a name="M000237"></a>
+      <div id="method-M000303" class="method-detail">
+        <a name="M000303"></a>
 
         <div class="method-heading">
-          <a href="#M000237" class="method-signature">
+          <a href="#M000303" class="method-signature">
           <span class="method-name">db_connection_opts</span><span class="method-args">()</span>
           </a>
         </div>
@@ -600,23 +595,23 @@ Creates the default values for the config hash
 The connection options for the standalone database connection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000237-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000237-source">
+            onclick="toggleCode('M000303-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000303-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 269</span>
-269:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">db_connection_opts</span>
-270:         <span class="ruby-identifier">connection_opts</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;db_connection&quot;</span>], <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;db_file&quot;</span>])
-271:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 266</span>
+266:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">db_connection_opts</span>
+267:         <span class="ruby-identifier">connection_opts</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;db_connection&quot;</span>], <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;db_file&quot;</span>])
+268:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000233" class="method-detail">
-        <a name="M000233"></a>
+      <div id="method-M000299" class="method-detail">
+        <a name="M000299"></a>
 
         <div class="method-heading">
-          <a href="#M000233" class="method-signature">
+          <a href="#M000299" class="method-signature">
           <span class="method-name">default_log_level</span><span class="method-args">()</span>
           </a>
         </div>
@@ -626,52 +621,52 @@ The connection options for the standalone database connection
 Get the default log level for the standalone log
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000233-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000233-source">
+            onclick="toggleCode('M000299-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000299-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 214</span>
-214:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_log_level</span>
-215:         <span class="ruby-keyword kw">case</span>(<span class="ruby-ivar">@environment</span>)
-216:         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'development'</span>, <span class="ruby-value str">'test'</span><span class="ruby-operator">:</span>
-217:           <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">DEBUG</span>
-218:         <span class="ruby-keyword kw">else</span>
-219:           <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">WARN</span>
-220:         <span class="ruby-keyword kw">end</span>
-221:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 211</span>
+211:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_log_level</span>
+212:         <span class="ruby-keyword kw">case</span>(<span class="ruby-ivar">@environment</span>)
+213:         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'development'</span>, <span class="ruby-value str">'test'</span><span class="ruby-operator">:</span>
+214:           <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">DEBUG</span>
+215:         <span class="ruby-keyword kw">else</span>
+216:           <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">WARN</span>
+217:         <span class="ruby-keyword kw">end</span>
+218:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000245" class="method-detail">
-        <a name="M000245"></a>
+      <div id="method-M000311" class="method-detail">
+        <a name="M000311"></a>
 
         <div class="method-heading">
-          <a href="#M000245" class="method-signature">
+          <a href="#M000311" class="method-signature">
           <span class="method-name">load_core_ext</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000245-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000245-source">
+            onclick="toggleCode('M000311-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000311-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 387</span>
-387:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_core_ext</span>
-388:         <span class="ruby-identifier">path_to_core_ext</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'vendor'</span>, <span class="ruby-value str">'plugins'</span>, <span class="ruby-value str">'talia_core'</span>, <span class="ruby-value str">'lib'</span>, <span class="ruby-value str">'core_ext'</span>)
-389:         <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">path_to_core_ext</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/**/*.rb'</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require</span> <span class="ruby-identifier">f</span>}
-390:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 382</span>
+382:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_core_ext</span>
+383:         <span class="ruby-identifier">path_to_core_ext</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'vendor'</span>, <span class="ruby-value str">'plugins'</span>, <span class="ruby-value str">'talia_core'</span>, <span class="ruby-value str">'lib'</span>, <span class="ruby-value str">'core_ext'</span>)
+384:         <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">path_to_core_ext</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/**/*.rb'</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require</span> <span class="ruby-identifier">f</span>}
+385:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000244" class="method-detail">
-        <a name="M000244"></a>
+      <div id="method-M000310" class="method-detail">
+        <a name="M000310"></a>
 
         <div class="method-heading">
-          <a href="#M000244" class="method-signature">
+          <a href="#M000310" class="method-signature">
           <span class="method-name">load_ontologies</span><span class="method-args">()</span>
           </a>
         </div>
@@ -681,49 +676,49 @@ Get the default log level for the standalone log
 Autoload ontologies, if configured
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000244-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000244-source">
+            onclick="toggleCode('M000310-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000310-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 357</span>
-357:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_ontologies</span>
-358:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'auto_ontologies'</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span>[<span class="ruby-value str">'false'</span>, <span class="ruby-value str">'no'</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'auto_ontologies'</span>].<span class="ruby-identifier">downcase</span>))
-359:         <span class="ruby-identifier">onto_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'auto_ontologies'</span>])
-360:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">SystemInitializationError</span>, <span class="ruby-node">&quot;Cannot find configured ontology dir #{onto_dir}&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">onto_dir</span>))
-361:         <span class="ruby-identifier">adapter</span> = <span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">write_adapter</span>
-362:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">SystemInitializationError</span>, <span class="ruby-value str">&quot;Ontology autoloading without a context-aware adapter deletes all RDF data. This is only allowed in testing, please load the ontology manually.&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">supports_context?</span> <span class="ruby-operator">||</span> (<span class="ruby-ivar">@environment</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'testing'</span>))
-363:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">SystemInitializationError</span>, <span class="ruby-value str">&quot;Ontology autoloading requires 'load' capability on the adapter.&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:load</span>))
-364: 
-365:         <span class="ruby-comment cmt"># Clear out the RDF</span>
-366:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">supports_context?</span>)
-367:           <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfImport</span>.<span class="ruby-identifier">clear_file_contexts</span>
-368:         <span class="ruby-keyword kw">else</span>
-369:           <span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:clear</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">clear</span> <span class="ruby-operator">:</span> <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span><span class="ruby-operator">::</span><span class="ruby-identifier">flush_rdf</span>
-370:         <span class="ruby-keyword kw">end</span>
-371: 
-372:         <span class="ruby-identifier">loaded_ontos</span> = []
-373: 
-374:         <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">onto_dir</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
-375:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">file</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\.owl$|\.rdf$|\.rdfs$/</span>)
-376:             <span class="ruby-identifier">file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">onto_dir</span>, <span class="ruby-identifier">file</span>))
-377:             <span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">supports_context?</span> <span class="ruby-value">? </span><span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfImport</span>.<span class="ruby-identifier">import_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-value str">'rdfxml'</span>, <span class="ruby-identifier">:auto</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfImport</span>.<span class="ruby-identifier">import_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-value str">'rdfxml'</span>)
-378:             <span class="ruby-identifier">loaded_ontos</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">file</span>)
-379:           <span class="ruby-keyword kw">end</span>
-380:         <span class="ruby-keyword kw">end</span>
-381: 
-382:         <span class="ruby-identifier">klasses</span>, <span class="ruby-identifier">updated</span> = <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfUpdate</span><span class="ruby-operator">::</span><span class="ruby-identifier">rdfs_from_owl</span>
-383: 
-384:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Ontologies autoloaded: #{loaded_ontos.join(', ')} (#{updated} of #{klasses} updated)&quot;</span>
-385:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 352</span>
+352:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_ontologies</span>
+353:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'auto_ontologies'</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span>[<span class="ruby-value str">'false'</span>, <span class="ruby-value str">'no'</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'auto_ontologies'</span>].<span class="ruby-identifier">downcase</span>))
+354:         <span class="ruby-identifier">onto_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'auto_ontologies'</span>])
+355:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">SystemInitializationError</span>, <span class="ruby-node">&quot;Cannot find configured ontology dir #{onto_dir}&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">onto_dir</span>))
+356:         <span class="ruby-identifier">adapter</span> = <span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">write_adapter</span>
+357:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">SystemInitializationError</span>, <span class="ruby-value str">&quot;Ontology autoloading without a context-aware adapter deletes all RDF data. This is only allowed in testing, please load the ontology manually.&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">supports_context?</span> <span class="ruby-operator">||</span> (<span class="ruby-ivar">@environment</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'testing'</span>))
+358:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">SystemInitializationError</span>, <span class="ruby-value str">&quot;Ontology autoloading requires 'load' capability on the adapter.&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:load</span>))
+359: 
+360:         <span class="ruby-comment cmt"># Clear out the RDF</span>
+361:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">supports_context?</span>)
+362:           <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfImport</span>.<span class="ruby-identifier">clear_file_contexts</span>
+363:         <span class="ruby-keyword kw">else</span>
+364:           <span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:clear</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">clear</span> <span class="ruby-operator">:</span> <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span><span class="ruby-operator">::</span><span class="ruby-identifier">flush_rdf</span>
+365:         <span class="ruby-keyword kw">end</span>
+366: 
+367:         <span class="ruby-identifier">loaded_ontos</span> = []
+368: 
+369:         <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">onto_dir</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
+370:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">file</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\.owl$|\.rdf$|\.rdfs$/</span>)
+371:             <span class="ruby-identifier">file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">onto_dir</span>, <span class="ruby-identifier">file</span>))
+372:             <span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">supports_context?</span> <span class="ruby-value">? </span><span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfImport</span>.<span class="ruby-identifier">import_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-value str">'rdfxml'</span>, <span class="ruby-identifier">:auto</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfImport</span>.<span class="ruby-identifier">import_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-value str">'rdfxml'</span>)
+373:             <span class="ruby-identifier">loaded_ontos</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">file</span>)
+374:           <span class="ruby-keyword kw">end</span>
+375:         <span class="ruby-keyword kw">end</span>
+376: 
+377:         <span class="ruby-identifier">klasses</span>, <span class="ruby-identifier">updated</span> = <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfUpdate</span><span class="ruby-operator">::</span><span class="ruby-identifier">rdfs_from_owl</span>
+378: 
+379:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Ontologies autoloaded: #{loaded_ontos.join(', ')} (#{updated} of #{klasses} updated)&quot;</span>
+380:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000239" class="method-detail">
-        <a name="M000239"></a>
+      <div id="method-M000305" class="method-detail">
+        <a name="M000305"></a>
 
         <div class="method-heading">
-          <a href="#M000239" class="method-signature">
+          <a href="#M000305" class="method-signature">
           <span class="method-name">rdf_connection_opts</span><span class="method-args">()</span>
           </a>
         </div>
@@ -733,28 +728,28 @@ Autoload ontologies, if configured
 Get the RDF configuration options
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000239-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000239-source">
+            onclick="toggleCode('M000305-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000305-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 293</span>
-293:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rdf_connection_opts</span>
-294:         <span class="ruby-identifier">options</span> = <span class="ruby-identifier">connection_opts</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;rdf_connection&quot;</span>], <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;rdf_connection_file&quot;</span>])
-295:         <span class="ruby-comment cmt"># Make the keys into symbols, as needed by ActiveRDF</span>
-296:         <span class="ruby-identifier">rdf_cfg</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
-297:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rdf_cfg</span>[<span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">value</span> }
-298: 
-299:         <span class="ruby-identifier">rdf_cfg</span>
-300:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 292</span>
+292:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rdf_connection_opts</span>
+293:         <span class="ruby-identifier">options</span> = <span class="ruby-identifier">connection_opts</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;rdf_connection&quot;</span>], <span class="ruby-ivar">@config</span>[<span class="ruby-value str">&quot;rdf_connection_file&quot;</span>])
+294:         <span class="ruby-comment cmt"># Make the keys into symbols, as needed by ActiveRDF</span>
+295:         <span class="ruby-identifier">rdf_cfg</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+296:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rdf_cfg</span>[<span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">value</span> }
+297: 
+298:         <span class="ruby-identifier">rdf_cfg</span>
+299:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000246" class="method-detail">
-        <a name="M000246"></a>
+      <div id="method-M000312" class="method-detail">
+        <a name="M000312"></a>
 
         <div class="method-heading">
-          <a href="#M000246" class="method-signature">
+          <a href="#M000312" class="method-signature">
           <span class="method-name">register_mime_types</span><span class="method-args">()</span>
           </a>
         </div>
@@ -764,46 +759,46 @@ Get the RDF configuration options
 Register the default mime types
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000246-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000246-source">
+            onclick="toggleCode('M000312-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000312-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 393</span>
-393:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register_mime_types</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 388</span>
+388:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register_mime_types</span>
+389: 
+390:         <span class="ruby-comment cmt"># Add new mime types for use in respond_to blocks:</span>
+391:         <span class="ruby-comment cmt"># Mime::Type.register &quot;text/richtext&quot;, :rtf</span>
+392:         <span class="ruby-comment cmt"># Mime::Type.register_alias &quot;text/html&quot;, :iphone</span>
+393:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;application/rdf+xml&quot;</span>, <span class="ruby-identifier">:rdf</span>
 394: 
-395:         <span class="ruby-comment cmt"># Add new mime types for use in respond_to blocks:</span>
-396:         <span class="ruby-comment cmt"># Mime::Type.register &quot;text/richtext&quot;, :rtf</span>
-397:         <span class="ruby-comment cmt"># Mime::Type.register_alias &quot;text/html&quot;, :iphone</span>
-398:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;application/rdf+xml&quot;</span>, <span class="ruby-identifier">:rdf</span>
-399: 
-400:         <span class="ruby-comment cmt"># The are used for serving &quot;static&quot; widget content by mime type</span>
-401:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/gif&quot;</span>, <span class="ruby-identifier">:gif</span>, [], <span class="ruby-node">%w( gif )</span>
-402:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/jpeg&quot;</span>, <span class="ruby-identifier">:jpeg</span>, [], <span class="ruby-node">%w( jpeg jpg jpe jfif pjpeg pjp )</span>
-403:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/png&quot;</span>, <span class="ruby-identifier">:png</span>, [], <span class="ruby-node">%w( png )</span>
-404:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/tiff&quot;</span>, <span class="ruby-identifier">:tiff</span>, [], <span class="ruby-node">%w( tiff tif )</span>
-405:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/bmp&quot;</span>, <span class="ruby-identifier">:bmp</span>, [], <span class="ruby-node">%w( bmp )</span>
-406:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/isivideo&quot;</span>, <span class="ruby-identifier">:isivideo</span>, [], <span class="ruby-node">%w( fvi )</span>
-407:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/mpeg&quot;</span>, <span class="ruby-identifier">:mpeg</span>, [], <span class="ruby-node">%w( mpeg mpg mpe mpv vbs mpegv )</span>
-408:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/x-mpeg2&quot;</span>, <span class="ruby-identifier">:xmpeg2</span>, [], <span class="ruby-node">%w( mpv2 mp2v )</span>
-409:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/msvideo&quot;</span>, <span class="ruby-identifier">:msvideo</span>, [], <span class="ruby-node">%w( avi )</span>
-410:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/quicktime&quot;</span>, <span class="ruby-identifier">:quicktime</span>, [], <span class="ruby-node">%w( qt mov moov )</span>
-411:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/vivo&quot;</span>, <span class="ruby-identifier">:vivo</span>, [], <span class="ruby-node">%w( viv vivo )</span>
-412:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/wavelet&quot;</span>, <span class="ruby-identifier">:wavelet</span>, [], <span class="ruby-node">%w( wv )</span>
-413:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/x-sgi-movie&quot;</span>, <span class="ruby-identifier">:xsgimovie</span>, [], <span class="ruby-node">%w( movie )</span>
-414:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;application/pdf&quot;</span>, <span class="ruby-identifier">:pdf</span>, [], <span class="ruby-node">%w( pdf )</span>
-415:         <span class="ruby-node">%w( hnml tei tei-p4 tei-p5 gml wittei)</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">type</span><span class="ruby-operator">|</span>
-416:           <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-node">&quot;application/xml+#{type}&quot;</span>, <span class="ruby-identifier">type</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/-/</span>, <span class="ruby-value str">'_'</span>).<span class="ruby-identifier">to_sym</span>, [], [ <span class="ruby-identifier">type</span> ] 
-417:         <span class="ruby-keyword kw">end</span>
-418:       <span class="ruby-keyword kw">end</span>
+395:         <span class="ruby-comment cmt"># The are used for serving &quot;static&quot; widget content by mime type</span>
+396:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/gif&quot;</span>, <span class="ruby-identifier">:gif</span>, [], <span class="ruby-node">%w( gif )</span>
+397:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/jpeg&quot;</span>, <span class="ruby-identifier">:jpeg</span>, [], <span class="ruby-node">%w( jpeg jpg jpe jfif pjpeg pjp )</span>
+398:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/png&quot;</span>, <span class="ruby-identifier">:png</span>, [], <span class="ruby-node">%w( png )</span>
+399:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/tiff&quot;</span>, <span class="ruby-identifier">:tiff</span>, [], <span class="ruby-node">%w( tiff tif )</span>
+400:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;image/bmp&quot;</span>, <span class="ruby-identifier">:bmp</span>, [], <span class="ruby-node">%w( bmp )</span>
+401:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/isivideo&quot;</span>, <span class="ruby-identifier">:isivideo</span>, [], <span class="ruby-node">%w( fvi )</span>
+402:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/mpeg&quot;</span>, <span class="ruby-identifier">:mpeg</span>, [], <span class="ruby-node">%w( mpeg mpg mpe mpv vbs mpegv )</span>
+403:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/x-mpeg2&quot;</span>, <span class="ruby-identifier">:xmpeg2</span>, [], <span class="ruby-node">%w( mpv2 mp2v )</span>
+404:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/msvideo&quot;</span>, <span class="ruby-identifier">:msvideo</span>, [], <span class="ruby-node">%w( avi )</span>
+405:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/quicktime&quot;</span>, <span class="ruby-identifier">:quicktime</span>, [], <span class="ruby-node">%w( qt mov moov )</span>
+406:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/vivo&quot;</span>, <span class="ruby-identifier">:vivo</span>, [], <span class="ruby-node">%w( viv vivo )</span>
+407:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/wavelet&quot;</span>, <span class="ruby-identifier">:wavelet</span>, [], <span class="ruby-node">%w( wv )</span>
+408:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;video/x-sgi-movie&quot;</span>, <span class="ruby-identifier">:xsgimovie</span>, [], <span class="ruby-node">%w( movie )</span>
+409:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-value str">&quot;application/pdf&quot;</span>, <span class="ruby-identifier">:pdf</span>, [], <span class="ruby-node">%w( pdf )</span>
+410:         <span class="ruby-node">%w( hnml tei tei-p4 tei-p5 gml wittei)</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">type</span><span class="ruby-operator">|</span>
+411:           <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">register</span> <span class="ruby-node">&quot;application/xml+#{type}&quot;</span>, <span class="ruby-identifier">type</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/-/</span>, <span class="ruby-value str">'_'</span>).<span class="ruby-identifier">to_sym</span>, [], [ <span class="ruby-identifier">type</span> ] 
+412:         <span class="ruby-keyword kw">end</span>
+413:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000235" class="method-detail">
-        <a name="M000235"></a>
+      <div id="method-M000301" class="method-detail">
+        <a name="M000301"></a>
 
         <div class="method-heading">
-          <a href="#M000235" class="method-signature">
+          <a href="#M000301" class="method-signature">
           <span class="method-name">set_environment</span><span class="method-args">()</span>
           </a>
         </div>
@@ -813,30 +808,30 @@ Register the default mime types
 Set the environmet to be used for config selection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000235-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000235-source">
+            onclick="toggleCode('M000301-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000301-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 238</span>
-238:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_environment</span>
-239:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@@environment</span>)
-240:           <span class="ruby-ivar">@environment</span> = <span class="ruby-ivar">@@environment</span>
-241:         <span class="ruby-keyword kw">elsif</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'RAILS_ENV'</span>])
-242:           <span class="ruby-ivar">@environment</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'RAILS_ENV'</span>]
-243:         <span class="ruby-keyword kw">else</span>
-244:           <span class="ruby-ivar">@environment</span> = <span class="ruby-value str">&quot;development&quot;</span>
-245:         <span class="ruby-keyword kw">end</span>
-246:         <span class="ruby-ivar">@@environment</span> = <span class="ruby-ivar">@environment</span>
-247:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 235</span>
+235:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_environment</span>
+236:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@@environment</span>)
+237:           <span class="ruby-ivar">@environment</span> = <span class="ruby-ivar">@@environment</span>
+238:         <span class="ruby-keyword kw">elsif</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'RAILS_ENV'</span>])
+239:           <span class="ruby-ivar">@environment</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'RAILS_ENV'</span>]
+240:         <span class="ruby-keyword kw">else</span>
+241:           <span class="ruby-ivar">@environment</span> = <span class="ruby-value str">&quot;development&quot;</span>
+242:         <span class="ruby-keyword kw">end</span>
+243:         <span class="ruby-ivar">@@environment</span> = <span class="ruby-ivar">@environment</span>
+244:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000232" class="method-detail">
-        <a name="M000232"></a>
+      <div id="method-M000298" class="method-detail">
+        <a name="M000298"></a>
 
         <div class="method-heading">
-          <a href="#M000232" class="method-signature">
+          <a href="#M000298" class="method-signature">
           <span class="method-name">set_logger</span><span class="method-args">()</span>
           </a>
         </div>
@@ -847,32 +842,32 @@ Creates a logger if no logger is defined At the moment, this just creates a
 logger to the default director
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000232-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000232-source">
+            onclick="toggleCode('M000298-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000298-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 200</span>
-200:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_logger</span>
-201:         <span class="ruby-ivar">@logger</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">RAILS_DEFAULT_LOGGER</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">RAILS_DEFAULT_LOGGER</span>)
-202:           <span class="ruby-constant">RAILS_DEFAULT_LOGGER</span>
-203:         <span class="ruby-keyword kw">else</span>
-204:           <span class="ruby-identifier">log_name</span> = <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'standalone_log'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'log'</span>, <span class="ruby-node">&quot;talia_core_#{@environment}.log&quot;</span>)
-205:           <span class="ruby-identifier">log_level</span> = <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'standalone_log_level'</span>] <span class="ruby-operator">?</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'standalone_log_level'</span>]) <span class="ruby-operator">:</span> <span class="ruby-identifier">default_log_level</span>
-206:           <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">makedirs</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">log_name</span>))
-207:           <span class="ruby-identifier">logger</span> = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">log_name</span>)
-208:           <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">level</span> = <span class="ruby-identifier">log_level</span>
-209:           <span class="ruby-identifier">logger</span>
-210:         <span class="ruby-keyword kw">end</span>
-211:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 197</span>
+197:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_logger</span>
+198:         <span class="ruby-ivar">@logger</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">RAILS_DEFAULT_LOGGER</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">RAILS_DEFAULT_LOGGER</span>)
+199:           <span class="ruby-constant">RAILS_DEFAULT_LOGGER</span>
+200:         <span class="ruby-keyword kw">else</span>
+201:           <span class="ruby-identifier">log_name</span> = <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'standalone_log'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TALIA_ROOT</span>, <span class="ruby-value str">'log'</span>, <span class="ruby-node">&quot;talia_core_#{@environment}.log&quot;</span>)
+202:           <span class="ruby-identifier">log_level</span> = <span class="ruby-ivar">@config</span>[<span class="ruby-value str">'standalone_log_level'</span>] <span class="ruby-operator">?</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-ivar">@config</span>[<span class="ruby-value str">'standalone_log_level'</span>]) <span class="ruby-operator">:</span> <span class="ruby-identifier">default_log_level</span>
+203:           <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">makedirs</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">log_name</span>))
+204:           <span class="ruby-identifier">logger</span> = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">log_name</span>)
+205:           <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">level</span> = <span class="ruby-identifier">log_level</span>
+206:           <span class="ruby-identifier">logger</span>
+207:         <span class="ruby-keyword kw">end</span>
+208:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000234" class="method-detail">
-        <a name="M000234"></a>
+      <div id="method-M000300" class="method-detail">
+        <a name="M000300"></a>
 
         <div class="method-heading">
-          <a href="#M000234" class="method-signature">
+          <a href="#M000300" class="method-signature">
           <span class="method-name">set_talia_root</span><span class="method-args">()</span>
           </a>
         </div>
@@ -883,21 +878,21 @@ Set the Talia root directory first. Use the configured directory if given,
 otherwise go for the RAILS_ROOT/current directory.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000234-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000234-source">
+            onclick="toggleCode('M000300-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000300-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 225</span>
-225:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_talia_root</span>
-226:         <span class="ruby-identifier">root</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@@talia_root</span>)
-227:           <span class="ruby-ivar">@@talia_root</span>
-228:         <span class="ruby-keyword kw">elsif</span>(<span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">RAILS_ROOT</span>))
-229:           <span class="ruby-constant">RAILS_ROOT</span>
-230:         <span class="ruby-keyword kw">else</span>
-231:           <span class="ruby-value str">'.'</span>
-232:         <span class="ruby-keyword kw">end</span>
-233:         <span class="ruby-comment cmt"># Use the full path for the root</span>
-234:         <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-identifier">:TALIA_ROOT</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">root</span>))
-235:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/initializer.rb, line 222</span>
+222:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_talia_root</span>
+223:         <span class="ruby-identifier">root</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@@talia_root</span>)
+224:           <span class="ruby-ivar">@@talia_root</span>
+225:         <span class="ruby-keyword kw">elsif</span>(<span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">RAILS_ROOT</span>))
+226:           <span class="ruby-constant">RAILS_ROOT</span>
+227:         <span class="ruby-keyword kw">else</span>
+228:           <span class="ruby-value str">'.'</span>
+229:         <span class="ruby-keyword kw">end</span>
+230:         <span class="ruby-comment cmt"># Use the full path for the root</span>
+231:         <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-identifier">:TALIA_ROOT</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">root</span>))
+232:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

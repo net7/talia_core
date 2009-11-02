@@ -19,9 +19,13 @@ module TaliaCore
       # on creation. This will call the attach_files method on the object.
       def new(*args)
         the_source = if((args.size == 1) && (args.first.is_a?(Hash)))
+          options = args.first
+          options.to_options!
+          
           # We have an option hash to init the source
-          files = args.first.delete(:files) || args.first.delete('files')
-          attributes = split_attribute_hash(args.first)
+          files = options.delete(:files)
+          options[:uri] = uri_string_for(options[:uri])
+          attributes = split_attribute_hash(options)
           the_source = super(attributes[:db_attributes])
           the_source.add_semantic_attributes(false, attributes[:semantic_attributes])
           the_source.attach_files(files) if(files)
@@ -41,7 +45,8 @@ module TaliaCore
       # like #new, but it will correctly initialize a source of the type given
       # in the hash. If no type is given, this will create a plain ActiveSource.
       def create_source(args)
-        type = args.delete(:type) || args.delete('type') || 'ActiveSource'
+        args.to_options!
+        type = args.delete(:type) || 'TaliaCore::ActiveSource'
         klass = type.constantize
         klass.new(args)
       end
@@ -59,11 +64,14 @@ module TaliaCore
       # [*progressor*] The progress reporting object, which must respond to run_with_progress(message, size, &block)
       # [*errors*] If given, all erors will be looged to this array instead of raising
       #            an exception
+      # [*duplicates*] How to treat alredy existing sources. See ImportJobHelper for more
+      #                documentation
       def create_from_xml(xml, options = {})
+        options.to_options!
         reader = options[:reader] ? options[:reader].to_s.classify.constantize : TaliaCore::ActiveSourceParts::Xml::SourceReader
-        source_properties = reader.sources_from(xml, options[:progressor])
+        source_properties = reader.sources_from(xml, options[:progressor], options[:base_file_uri])
         self.progressor = options[:progressor]
-        sources = create_multi_from(source_properties)
+        sources = create_multi_from(source_properties, options)
         (sources.size > 1) ? sources : sources.first
       end
 
@@ -74,30 +82,29 @@ module TaliaCore
       # Options:
       # [*errors*] If given, all erors will be looged to this array instead of raising
       #            an exception
+      # [*duplicates*] Indicates how to deal with sources that already exist in the
+      #                datastore. See the ImportJobHelper class for a documentation of
+      #                this option. Default is :skip
       def create_multi_from(sources, options = {})
+        options.to_options!
         source_objects = []
         run_with_progress('Writing imported', sources.size) do |progress|
           source_objects = sources.collect do |props|
+            props.to_options!
             src = nil
             begin
-              if(src = ActiveSource.find(:first, :conditions => { :uri => (props[:uri] || props['uri']) }))
-                # Deal with already existing sources
-                src.rewrite_attributes(props)
-                # Rewrite the type, if neccessary
-                type = props[:type] || props['type']
-                switch_type = type && (src.type != type)
-                # Warn to the log if we have a problematic type change
-                TaliaCore.logger.warn("WARNING: Type change from #{src.type} to #{type}") if(switch_type && !src.is_a?(DummySource))
-                src.type = type if(switch_type)
-                src
+              props[:uri] = uri_string_for(props[:uri])
+              assit(props[:uri], "Must have a valid uri at this step")
+              if(src = ActiveSource.find(:first, :conditions => { :uri => props[:uri] }))
+                src.update_source(props, options[:duplicates])
               else
                 src = ActiveSource.create_source(props)
               end
               src.save!
             rescue Exception => e
               if(options[:errors]) 
-                options[:errors] << "ERROR during import of #{props['uri'] || props[:uri]}: #{e.message}" 
-                TALIA_CORE.logger.warn("Problems importing #{props['uri'] || props[:uri]} (logged): #{e.message}")
+                options[:errors] << "ERROR during import of #{props[:uri]}: #{e.message}" 
+                TALIA_CORE.logger.warn("Problems importing #{props[:uri]} (logged): #{e.message}")
               else
                 raise
               end

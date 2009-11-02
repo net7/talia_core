@@ -3,6 +3,7 @@
 # in Rails and in standalone mode.
 
 require 'fileutils'
+require 'rake/rdoctask'
 
 $: << File.join(File.dirname(__FILE__))
 
@@ -25,6 +26,13 @@ task :migrate => "talia_core:talia_init" do
   Util::do_migrations 
   puts "Migrations done."
 end  
+
+Rake::RDocTask.new(:rdoc) do |rdoc|
+  rdoc.title    = 'Talia Core'
+  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.rdoc_files.include('README.rdoc')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
 
 
 begin

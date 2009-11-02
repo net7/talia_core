@@ -1,7 +1,7 @@
 module TaliaCore
   module DataTypes
     
-    # Class to manage IIP Image data type
+    # Class to manage IIP Image data type. FIXME: Check if this correctly destroys existing files.
     class IipData < FileRecord
       
       # Returns the IIP server configured for the application

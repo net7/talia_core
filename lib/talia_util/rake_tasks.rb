@@ -6,7 +6,6 @@ require 'talia_core'
 require 'talia_util'
 require 'talia_util/util'
 require 'rake/testtask'
-require 'rake/rdoctask'
 require 'progressbar'
 
 include TaliaUtil

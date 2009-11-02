@@ -19,6 +19,7 @@ module TaliaCore
   # * To ensure that the data is written, the save method should be called as 
   #   necessary.
   class Source < ActiveSource
+    # FIXME: Remove methods for old admin panel
     
     has_one :workflow, :class_name => 'TaliaCore::Workflow::Base', :dependent => :destroy
     
@@ -31,16 +32,6 @@ module TaliaCore
     def local
       uri.local?
     end
-
-    alias_method :ar_update_attributes, :update_attributes    
-    # Wrapping for <tt>ActiveRecord</tt> <tt>update_attributes</tt>.
-    def update_attributes(attributes)
-      attributes, rdf_attributes = extract_attributes!(attributes)
-      rdf_attributes.each do |k,v|
-        send(k + "=", v)
-        send('save_' + k)
-      end
-    end    
     
     # Shortcut for assigning the primary_source status
     def primary_source=(value)
@@ -225,16 +216,6 @@ module TaliaCore
     end
     
     protected
-    
-    # Separates given attributes distinguishing between ActiveSource and RDF.
-    def extract_attributes!(attributes)
-      active_source_attributes = attributes.inject({}) do |active_source_attributes, column_values|
-        active_source_attributes[column_values.first] = attributes.delete(column_values.first) if self.class.column_names.include? column_values.first
-        active_source_attributes
-      end
-
-      [ active_source_attributes, attributes ]
-    end
     
     # Look at the given attributes and choose to instantiate
     # a Source or a RDF object (triple endpoint).

@@ -107,6 +107,53 @@ module TaliaCore
     alias :update_attributes_orig :update_attributes
     alias :update_attributes_orig! :update_attributes!
 
+
+    # Updates the source with the given properties. The 'mode' field indicates if
+    # and how the update will be performed. See the ImportJobHelper class for
+    # the different modes.
+    #
+    # As opposed to the *_attributes method, this will also handle file elements.
+    # The default mode is :skip (do nothing)
+    def update_source(properties, mode)
+      properties.to_options!
+      mode = :update if(self.is_a?(DummySource)) # Dummy sources are always updated
+      mode ||= :skip
+      mode = mode.to_sym
+      return self if(mode == :skip) # If we're told to ignore updates
+      
+      # Deal with already existing sources
+      files = properties.delete(:files)
+      
+      if(mode == :overwrite)
+        # If we are to overwrite, delete all relations and update normally
+        self.semantic_relations.destroy_all
+        self.data_records.destroy_all
+        mode = :update
+      elsif(mode == :update && files && self.data_records.size > 0)
+        # On updating we should only remove the files if there are new ones
+        self.data_records.destroy_all
+      end
+      
+      # Add any files
+      attach_files(files) if(files)
+      
+      # Rewrite the type, if neccessary
+      type = properties[:type]
+      switch_type = type && (self.type != type)
+      # Warn to the log if we have a problematic type change
+      TaliaCore.logger.warn("WARNING: Type change from #{self.type} to #{type}") if(switch_type && !self.is_a?(DummySource))
+      self.type = type if(switch_type)
+      
+      # Now we should either be adding or updating
+      assit(mode == :update || mode == :add)
+      update = (mode == :update)
+      
+      # Overwrite with or add the imported attributes
+      update ? rewrite_attributes(properties) : update_attributes(properties)
+      
+      self
+    end
+
     # Updates *all* attributes of this source. For the database attributes, this works
     # exactly like ActiveRecord::Base#update_attributes
     #
@@ -331,7 +378,7 @@ module TaliaCore
     # string it will be returned as a string.
     def target_for(value)
       return value if(value.kind_of?(N::URI) || value.kind_of?(ActiveSource))
-      assit_kind_of(String, value)
+      assit_block { |msg| msg << "Expected #{value.inspect} to be a String" unless(value.is_a?(String)) ; value.is_a?(String) }
       value.strip!
       if((value[0..0] == '<') && (value[-1..-1] == '>'))
         value = ActiveSource.expand_uri(value [1..-2])

@@ -12,6 +12,10 @@ module TaliaCore
     fixtures :active_sources, :semantic_properties, :semantic_relations, :data_records
     
     N::Namespace.shortcut(:as_test_preds, 'http://testvalue.org/')
+    
+    def setup
+      setup_once(:test_file) { File.join(ActiveSupport::TestCase.fixture_path, 'generic_test.xml') }
+    end
 
     def test_has_type
       src = ActiveSource.new('http://xsource/has_type_test')
@@ -521,6 +525,11 @@ module TaliaCore
       assert_property(src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
     end
     
+    def test_create_with_attributes_plain_uri
+      src = ActiveSource.new(:uri => 'test_create_with_attributes_plain_uri')
+      assert_equal(N::LOCAL.test_create_with_attributes_plain_uri, src.uri)
+    end
+    
     def test_create_source
       src = ActiveSource.create_source(:uri => 'http://as_test/create_with_type', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::SingularAccessorTest')
       assert_kind_of(SingularAccessorTest, src)
@@ -536,7 +545,7 @@ module TaliaCore
       xml = src.to_xml
       # Quickly change something inside, but leave the URL
       xml.gsub!('valueFOOOO', 'valorz')
-      new_src = ActiveSource.create_from_xml(xml)
+      new_src = ActiveSource.create_from_xml(xml, 'duplicates' => 'update')
       # Now test as above
       assert_equal(src.uri.to_s, new_src.uri.to_s)
       assert_equal('valorz', new_src[N::LOCAL.localthi].first)
@@ -549,7 +558,7 @@ module TaliaCore
         { :uri => N::LOCAL.test_create_multi_stuff, 'rdf:relatit' => [ "<#{N::LOCAL.test_create_multi_stuff_two}>" ], 'type' => 'TaliaCore::SingularAccessorTest' },
         { :uri => N::LOCAL.test_create_multi_stuff_two, ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<#{N::LOCAL.test_create_multi_stuff}>"], 'type' => 'TaliaCore::SingularAccessorTest' }
       ]
-      ActiveSource.create_multi_from(src_attribs)
+      ActiveSource.create_multi_from(src_attribs, :duplicates => :update)
       src = TaliaCore::ActiveSource.find(N::LOCAL.test_create_multi_stuff)
       src_two = TaliaCore::ActiveSource.find(N::LOCAL.test_create_multi_stuff_two)
       assert(src && src_two)
@@ -568,7 +577,7 @@ module TaliaCore
       # Quickly change the URI for the new thing
       xml.gsub!(src.uri.to_s, 'http://as_test/create_forth_and_forth')
       xml.gsub!('DummySource', 'SingularAccessorTest')
-      new_src = ActiveSource.create_from_xml(xml)
+      new_src = ActiveSource.create_from_xml(xml, :duplicates => :update)
       assert_kind_of(TaliaCore::SingularAccessorTest, new_src)
       # Now test as above
       assert_equal('http://as_test/create_forth_and_forth', new_src.uri.to_s)
@@ -578,13 +587,12 @@ module TaliaCore
     end
     
     def test_create_with_file
-      test_file = File.join(ActiveSupport::TestCase.fixture_path, 'generic_test.xml')
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_with_file', 'type' => 'TaliaCore::Source', 'files' => {'url' => test_file })
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_with_file', 'type' => 'TaliaCore::Source', 'files' => {'url' => @test_file })
       assert_equal(1, src.data_records.size)
       src.save!
       assert(!src.data_records.first.new_record?)
       assert_kind_of(DataTypes::XmlData, src.data_records.first)
-      File.open(test_file) do |io|
+      File.open(@test_file) do |io|
         assert_equal(src.data_records.first.all_text, io.read)
       end
     end
@@ -615,7 +623,56 @@ module TaliaCore
       assert_equal(0, data.size)
       data = data_source.data("SimpleText", "noop.txt")
       assert_nil(data)
-    end 
+    end
+    
+    def test_update_source_skip
+      src = ActiveSource.create_source(:uri => 'http://as_test/update_source_skip', ':localthi' => 'value', 'rdf:somethi' => 'value2', 'type' => 'TaliaCore::Source', 'files' => {'url' => @test_file })
+      src.save!
+      src.update_source({ ':localthi' => ['value2', 'value3'] }, :skip)
+      assert_property(src[N::LOCAL.localthi], 'value')
+      assert_property(src[N::RDF.somethi], 'value2')
+      assert_equal(1, src.data_records.size)
+    end
+    
+    def test_update_source_skip_dummy
+      src = ActiveSource.create_source(:uri => 'http://as_test/update_source_skip_dummy', ':localthi' => 'value', 'rdf:somethi' => 'value2', 'type' => 'TaliaCore::DummySource')
+      src.save!
+      assert_kind_of(DummySource, src)
+      src.update_source({ ':localthi' => ['value2', 'value3'] }, :skip)
+      assert_property(src[N::LOCAL.localthi], 'value2', 'value3')
+      assert_property(src[N::RDF.somethi], 'value2')
+    end
+    
+    def test_update_source_overwrite
+      src = ActiveSource.create_source(:uri => 'http://as_test/update_source_overwrite', ':localthi' => 'value', 'rdf:somethi' => 'value2', 'type' => 'TaliaCore::Source', 'files' => {'url' => @test_file })
+      src.save!
+      new_file = File.join(ActiveSupport::TestCase.fixture_path, 'tiny.jpg')
+      src.update_source({ ':localthi' => ['value2', 'value3'] }, :overwrite)
+      assert_property(src[N::LOCAL.localthi], 'value2', 'value3')
+      assert_property(src[N::RDF.somethi])
+      assert_equal(0, src.data_records.size)
+    end
+    
+    def test_update_source_update
+      src = ActiveSource.create_source(:uri => 'http://as_test/update_source_update', ':localthi' => 'value', 'rdf:somethi' => 'value2', 'type' => 'TaliaCore::Source', 'files' => {'url' => @test_file })
+      src.save!
+      new_file = File.join(ActiveSupport::TestCase.fixture_path, 'tiny.jpg')
+      src.update_source({ ':localthi' => ['value2', 'value3'], 'files' => {'url' => new_file } }, :update)
+      assert_property(src[N::LOCAL.localthi], 'value2', 'value3')
+      assert_property(src[N::RDF.somethi], 'value2')
+      assert_kind_of(DataTypes::IipData, src.data_records.first)
+    end
+    
+    def test_update_source_add
+      src = ActiveSource.create_source(:uri => 'http://as_test/update_source_add', ':localthi' => 'value', 'rdf:somethi' => 'value2', 'type' => 'TaliaCore::Source', 'files' => {'url' => @test_file })
+      src.save!
+      new_file = File.join(ActiveSupport::TestCase.fixture_path, 'tiny.jpg')
+      src.update_source({ ':localthi' => ['value2', 'value3'], 'files' => {'url' => new_file } }, :add)
+      assert_property(src[N::LOCAL.localthi], 'value', 'value2', 'value3')
+      assert_property(src[N::RDF.somethi], 'value2')
+      # Expect 2 records: The original, the iip image and the orig_image
+      assert_equal(3, src.data_records.size)
+    end
     
     private
     

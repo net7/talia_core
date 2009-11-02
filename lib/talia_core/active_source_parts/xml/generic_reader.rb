@@ -1,4 +1,5 @@
 require 'hpricot'
+require 'pathname'
 
 module TaliaCore
   module ActiveSourceParts
@@ -28,11 +29,14 @@ module TaliaCore
           # See the IoHelper class for help on the options. A progressor may
           # be supplied on which the importer will report it's progress.
           def sources_from_url(url, options = nil, progressor = nil)
-            open_generic(url, options) { |io| sources_from(io, progressor) }
+            open_generic(url, options) { |io| sources_from(io, progressor, base_for(url)) }
           end
 
-          def sources_from(source, progressor = nil)
+          # Reader the sources from the given IO stream. You may specify a base
+          # url to help the reader to decide from where files should be opened.
+          def sources_from(source, progressor = nil, base_url=nil)
             reader = self.new(source)
+            reader.base_file_url = base_url if(base_url)
             reader.progressor = progressor
             reader.sources
           end
@@ -91,6 +95,13 @@ module TaliaCore
           end
           @sources.values
         end
+        
+        # This is the "base" for resolving file URLs. If a file URL is found
+        # to be relative, it will be relative to this URL
+        def base_file_url
+          @base_file_url ||= RAILS_ROOT
+        end
+        attr_writer :base_file_url
 
         def add_source_with_check(source_attribs)
           assit_kind_of(Hash, source_attribs)
@@ -221,7 +232,7 @@ module TaliaCore
           end
           if(object.kind_of?(Array))
             object.each do |obj| 
-              raise(ArgumentError, "Cannot add relation on database field") if(ActiveSource.db_attr?(predicate))
+              raise(ArgumentError, "Cannot add relation on database field <#{predicate}> - <#{object.inspect}>") if(ActiveSource.db_attr?(predicate))
               set_element(predicate, "<#{irify(obj)}>", required) 
             end
           else
@@ -234,8 +245,26 @@ module TaliaCore
         def add_file(urls, options = {})
           return if(urls.blank?)
           urls = [ urls ] unless(urls.is_a?(Array))
-          files = urls.collect { |url| { :url => url.to_s, :options => options } }
+          files = urls.collect { |url| { :url => get_absolute_file_url(url), :options => options } }
           @current.attributes[:files] = files if(files.size > 0)
+        end
+
+        # Gets an absolute path to the given file url, using the base_file_url
+        def get_absolute_file_url(url)
+          url = url.to_s
+          if(base_file_url.is_a?(String) && Pathname.new(url).relative?)
+            # Base is a directory and we have a relative path
+            File.join(base_file_url, url)
+          elsif(!url.include?('://'))
+            # We have a URL base and the uri is not a url
+            if(url[0..0] == '/')
+              new_url = base_file_url.clone
+              new_url.path = url
+              new_url.to_s
+            else
+              base_file_url + url
+            end
+          end
         end
 
         # Returns true if the given source was already imported. This can return false

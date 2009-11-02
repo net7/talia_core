@@ -22,16 +22,37 @@ module TaliaUtil
   #                 yielded to for each progress step and which can receive the overall number of
   #                 steps
   # [*extension*] - Only used with index files; file extension to use
+  # [*duplicates*] - How to deal with elements that already exist in the datastore. This may be
+  #                  set to one of the following options (default: :skip):
+  #                  * :add - Database fields will be updated and the system will add semantic
+  #                    properties as additional values, without removing any of the existing
+  #                    semantic relations. Example: If the data store already
+  #                    contains a title for an element, and the import file contains another
+  #                    for that element, the element will have two titles after the import. 
+  #                    The system will not check for duplicates. Files will always be imported
+  #                    in addition to the existing ones.
+  #                  * :update - Database fields will be updated, and semantic properties will
+  #                    be overwritten with the new value(s). Semantic properties that are not
+  #                    included in the import data will be left untouched. In the example above,
+  #                    the element would only contain the new title. If the element also contained
+  #                    author information, and no author information was in the import file, the
+  #                    existing author information will be untouched. Existing files are replaced
+  #                    if the import contains new files
+  #                  * :overwrite - Database fields will be updated. All semantic data will be
+  #                    deleted before the import. Files are always removed.
+  #                  * :skip - If an element already exists, the import will be skipped.
+  # 
   class ImportJobHelper
 
     include IoHelper
 
-    attr_reader :importer, :credentials, :index_data, :xml_data, :reset, :callback, :base_url, :message_stream, :progressor
+    attr_reader :importer, :credentials, :index_data, :xml_data, :reset, :callback, :base_url, :message_stream, :progressor, :duplicates
 
     # The message_stream will be used for printing progress messages
     def initialize(message_stream = STDOUT, progressor = TaliaCore::BackgroundJobs::Job)
       @progressor = progressor
       @message_stream = message_stream
+      @duplicates = ENV['duplicates'].to_sym if(ENV['duplicates'])
       @importer = ENV['importer'] || 'TaliaCore::ActiveSourceParts::Xml::SourceReader'
       @credentials = { :http_basic_authentication => [ENV['user'], ENV['pass']] } unless(ENV['user'].blank?)
       assit(!(ENV['xml'] && ENV['index']), 'Not both xml and index parameters allowed')
@@ -59,6 +80,7 @@ module TaliaUtil
         else
           xml_url = ENV['xml']
           xml_url = base_url + xml_url unless(File.exists?(xml_url))
+          @true_root = base_for(xml_url)
           open_generic(xml_url, credentials) { |io| io.read }
         end
       else
@@ -78,7 +100,7 @@ module TaliaUtil
         import_from_index(errors)
       else
         puts "Importing from single data file."
-        TaliaCore::ActiveSource.create_from_xml(xml_data, :progressor => progressor, :reader => importer, :errors => errors)
+        TaliaCore::ActiveSource.create_from_xml(xml_data, :progressor => progressor, :reader => importer, :base_file_uri => @true_root, :errors => errors, :duplicates => duplicates)
       end
       if(errors.size > 0)
         puts "WARNING: #{errors.size} errors during import:"
@@ -99,10 +121,8 @@ module TaliaUtil
         elements.each do |element|
           url = make_url_from("#{element.inner_text}#{ENV['extension']}")
           begin
-            open_generic(url, credentials) do |io|
-              this_attribs = my_importer.sources_from(io)
-              source_attributes = source_attributes + this_attribs
-            end
+            this_attribs = my_importer.sources_from_url(url, credentials)
+            source_attributes = source_attributes + this_attribs
           rescue Exception => e
             message_stream.puts "Problem importing #{url} (#{e.message})"
             message_stream.puts e.backtrace
@@ -112,7 +132,7 @@ module TaliaUtil
       end
       # Write the data
       TaliaCore::ActiveSource.progressor = progressor
-      TaliaCore::ActiveSource.create_multi_from(source_attributes, :errors => errors)
+      TaliaCore::ActiveSource.create_multi_from(source_attributes, :errors => errors, :duplicates => duplicates)
     end
 
     def make_url_from(url)

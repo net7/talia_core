@@ -322,16 +322,6 @@ module TaliaCore
       assert_equal("http://star-wars.org/obi-wan-kenobi", Source.normalize_uri('http://star-wars.org/obi-wan-kenobi').to_s)
     end
     
-    def test_extract_attributes
-      source = make_dummy_source("http://star-wars.org/")
-      attributes, rdf_attributes = source.send(:extract_attributes!, @params)
-
-      assert_equal(%w( uri ), attributes.keys)
-      rdf_attributes['predicates_attributes'].each do |attributes_hash|
-        assert_kind_of Hash, attributes_hash
-      end
-    end
-    
     def test_instantiate_source_or_rdf_object
       source = make_dummy_source("http://springfield.org/")
 
@@ -374,6 +364,7 @@ module TaliaCore
     end
     
     # Write an db attribute by symbol
+    
     def test_write_access_db_symbol
       source = Source.new('http://localnode.org/something')
       source[:uri] = "http://somethingelse.com/"

@@ -21,6 +21,21 @@ module TaliaUtil
       end
     end
 
+    # Will try to figure out the "base" (that is the parent directory or path)
+    # If the base is a directory, this will return the directory name, but if
+    # it is an URL, this will return an URI object.
+    def base_for(url)
+      url = file_url(url)
+      if(File.exist?(url))
+        File.expand_path(File.dirname(url))
+      else
+        uri = URI.parse(url)
+        uri.path.gsub!(/\/[^\/]+\Z/, '/')
+        uri.fragment = nil
+        uri
+      end
+    end
+
     # Opens the given (web) URL, using URL encoding and necessary substitutions.
     # The user must pass a block which will receive the io object from
     # the url.

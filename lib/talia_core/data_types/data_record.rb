@@ -11,6 +11,8 @@ module TaliaCore
       belongs_to :source, :class_name => 'TaliaCore::ActiveSource'
       before_create :set_mime_type # Mime type must be saved before the record is written
       
+      # validates_presence_of :source
+      
       extend MimeMapping
 
       # Declaration of main abstract methods ======================

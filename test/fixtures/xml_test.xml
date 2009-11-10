@@ -7,7 +7,7 @@
 		</attribute>
 		<attribute>
 			<predicate>type</predicate>
-			<value>TaliaCore::DummySource</value>
+			<value>TaliaCore::SourceTypes::DummySource</value>
 		</attribute>
 		<attribute>
 			<predicate>uri</predicate>

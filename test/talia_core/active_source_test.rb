@@ -24,8 +24,8 @@ module TaliaCore
     end
     
     def test_type_field
-      src = DummySource.new('http://xsource/has_type_test')
-      assert_equal(src.type, 'TaliaCore::DummySource')
+      src = SourceTypes::DummySource.new('http://xsource/has_type_test')
+      assert_equal(src.type, 'TaliaCore::SourceTypes::DummySource')
     end
 
     def test_exists
@@ -212,10 +212,23 @@ module TaliaCore
       assert(preds.include?('http://testvalue.org/pred_b'), "#{preds} does not include the expected value")
     end
 
-    def tes_predicates_prefetch
+    def test_predicates_prefetch
       uri = active_sources(:testy)
       src = TaliaCore::ActiveSource.find(uri, :prefetch_relations => true)
-      assert_equal('The test value', src.predicate(:as_test_preds, :the_rel1)[0])
+      assert_equal(true, src.instance_variable_get(:@prefetched))
+      type_cache = src.instance_variable_get(:@type_cache)
+      assert_equal('The test value', type_cache[N::AS_TEST_PREDS.the_rel1.to_s].first)
+    end
+    
+    def test_prefetch_finder
+      srcs = TaliaCore::ActiveSource.find(:all, :prefetch_relations => true)
+      src = srcs.detect { |s| s.uri.to_s == 'http://testy.com/testme/hard'}
+      assert(src)
+      assert_equal(true, src.instance_variable_get(:@prefetched))
+      type_cache = src.instance_variable_get(:@type_cache)
+      assert(type_cache)
+      assert_equal('The test value', type_cache[N::AS_TEST_PREDS.the_rel1.to_s].first)
+      assert_equal('The test value', src.predicate(:as_test_preds, :the_rel1).first)
     end
     
     def test_inverse_predicates
@@ -450,6 +463,13 @@ module TaliaCore
       assert(!ActiveSource.db_attr?('http://www.foobar.org/'))
     end
     
+    def test_db_id
+      assert(ActiveSource.db_attr?(:id))
+      assert(ActiveSource.db_attr?('id'))
+      assert_equal(active_sources(:testy)['id'], active_sources(:testy)[:id])
+      assert_equal(active_sources(:testy)['id'], active_sources(:testy).id)
+    end
+    
     def test_expand_uri
       assert_equal(N::LOCAL.foo.to_s, ActiveSource.expand_uri(':foo'))
       assert_equal(N::LOCAL.foo.to_s, ActiveSource.expand_uri('foo'))
@@ -463,7 +483,7 @@ module TaliaCore
       src.save!
       src.update_attributes(:uri => 'http://as_test/test_update_attributes_on_2', 'rdf:foo' => 'value', N::LOCAL.relatit.to_s => "<#{N::LOCAL + 'attr_on_save_test_dummy'}>" )
       src = ActiveSource.find('http://as_test/test_update_attributes_on_2')
-      assert_kind_of(DummySource, src[N::LOCAL.relatit].first)
+      assert_kind_of(SourceTypes::DummySource, src[N::LOCAL.relatit].first)
       assert_equal(N::LOCAL + 'attr_on_save_test_dummy', src[N::LOCAL.relatit].first.uri)
       assert_equal('value', src[N::RDF.foo].first)
     end
@@ -571,11 +591,14 @@ module TaliaCore
     
     
     def test_xml_forth_and_back
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::DummySource')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_back', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::SourceTypes::DummySource')
       xml = src.to_xml
-      assert_kind_of(TaliaCore::DummySource, src)
+      assert_kind_of(TaliaCore::SourceTypes::DummySource, src)
       # Quickly change the URI for the new thing
       xml.gsub!(src.uri.to_s, 'http://as_test/create_forth_and_forth')
+      # this is for the type attribute in the xml
+      xml.gsub!('SourceTypes::DummySource', 'SingularAccessorTest')
+      # The next is for the 'type' semantic triple already existing
       xml.gsub!('DummySource', 'SingularAccessorTest')
       new_src = ActiveSource.create_from_xml(xml, :duplicates => :update)
       assert_kind_of(TaliaCore::SingularAccessorTest, new_src)
@@ -635,9 +658,9 @@ module TaliaCore
     end
     
     def test_update_source_skip_dummy
-      src = ActiveSource.create_source(:uri => 'http://as_test/update_source_skip_dummy', ':localthi' => 'value', 'rdf:somethi' => 'value2', 'type' => 'TaliaCore::DummySource')
+      src = ActiveSource.create_source(:uri => 'http://as_test/update_source_skip_dummy', ':localthi' => 'value', 'rdf:somethi' => 'value2', 'type' => 'TaliaCore::SourceTypes::DummySource')
       src.save!
-      assert_kind_of(DummySource, src)
+      assert_kind_of(SourceTypes::DummySource, src)
       src.update_source({ ':localthi' => ['value2', 'value3'] }, :skip)
       assert_property(src[N::LOCAL.localthi], 'value2', 'value3')
       assert_property(src[N::RDF.somethi], 'value2')

@@ -17,7 +17,7 @@ module TaliaCore
           raise(RangeError, "Too many sources for prefetching.") if(sources.size > limit)
           src_hash = {}
           sources.each { |src| src_hash[src.id] = src }
-          conditions = ['subject_id in (?)', src_hash.keys.join(', ')]
+          conditions = { :subject_id => src_hash.keys }
           joins = ActiveSource.sources_join
           joins << ActiveSource.props_join
           relations = SemanticRelation.find(:all, :conditions => conditions,
@@ -51,16 +51,15 @@ module TaliaCore
       # so that the object will always be the same as long as the parent source
       # lives.
       def get_objects_on(predicate)
-        TaliaCore::logger.warn "GETTING OBJECTS (#{predicate}) #{@type_cache.inspect}"
         @type_cache ||= {}
         active_wrapper = @type_cache[predicate.to_s]
-
 
         if(active_wrapper.nil?)
           # If this is a prefetched source we have everything - no use looking further
           # TODO: Returns an Array instead of a wrapper
           return [] if(@prefetched)
           
+          TaliaCore::logger.debug "FETCHING OBJECTS for #{predicate} on #{self.uri}"
           active_wrapper = SemanticCollectionWrapper.new(self, predicate)
           @type_cache[predicate.to_s] = active_wrapper
         end

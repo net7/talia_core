@@ -24,6 +24,7 @@ module TaliaCore
     include RDFS::ResourceLike
     
     extend ActiveSourceParts::ClassMethods
+    extend ActiveSourceParts::Finders
     extend ActiveSourceParts::SqlHelper
     include ActiveSourceParts::PredicateHandler
     extend ActiveSourceParts::PredicateHandler::ClassMethods
@@ -66,6 +67,11 @@ module TaliaCore
     #   :with => /^(http|https):\/\/[a-z0-9\_\-\.]*[a-z0-9_-]{1,}\.[a-z]{2,4}[\/\w\d\_\-\.\?\&\#]*$/i
     
     validate :check_uri    
+
+    # Uri in short notation
+    def short_uri
+      N::URI.new(self.uri).to_name_s
+    end
 
     # Helper
     def value_for(thing)
@@ -116,7 +122,7 @@ module TaliaCore
     # The default mode is :skip (do nothing)
     def update_source(properties, mode)
       properties.to_options!
-      mode = :update if(self.is_a?(DummySource)) # Dummy sources are always updated
+      mode = :update if(self.is_a?(SourceTypes::DummySource)) # Dummy sources are always updated
       mode ||= :skip
       mode = mode.to_sym
       return self if(mode == :skip) # If we're told to ignore updates
@@ -141,7 +147,7 @@ module TaliaCore
       type = properties[:type]
       switch_type = type && (self.type != type)
       # Warn to the log if we have a problematic type change
-      TaliaCore.logger.warn("WARNING: Type change from #{self.type} to #{type}") if(switch_type && !self.is_a?(DummySource))
+      TaliaCore.logger.warn("WARNING: Type change from #{self.type} to #{type}") if(switch_type && !self.is_a?(SourceTypes::DummySource))
       self.type = type if(switch_type)
       
       # Now we should either be adding or updating
@@ -384,7 +390,7 @@ module TaliaCore
         value = ActiveSource.expand_uri(value [1..-2])
         val_src = ActiveSource.find(:first, :conditions => { :uri => value })
         if(!val_src)
-          value = DummySource.new(value)
+          value = SourceTypes::DummySource.new(value)
           value.save!
         else
           value = val_src

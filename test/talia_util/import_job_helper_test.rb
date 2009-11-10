@@ -35,7 +35,7 @@ module TaliaCore
     end
     
     def test_relation
-      assert_property(@imported[N::RDF.relatit], DummySource.new('http://localnode.org/as_create_attr_dummy_2'), DummySource.new('http://localnode.org/as_create_attr_dummy_1'))
+      assert_property(@imported[N::RDF.relatit], SourceTypes::DummySource.new('http://localnode.org/as_create_attr_dummy_2'), SourceTypes::DummySource.new('http://localnode.org/as_create_attr_dummy_1'))
     end
     
   end

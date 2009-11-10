@@ -20,7 +20,7 @@ module TaliaUtil
     # Source given by the URI.
     def assert_property(property, *values)
       assert_kind_of(TaliaCore::SemanticCollectionWrapper, property) # Just to be sure
-      assert_equal(values.size, property.size, "Expected #{values.size} values instead of #{property.size}")
+      assert_equal(values.size, property.size, "Expected #{values.size} values instead of #{property.size}.")
       property.each do |value|
         assert(values.detect { |val| val.respond_to?(:uri) ? (val.uri.to_s == value.uri.to_s) : (value == val) }, "Found unexpected value #{value}. Value is a #{value.class}\nExpected:\n#{values.join("\n")}")
       end

@@ -38,29 +38,38 @@ module TaliaUtil
         # Remove previous auto rdfs triples
         FederationManager.clear(N::TALIA.auto_rdfs.context)
         
-        # Get all OWL classes
-        qry = Query.new(N::URI).distinct.select(:klass, :type)
-        qry.where(:klass, N::RDF::type, N::OWL + 'Class')
-        qry.where(:klass, N::RDF::type, :type)
-        classes_with_types = qry.execute
+        # This gets all OWL classes in the store
+        all_qry = Query.new(N::URI).distinct.select(:class)
+        all_qry.where(:class, N::RDF::type, N::OWL.Class)
+        all_owl = all_qry.execute
+        
+        # This gets all OWL classes that already have an RDF class attached
+        qry_rdfs = Query.new(N::URI).distinct.select(:class)
+        qry_rdfs.where(:class, N::RDF::type, N::OWL.Class)
+        qry_rdfs.where(:class, N::RDF::type, N::RDFS.Class)
+        classes_with_rdfs = qry_rdfs.execute
+        
+        
         modified = 0
         blanks = 0
         
         class_hash = {}
         
-        # We have a list of all combinations of klass elements with their types
-        # The next step is to find all things where a RDFS.Class type already
-        # exists
-        classes_with_types.each do |class_with_type|
-          if(class_with_type.first.is_a?(RDFS::BNode))
+        # Put all the existing owl classes in a hash
+        all_owl.each do |owl_class|
+          if(owl_class.is_a?(RDFS::BNode))
             blanks = blanks + 1
             next
           end
           
-          klass, type = class_with_type
+          class_hash[owl_class] = :has_rdfs_class
+        end
+        
+        # Now remove the ones that already have an RDF class
+        classes_with_rdfs.each do |owl_class|
+          next if(owl_class.is_a?(RDFS::BNode))
           
-          class_hash[klass.to_s] ||= :no_rdfs_class
-          class_hash[klass.to_s] = :has_rdfs_class if(type == N::RDFS.Class)
+          class_hash[owl_class] = :no_rdfs_class
         end
         
         # Now go through all klasses and add the missing triples

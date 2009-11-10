@@ -114,7 +114,7 @@ module TaliaCore
             @sources[uri].each do |key, value|
               next unless(new_value = source_attribs.delete(key))
 
-              assit(!((key.to_sym == :type) && (value != 'TaliaCore::DummySource') && (value != new_value)), "Type should not change during import, may be a format problem. (From #{value} to #{new_value})")
+              assit(!((key.to_sym == :type) && (value != 'TaliaCore::SourceTypes::DummySource') && (value != new_value)), "Type should not change during import, may be a format problem. (From #{value} to #{new_value})")
               if(new_value.is_a?(Array) && value.is_a?(Array))
                 # If both are Array-types, the new elements will be appended
                 # and duplicates nwill be removed

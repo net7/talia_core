@@ -37,7 +37,7 @@ class SourceDataController < ApplicationController
   def send_record_data(record)
     send_data record.content_string, :type => record.mime_type,
       :disposition => 'inline',
-      :filename => "#{params[:location]}.tif"
+      :filename => record.location
   end
   
 end

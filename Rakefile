@@ -17,12 +17,12 @@ task :environment do
 end
 
 desc "Load fixtures into the current database.  Load specific fixtures using FIXTURES=x,y"  
-task :fixtures => "talia_core:talia_init" do
+task :fixtures => "talia_core:init" do
   load_fixtures 
 end  
 
 desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x"  
-task :migrate => "talia_core:talia_init" do
+task :migrate => "talia_core:init" do
   Util::do_migrations 
   puts "Migrations done."
 end  

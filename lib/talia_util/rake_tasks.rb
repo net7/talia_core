@@ -11,10 +11,10 @@ require 'progressbar'
 include TaliaUtil
 
 namespace :talia_core do
-  
+
   # Standard initialization
   desc "Initialize the TaliaCore"
-  task :talia_init do
+  task :init do
     Util::title
     Util::init_talia
     TLoad::force_rails_parts unless(defined?(ActiveRecord))
@@ -24,15 +24,15 @@ namespace :talia_core do
     model_path = File.join(TALIA_ROOT, 'app', 'models')
     ActiveSupport::Dependencies.load_paths << model_path if(File.directory?(model_path))
   end
-  
+
   # Removes all data
   desc "Reset the Talia data store"
-  task :clear_store => :talia_init do
+  task :clear_store => :init do
     Util::flush_db
     Util::flush_rdf
     puts "Flushed data store"
   end
-  
+
   # Init for the unit tests
   desc "Initialize Talia for the tests"
   task :test_setup do
@@ -42,9 +42,9 @@ namespace :talia_core do
     end
 
     # Invoke the init after the setup
-    Rake::Task["talia_core:talia_init"].invoke
+    Rake::Task["talia_core:init"].invoke
   end
-  
+
   # Test task
   desc 'Test the talia_core plugin.'
   task :test => :test_setup
@@ -55,46 +55,46 @@ namespace :talia_core do
     t.test_files = FileList["#{File.dirname(__FILE__)}/../../test/**/*_test.rb"]
     t.verbose = true
   end
-  
+
   # Queue an import in the background
   desc "Xml Background import. Options: [index=<indexfile>] [xml=<datafile>] [importer=<importclass>] [reset_store=true] [...]"
   task :xml_background_import do 
     background_job('xml_import', :tag => 'import')
     puts "Queued XML background import."
   end
-  
+
   desc "Xml Import. Options: see xml_background_import"
-  task :xml_import => :talia_init do
+  task :xml_import => :init do
     importer = TaliaUtil::ImportJobHelper.new(STDOUT, TaliaUtil::BarProgressor)
     importer.do_import
   end
-  
+
   # Just run the Talia init to test it
   desc "Test the TaliaCore startup"
-  task :init_test => :talia_init do
+  task :init_test => :init do
     Util::talia_config
   end
- 
+
   # Task for importing ontologies/raw RDF data
   desc "Import ontologies. This imports the given rdf files (same as rdf_import), and sets the context automatically"
-  task :ontology_import => :talia_init do
+  task :ontology_import => :init do
     TaliaCore::RdfImport::import(ENV['rdf_syntax'], TaliaUtil::Util::get_files, :auto)
   end
-  
+
   # RDF importing task. A context can be freely assigned.
   desc "Import RDF data directly into the triple store. Option: rdf_syntax={ntriples|rdfxml} [context=<context>]"
-  task :rdf_import => :talia_init do
+  task :rdf_import => :init do
     TaliaCore::RdfImport::import(ENV['rdf_syntax'], TaliaUtil::Util::get_files, ENV['context'])
   end
 
   desc "Update the Ontologies. Options [ontologies=<ontology_folder>]"
-  task :setup_ontologies => :talia_init do
+  task :setup_ontologies => :init do
     Util::setup_ontologies
   end
 
   # Rewrite your base URL. This will loose any comments in the config file
   desc "Rewrite the database to move it to a new URL. Options new_home=<url>."
-  task :move_site => :talia_init do
+  task :move_site => :init do
     new_site = ENV['new_home']
     # Check if this looks like an URL
     raise(RuntimeError, "Illegal new_home given. (It must start with http(s):// and end with a slash)") unless(new_site =~ /^https?:\/\/\S+\/$/)
@@ -120,56 +120,12 @@ namespace :talia_core do
     puts "New configuration saved. Finished site rebuilding."
   end
 
-  # Task for importing YAML data into the data store
-  desc "Import YAML data file in Talia format."
-  task :yaml_import => :talia_init do
-    YamlImport::import_multi_files(TaliaUtil::Util::get_files)
-  end
-  
   # Task for updating the OWL classes with RDFS class information
   desc "Update OWL classes with RDFS class information."
-  task :owl_to_rdfs_update => :talia_init do
+  task :owl_to_rdfs_update => :init do
     RdfUpdate::owl_to_rdfs
   end
-  
-  # Task to import data files into the Talia system
-  desc "Import data files. Options data_type=<data_type> replace_files={yes|no}"
-  task :data_import => :talia_init do
-    DataImport::import(TaliaUtil::Util::get_files, ENV['data_type'])
-  end
-  
-  # Task to import demo data from a demo directory
-  desc "Import demo data (for default demo data). Opions: demodir=<dir> [owlify=no]"
-  task :demo_import do
-    unless(demodir = ENV['demodir'])
-      puts "ERROR: Need demodir option for import"
-      Util::print_options
-      exit(1)
-    end
-    
-    # Force some options to default
-    ENV['reset_db'] = "yes" unless(ENV['reset_db'])
-    ENV['reset_rdf'] = "yes" unless(ENV['reset_rdf'])
-    
-    # Invoke the init after the setup
-    Rake::Task["talia_core:talia_init"].invoke
-    
-    puts "Importing ontologies..."
-    RdfImport::import("rdfxml", FileList.new(File.join(demodir, '*.rdf*'), File.join(demodir, '*.owl')))
-    puts "Importing data records..."
-    YamlImport::import_multi_files([File.join(demodir, "demo_data.yml")])
-    puts "Importing files..."
-    Dir.foreach(File.join(demodir)) do |entry|
-      if(FileTest.directory?(File.join(demodir,entry)) && entry != ".." && entry != "." && entry != ".svn")
-        puts "Importing for type #{entry}"
-        DataImport::import(FileList.new(File.join(demodir, entry, '*')), entry)
-      end
-    end
-    if(ENV['owlify'].to_s.downcase == 'yes')
-      RdfUpdate::owl_to_rdfs
-    end
-  end
-  
+
   # Helper task to bootstrap Redland RDF (should usually only be a problem when
   # using Redland with mysql store)
   desc "Initialize Redland RDF store. Option: rdfconf=<rdfconfig_file> [environment=env]"
@@ -179,12 +135,12 @@ namespace :talia_core do
     environment = ENV['environment'] || "development"
     raise(ArgumentError, "Must have rdfconf=<config_file>") unless(ENV['rdfconf'])
     options = YAML::load(File.open(ENV['rdfconf']))[environment]
-    
+
     rdf_cfg = Hash.new
     options.each { |key, value| rdf_cfg[key.to_sym] = value }
-    
+
     rdf_cfg[:new] = "yes"
-    
+
     ConnectionPool.add_data_source(rdf_cfg)
   end
 
@@ -197,7 +153,7 @@ namespace :talia_core do
   end
 
   desc "Rebuild the RDF store from the database. Option [hard_reset=(true|false)]"
-  task :rebuild_rdf => :talia_init do
+  task :rebuild_rdf => :init do
     count = TaliaCore::SemanticRelation.count
     puts "Rebuilding RDF for #{count} triples."
     prog = ProgressBar.new('Rebuilding', count)
@@ -205,9 +161,30 @@ namespace :talia_core do
     prog.finish
     puts "Finished rewriting. ATTENTION: You may want to call setup_ontologies now."
   end
-  
+
+  desc "Generate large database for load tests. [count=<number of sources>]"
+  task :generate_large_data => :init do
+    count = (ENV['count'] || '10000').to_i
+    prog = ProgressBar.new('Creating', count)
+    (1..count).each do |idx|
+      src = TaliaCore::ActiveSource.new(:uri => N::LOCAL + "large_sample_#{idx}")
+      if(idx > 1)
+        # For now an easy approach: Each source has 10 connections to the previous
+        # one.
+        prev = TaliaCore::ActiveSource.find(N::LOCAL + "large_sample_#{idx - 1}")
+        (1..10).each do |rel_idx|
+          src[N::RDF + "dummy_rel_#{rel_idx}"] << prev
+          src[N::RDFS + "dummy_prop_#{rel_idx}"] << 'Some property'
+        end
+      end
+      src.save!
+      prog.inc
+    end
+    prog.finish
+  end
+
   # Helper methods
-  
+
   # Queue the long-running task in the background processing queue.
   # This will simply queue the job, and doesn't start the runner
   # by itself
@@ -218,5 +195,5 @@ namespace :talia_core do
     options[:no_tickle] = true
     TaliaCore::BackgroundJobs::Job.submit_with_progress(job, options)
   end
-  
+
 end

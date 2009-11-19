@@ -76,7 +76,9 @@ module TaliaCore
           #
           # source_data = source_data_type.classify.constantize.find_by_location(location, :limit => 1)
           #
-          source_data = self.find(:first, :conditions => ["type = ? AND location = ?", source_data_type.camelize, location])
+          data_type = "TaliaCore::DataTypes::#{source_data_type.camelize}"
+          source_data = self.find(:first, :conditions => ["type = ? AND location = ?", data_type, location])
+          
           raise ActiveRecord::RecordNotFound if source_data.nil?
           source_data
         end

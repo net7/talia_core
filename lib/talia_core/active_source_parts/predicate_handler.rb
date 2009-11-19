@@ -59,7 +59,6 @@ module TaliaCore
           # TODO: Returns an Array instead of a wrapper
           return [] if(@prefetched)
           
-          TaliaCore::logger.debug "FETCHING OBJECTS for #{predicate} on #{self.uri}"
           active_wrapper = SemanticCollectionWrapper.new(self, predicate)
           @type_cache[predicate.to_s] = active_wrapper
         end

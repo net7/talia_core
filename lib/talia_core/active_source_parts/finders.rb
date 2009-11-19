@@ -19,13 +19,15 @@ module TaliaCore
         prefetching = false
         if(args.last.is_a?(Hash))
           options = args.last
+          options.to_options!
           prefetching =  options.delete(:prefetch_relations)
           if(options.empty?) # If empty we remove the args hash, so that the 1-param uri search works
             args.pop
           else
-            prepare_options!(args.last)
+            prepare_options!(options)
           end
         end
+        
         result = if(args.size == 1 && (uri_s = uri_string_for(args[0])))
           src = super(:first, :conditions => { :uri => uri_s })
           raise(ActiveRecord::RecordNotFound, "Not found: #{uri_s}") unless(src)
@@ -37,6 +39,17 @@ module TaliaCore
         prefetch_relations_for(result) if(prefetching)
 
         result
+      end
+      
+      # Modify the count helper so that it can use the advanced options of the 
+      # ActiveSource #find routine
+      def count(*args)
+        if((options = args.last).is_a?(Hash))
+          options.to_options!
+          options.delete(:prefetch_relations) # This is not relevant for counting
+          prepare_options!(options)
+        end
+        super
       end
 
       # Find a list of sources which contains the given token inside the local name.

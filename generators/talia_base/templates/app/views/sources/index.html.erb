@@ -1,13 +1,18 @@
-<h1>Sources found: <%= @sources.total_entries  %></h1>
-
-<div class="tags">
-<% for type in @rdf_types %>
-  <span class="<%= current_filter?(type) ? 'tag_selected' : 'tag' %>"><%= filter_link_for(type) %></span>
-<% end %>
+<div class="sources_list">
+	<h1>Sources found: <%= @sources.total_entries  %></h1>
+	<ul>
+	<% for source in @sources %>
+	<% next if(source.is_a?(TaliaCore::SourceTypes::DummySource)) %>
+	<li>
+		<p>
+			<span class="source_type"><%= type_images(source.types) %></span>
+			<span class="source_title"><%= title_for(source) %></span>
+			<span class="source-data"><%= data_icons(source.data_records) %></span>
+			<span class="more"> <%= link_to 'more...', :action => 'dispatch', :dispatch_uri => N::URI.new(source.uri).local_name %></span>
+		</p>
+	</li>
+	<% end  %>
+</ul>
 </div>
-
-<% for source in @sources %>
-  <p><%= link_to title_for(source), source.uri.to_s %> (<%= source.class.name  %>)</p>
-<% end  %>
 
 <%= will_paginate @sources %>

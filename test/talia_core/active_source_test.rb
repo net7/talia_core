@@ -231,6 +231,12 @@ module TaliaCore
       assert_equal('The test value', src.predicate(:as_test_preds, :the_rel1).first)
     end
     
+    def test_prefetch_count
+      count = TaliaCore::ActiveSource.count(:prefetch_relations => true)
+      real_count = TaliaCore::ActiveSource.count
+      assert_equal(count, real_count)
+    end
+    
     def test_inverse_predicates
       preds = active_sources(:predicate_search_b).inverse_predicates
       assert_equal(4, preds.size)
@@ -323,6 +329,11 @@ module TaliaCore
       result = ActiveSource.find(:all, :find_through => ['http://testvalue.org/pred_find_through', active_sources(:find_through_target).uri])
       assert_equal(1, result.size)
       assert_equal(active_sources(:find_through_test), result[0])
+    end
+    
+    def test_count_through
+      result = ActiveSource.count(:find_through => ['http://testvalue.org/pred_find_through', active_sources(:find_through_target).uri])
+      assert_equal(1, result)
     end
     
     def test_find_through_props

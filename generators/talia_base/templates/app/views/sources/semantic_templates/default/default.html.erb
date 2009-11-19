@@ -1,21 +1,10 @@
 <div class="back"><%= index_link %></div>
 
-<h2><%= @source.uri.to_name_s %></h2>
-<table>
-	<% for attribute, value in @source.attributes %>
-	<tr>
-		<td><%= attribute %></td>
-		<td><%= value %></td>
-	</tr>
-	<% end %>
-	<% for predicate in @source.direct_predicates %>
-	<tr>
-		<td><%= predicate %></td>
-		<td>
-			<% @source[predicate].each do |val| %>
-				<%= val %><br/>
-			<% end %>
-		</td>
-	</tr>
-	<% end %>
-</table>
+<h2><%= @source[N::DCNS.title].first || @source[N::RDFS.label].first || @source.uri.to_name_s %></h2>
+
+<%= render(:partial => 'property_list') %>
+
+<% if(@source.data_records.size > 0) %>
+<h2>Data Records</h2>
+<%= render(:partial => 'data_list') %>
+<% end %>

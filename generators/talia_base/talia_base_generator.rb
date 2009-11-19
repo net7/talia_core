@@ -27,6 +27,9 @@ class TaliaBaseGenerator < Rails::Generator::Base
       # The default ontologies
       files_in m, 'ontologies'
       
+      # The whole public dir
+      files_in m, 'public'
+      
       # Set up the rake tasks, only if we come from a gem
       if(Gem.source_index.find_name('talia_core').first)
         m.directory 'lib/tasks'

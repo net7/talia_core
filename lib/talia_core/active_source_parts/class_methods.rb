@@ -205,7 +205,7 @@ module TaliaCore
 
       # The attributes stored in the database
       def db_attributes
-        @db_attributes ||attrs = (ActiveSource.new.attribute_names << 'id')
+        @db_attributes ||= (ActiveSource.new.attribute_names << 'id')
       end
 
       # Helper to define a "additional type" in subclasses which will 

@@ -66,22 +66,15 @@ module TaliaCore
         # Splits up the value, extracting encoded language codes and RDF data types. The 
         # result will be returned as a hash, with the "true" value being "value"
         def extract_values(value)
+          prop_string = PropertyString.new(value)
           result = {}
-          # First split for the type
-          type_split = value.split('^^')
-          # Check if any of the elements contains a language string
-          type_split = type_split.collect { |element| extract_lang(element, result) }
-          result['rdf:datatype'] = type_split.last if(type_split.size > 1)
-          result['value'] = (type_split.first || '')
+          result['value'] = prop_string
+          result['rdf:datatype'] = prop_string.type if(prop_string.type)
+          result['xml:lang'] = prop_string.lang if(prop_string.lang)
+          
           result
         end
-
-        # Helper to extract a language string. The lang value, if any, will be added to the hash
-        def extract_lang(value, hash)
-          lang_split = value.split('@')
-          hash['xml:lang'] = lang_split.last if(lang_split.size > 1)
-          lang_split.first || ''
-        end
+        
       end
     end 
   end

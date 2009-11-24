@@ -20,3 +20,9 @@ find_through_prop:
 
 find_through_prop2:
     value: other value
+    
+i18n_value1:
+    value: 'value@en'
+
+i18n_value2:
+    value: 'wert^^string@de'

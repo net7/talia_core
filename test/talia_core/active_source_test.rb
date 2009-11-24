@@ -211,6 +211,35 @@ module TaliaCore
       assert_equal(4, preds.size)
       assert(preds.include?('http://testvalue.org/pred_b'), "#{preds} does not include the expected value")
     end
+    
+    def test_i18n_predicates
+      src = active_sources(:i18n_test)
+      assert_property(src.predicate(:as_test_preds, :i18n), 'value', 'wert')
+    end
+    
+    def test_values_with_lang
+      src = active_sources(:i18n_test)
+      assert_equal(src.predicate(:as_test_preds, :i18n).values_with_lang('de'), ['wert'])
+      assert_equal(src.predicate(:as_test_preds, :i18n).values_with_lang('en'), ['value'])
+    end
+    
+    def test_values_with_lang_fallback
+      src = active_sources(:i18n_test)
+      assert_equal(src.predicate(:as_test_preds, :i18n).values_with_lang('ar'), ['value'])
+    end
+    
+    def test_values_with_lang_fallback_unset
+      src_preds = active_sources(:testy).predicate(:as_test_preds, :the_rel1)
+      assert_equal(src_preds.values_with_lang('de'), ['The test value'])
+      assert_equal(src_preds.values_with_lang('en'), ['The test value'])
+    end
+    
+    def test_property_string_values
+      src = active_sources(:i18n_test)
+      pred = src.predicate(:as_test_preds, :i18n).first
+      assert_kind_of(PropertyString, pred)
+      assert(!pred.lang.blank?)
+    end
 
     def test_predicates_prefetch
       uri = active_sources(:testy)

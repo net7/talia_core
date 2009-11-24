@@ -79,6 +79,16 @@ inverse_rel_c:
     subject: assoc_inverse_end_c
     object: assoc_inverse_start (TaliaCore::ActiveSource)
     predicate_uri: http://testvalue.org/inverse_test_rel2
+        
+i18n_rel_a:
+    subject: i18n_test
+    object: i18n_value1 (TaliaCore::SemanticProperty)
+    predicate_uri: http://testvalue.org/i18n
+
+i18n_rel_b:
+    subject: i18n_test
+    object: i18n_value2 (TaliaCore::SemanticProperty)
+    predicate_uri: http://testvalue.org/i18n
 
 predicate_search_a:
     subject: predicate_search_a

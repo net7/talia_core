@@ -27,7 +27,8 @@ module TaliaCore
       @fat_relation || @plain_relation
     end
 
-    # Return the "value" (Semantic relation value or the related ActiveSource)
+    # Return the "value" (Semantic relation value or the related ActiveSource).
+    # String values will actually be PropertyString strings
     def value
       semprop = object.is_a?(SemanticProperty)
       if(@object_type)
@@ -36,7 +37,7 @@ module TaliaCore
         @object_type.new(object.uri.to_s)
       else
         # Plain, return the object or the value for SemanticProperties
-        semprop ? object.value : object
+        semprop ? PropertyString.new(object.value) : object
       end
     end
 

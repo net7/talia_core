@@ -92,6 +92,9 @@ find_through_target:
 
 find_through_type:
     uri: http://testy.com/find_through_type
+    
+i18n_test:
+    uri: http://testy.com/international_test
 
 # Sources
 

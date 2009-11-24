@@ -1,0 +1,13 @@
+<div class ="properties_list">
+  <ul>
+    <% for attribute, value in @source.attributes %>
+      <%= render(:partial => 'property_item', :object => attribute, :locals => { :values => [value] }) %>
+    <% end %>
+    <% for predicate in @source.direct_predicates %>
+      <%= render(:partial => 'property_item', :object => predicate.to_name_s, :locals => { :values => @source[predicate] }) %>
+    <% end %>
+    <% for predicate in @source.inverse_predicates %>
+      <%= render(:partial => 'property_item', :object => "#{predicate.to_name_s} (inverse)", :locals => { :values => @source.inverse[predicate] }) %>
+    <% end %>
+  </ul>
+</div>

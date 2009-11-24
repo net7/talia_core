@@ -1,0 +1,17 @@
+<div class="properties_list">
+  <ul>
+    <% for record in @source.data_records %>
+      <li>
+        <p>
+          <% record_options = data_record_options(record) %>
+          <span class="predicate">
+            <%= link_to(record.location, { :controller => 'source_data', :action => 'show', :id => record.id }, record_options.last )%>
+          </span>
+          <span class="value">
+            <%=  image_tag("demo/#{record_options.first}.png", :alt => record.mime, :title => record.mime) %> (<%= record.mime %>)
+          </span>
+        </p>
+      </li>
+    <% end  %>
+  </ul>
+</div>

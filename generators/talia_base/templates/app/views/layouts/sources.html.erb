@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title><%= h(yield(:title) || "Talia | The Digital Library") %></title>
+    <%= stylesheet_link_tag 'main' %>
+  </head>
+  <body>
+    <div id="title_bar">
+      <h1><%= link_to h(yield(:title) || "Talia | The Digital Library"), 'root_path', :title => 'Home page'%></h1>
+      <p class="header_subtitle">Subtitle</p>
+    </div>
+
+    <!-- header end -->
+    <!-- contents: main part of the page - divided into external and internal -->
+    <div id="contents">
+      <%= yield %>
+    </div>
+
+  </body>
+</html>

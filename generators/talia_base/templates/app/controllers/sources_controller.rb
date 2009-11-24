@@ -10,14 +10,15 @@ class SourcesController < ApplicationController
   def index
     @rdf_types ||= self.class.source_types
 
-    conditions = if(filter = params[:filter])
-      { :find_through => [N::RDF.type, N::URI.make_uri(filter, '+')] }
-    else
-      {}
+    conditions = { :prefetch_relations => true, :include => :data_records }
+    if(filter = params[:filter])
+      conditions.merge!(:find_through => [N::RDF.type, N::URI.make_uri(filter, '+')])
     end
     if(will_paginate?)
+      @pagination = true
       @sources = TaliaCore::ActiveSource.paginate(conditions.merge(:page => params[:page]))
     else
+      @pagination = false
       @sources = TaliaCore::ActiveSource.find(:all, conditions)
     end
   end

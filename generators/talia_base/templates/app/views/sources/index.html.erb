@@ -1,5 +1,5 @@
 <div class="sources_list">
-	<h1>Sources found: <%= @sources.total_entries  %></h1>
+	<h1>Sources found: <%= @pagination ? @sources.total_entries : @sources.size  %></h1>
 	<ul>
 	<% for source in @sources %>
 	<% next if(source.is_a?(TaliaCore::SourceTypes::DummySource)) %>
@@ -15,4 +15,4 @@
 </ul>
 </div>
 
-<%= will_paginate @sources %>
+<%= if(@pagination) ; will_paginate @sources ; end %>

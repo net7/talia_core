@@ -2,12 +2,15 @@ module TaliaCore
   module DataTypes
     
     # Mapping from Mime types to data classes and importing methods. Currently uses a fixed 
-    # default mapping
+    # default mapping. If the mime type is not known, it will use a fallback default handler.
     module MimeMapping
       
       def mapping_for(mime_type)
         mime_type = Mime::Type.lookup(mime_type) if(mime_type.is_a?(String))
         mapping = mapping_hash[mime_type.to_sym]
+        TaliaCore.logger.warn { "No data class registered for mime type #{mime_type.inspect}, trying default handler." } unless(mapping)
+        mapping ||= mapping_hash[:default]
+        
         raise(ArgumentError, "No data class registered for type #{mime_type.inspect}") unless(mapping)
         mapping
       end
@@ -22,7 +25,7 @@ module TaliaCore
         map[:loader] || map[:type]
       end
       
-      # Currently this is only the default mapping
+      # Currently there is only the default mapping
       def mapping_hash
         @mapping ||= {
           :xml => { :type => XmlData },
@@ -38,7 +41,9 @@ module TaliaCore
           :png => { :type => ImageData, :loader => :create_iip },
           :gif => { :type => ImageData, :loader => :create_iip },
           :pdf => { :type => PdfData },
-          :text => { :type => SimpleText }
+          :text => { :type => SimpleText },
+          # Default fallback handler
+          :default => { :type => FileRecord }
         }
       end
       

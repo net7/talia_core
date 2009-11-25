@@ -27,9 +27,11 @@ module TaliaUtil
     def base_for(url)
       url = file_url(url)
       if(File.exist?(url))
-        File.expand_path(File.dirname(url))
+        file = File.expand_path(url)
+        File.directory?(file) ? file : File.dirname(file)
       else
         uri = URI.parse(url)
+        # Remove everything after the last '/'
         uri.path.gsub!(/\/[^\/]+\Z/, '/')
         uri.fragment = nil
         uri
@@ -45,7 +47,10 @@ module TaliaUtil
     # 
     #   :http_basic_authentication => [login, password]
     def open_from_url(url, options = {})
-      url = URI.encode(url)
+      # Encode the URI (the inner decode will save already-encoded URI and should
+      # do nothing to non-encoded URIs)
+      url = URI.encode(URI.decode(url))
+      
       url.gsub!(/\[/, '%5B') # URI class doesn't like unescaped brackets
       url.gsub!(/\]/, '%5D')
       open_args = [ url ]

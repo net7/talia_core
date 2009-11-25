@@ -36,10 +36,11 @@ module TaliaCore
       setup_once(:test_xml) do
         File.open(TestHelper.fixture_file('generic_test.xml')) { |io| io.read }
       end
+      
       setup_once(:imported) do
-        import = GenericImporterTest.sources_from(@test_xml)
-        import
+        GenericImporterTest.sources_from(@test_xml)
       end
+      
       setup_once(:sources) do
         sources = {}
         @imported.each do |el| 
@@ -48,6 +49,17 @@ module TaliaCore
         end
         sources
       end
+      
+      setup_once(:reader_fs) do
+        GenericImporterTest.new(@test_xml)
+      end
+      
+      setup_once(:reader_net) do
+        reader = GenericImporterTest.new(@test_xml)
+        reader.base_file_url = 'http://www.talia.org/foobar/moff'
+        reader
+      end
+      
       # setup_once(:source_objects) do 
       #   ActiveSource.create_from_xml(@test_xml, "TaliaCore::GenericImporterTest")
       # end
@@ -73,6 +85,38 @@ module TaliaCore
     
     def test_part
       assert_equal(['<http://www.otherfoo.com/>'], @sources['http://first_sub/Y'][N::TALIA.part_of.to_s])
+    end
+    
+    def test_absolute_url_absolute
+      assert_equal('/file', @reader_fs.send(:get_absolute_file_url, '/file'))
+    end
+    
+    def test_absolute_url_relative
+      assert_equal(File.join(TALIA_ROOT, 'file'), @reader_fs.send(:get_absolute_file_url, 'file'))
+    end
+    
+    def test_absolute_net_url_on_fs
+      assert_equal('http://foobar.com/', @reader_fs.send(:get_absolute_file_url, 'http://foobar.com/'))
+    end
+    
+    def test_absolute_net_url
+      assert_equal('http://foobar.com/', @reader_net.send(:get_absolute_file_url, 'http://foobar.com/'))
+    end
+    
+    def test_relative_net_path
+       assert_equal('http://www.talia.org/foobar/file', @reader_net.send(:get_absolute_file_url, 'file'))
+    end
+    
+    def test_absolute_net_path
+       assert_equal('http://www.talia.org/file', @reader_net.send(:get_absolute_file_url, '/file'))
+    end
+    
+    def test_file_url_on_net_absolute
+      assert_equal('/test/file', @reader_net.send(:get_absolute_file_url, 'file:///test/file'))
+    end
+    
+    def test_file_url_on_net_relative
+      assert_equal('test/file', @reader_net.send(:get_absolute_file_url, 'file://test/file'))
     end
     
     # def test_create

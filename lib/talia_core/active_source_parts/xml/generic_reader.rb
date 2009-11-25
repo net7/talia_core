@@ -17,6 +17,7 @@ module TaliaCore
       class GenericReader
 
         extend TaliaUtil::IoHelper
+        include TaliaUtil::IoHelper
         include TaliaUtil::Progressable
 
         # Helper class for state
@@ -29,7 +30,7 @@ module TaliaCore
           # See the IoHelper class for help on the options. A progressor may
           # be supplied on which the importer will report it's progress.
           def sources_from_url(url, options = nil, progressor = nil)
-            open_generic(url, options) { |io| sources_from(io, progressor, base_for(url)) }
+            open_generic(url, options) { |io| sources_from(io, progressor, url) }
           end
 
           # Reader the sources from the given IO stream. You may specify a base
@@ -99,9 +100,13 @@ module TaliaCore
         # This is the "base" for resolving file URLs. If a file URL is found
         # to be relative, it will be relative to this URL
         def base_file_url
-          @base_file_url ||= RAILS_ROOT
+          @base_file_url ||= TALIA_ROOT
         end
-        attr_writer :base_file_url
+        
+        # Assign a new base url
+        def base_file_url=(new_base_url)
+          @base_file_url = base_for(new_base_url)
+        end
 
         def add_source_with_check(source_attribs)
           assit_kind_of(Hash, source_attribs)
@@ -261,19 +266,49 @@ module TaliaCore
 
         # Gets an absolute path to the given file url, using the base_file_url
         def get_absolute_file_url(url)
-          url = url.to_s
-          if(base_file_url.is_a?(String) && Pathname.new(url).relative?)
-            # Base is a directory and we have a relative path
-            File.join(base_file_url, url)
-          elsif(!url.include?('://'))
-            # We have a URL base and the uri is not a url
-            if(url[0..0] == '/')
-              new_url = base_file_url.clone
-              new_url.path = url
-              new_url.to_s
-            else
-              base_file_url + url
-            end
+          orig_url = url.to_s.strip
+          
+          url = file_url(orig_url)
+          # If a file:// was stripped from the url, this means it will always point
+          # to a file
+          force_file = (orig_url != url)
+          # Indicates wether the base url is a network url or a file/directory
+          base_is_net = !base_file_url.is_a?(String)
+          # Try to find if we have a "net" URL if we aren't sure if this is a file. In
+          # case the base url is a network url, we'll always assume that the
+          # url is also a net thing. Otherwise we only have a net url if it contains a
+          # '://' string
+          is_net_url = !force_file && (base_is_net || url.include?('://'))
+          # The url is absolute if there is a : character to be found
+          
+          
+          if(is_net_url)
+            base_is_net ? join_url(base_file_url, url) : url
+          else
+            base_is_net ? url : join_files(base_file_url, url)
+          end
+        end
+        
+        # Joins the two files. If the path is an absolute path,
+        # the base_dir is ignored
+        def join_files(base_dir, path)
+          if(Pathname.new(path).relative?)
+            File.join(base_dir, path)
+          else
+            path
+          end
+        end
+        
+        # Joins the two url parts. If the path is an absolute URL,
+        # the base_url is ignored.
+        def join_url(base_url, path)
+          return path if(path.include?(':')) # Absolute URL contains ':'
+          if(path[0..0] == '/')
+            new_url = base_url.clone
+            new_url.path = path
+            new_url.to_s
+          else
+            (base_file_url + path).to_s
           end
         end
 

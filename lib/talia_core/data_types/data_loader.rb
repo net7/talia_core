@@ -27,7 +27,7 @@ module TaliaCore
         # an explicit mime type is given.
         def create_from_url(uri, options = {})
           options.to_options!
-          check_options!(options)
+          options.assert_valid_keys(:mime_type, :location, :http_credentials)
           
           mime_type = options[:mime_type] 
           location = options[:location]
@@ -50,9 +50,9 @@ module TaliaCore
           # If we have a "standard" uri, we cut off at the last slash (the
           # File.basename would use the system file separator)
           location ||= uri.rindex('/') ? uri[(uri.rindex('/') + 1)..-1] : uri
-
+          
           if(is_file)
-            mime_type ||= mime_by_location(locatio)
+            mime_type ||= mime_by_location(location)
             open_and_create(mime_type, location, uri, true)
           else
             open_from_url(uri, options[:http_credentials]) do |io|
@@ -66,12 +66,6 @@ module TaliaCore
         end
 
         private
-        
-        def check_options!(options)
-          valid_options = [:http_credentials, :mime_type, :location]
-          rejected = options.keys.reject { |k| valid_options.include?(k) }
-          raise(ArgumentError, "Illegal options for file import: #{rejected.inspect}") unless(rejected.empty?)
-        end
         
         # Get the mime type from the location
         def mime_by_location(location)

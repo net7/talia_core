@@ -63,14 +63,16 @@ module TaliaCore
       # [*reader*] The reader class that the import should use
       # [*progressor*] The progress reporting object, which must respond to run_with_progress(message, size, &block)
       # [*errors*] If given, all erors will be looged to this array instead of raising
-      #            an exception
+      #            an exception. See the create_multi_from method for more.
       # [*duplicates*] How to treat alredy existing sources. See ImportJobHelper for more
       #                documentation
+      # [*base_file_uri*] The base uri to import file from
       def create_from_xml(xml, options = {})
         options.to_options!
-        reader = options[:reader] ? options[:reader].to_s.classify.constantize : TaliaCore::ActiveSourceParts::Xml::SourceReader
-        source_properties = reader.sources_from(xml, options[:progressor], options[:base_file_uri])
-        self.progressor = options[:progressor]
+        options.assert_valid_keys(:reader, :progressor, :errors, :duplicates, :base_file_uri)
+        reader = options[:reader] ? options.delete(:reader).to_s.classify.constantize : TaliaCore::ActiveSourceParts::Xml::SourceReader
+        source_properties = reader.sources_from(xml, options[:progressor], options.delete(:base_file_uri))
+        self.progressor = options.delete(:progressor)
         sources = create_multi_from(source_properties, options)
         (sources.size > 1) ? sources : sources.first
       end
@@ -80,13 +82,15 @@ module TaliaCore
       # correctly.
       #
       # Options:
-      # [*errors*] If given, all erors will be looged to this array instead of raising
-      #            an exception
+      # [*errors*] If given, all erors will be logged to this array instead of raising
+      #            an exception. Each "entry" in the error array will be an Error object
+      #            containing the origianl stack trace of the error
       # [*duplicates*] Indicates how to deal with sources that already exist in the
       #                datastore. See the ImportJobHelper class for a documentation of
       #                this option. Default is :skip
       def create_multi_from(sources, options = {})
         options.to_options!
+        options.assert_valid_keys(:errors, :duplicates)
         source_objects = []
         run_with_progress('Writing imported', sources.size) do |progress|
           source_objects = sources.collect do |props|
@@ -103,7 +107,9 @@ module TaliaCore
               src.save!
             rescue Exception => e
               if(options[:errors]) 
-                options[:errors] << "ERROR during import of #{props[:uri]}: #{e.message}" 
+                err = ImportError.new("ERROR during import of #{props[:uri]}: #{e.message}")
+                err.set_backtrace(e.backtrace)
+                options[:errors] <<  err
                 TaliaCore.logger.warn("Problems importing #{props[:uri]} (logged): #{e.message}")
               else
                 raise

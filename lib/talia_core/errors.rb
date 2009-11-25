@@ -23,3 +23,7 @@ end
 # Indicates an error in a query
 class QueryError < RuntimeError
 end
+
+# Indicates an error with import data
+class ImportError < RuntimeError
+end

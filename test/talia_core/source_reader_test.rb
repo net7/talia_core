@@ -9,7 +9,7 @@ module TaliaCore
     suppress_fixtures
     
     def setup
-      @test_xml = "<sources><source><attribute><predicate>uri\n</predicate>\n<value>http://foodonga.com</value></attribute><attribute><predicate>http://bongobongo.com</predicate><value>foo\n</value><value> bar</value><object>http:/bingobongo.com</object></attribute></source></sources>"
+      @test_xml = "<sources><source><attribute><predicate>uri\n</predicate>\n<value>http://foodonga.com</value></attribute><attribute><predicate>http://bongobongo.com</predicate><value>foo\n</value><value xml:lang='en'>bar</value><object>http:/bingobongo.com</object></attribute></source></sources>"
       @sources = ActiveSourceParts::Xml::SourceReader.sources_from(@test_xml)
     end
     
@@ -27,6 +27,10 @@ module TaliaCore
     
     def test_predicate
       assert_equal(['foo', 'bar', '<http:/bingobongo.com>'], @sources.first['http://bongobongo.com'])
+    end
+    
+    def test_i18n_value
+      assert_equal('en', @sources.first['http://bongobongo.com'].detect { |el| el == 'bar'}.lang)
     end
     
   end

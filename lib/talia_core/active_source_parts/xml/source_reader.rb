@@ -6,9 +6,14 @@ module TaliaCore
       class SourceReader < GenericReader
 
         element :source do
-          nested :attribute do 
-            add from_element(:predicate), all_elements(:value)
-            add_rel from_element(:predicate), all_elements(:object)
+          nested :attribute do
+            predicate = from_element(:predicate)
+            # We need to treat each value separately, as the can have 'xml:lang'
+            # attributes
+            nested :value do
+              add_i18n predicate, from_element(:self), from_attribute('xml:lang')
+            end
+            add_rel predicate, all_elements(:object)
           end
           add_file all_elements(:file)
         end

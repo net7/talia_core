@@ -117,7 +117,7 @@ module TaliaCore
               assit(!((key.to_sym == :type) && (value != 'TaliaCore::SourceTypes::DummySource') && (value != new_value)), "Type should not change during import, may be a format problem. (From #{value} to #{new_value})")
               if(new_value.is_a?(Array) && value.is_a?(Array))
                 # If both are Array-types, the new elements will be appended
-                # and duplicates nwill be removed
+                # and duplicates will be removed
                 @sources[uri][key] = (value + new_value).uniq
               else
                 # Otherwise just replace
@@ -195,18 +195,27 @@ module TaliaCore
 
         # Adds a value for the given predicate (may also be a database field)
         def add(predicate, object, required = false)
+          # We need to check if the object elements are already strings -
+          # otherwise we would *.to_s the PropertyString objects, which would
+          # destroy the metadata in them.
           if(object.kind_of?(Array))
-            object.each { |obj| set_element(predicate, obj.to_s, required) }
+            object.each { |obj| set_element(predicate, obj.is_a?(String) ? obj : obj.to_s, required) }
           else
-            set_element(predicate, object.to_s, required)
+            set_element(predicate, object.is_a?(String) ? object : object.to_s, required)
           end
+        end
+        
+        # Adds a value with the given prediate and language/type information
+        def add_i18n(predicate, object, lang, type=nil)
+          object = object.blank? ? nil : TaliaCore::PropertyString.new(object, lang, type)
+          add(predicate, object)
         end
         
         # Adds a date field. This will attempt to parse the original string
         # and write the result as an ISO 8061 compliant date string. Note
         # that this won't be able to parse everything you throw at it, though.
         def add_date(predicate, date, required = false, fmt = nil)
-          add(predicate, parse_date(date, fmt), required)
+          add(predicate, to_iso8601(parse_date(date, fmt)), required)
         end
         
         # Adds a date interval as an ISO 8061 compliant date string. See
@@ -219,7 +228,7 @@ module TaliaCore
           elsif(end_date.blank?)
             add_date(predicate, end_date, true, fmt)
           else
-            add(predicate, "#{parse_date(start_date, fmt)}/#{parse_date(end_date, fmt)}", required)
+            add(predicate, "#{to_iso8601(parse_date(start_date, fmt))}/#{to_iso8601(parse_date(end_date, fmt))}", required)
           end
         end
 
@@ -241,7 +250,8 @@ module TaliaCore
           end
         end
 
-        # Add a file to the source being imported
+        # Add a file to the source being imported. See the DataLoader module for a description of
+        # the possible options
         def add_file(urls, options = {})
           return if(urls.blank?)
           urls = [ urls ] unless(urls.is_a?(Array))
@@ -366,7 +376,10 @@ module TaliaCore
 
         # Get the content of exactly one child element of type "elem" of the
         # currently importing element.
+        #
+        # If elem is set to :self, this will give the content of the current element
         def from_element(elem)
+          return @current.element.inner_text.strip if(elem == :self)
           elements = all_elements(elem)
           elements = elements.uniq if(elements.size > 1) # Try to ignore dupes
           raise(ArgumentError, "More than one element of #{elem} in #{@current.element.inspect}") if(elements.size > 1)
@@ -379,6 +392,13 @@ module TaliaCore
           result = []
           @current.element.search("/#{elem}").each { |el| result << el.inner_text.strip }
           result
+        end
+        
+        # Get the iso8601 string for the date
+        def to_iso8601(date)
+          return nil unless(date)
+          date = DateTime.parse(date) unless(date.respond_to?(:strftime))
+          date.strftime('%Y-%m-%dT%H:%M:%SZ')
         end
         
         # Parses the given string and returns it as a date object

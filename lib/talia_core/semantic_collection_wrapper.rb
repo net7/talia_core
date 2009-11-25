@@ -93,7 +93,7 @@ module TaliaCore
       return default unless(default.empty?)
       unset
     end
-
+    
     # Size of the collection.
     def size
       return items.size if(loaded?)
@@ -312,7 +312,8 @@ module TaliaCore
           to_add.object = value
         else
           prop = TaliaCore::SemanticProperty.new
-          prop.value = value
+          # Check if we need to add from a PropertyString
+          prop.value = value.is_a?(PropertyString) ? value.to_rdf : value
           to_add.object = prop
         end
         to_add

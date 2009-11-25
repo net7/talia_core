@@ -37,7 +37,7 @@ module TaliaCore
         @object_type.new(object.uri.to_s)
       else
         # Plain, return the object or the value for SemanticProperties
-        semprop ? PropertyString.new(object.value) : object
+        semprop ? PropertyString.parse(object.value) : object
       end
     end
 

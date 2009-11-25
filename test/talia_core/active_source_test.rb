@@ -240,6 +240,18 @@ module TaliaCore
       assert_kind_of(PropertyString, pred)
       assert(!pred.lang.blank?)
     end
+    
+    def test_property_string_adding
+      src = TaliaCore::ActiveSource.new('http://testy.org/do_the_property_string')
+      src[N::RDF.testpred] << PropertyString.new('value', 'en', 'string')
+      assert(src[N::RDF.testpred].first.lang, 'en')
+      src.save!
+      src_new = TaliaCore::ActiveSource.find(src.uri)
+      assert_property(src_new[N::RDF.testpred], 'value')
+      pred = src_new[N::RDF.testpred].first
+      assert_equal(pred.lang, 'en')
+      assert_equal(pred.type, 'string')
+    end
 
     def test_predicates_prefetch
       uri = active_sources(:testy)

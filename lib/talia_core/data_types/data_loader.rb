@@ -26,13 +26,14 @@ module TaliaCore
         # will *always* attempt to determine the mime type through the location parameter, unless
         # an explicit mime type is given.
         def create_from_url(uri, options = {})
-          mime_type = options[:mime_type] || options['mime_type']
-          location = options[:location] || options['location']
+          options.to_options!
+          check_options!(options)
+          
+          mime_type = options[:mime_type] 
+          location = options[:location]
           # If a Mime type is given, use that.
           if(mime_type)
             mime_type = Mime::Type.lookup(mime_type) if(mime_type.is_a?(String))
-          elsif(location)
-            mime_type = Mime::Type.lookup_by_extension(File.extname(location)[1..-1])
           end
 
           data_records = []
@@ -51,11 +52,13 @@ module TaliaCore
           location ||= uri.rindex('/') ? uri[(uri.rindex('/') + 1)..-1] : uri
 
           if(is_file)
-            mime_type ||= Mime::Type.lookup_by_extension(File.extname(location)[1..-1])
+            mime_type ||= mime_by_location(locatio)
             open_and_create(mime_type, location, uri, true)
           else
             open_from_url(uri, options[:http_credentials]) do |io|
               mime_type ||= Mime::Type.lookup(io.content_type)
+              # Just in case we didn't get any content type
+              mime_type ||= mime_by_location(location)
               open_and_create(mime_type, location, io, false)
             end
           end
@@ -63,6 +66,17 @@ module TaliaCore
         end
 
         private
+        
+        def check_options!(options)
+          valid_options = [:http_credentials, :mime_type, :location]
+          rejected = options.keys.reject { |k| valid_options.include?(k) }
+          raise(ArgumentError, "Illegal options for file import: #{rejected.inspect}") unless(rejected.empty?)
+        end
+        
+        # Get the mime type from the location
+        def mime_by_location(location)
+          Mime::Type.lookup_by_extension(File.extname(location)[1..-1].downcase)
+        end
 
         # The main loader. This will handle the lookup from the mapping and the creating of the
         # data objects. Depending on the setting of is_file, the source parameter will be interpreted

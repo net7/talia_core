@@ -66,7 +66,7 @@ module TaliaCore
         # Splits up the value, extracting encoded language codes and RDF data types. The 
         # result will be returned as a hash, with the "true" value being "value"
         def extract_values(value)
-          prop_string = PropertyString.new(value)
+          prop_string = PropertyString.parse(value)
           result = {}
           result['value'] = prop_string
           result['rdf:datatype'] = prop_string.type if(prop_string.type)

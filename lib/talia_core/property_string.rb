@@ -9,8 +9,20 @@ module TaliaCore
     
     attr_accessor :type, :lang
     
-    # Create a new object from the given property string
-    def initialize(property_string)
+    # Create a new object by parsing the given property string
+    def self.parse(property_string)
+      self.new.parse(property_string)
+    end
+    
+    # Create a new object from the given values. No parsing is done here.
+    def initialize(property_string = '', language = nil, type = nil)
+      @lang = language
+      @type = type
+      self.replace(property_string)
+    end
+    
+    # Parses the given string into a PropertyString
+    def parse(property_string)
       # First split for the type
       type_split = property_string.split('^^')
       # Check if any of the elements contains a language string
@@ -19,6 +31,19 @@ module TaliaCore
       self.replace(type_split.first || '')
     end
 
+    # Gives the "internal representation" - this should be equivalent
+    # to the string from which the object was created
+    def to_rdf
+      value = self.clone
+      value << '^^' << type if(type)
+      value << '@' << lang if(lang)
+      value
+    end
+    
+    # Inspect shows the real content
+    def inspect
+      "\"#{self}\" <lang: #{lang.inspect} - type: #{type.inspect}>"
+    end
     
     private
 

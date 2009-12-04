@@ -44,3 +44,4 @@ namespaces:
     luccadom: http://trac.talia.discovery-project.eu/wiki/LuccaOntology#
     talias: http://trac.talia.discovery-project.eu/wiki/StructuralOntology#
     taliadom: http://trac.talia.discovery-project.eu/wiki/SampleDomainOntology#
+    sesame: http://www.openrdf.org/schema/sesame#

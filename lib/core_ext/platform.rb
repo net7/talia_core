@@ -4,6 +4,7 @@ module Platform # :nodoc:
   def jruby?
     RUBY_PLATFORM =~ /java/
   end
+  
 end
 
 extend Platform

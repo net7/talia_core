@@ -84,10 +84,15 @@ module TaliaCore
       default = []
       unset = []
       items.each do |item|
-        val = item.value
-        real << val if(val.lang == language)
-        default << val if(!language_is_default && (val.lang == I18n.default_locale.to_s))
-        unset << val if(val.lang.blank?)
+        # FIXME: At the moment, this only works for value attributes, not for 
+        # sources
+        if((val = item.value).respond_to?(:lang))
+          real << val if(val.lang == language)
+          default << val if(!language_is_default && (val.lang == I18n.default_locale.to_s))
+          unset << val if(val.lang.blank?)
+        else
+          default << val
+        end
       end
       return real unless(real.empty?)
       return default unless(default.empty?)
@@ -216,6 +221,16 @@ module TaliaCore
         @items ||= []
         @items << SemanticCollectionItem.new(fat_rel, :fat)
       end
+      
+      # Forces this relation to be empty. This initializes the relation
+      # as if no elements exist. This doesn't look anything up in the 
+      # databse. *Warning* Only call this if you need an empty wrapper
+      # that doesn't look up anything in the database
+      def init_as_empty!
+        raise(ArgumentError, "Already initialized!") if(loaded?)
+        @items = []
+        @loaded = true
+      end
 
       private
 
@@ -230,8 +245,7 @@ module TaliaCore
       end
 
       # Inject a fat relation into the items
-
-
+      
       # Inititlizes the collection from the given collection of "fat" relations
       def init_from_fat_rels(fat_relations)
         # Check if there are records that have been added previously

@@ -83,6 +83,11 @@ module TaliaCore
     def to_s
       self[:uri]
     end
+    
+    # Create a new uri object
+    def to_uri
+      self[:uri].to_uri
+    end
 
     # Works in the normal way for database attributes. If the value
     # is not an attribute, it tries to find objects related to this source
@@ -357,6 +362,7 @@ module TaliaCore
     # given, it will retrieve only the specified data element
     def data(type = nil, location= nil)
       find_type = location ? :first : :all # Find just one element if a location is given
+      type = type.name if(type.is_a?(Class))
       options = {}
       options[:conditions] = [ "type = ?", type ] if(type && !location)
       options[:conditions] = [ "type = ? AND location = ?", type, location ] if(type && location)

@@ -55,14 +55,15 @@ module TaliaCore
         active_wrapper = @type_cache[predicate.to_s]
 
         if(active_wrapper.nil?)
-          # If this is a prefetched source we have everything - no use looking further
-          # TODO: Returns an Array instead of a wrapper
-          return [] if(@prefetched)
-          
           active_wrapper = SemanticCollectionWrapper.new(self, predicate)
+          
+          # If this is a prefetched source we have everything, so we can 
+          # initialize the wrapper without loading anything
+          active_wrapper.init_as_empty! if(@prefetched)
+          
           @type_cache[predicate.to_s] = active_wrapper
         end
-
+        
         active_wrapper
       end
 

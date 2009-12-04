@@ -1,7 +1,7 @@
 class SourcesController < ApplicationController
   include TaliaCore
   
-  before_filter :setup_format, :except => [ 'dispatch', 'index' ]
+  before_filter :setup_format, :only => [ 'show' ]
 
   PER_PAGE = 10
   
@@ -67,9 +67,29 @@ class SourcesController < ApplicationController
       self.send(caller) if(self.respond_to?(caller))
     end
     respond_to do |format|
+      format.html { render :action => template_for(@source) }
       format.xml { render :text => @source.to_xml }
       format.rdf { render :text => @source.to_rdf }
-      format.html { render :action => template_for(@source) }
+    end
+  end
+  
+  # Autocompletion actions
+  
+  def auto_complete_for_uri
+    if(s_uri = params[:record][:source])
+      s_uri_parts = s_uri.split(':')
+      options = { :limit => 10 }
+      @records = if(s_uri.include?('://'))
+        TaliaCore::ActiveSource.find_by_partial_uri(s_uri, options)
+      elsif(s_uri_parts.size == 2)
+        TaliaCore::ActiveSource.find_by_partial_local(s_uri_parts.first, s_uri_parts.last, options)
+      else
+        TaliaCore::ActiveSource.find_by_uri_token(s_uri, options)
+      end
+
+      render :inline => "<%= content_tag(:ul, @records.map { |rec| content_tag(:li, h(N::URI.new(rec.uri).to_name_s)) }) %>"
+    else
+      render :inline => ''
     end
   end
   
@@ -82,8 +102,6 @@ class SourcesController < ApplicationController
     params[:id] = split_id.first
     params[:format] = (split_id.size > 1) ? split_id.last : 'html'
   end
-  
-  private
 
   # Indicates if pagination is available.
   def will_paginate?
@@ -109,7 +127,7 @@ class SourcesController < ApplicationController
   # * If no other template is found, this will return the default template name
   def template_for(source)
     source.types.each do |type|
-      if(template = template_map[type.uri.to_s])
+      if(template = template_map[type.uri.to_s.downcase])
         return template
       end
     end
@@ -150,14 +168,14 @@ class SourcesController < ApplicationController
     # template for a source. This scans the template directory and connects
     # the templates to the right RDF types
     def map_templates_in(dir)
-      namespace = N::Namespace[File.basename(dir)]
-      namsp_object = N::Namespace[namespace]
+      namespace = File.basename(dir)
+      namesp_object = N::Namespace[namespace]
       TaliaCore.logger.warn("WARNING: Template files in #{dir} are never used, no namespace: #{namespace}.") unless(namesp_object)
       return unless(namesp_object)
       Dir["#{dir}/*"].each do |template|
         next unless(File.file?(template))
         template = template_basename(template)
-        @template_map[(namsp_object + template).to_s] = "semantic_templates/#{namespace}/#{template}"
+        @template_map[(namesp_object + template).to_s.downcase] = "semantic_templates/#{namespace}/#{template}"
       end
     end
   

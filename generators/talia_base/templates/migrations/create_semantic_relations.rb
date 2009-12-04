@@ -8,7 +8,8 @@ class CreateSemanticRelations < ActiveRecord::Migration
     end
     
     add_index :semantic_relations, :predicate_uri, :unique => false
-    
+    add_index :semantic_relations, :subject_id, :unique => false
+    add_index :semantic_relations, :object_id, :unique => false
   end
 
   def self.down

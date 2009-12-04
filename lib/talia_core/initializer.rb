@@ -380,7 +380,7 @@ module TaliaCore
       end
 
       def load_core_ext
-        path_to_core_ext = File.join(TALIA_ROOT, 'vendor', 'plugins', 'talia_core', 'lib', 'core_ext')
+        path_to_core_ext = File.join(TALIA_CODE_ROOT, 'lib', 'core_ext')
         Dir[path_to_core_ext + '/**/*.rb'].each { |f| require f}
       end
       

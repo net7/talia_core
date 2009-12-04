@@ -749,6 +749,11 @@ module TaliaCore
       assert_equal(3, src.data_records.size)
     end
     
+    def test_to_uri
+      src = ActiveSource.new('http://xsource/has_type_test')
+      assert_equal(N::URI.new('http://xsource/has_type_test'), src.to_uri)
+    end
+    
     private
     
     def make_data_source

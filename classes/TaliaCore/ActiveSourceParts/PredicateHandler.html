@@ -80,13 +80,13 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000135">each_cached_wrapper</a>&nbsp;&nbsp;
-      <a href="#M000133">get_objects_on</a>&nbsp;&nbsp;
-      <a href="#M000132">has_type?</a>&nbsp;&nbsp;
-      <a href="#M000137">inject_predicate</a>&nbsp;&nbsp;
-      <a href="#M000136">reset!</a>&nbsp;&nbsp;
-      <a href="#M000134">save_wrappers</a>&nbsp;&nbsp;
-      <a href="#M000131">types</a>&nbsp;&nbsp;
+      <a href="#M000139">each_cached_wrapper</a>&nbsp;&nbsp;
+      <a href="#M000137">get_objects_on</a>&nbsp;&nbsp;
+      <a href="#M000136">has_type?</a>&nbsp;&nbsp;
+      <a href="#M000141">inject_predicate</a>&nbsp;&nbsp;
+      <a href="#M000140">reset!</a>&nbsp;&nbsp;
+      <a href="#M000138">save_wrappers</a>&nbsp;&nbsp;
+      <a href="#M000135">types</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -114,11 +114,11 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000135" class="method-detail">
-        <a name="M000135"></a>
+      <div id="method-M000139" class="method-detail">
+        <a name="M000139"></a>
 
         <div class="method-heading">
-          <a href="#M000135" class="method-signature">
+          <a href="#M000139" class="method-signature">
           <span class="method-name">each_cached_wrapper</span><span class="method-args">() {|wrap| ...}</span>
           </a>
         </div>
@@ -128,24 +128,24 @@
 Loops through the cache and passes each existing wrapper to the block
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000135-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000135-source">
+            onclick="toggleCode('M000139-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000139-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 83</span>
-83:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_cached_wrapper</span>
-84:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@type_cache</span>)
-85:         <span class="ruby-ivar">@type_cache</span>.<span class="ruby-identifier">each_value</span> {  <span class="ruby-operator">|</span><span class="ruby-identifier">wrap</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">wrap</span>) }
-86:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 82</span>
+82:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_cached_wrapper</span>
+83:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@type_cache</span>)
+84:         <span class="ruby-ivar">@type_cache</span>.<span class="ruby-identifier">each_value</span> {  <span class="ruby-operator">|</span><span class="ruby-identifier">wrap</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">wrap</span>) }
+85:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000133" class="method-detail">
-        <a name="M000133"></a>
+      <div id="method-M000137" class="method-detail">
+        <a name="M000137"></a>
 
         <div class="method-heading">
-          <a href="#M000133" class="method-signature">
+          <a href="#M000137" class="method-signature">
           <span class="method-name">get_objects_on</span><span class="method-args">(predicate)</span>
           </a>
         </div>
@@ -157,80 +157,26 @@ so that the object will always be the same as long as the parent source
 lives.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000133-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000133-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 53</span>
-53:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_objects_on</span>(<span class="ruby-identifier">predicate</span>)
-54:         <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn</span> <span class="ruby-node">&quot;GETTING OBJECTS (#{predicate}) #{@type_cache.inspect}&quot;</span>
-55:         <span class="ruby-ivar">@type_cache</span> <span class="ruby-operator">||=</span> {}
-56:         <span class="ruby-identifier">active_wrapper</span> = <span class="ruby-ivar">@type_cache</span>[<span class="ruby-identifier">predicate</span>.<span class="ruby-identifier">to_s</span>]
-57: 
-58: 
-59:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">active_wrapper</span>.<span class="ruby-identifier">nil?</span>)
-60:           <span class="ruby-comment cmt"># If this is a prefetched source we have everything - no use looking further</span>
-61:           <span class="ruby-comment cmt"># TODO: Returns an Array instead of a wrapper</span>
-62:           <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@prefetched</span>)
-63:           
-64:           <span class="ruby-identifier">active_wrapper</span> = <span class="ruby-constant">SemanticCollectionWrapper</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">predicate</span>)
-65:           <span class="ruby-ivar">@type_cache</span>[<span class="ruby-identifier">predicate</span>.<span class="ruby-identifier">to_s</span>] = <span class="ruby-identifier">active_wrapper</span>
-66:         <span class="ruby-keyword kw">end</span>
-67: 
-68:         <span class="ruby-identifier">active_wrapper</span>
-69:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000132" class="method-detail">
-        <a name="M000132"></a>
-
-        <div class="method-heading">
-          <a href="#M000132" class="method-signature">
-          <span class="method-name">has_type?</span><span class="method-args">(type)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-Returns if the Facsimile is of the given type
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000132-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000132-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 46</span>
-46:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_type?</span>(<span class="ruby-identifier">type</span>)
-47:         (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">types</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">type</span>))
-48:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000137" class="method-detail">
-        <a name="M000137"></a>
-
-        <div class="method-heading">
-          <a href="#M000137" class="method-signature">
-          <span class="method-name">inject_predicate</span><span class="method-args">(fat_relation)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-Injects a &#8216;fat&#8217; predicate relation on a source
-</p>
-          <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000137-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000137-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 95</span>
-95:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inject_predicate</span>(<span class="ruby-identifier">fat_relation</span>)
-96:         <span class="ruby-identifier">wrapper</span> = <span class="ruby-identifier">get_objects_on</span>(<span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">predicate_uri</span>)
-97:         <span class="ruby-identifier">wrapper</span>.<span class="ruby-identifier">inject_fat_item</span>(<span class="ruby-identifier">fat_relation</span>)
-98:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 53</span>
+53:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_objects_on</span>(<span class="ruby-identifier">predicate</span>)
+54:         <span class="ruby-ivar">@type_cache</span> <span class="ruby-operator">||=</span> {}
+55:         <span class="ruby-identifier">active_wrapper</span> = <span class="ruby-ivar">@type_cache</span>[<span class="ruby-identifier">predicate</span>.<span class="ruby-identifier">to_s</span>]
+56: 
+57:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">active_wrapper</span>.<span class="ruby-identifier">nil?</span>)
+58:           <span class="ruby-identifier">active_wrapper</span> = <span class="ruby-constant">SemanticCollectionWrapper</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">predicate</span>)
+59:           
+60:           <span class="ruby-comment cmt"># If this is a prefetched source we have everything, so we can </span>
+61:           <span class="ruby-comment cmt"># initialize the wrapper without loading anything</span>
+62:           <span class="ruby-identifier">active_wrapper</span>.<span class="ruby-identifier">init_as_empty!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@prefetched</span>)
+63:           
+64:           <span class="ruby-ivar">@type_cache</span>[<span class="ruby-identifier">predicate</span>.<span class="ruby-identifier">to_s</span>] = <span class="ruby-identifier">active_wrapper</span>
+65:         <span class="ruby-keyword kw">end</span>
+66:         
+67:         <span class="ruby-identifier">active_wrapper</span>
+68:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -241,6 +187,59 @@ Injects a &#8216;fat&#8217; predicate relation on a source
 
         <div class="method-heading">
           <a href="#M000136" class="method-signature">
+          <span class="method-name">has_type?</span><span class="method-args">(type)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns if the Facsimile is of the given type
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000136-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000136-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 46</span>
+46:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_type?</span>(<span class="ruby-identifier">type</span>)
+47:         (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">types</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">type</span>))
+48:       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000141" class="method-detail">
+        <a name="M000141"></a>
+
+        <div class="method-heading">
+          <a href="#M000141" class="method-signature">
+          <span class="method-name">inject_predicate</span><span class="method-args">(fat_relation)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Injects a &#8216;fat&#8217; predicate relation on a source
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000141-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000141-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 94</span>
+94:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inject_predicate</span>(<span class="ruby-identifier">fat_relation</span>)
+95:         <span class="ruby-identifier">wrapper</span> = <span class="ruby-identifier">get_objects_on</span>(<span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">predicate_uri</span>)
+96:         <span class="ruby-identifier">wrapper</span>.<span class="ruby-identifier">inject_fat_item</span>(<span class="ruby-identifier">fat_relation</span>)
+97:       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000140" class="method-detail">
+        <a name="M000140"></a>
+
+        <div class="method-heading">
+          <a href="#M000140" class="method-signature">
           <span class="method-name">reset!</span><span class="method-args">()</span>
           </a>
         </div>
@@ -251,23 +250,23 @@ Clear the source (this will force reloading of elements and discard unsaved
 changes
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000136-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000136-source">
+            onclick="toggleCode('M000140-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000140-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 90</span>
-90:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>
-91:         <span class="ruby-ivar">@type_cache</span> = <span class="ruby-keyword kw">nil</span>
-92:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 89</span>
+89:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>
+90:         <span class="ruby-ivar">@type_cache</span> = <span class="ruby-keyword kw">nil</span>
+91:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000134" class="method-detail">
-        <a name="M000134"></a>
+      <div id="method-M000138" class="method-detail">
+        <a name="M000138"></a>
 
         <div class="method-heading">
-          <a href="#M000134" class="method-signature">
+          <a href="#M000138" class="method-signature">
           <span class="method-name">save_wrappers</span><span class="method-args">()</span>
           </a>
         </div>
@@ -277,40 +276,40 @@ changes
 Go through the existing relation wrappers and save the (new) items
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000134-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000134-source">
+            onclick="toggleCode('M000138-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000138-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 72</span>
-72:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save_wrappers</span>
-73:         <span class="ruby-identifier">each_cached_wrapper</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">wrap</span><span class="ruby-operator">|</span>
-74:           <span class="ruby-comment cmt"># Load unloaded if we're not rdf_autosaving. Quick hack since otherwise</span>
-75:           <span class="ruby-comment cmt"># since the blanking of unloaded properties could cause problems with</span>
-76:           <span class="ruby-comment cmt"># the rdf writing otherwise</span>
-77:           <span class="ruby-identifier">wrap</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:load!</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">wrap</span>.<span class="ruby-identifier">loaded?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">autosave_rdf?</span>)
-78:           <span class="ruby-identifier">wrap</span>.<span class="ruby-identifier">save_items!</span>
-79:         <span class="ruby-keyword kw">end</span>
-80:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 71</span>
+71:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save_wrappers</span>
+72:         <span class="ruby-identifier">each_cached_wrapper</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">wrap</span><span class="ruby-operator">|</span>
+73:           <span class="ruby-comment cmt"># Load unloaded if we're not rdf_autosaving. Quick hack since otherwise</span>
+74:           <span class="ruby-comment cmt"># since the blanking of unloaded properties could cause problems with</span>
+75:           <span class="ruby-comment cmt"># the rdf writing otherwise</span>
+76:           <span class="ruby-identifier">wrap</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:load!</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">wrap</span>.<span class="ruby-identifier">loaded?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">autosave_rdf?</span>)
+77:           <span class="ruby-identifier">wrap</span>.<span class="ruby-identifier">save_items!</span>
+78:         <span class="ruby-keyword kw">end</span>
+79:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000131" class="method-detail">
-        <a name="M000131"></a>
+      <div id="method-M000135" class="method-detail">
+        <a name="M000135"></a>
 
         <div class="method-heading">
-          <a href="#M000131" class="method-signature">
+          <a href="#M000135" class="method-signature">
           <span class="method-name">types</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Gets the <a href="PredicateHandler.html#M000131">types</a>
+Gets the <a href="PredicateHandler.html#M000135">types</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000131-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000131-source">
+            onclick="toggleCode('M000135-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000135-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 41</span>
 41:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">types</span>

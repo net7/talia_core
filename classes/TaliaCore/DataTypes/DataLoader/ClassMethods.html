@@ -80,7 +80,7 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000179">create_from_url</a>&nbsp;&nbsp;
+      <a href="#M000184">create_from_url</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -102,11 +102,11 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000179" class="method-detail">
-        <a name="M000179"></a>
+      <div id="method-M000184" class="method-detail">
+        <a name="M000184"></a>
 
         <div class="method-heading">
-          <a href="#M000179" class="method-signature">
+          <a href="#M000184" class="method-signature">
           <span class="method-name">create_from_url</span><span class="method-args">(uri, options = {})</span>
           </a>
         </div>
@@ -145,46 +145,49 @@ mime type through the location parameter, unless an explicit mime type is
 given.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000179-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000179-source">
+            onclick="toggleCode('M000184-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000184-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_loader.rb, line 28</span>
 28:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_url</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">options</span> = {})
-29:           <span class="ruby-identifier">mime_type</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:mime_type</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">options</span>[<span class="ruby-value str">'mime_type'</span>]
-30:           <span class="ruby-identifier">location</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:location</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">options</span>[<span class="ruby-value str">'location'</span>]
-31:           <span class="ruby-comment cmt"># If a Mime type is given, use that.</span>
-32:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mime_type</span>)
-33:             <span class="ruby-identifier">mime_type</span> = <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">mime_type</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>))
-34:           <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">location</span>)
-35:             <span class="ruby-identifier">mime_type</span> = <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup_by_extension</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>)[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
-36:           <span class="ruby-keyword kw">end</span>
-37: 
-38:           <span class="ruby-identifier">data_records</span> = []
-39: 
-40:           <span class="ruby-comment cmt"># Remove file:// from URIs to allow standard file URIs</span>
-41:           <span class="ruby-identifier">uri</span> = <span class="ruby-identifier">file_url</span>(<span class="ruby-identifier">uri</span>)
-42:           
-43:           <span class="ruby-comment cmt"># We have diffent code paths for local and remote files. This is mainly because</span>
-44:           <span class="ruby-comment cmt"># the system will try to not open local files at all and just copy them around -</span>
-45:           <span class="ruby-comment cmt"># which will greatly speed up the operation.</span>
-46:           <span class="ruby-identifier">is_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">uri</span>)
-47: 
-48:           <span class="ruby-identifier">location</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">uri</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
-49:           <span class="ruby-comment cmt"># If we have a &quot;standard&quot; uri, we cut off at the last slash (the</span>
-50:           <span class="ruby-comment cmt"># File.basename would use the system file separator)</span>
-51:           <span class="ruby-identifier">location</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">uri</span>[(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)<span class="ruby-operator">..</span><span class="ruby-value">-1</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">uri</span>
-52: 
-53:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
-54:             <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup_by_extension</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>)[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
-55:             <span class="ruby-identifier">open_and_create</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-keyword kw">true</span>)
-56:           <span class="ruby-keyword kw">else</span>
-57:             <span class="ruby-identifier">open_from_url</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:http_credentials</span>]) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
-58:               <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">io</span>.<span class="ruby-identifier">content_type</span>)
-59:               <span class="ruby-identifier">open_and_create</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">io</span>, <span class="ruby-keyword kw">false</span>)
-60:             <span class="ruby-keyword kw">end</span>
-61:           <span class="ruby-keyword kw">end</span>
-62: 
-63:         <span class="ruby-keyword kw">end</span>
+29:           <span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_options!</span>
+30:           <span class="ruby-identifier">options</span>.<span class="ruby-identifier">assert_valid_keys</span>(<span class="ruby-identifier">:mime_type</span>, <span class="ruby-identifier">:location</span>, <span class="ruby-identifier">:http_credentials</span>)
+31:           
+32:           <span class="ruby-identifier">mime_type</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:mime_type</span>] 
+33:           <span class="ruby-identifier">location</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:location</span>]
+34:           <span class="ruby-comment cmt"># If a Mime type is given, use that.</span>
+35:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mime_type</span>)
+36:             <span class="ruby-identifier">mime_type</span> = <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">mime_type</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>))
+37:           <span class="ruby-keyword kw">end</span>
+38: 
+39:           <span class="ruby-identifier">data_records</span> = []
+40: 
+41:           <span class="ruby-comment cmt"># Remove file:// from URIs to allow standard file URIs</span>
+42:           <span class="ruby-identifier">uri</span> = <span class="ruby-identifier">file_url</span>(<span class="ruby-identifier">uri</span>)
+43:           
+44:           <span class="ruby-comment cmt"># We have diffent code paths for local and remote files. This is mainly because</span>
+45:           <span class="ruby-comment cmt"># the system will try to not open local files at all and just copy them around -</span>
+46:           <span class="ruby-comment cmt"># which will greatly speed up the operation.</span>
+47:           <span class="ruby-identifier">is_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">uri</span>)
+48: 
+49:           <span class="ruby-identifier">location</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">uri</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
+50:           <span class="ruby-comment cmt"># If we have a &quot;standard&quot; uri, we cut off at the last slash (the</span>
+51:           <span class="ruby-comment cmt"># File.basename would use the system file separator)</span>
+52:           <span class="ruby-identifier">location</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">uri</span>[(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)<span class="ruby-operator">..</span><span class="ruby-value">-1</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">uri</span>
+53:           
+54:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
+55:             <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">mime_by_location</span>(<span class="ruby-identifier">location</span>)
+56:             <span class="ruby-identifier">open_and_create</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-keyword kw">true</span>)
+57:           <span class="ruby-keyword kw">else</span>
+58:             <span class="ruby-identifier">open_from_url</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:http_credentials</span>]) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
+59:               <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">io</span>.<span class="ruby-identifier">content_type</span>)
+60:               <span class="ruby-comment cmt"># Just in case we didn't get any content type</span>
+61:               <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">mime_by_location</span>(<span class="ruby-identifier">location</span>)
+62:               <span class="ruby-identifier">open_and_create</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">io</span>, <span class="ruby-keyword kw">false</span>)
+63:             <span class="ruby-keyword kw">end</span>
+64:           <span class="ruby-keyword kw">end</span>
+65: 
+66:         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

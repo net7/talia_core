@@ -101,12 +101,12 @@ Only one of the above should be usually given
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000351">==</a>&nbsp;&nbsp;
-      <a href="#M000352">create_object_from</a>&nbsp;&nbsp;
-      <a href="#M000347">new</a>&nbsp;&nbsp;
-      <a href="#M000350">object</a>&nbsp;&nbsp;
-      <a href="#M000348">relation</a>&nbsp;&nbsp;
-      <a href="#M000349">value</a>&nbsp;&nbsp;
+      <a href="#M000363">==</a>&nbsp;&nbsp;
+      <a href="#M000364">create_object_from</a>&nbsp;&nbsp;
+      <a href="#M000359">new</a>&nbsp;&nbsp;
+      <a href="#M000362">object</a>&nbsp;&nbsp;
+      <a href="#M000360">relation</a>&nbsp;&nbsp;
+      <a href="#M000361">value</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -146,19 +146,19 @@ Only one of the above should be usually given
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000347" class="method-detail">
-        <a name="M000347"></a>
+      <div id="method-M000359" class="method-detail">
+        <a name="M000359"></a>
 
         <div class="method-heading">
-          <a href="#M000347" class="method-signature">
+          <a href="#M000359" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(relation, plain_or_fat)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000347-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000347-source">
+            onclick="toggleCode('M000359-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000359-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 13</span>
 13:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">relation</span>, <span class="ruby-identifier">plain_or_fat</span>)
@@ -179,134 +179,134 @@ Only one of the above should be usually given
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000351" class="method-detail">
-        <a name="M000351"></a>
+      <div id="method-M000363" class="method-detail">
+        <a name="M000363"></a>
 
         <div class="method-heading">
-          <a href="#M000351" class="method-signature">
+          <a href="#M000363" class="method-signature">
           <span class="method-name">==</span><span class="method-args">(compare)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000351-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000351-source">
+            onclick="toggleCode('M000363-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000363-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 56</span>
-56:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">==</span>(<span class="ruby-identifier">compare</span>)
-57:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">compare</span>
-58:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 57</span>
+57:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">==</span>(<span class="ruby-identifier">compare</span>)
+58:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">compare</span>
+59:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000352" class="method-detail">
-        <a name="M000352"></a>
+      <div id="method-M000364" class="method-detail">
+        <a name="M000364"></a>
 
         <div class="method-heading">
-          <a href="#M000352" class="method-signature">
+          <a href="#M000364" class="method-signature">
           <span class="method-name">create_object_from</span><span class="method-args">(fat_relation)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Creates an <a href="SemanticCollectionItem.html#M000350">object</a> frm the
+Creates an <a href="SemanticCollectionItem.html#M000362">object</a> frm the
 given &quot;fat&quot; <a
-href="SemanticCollectionItem.html#M000348">relation</a>. This retrieves the
-data from the <a href="SemanticCollectionItem.html#M000348">relation</a> <a
-href="SemanticCollectionItem.html#M000350">object</a> and instantiates it
+href="SemanticCollectionItem.html#M000360">relation</a>. This retrieves the
+data from the <a href="SemanticCollectionItem.html#M000360">relation</a> <a
+href="SemanticCollectionItem.html#M000362">object</a> and instantiates it
 just like it would be after a find operation.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000352-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000352-source">
+            onclick="toggleCode('M000364-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000364-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 65</span>
-65:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_object_from</span>(<span class="ruby-identifier">fat_relation</span>)
-66:       <span class="ruby-comment cmt"># First we find out which class (table our target object is in)</span>
-67:       <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_type</span>.<span class="ruby-identifier">constantize</span>
-68:       <span class="ruby-identifier">record</span> = <span class="ruby-keyword kw">nil</span>
-69:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">klass</span> <span class="ruby-operator">==</span> <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSource</span>)
-70:         <span class="ruby-comment cmt"># We prepare a hash of properties for the ActiveSource</span>
-71:         <span class="ruby-identifier">record</span> = {
-72:           <span class="ruby-value str">'uri'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_uri</span>,
-73:           <span class="ruby-value str">'created_at'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_created_at</span>,
-74:           <span class="ruby-value str">'updated_at'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_updated_at</span>,
-75:           <span class="ruby-value str">'type'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_realtype</span>
-76:         }
-77:       <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">klass</span> <span class="ruby-operator">==</span> <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">SemanticProperty</span>)
-78:         <span class="ruby-comment cmt"># We prepare a hash of properties for the SemanticProperty</span>
-79:         <span class="ruby-identifier">record</span> = {
-80:           <span class="ruby-value str">'value'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">property_value</span>,
-81:           <span class="ruby-value str">'created_at'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">property_created_at</span>,
-82:           <span class="ruby-value str">'updated_at'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">property_updated_at</span>
-83:         }
-84:       <span class="ruby-keyword kw">end</span>
-85:       <span class="ruby-comment cmt"># Common attributes</span>
-86:       <span class="ruby-identifier">record</span>[<span class="ruby-value str">'id'</span>] = <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_id</span>
-87:       <span class="ruby-comment cmt"># Instantiate the new record</span>
-88:       <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:instantiate</span>, <span class="ruby-identifier">record</span>)
-89:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 66</span>
+66:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_object_from</span>(<span class="ruby-identifier">fat_relation</span>)
+67:       <span class="ruby-comment cmt"># First we find out which class (table our target object is in)</span>
+68:       <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_type</span>.<span class="ruby-identifier">constantize</span>
+69:       <span class="ruby-identifier">record</span> = <span class="ruby-keyword kw">nil</span>
+70:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">klass</span> <span class="ruby-operator">==</span> <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSource</span>)
+71:         <span class="ruby-comment cmt"># We prepare a hash of properties for the ActiveSource</span>
+72:         <span class="ruby-identifier">record</span> = {
+73:           <span class="ruby-value str">'uri'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_uri</span>,
+74:           <span class="ruby-value str">'created_at'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_created_at</span>,
+75:           <span class="ruby-value str">'updated_at'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_updated_at</span>,
+76:           <span class="ruby-value str">'type'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_realtype</span>
+77:         }
+78:       <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">klass</span> <span class="ruby-operator">==</span> <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">SemanticProperty</span>)
+79:         <span class="ruby-comment cmt"># We prepare a hash of properties for the SemanticProperty</span>
+80:         <span class="ruby-identifier">record</span> = {
+81:           <span class="ruby-value str">'value'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">property_value</span>,
+82:           <span class="ruby-value str">'created_at'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">property_created_at</span>,
+83:           <span class="ruby-value str">'updated_at'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">property_updated_at</span>
+84:         }
+85:       <span class="ruby-keyword kw">end</span>
+86:       <span class="ruby-comment cmt"># Common attributes</span>
+87:       <span class="ruby-identifier">record</span>[<span class="ruby-value str">'id'</span>] = <span class="ruby-identifier">fat_relation</span>.<span class="ruby-identifier">object_id</span>
+88:       <span class="ruby-comment cmt"># Instantiate the new record</span>
+89:       <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:instantiate</span>, <span class="ruby-identifier">record</span>)
+90:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000350" class="method-detail">
-        <a name="M000350"></a>
+      <div id="method-M000362" class="method-detail">
+        <a name="M000362"></a>
 
         <div class="method-heading">
-          <a href="#M000350" class="method-signature">
+          <a href="#M000362" class="method-signature">
           <span class="method-name">object</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Creates an <a href="SemanticCollectionItem.html#M000350">object</a> from
-the given <a href="SemanticCollectionItem.html#M000348">relation</a>
+Creates an <a href="SemanticCollectionItem.html#M000362">object</a> from
+the given <a href="SemanticCollectionItem.html#M000360">relation</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000350-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000350-source">
+            onclick="toggleCode('M000362-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000362-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 44</span>
-44:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">object</span>
-45:       <span class="ruby-ivar">@object</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">begin</span>
-46:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@fat_relation</span>)
-47:           <span class="ruby-identifier">create_object_from</span>(<span class="ruby-ivar">@fat_relation</span>)
-48:         <span class="ruby-keyword kw">elsif</span>(<span class="ruby-ivar">@plain_relation</span>)
-49:           <span class="ruby-ivar">@plain_relation</span>.<span class="ruby-identifier">object</span>
-50:         <span class="ruby-keyword kw">else</span>
-51:           <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;No relation was given to this object&quot;</span>)
-52:         <span class="ruby-keyword kw">end</span>
-53:       <span class="ruby-keyword kw">end</span>
-54:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 45</span>
+45:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">object</span>
+46:       <span class="ruby-ivar">@object</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">begin</span>
+47:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@fat_relation</span>)
+48:           <span class="ruby-identifier">create_object_from</span>(<span class="ruby-ivar">@fat_relation</span>)
+49:         <span class="ruby-keyword kw">elsif</span>(<span class="ruby-ivar">@plain_relation</span>)
+50:           <span class="ruby-ivar">@plain_relation</span>.<span class="ruby-identifier">object</span>
+51:         <span class="ruby-keyword kw">else</span>
+52:           <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;No relation was given to this object&quot;</span>)
+53:         <span class="ruby-keyword kw">end</span>
+54:       <span class="ruby-keyword kw">end</span>
+55:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000348" class="method-detail">
-        <a name="M000348"></a>
+      <div id="method-M000360" class="method-detail">
+        <a name="M000360"></a>
 
         <div class="method-heading">
-          <a href="#M000348" class="method-signature">
+          <a href="#M000360" class="method-signature">
           <span class="method-name">relation</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Return the <a href="SemanticCollectionItem.html#M000348">relation</a> <a
-href="SemanticCollectionItem.html#M000350">object</a> that was given
+Return the <a href="SemanticCollectionItem.html#M000360">relation</a> <a
+href="SemanticCollectionItem.html#M000362">object</a> that was given
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000348-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000348-source">
+            onclick="toggleCode('M000360-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000360-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 26</span>
 26:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">relation</span>
@@ -317,11 +317,11 @@ href="SemanticCollectionItem.html#M000350">object</a> that was given
         </div>
       </div>
 
-      <div id="method-M000349" class="method-detail">
-        <a name="M000349"></a>
+      <div id="method-M000361" class="method-detail">
+        <a name="M000361"></a>
 
         <div class="method-heading">
-          <a href="#M000349" class="method-signature">
+          <a href="#M000361" class="method-signature">
           <span class="method-name">value</span><span class="method-args">()</span>
           </a>
         </div>
@@ -329,27 +329,29 @@ href="SemanticCollectionItem.html#M000350">object</a> that was given
         <div class="method-description">
           <p>
 Return the &quot;<a
-href="SemanticCollectionItem.html#M000349">value</a>&quot; (Semantic <a
-href="SemanticCollectionItem.html#M000348">relation</a> <a
-href="SemanticCollectionItem.html#M000349">value</a> or the related <a
-href="ActiveSource.html">ActiveSource</a>)
+href="SemanticCollectionItem.html#M000361">value</a>&quot; (Semantic <a
+href="SemanticCollectionItem.html#M000360">relation</a> <a
+href="SemanticCollectionItem.html#M000361">value</a> or the related <a
+href="ActiveSource.html">ActiveSource</a>). <a
+href="../String.html">String</a> values will actually be <a
+href="PropertyString.html">PropertyString</a> strings
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000349-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000349-source">
+            onclick="toggleCode('M000361-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000361-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 31</span>
-31:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value</span>
-32:       <span class="ruby-identifier">semprop</span> = <span class="ruby-identifier">object</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SemanticProperty</span>)
-33:       <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@object_type</span>)
-34:         <span class="ruby-identifier">assit</span>(<span class="ruby-identifier">object</span>, <span class="ruby-node">&quot;Must have object for #{relation.predicate_uri}&quot;</span>)
-35:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">'Must not have a property for a typed item'</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">semprop</span>)
-36:         <span class="ruby-ivar">@object_type</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">object</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>)
-37:       <span class="ruby-keyword kw">else</span>
-38:         <span class="ruby-comment cmt"># Plain, return the object or the value for SemanticProperties</span>
-39:         <span class="ruby-identifier">semprop</span> <span class="ruby-value">? </span><span class="ruby-identifier">object</span>.<span class="ruby-identifier">value</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">object</span>
-40:       <span class="ruby-keyword kw">end</span>
-41:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_item.rb, line 32</span>
+32:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value</span>
+33:       <span class="ruby-identifier">semprop</span> = <span class="ruby-identifier">object</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SemanticProperty</span>)
+34:       <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@object_type</span>)
+35:         <span class="ruby-identifier">assit</span>(<span class="ruby-identifier">object</span>, <span class="ruby-node">&quot;Must have object for #{relation.predicate_uri}&quot;</span>)
+36:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">'Must not have a property for a typed item'</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">semprop</span>)
+37:         <span class="ruby-ivar">@object_type</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">object</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>)
+38:       <span class="ruby-keyword kw">else</span>
+39:         <span class="ruby-comment cmt"># Plain, return the object or the value for SemanticProperties</span>
+40:         <span class="ruby-identifier">semprop</span> <span class="ruby-value">? </span><span class="ruby-constant">PropertyString</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">object</span>.<span class="ruby-identifier">value</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">object</span>
+41:       <span class="ruby-keyword kw">end</span>
+42:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

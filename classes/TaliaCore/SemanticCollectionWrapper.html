@@ -80,9 +80,9 @@
 
     <div id="description">
       <p>
-Wraps the Array/<a href="Collection.html">Collection</a> returned from the
-ActiveRecord, simply &quot;hiding&quot; the <a
-href="SemanticProperty.html">SemanticProperty</a> objects behind strings.
+Wraps the Array/Collection returned from the ActiveRecord, simply
+&quot;hiding&quot; the <a href="SemanticProperty.html">SemanticProperty</a>
+objects behind strings.
 </p>
 
     </div>
@@ -94,30 +94,32 @@ href="SemanticProperty.html">SemanticProperty</a> objects behind strings.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000368">&lt;&lt;</a>&nbsp;&nbsp;
-      <a href="#M000356">[]</a>&nbsp;&nbsp;
-      <a href="#M000369">add_with_order</a>&nbsp;&nbsp;
-      <a href="#M000355">at</a>&nbsp;&nbsp;
-      <a href="#M000374">clean?</a>&nbsp;&nbsp;
-      <a href="#M000361">collect</a>&nbsp;&nbsp;
-      <a href="#M000360">each</a>&nbsp;&nbsp;
-      <a href="#M000362">each_item</a>&nbsp;&nbsp;
-      <a href="#M000375">empty?</a>&nbsp;&nbsp;
-      <a href="#M000357">first</a>&nbsp;&nbsp;
-      <a href="#M000359">get_item_at</a>&nbsp;&nbsp;
-      <a href="#M000367">include?</a>&nbsp;&nbsp;
-      <a href="#M000366">index</a>&nbsp;&nbsp;
-      <a href="#M000376">inject_fat_item</a>&nbsp;&nbsp;
-      <a href="#M000365">join</a>&nbsp;&nbsp;
-      <a href="#M000358">last</a>&nbsp;&nbsp;
-      <a href="#M000373">loaded?</a>&nbsp;&nbsp;
-      <a href="#M000354">new</a>&nbsp;&nbsp;
-      <a href="#M000371">remove</a>&nbsp;&nbsp;
-      <a href="#M000370">replace</a>&nbsp;&nbsp;
-      <a href="#M000372">save_items!</a>&nbsp;&nbsp;
-      <a href="#M000364">size</a>&nbsp;&nbsp;
-      <a href="#M000353">special_types</a>&nbsp;&nbsp;
-      <a href="#M000363">values</a>&nbsp;&nbsp;
+      <a href="#M000381">&lt;&lt;</a>&nbsp;&nbsp;
+      <a href="#M000368">[]</a>&nbsp;&nbsp;
+      <a href="#M000382">add_with_order</a>&nbsp;&nbsp;
+      <a href="#M000367">at</a>&nbsp;&nbsp;
+      <a href="#M000387">clean?</a>&nbsp;&nbsp;
+      <a href="#M000373">collect</a>&nbsp;&nbsp;
+      <a href="#M000372">each</a>&nbsp;&nbsp;
+      <a href="#M000374">each_item</a>&nbsp;&nbsp;
+      <a href="#M000388">empty?</a>&nbsp;&nbsp;
+      <a href="#M000369">first</a>&nbsp;&nbsp;
+      <a href="#M000371">get_item_at</a>&nbsp;&nbsp;
+      <a href="#M000380">include?</a>&nbsp;&nbsp;
+      <a href="#M000379">index</a>&nbsp;&nbsp;
+      <a href="#M000390">init_as_empty!</a>&nbsp;&nbsp;
+      <a href="#M000389">inject_fat_item</a>&nbsp;&nbsp;
+      <a href="#M000378">join</a>&nbsp;&nbsp;
+      <a href="#M000370">last</a>&nbsp;&nbsp;
+      <a href="#M000386">loaded?</a>&nbsp;&nbsp;
+      <a href="#M000366">new</a>&nbsp;&nbsp;
+      <a href="#M000384">remove</a>&nbsp;&nbsp;
+      <a href="#M000383">replace</a>&nbsp;&nbsp;
+      <a href="#M000385">save_items!</a>&nbsp;&nbsp;
+      <a href="#M000377">size</a>&nbsp;&nbsp;
+      <a href="#M000365">special_types</a>&nbsp;&nbsp;
+      <a href="#M000375">values</a>&nbsp;&nbsp;
+      <a href="#M000376">values_with_lang</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -172,11 +174,11 @@ href="SemanticProperty.html">SemanticProperty</a> objects behind strings.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000354" class="method-detail">
-        <a name="M000354"></a>
+      <div id="method-M000366" class="method-detail">
+        <a name="M000366"></a>
 
         <div class="method-heading">
-          <a href="#M000354" class="method-signature">
+          <a href="#M000366" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(source, predicate)</span>
           </a>
         </div>
@@ -186,8 +188,8 @@ href="SemanticProperty.html">SemanticProperty</a> objects behind strings.
 Initialize the list
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000354-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000354-source">
+            onclick="toggleCode('M000366-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000366-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 21</span>
 21:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">predicate</span>)
@@ -205,11 +207,11 @@ Initialize the list
         </div>
       </div>
 
-      <div id="method-M000353" class="method-detail">
-        <a name="M000353"></a>
+      <div id="method-M000365" class="method-detail">
+        <a name="M000365"></a>
 
         <div class="method-heading">
-          <a href="#M000353" class="method-signature">
+          <a href="#M000365" class="method-signature">
           <span class="method-name">special_types</span><span class="method-args">()</span>
           </a>
         </div>
@@ -222,8 +224,8 @@ href="ActiveSource.html">ActiveSource</a> relations and all sources will be
 casted to the given type
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000353-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000353-source">
+            onclick="toggleCode('M000365-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000365-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 14</span>
 14:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">special_types</span>
@@ -238,11 +240,11 @@ casted to the given type
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000368" class="method-detail">
-        <a name="M000368"></a>
+      <div id="method-M000381" class="method-detail">
+        <a name="M000381"></a>
 
         <div class="method-heading">
-          <a href="#M000368" class="method-signature">
+          <a href="#M000381" class="method-signature">
           <span class="method-name">&lt;&lt;</span><span class="method-args">(value)</span>
           </a>
         </div>
@@ -253,20 +255,20 @@ Push to collection. Giving a string will create a property to be created,
 saved and associated.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000368-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000368-source">
+            onclick="toggleCode('M000381-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000381-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 108</span>
-108:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">value</span>)
-109:       <span class="ruby-identifier">add_with_order</span>(<span class="ruby-identifier">value</span>, <span class="ruby-keyword kw">nil</span>)
-110:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 136</span>
+136:       <span class="ruby-keyword kw">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">value</span>)
+137:         <span class="ruby-identifier">add_with_order</span>(<span class="ruby-identifier">value</span>, <span class="ruby-keyword kw">nil</span>)
+138:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000356" class="method-detail">
-        <a name="M000356"></a>
+      <div id="method-M000368" class="method-detail">
+        <a name="M000368"></a>
 
         <div class="method-heading">
           <span class="method-name">[]</span><span class="method-args">(index)</span>
@@ -274,16 +276,16 @@ saved and associated.
       
         <div class="method-description">
           <p>
-Alias for <a href="SemanticCollectionWrapper.html#M000355">at</a>
+Alias for <a href="SemanticCollectionWrapper.html#M000367">at</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000369" class="method-detail">
-        <a name="M000369"></a>
+      <div id="method-M000382" class="method-detail">
+        <a name="M000382"></a>
 
         <div class="method-heading">
-          <a href="#M000369" class="method-signature">
+          <a href="#M000382" class="method-signature">
           <span class="method-name">add_with_order</span><span class="method-args">(value, order)</span>
           </a>
         </div>
@@ -293,30 +295,30 @@ Alias for <a href="SemanticCollectionWrapper.html#M000355">at</a>
 Adds the object and gives the relation the given order.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000369-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000369-source">
+            onclick="toggleCode('M000382-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000382-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 114</span>
-114:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_with_order</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">order</span>)
-115:       <span class="ruby-comment cmt"># We use order exclusively for &quot;ordering&quot; predicates</span>
-116:       <span class="ruby-identifier">assit_equal</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">OrderedSource</span>.<span class="ruby-identifier">index_to_predicate</span>(<span class="ruby-identifier">order</span>), <span class="ruby-ivar">@assoc_predicate</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">order</span>)
-117:       <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;cannot add nil&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">value</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)
-118:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>))
-119:         <span class="ruby-identifier">value</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">add_record_for</span>(<span class="ruby-identifier">v</span>, <span class="ruby-identifier">order</span>) }
-120:       <span class="ruby-keyword kw">else</span>
-121:         <span class="ruby-identifier">add_record_for</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">order</span>)
-122:       <span class="ruby-keyword kw">end</span>
-123:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 142</span>
+142:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_with_order</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">order</span>)
+143:         <span class="ruby-comment cmt"># We use order exclusively for &quot;ordering&quot; predicates</span>
+144:         <span class="ruby-identifier">assit_equal</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">OrderedSource</span>.<span class="ruby-identifier">index_to_predicate</span>(<span class="ruby-identifier">order</span>), <span class="ruby-ivar">@assoc_predicate</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">order</span>)
+145:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;cannot add nil&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">value</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)
+146:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>))
+147:           <span class="ruby-identifier">value</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">add_record_for</span>(<span class="ruby-identifier">v</span>, <span class="ruby-identifier">order</span>) }
+148:         <span class="ruby-keyword kw">else</span>
+149:           <span class="ruby-identifier">add_record_for</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">order</span>)
+150:         <span class="ruby-keyword kw">end</span>
+151:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000355" class="method-detail">
-        <a name="M000355"></a>
+      <div id="method-M000367" class="method-detail">
+        <a name="M000367"></a>
 
         <div class="method-heading">
-          <a href="#M000355" class="method-signature">
+          <a href="#M000367" class="method-signature">
           <span class="method-name">at</span><span class="method-args">(index)</span>
           </a>
         </div>
@@ -324,12 +326,12 @@ Adds the object and gives the relation the given order.
         <div class="method-description">
           <p>
 Get the element &#8217;&#8217;&#8216;value&#8217;&#8217;&#8217; <a
-href="SemanticCollectionWrapper.html#M000355">at</a> the given <a
-href="SemanticCollectionWrapper.html#M000366">index</a>
+href="SemanticCollectionWrapper.html#M000367">at</a> the given <a
+href="SemanticCollectionWrapper.html#M000379">index</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000355-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000355-source">
+            onclick="toggleCode('M000367-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000367-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 33</span>
 33:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">at</span>(<span class="ruby-identifier">index</span>)
@@ -340,11 +342,11 @@ href="SemanticCollectionWrapper.html#M000366">index</a>
         </div>
       </div>
 
-      <div id="method-M000374" class="method-detail">
-        <a name="M000374"></a>
+      <div id="method-M000387" class="method-detail">
+        <a name="M000387"></a>
 
         <div class="method-heading">
-          <a href="#M000374" class="method-signature">
+          <a href="#M000387" class="method-signature">
           <span class="method-name">clean?</span><span class="method-args">()</span>
           </a>
         </div>
@@ -355,23 +357,23 @@ Indicates that the wraper is &quot;clean&quot;, that is it hasn&#8216;t
 been written to or read from
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000374-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000374-source">
+            onclick="toggleCode('M000387-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000387-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 181</span>
-181:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clean?</span>
-182:       <span class="ruby-ivar">@items</span>.<span class="ruby-identifier">nil?</span>
-183:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 209</span>
+209:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clean?</span>
+210:         <span class="ruby-ivar">@items</span>.<span class="ruby-identifier">nil?</span>
+211:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000361" class="method-detail">
-        <a name="M000361"></a>
+      <div id="method-M000373" class="method-detail">
+        <a name="M000373"></a>
 
         <div class="method-heading">
-          <a href="#M000361" class="method-signature">
+          <a href="#M000373" class="method-signature">
           <span class="method-name">collect</span><span class="method-args">() {|item.value| ...}</span>
           </a>
         </div>
@@ -381,8 +383,8 @@ been written to or read from
 Collect method for the semantic wrapper
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000361-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000361-source">
+            onclick="toggleCode('M000373-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000373-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 59</span>
 59:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">collect</span>
@@ -393,24 +395,24 @@ Collect method for the semantic wrapper
         </div>
       </div>
 
-      <div id="method-M000360" class="method-detail">
-        <a name="M000360"></a>
+      <div id="method-M000372" class="method-detail">
+        <a name="M000372"></a>
 
         <div class="method-heading">
-          <a href="#M000360" class="method-signature">
+          <a href="#M000372" class="method-signature">
           <span class="method-name">each</span><span class="method-args">() {|item.value| ...}</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Iterates over <a href="SemanticCollectionWrapper.html#M000360">each</a>
+Iterates over <a href="SemanticCollectionWrapper.html#M000372">each</a>
 &#8217;&#8217;&#8216;value&#8217;&#8217;&#8217; of the items in the
 relation.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000360-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000360-source">
+            onclick="toggleCode('M000372-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000372-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 54</span>
 54:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>
@@ -421,26 +423,26 @@ relation.
         </div>
       </div>
 
-      <div id="method-M000362" class="method-detail">
-        <a name="M000362"></a>
+      <div id="method-M000374" class="method-detail">
+        <a name="M000374"></a>
 
         <div class="method-heading">
-          <a href="#M000362" class="method-signature">
+          <a href="#M000374" class="method-signature">
           <span class="method-name">each_item</span><span class="method-args">() {|item.object| ...}</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Iterates of <a href="SemanticCollectionWrapper.html#M000360">each</a>
+Iterates of <a href="SemanticCollectionWrapper.html#M000372">each</a>
 &#8217;&#8217;&#8216;target&#8217;&#8217;&#8217; of the items in the
 relation. (This will pass in <a
 href="SemanticProperty.html">SemanticProperty</a> objects instead of the
 value
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000362-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000362-source">
+            onclick="toggleCode('M000374-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000374-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 65</span>
 65:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_item</span>
@@ -451,42 +453,42 @@ value
         </div>
       </div>
 
-      <div id="method-M000375" class="method-detail">
-        <a name="M000375"></a>
+      <div id="method-M000388" class="method-detail">
+        <a name="M000388"></a>
 
         <div class="method-heading">
-          <a href="#M000375" class="method-signature">
+          <a href="#M000388" class="method-signature">
           <span class="method-name">empty?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000375-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000375-source">
+            onclick="toggleCode('M000388-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000388-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 185</span>
-185:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">empty?</span>
-186:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
-187:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 213</span>
+213:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">empty?</span>
+214:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+215:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000357" class="method-detail">
-        <a name="M000357"></a>
+      <div id="method-M000369" class="method-detail">
+        <a name="M000369"></a>
 
         <div class="method-heading">
-          <a href="#M000357" class="method-signature">
+          <a href="#M000369" class="method-signature">
           <span class="method-name">first</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000357-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000357-source">
+            onclick="toggleCode('M000369-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000369-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 38</span>
 38:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">first</span>
@@ -498,23 +500,23 @@ value
         </div>
       </div>
 
-      <div id="method-M000359" class="method-detail">
-        <a name="M000359"></a>
+      <div id="method-M000371" class="method-detail">
+        <a name="M000371"></a>
 
         <div class="method-heading">
-          <a href="#M000359" class="method-signature">
+          <a href="#M000371" class="method-signature">
           <span class="method-name">get_item_at</span><span class="method-args">(index)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Gets the value <a href="SemanticCollectionWrapper.html#M000355">at</a> the
-given <a href="SemanticCollectionWrapper.html#M000366">index</a>
+Gets the value <a href="SemanticCollectionWrapper.html#M000367">at</a> the
+given <a href="SemanticCollectionWrapper.html#M000379">index</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000359-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000359-source">
+            onclick="toggleCode('M000371-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000371-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 49</span>
 49:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_item_at</span>(<span class="ruby-identifier">index</span>)
@@ -525,11 +527,11 @@ given <a href="SemanticCollectionWrapper.html#M000366">index</a>
         </div>
       </div>
 
-      <div id="method-M000367" class="method-detail">
-        <a name="M000367"></a>
+      <div id="method-M000380" class="method-detail">
+        <a name="M000380"></a>
 
         <div class="method-heading">
-          <a href="#M000367" class="method-signature">
+          <a href="#M000380" class="method-signature">
           <span class="method-name">include?</span><span class="method-args">(value)</span>
           </a>
         </div>
@@ -539,23 +541,23 @@ given <a href="SemanticCollectionWrapper.html#M000366">index</a>
 Check if the collection includes the value
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000367-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000367-source">
+            onclick="toggleCode('M000380-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000380-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 100</span>
-100:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>)
-101:       <span class="ruby-identifier">items</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>)
-102:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 128</span>
+128:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>)
+129:         <span class="ruby-identifier">items</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>)
+130:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000366" class="method-detail">
-        <a name="M000366"></a>
+      <div id="method-M000379" class="method-detail">
+        <a name="M000379"></a>
 
         <div class="method-heading">
-          <a href="#M000366" class="method-signature">
+          <a href="#M000379" class="method-signature">
           <span class="method-name">index</span><span class="method-args">(value)</span>
           </a>
         </div>
@@ -565,23 +567,54 @@ Check if the collection includes the value
 Index of the given value
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000366-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000366-source">
+            onclick="toggleCode('M000379-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000379-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 95</span>
-95:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>(<span class="ruby-identifier">value</span>)
-96:       <span class="ruby-identifier">items</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">value</span>)
-97:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 123</span>
+123:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>(<span class="ruby-identifier">value</span>)
+124:         <span class="ruby-identifier">items</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">value</span>)
+125:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000376" class="method-detail">
-        <a name="M000376"></a>
+      <div id="method-M000390" class="method-detail">
+        <a name="M000390"></a>
 
         <div class="method-heading">
-          <a href="#M000376" class="method-signature">
+          <a href="#M000390" class="method-signature">
+          <span class="method-name">init_as_empty!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Forces this relation to be empty. This initializes the relation as if no
+elements exist. This doesn&#8216;t look anything up in the databse.
+<b>Warning</b> Only call this if you need an empty wrapper that
+doesn&#8216;t look up anything in the database
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000390-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000390-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 229</span>
+229:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init_as_empty!</span>
+230:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Already initialized!&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">loaded?</span>)
+231:         <span class="ruby-ivar">@items</span> = []
+232:         <span class="ruby-ivar">@loaded</span> = <span class="ruby-keyword kw">true</span>
+233:       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000389" class="method-detail">
+        <a name="M000389"></a>
+
+        <div class="method-heading">
+          <a href="#M000389" class="method-signature">
           <span class="method-name">inject_fat_item</span><span class="method-args">(fat_rel)</span>
           </a>
         </div>
@@ -592,25 +625,25 @@ Injector for a fat relation. This must take place before flagging the
 source as &quot;loaded&quot;
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000376-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000376-source">
+            onclick="toggleCode('M000389-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000389-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 191</span>
-191:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inject_fat_item</span>(<span class="ruby-identifier">fat_rel</span>)
-192:       <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RuntimeError</span>, <span class="ruby-value str">'Trying to inject in loaded object.'</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">loaded?</span>)
-193:       <span class="ruby-ivar">@items</span> <span class="ruby-operator">||=</span> []
-194:       <span class="ruby-ivar">@items</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">SemanticCollectionItem</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">fat_rel</span>, <span class="ruby-identifier">:fat</span>)
-195:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 219</span>
+219:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inject_fat_item</span>(<span class="ruby-identifier">fat_rel</span>)
+220:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RuntimeError</span>, <span class="ruby-value str">'Trying to inject in loaded object.'</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">loaded?</span>)
+221:         <span class="ruby-ivar">@items</span> <span class="ruby-operator">||=</span> []
+222:         <span class="ruby-ivar">@items</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">SemanticCollectionItem</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">fat_rel</span>, <span class="ruby-identifier">:fat</span>)
+223:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000365" class="method-detail">
-        <a name="M000365"></a>
+      <div id="method-M000378" class="method-detail">
+        <a name="M000378"></a>
 
         <div class="method-heading">
-          <a href="#M000365" class="method-signature">
+          <a href="#M000378" class="method-signature">
           <span class="method-name">join</span><span class="method-args">(join_str = ', ')</span>
           </a>
         </div>
@@ -620,32 +653,32 @@ source as &quot;loaded&quot;
 Joins the elments into a string
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000365-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000365-source">
+            onclick="toggleCode('M000378-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000378-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 89</span>
-89:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">join</span>(<span class="ruby-identifier">join_str</span> = <span class="ruby-value str">', '</span>)
-90:       <span class="ruby-identifier">strs</span> = <span class="ruby-identifier">items</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_s</span> }
-91:       <span class="ruby-identifier">strs</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">join_str</span>)
-92:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 117</span>
+117:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">join</span>(<span class="ruby-identifier">join_str</span> = <span class="ruby-value str">', '</span>)
+118:         <span class="ruby-identifier">strs</span> = <span class="ruby-identifier">items</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_s</span> }
+119:         <span class="ruby-identifier">strs</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">join_str</span>)
+120:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000358" class="method-detail">
-        <a name="M000358"></a>
+      <div id="method-M000370" class="method-detail">
+        <a name="M000370"></a>
 
         <div class="method-heading">
-          <a href="#M000358" class="method-signature">
+          <a href="#M000370" class="method-signature">
           <span class="method-name">last</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000358-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000358-source">
+            onclick="toggleCode('M000370-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000370-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 43</span>
 43:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">last</span>
@@ -657,11 +690,11 @@ Joins the elments into a string
         </div>
       </div>
 
-      <div id="method-M000373" class="method-detail">
-        <a name="M000373"></a>
+      <div id="method-M000386" class="method-detail">
+        <a name="M000386"></a>
 
         <div class="method-heading">
-          <a href="#M000373" class="method-signature">
+          <a href="#M000386" class="method-signature">
           <span class="method-name">loaded?</span><span class="method-args">()</span>
           </a>
         </div>
@@ -671,23 +704,23 @@ Joins the elments into a string
 Indicates of the internal collection is loaded
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000373-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000373-source">
+            onclick="toggleCode('M000386-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000386-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 175</span>
-175:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded?</span>
-176:       <span class="ruby-ivar">@loaded</span>
-177:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 203</span>
+203:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded?</span>
+204:         <span class="ruby-ivar">@loaded</span>
+205:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000371" class="method-detail">
-        <a name="M000371"></a>
+      <div id="method-M000384" class="method-detail">
+        <a name="M000384"></a>
 
         <div class="method-heading">
-          <a href="#M000371" class="method-signature">
+          <a href="#M000384" class="method-signature">
           <span class="method-name">remove</span><span class="method-args">(*params)</span>
           </a>
         </div>
@@ -698,37 +731,37 @@ Remove the given value. With no parameters, the whole list will be cleared
 and the RDF will be updated immediately.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000371-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000371-source">
+            onclick="toggleCode('M000384-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000384-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 134</span>
-134:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">params</span>)
-135:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">params</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
-136:         <span class="ruby-identifier">params</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">par</span><span class="ruby-operator">|</span> <span class="ruby-identifier">remove_relation</span>(<span class="ruby-identifier">par</span>) }
-137:       <span class="ruby-keyword kw">else</span>
-138:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">loaded?</span>)
-139:           <span class="ruby-identifier">items</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">relation</span>.<span class="ruby-identifier">destroy</span> }
-140:         <span class="ruby-keyword kw">else</span>
-141:           <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">destroy_all</span>(
-142:             <span class="ruby-identifier">:subject_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">id</span>,
-143:             <span class="ruby-identifier">:predicate_uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@assoc_predicate</span>
-144:           )
-145:         <span class="ruby-keyword kw">end</span>
-146:         <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">my_rdf</span>.<span class="ruby-identifier">remove</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@assoc_predicate</span>))
-147:         <span class="ruby-ivar">@items</span> = []
-148:         <span class="ruby-ivar">@loaded</span> = <span class="ruby-keyword kw">true</span>
-149:       <span class="ruby-keyword kw">end</span>
-150:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 162</span>
+162:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">params</span>)
+163:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">params</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
+164:           <span class="ruby-identifier">params</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">par</span><span class="ruby-operator">|</span> <span class="ruby-identifier">remove_relation</span>(<span class="ruby-identifier">par</span>) }
+165:         <span class="ruby-keyword kw">else</span>
+166:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">loaded?</span>)
+167:             <span class="ruby-identifier">items</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">relation</span>.<span class="ruby-identifier">destroy</span> }
+168:           <span class="ruby-keyword kw">else</span>
+169:             <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">destroy_all</span>(
+170:             <span class="ruby-identifier">:subject_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">id</span>,
+171:             <span class="ruby-identifier">:predicate_uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@assoc_predicate</span>
+172:             )
+173:           <span class="ruby-keyword kw">end</span>
+174:           <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">my_rdf</span>.<span class="ruby-identifier">remove</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@assoc_predicate</span>))
+175:           <span class="ruby-ivar">@items</span> = []
+176:           <span class="ruby-ivar">@loaded</span> = <span class="ruby-keyword kw">true</span>
+177:         <span class="ruby-keyword kw">end</span>
+178:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000370" class="method-detail">
-        <a name="M000370"></a>
+      <div id="method-M000383" class="method-detail">
+        <a name="M000383"></a>
 
         <div class="method-heading">
-          <a href="#M000370" class="method-signature">
+          <a href="#M000383" class="method-signature">
           <span class="method-name">replace</span><span class="method-args">(old_value, new_value)</span>
           </a>
         </div>
@@ -736,28 +769,28 @@ and the RDF will be updated immediately.
         <div class="method-description">
           <p>
 Replace a value with a <a
-href="SemanticCollectionWrapper.html#M000354">new</a> one
+href="SemanticCollectionWrapper.html#M000366">new</a> one
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000370-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000370-source">
+            onclick="toggleCode('M000383-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000383-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 126</span>
-126:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">replace</span>(<span class="ruby-identifier">old_value</span>, <span class="ruby-identifier">new_value</span>)
-127:       <span class="ruby-identifier">idx</span> = <span class="ruby-identifier">items</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">old_value</span>)
-128:       <span class="ruby-identifier">items</span>[<span class="ruby-identifier">idx</span>].<span class="ruby-identifier">destroy</span>
-129:       <span class="ruby-identifier">add_record_for</span>(<span class="ruby-identifier">new_value</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">new_item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">items</span>[<span class="ruby-identifier">idx</span>] = <span class="ruby-identifier">new_item</span> }
-130:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 154</span>
+154:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">replace</span>(<span class="ruby-identifier">old_value</span>, <span class="ruby-identifier">new_value</span>)
+155:         <span class="ruby-identifier">idx</span> = <span class="ruby-identifier">items</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">old_value</span>)
+156:         <span class="ruby-identifier">items</span>[<span class="ruby-identifier">idx</span>].<span class="ruby-identifier">destroy</span>
+157:         <span class="ruby-identifier">add_record_for</span>(<span class="ruby-identifier">new_value</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">new_item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">items</span>[<span class="ruby-identifier">idx</span>] = <span class="ruby-identifier">new_item</span> }
+158:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000372" class="method-detail">
-        <a name="M000372"></a>
+      <div id="method-M000385" class="method-detail">
+        <a name="M000385"></a>
 
         <div class="method-heading">
-          <a href="#M000372" class="method-signature">
+          <a href="#M000385" class="method-signature">
           <span class="method-name">save_items!</span><span class="method-args">()</span>
           </a>
         </div>
@@ -767,40 +800,40 @@ href="SemanticCollectionWrapper.html#M000354">new</a> one
 This attempts to save the items to the database
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000372-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000372-source">
+            onclick="toggleCode('M000385-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000385-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 153</span>
-153:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save_items!</span>
-154:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">clean?</span>) <span class="ruby-comment cmt"># If there are no items, nothing was modified</span>
-155:       <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">id</span>)
-156:       <span class="ruby-ivar">@items</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
-157:         <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">item</span>.<span class="ruby-identifier">fat_relation</span>) <span class="ruby-comment cmt"># we skip the fat relations, they are never new and never saveable</span>
-158:         <span class="ruby-identifier">rel</span> = <span class="ruby-identifier">item</span>.<span class="ruby-identifier">plain_relation</span>
-159:         <span class="ruby-identifier">must_save</span> = <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">new_record?</span>
-160:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object_id</span>.<span class="ruby-identifier">nil?</span>)
-161:           <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">new_record?</span>)
-162:           <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object_id</span> = <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">id</span>
-163:           <span class="ruby-identifier">must_save</span> = <span class="ruby-keyword kw">true</span>
-164:         <span class="ruby-keyword kw">end</span>
-165:         <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">subject_id</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)
-166:           <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">subject_id</span> = <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">id</span>
-167:           <span class="ruby-identifier">must_save</span> = <span class="ruby-keyword kw">true</span>
-168:         <span class="ruby-keyword kw">end</span>
-169:         <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">must_save</span>)
-170:       <span class="ruby-keyword kw">end</span>
-171:       <span class="ruby-ivar">@items</span> = <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">loaded?</span>) <span class="ruby-comment cmt"># Otherwise we'll have trouble reload-and merging</span>
-172:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 181</span>
+181:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save_items!</span>
+182:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">clean?</span>) <span class="ruby-comment cmt"># If there are no items, nothing was modified</span>
+183:         <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">id</span>)
+184:         <span class="ruby-ivar">@items</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
+185:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">item</span>.<span class="ruby-identifier">fat_relation</span>) <span class="ruby-comment cmt"># we skip the fat relations, they are never new and never saveable</span>
+186:           <span class="ruby-identifier">rel</span> = <span class="ruby-identifier">item</span>.<span class="ruby-identifier">plain_relation</span>
+187:           <span class="ruby-identifier">must_save</span> = <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">new_record?</span>
+188:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object_id</span>.<span class="ruby-identifier">nil?</span>)
+189:             <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">new_record?</span>)
+190:             <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object_id</span> = <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">id</span>
+191:             <span class="ruby-identifier">must_save</span> = <span class="ruby-keyword kw">true</span>
+192:           <span class="ruby-keyword kw">end</span>
+193:           <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">subject_id</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)
+194:             <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">subject_id</span> = <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">id</span>
+195:             <span class="ruby-identifier">must_save</span> = <span class="ruby-keyword kw">true</span>
+196:           <span class="ruby-keyword kw">end</span>
+197:           <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">must_save</span>)
+198:         <span class="ruby-keyword kw">end</span>
+199:         <span class="ruby-ivar">@items</span> = <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">loaded?</span>) <span class="ruby-comment cmt"># Otherwise we'll have trouble reload-and merging</span>
+200:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000364" class="method-detail">
-        <a name="M000364"></a>
+      <div id="method-M000377" class="method-detail">
+        <a name="M000377"></a>
 
         <div class="method-heading">
-          <a href="#M000364" class="method-signature">
+          <a href="#M000377" class="method-signature">
           <span class="method-name">size</span><span class="method-args">()</span>
           </a>
         </div>
@@ -810,32 +843,32 @@ This attempts to save the items to the database
 Size of the collection.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000364-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000364-source">
+            onclick="toggleCode('M000377-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000377-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 75</span>
-75:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>
-76:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">items</span>.<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">loaded?</span>)
-77:       <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@items</span>)
-78:         <span class="ruby-comment cmt"># This is not really possible without loading, so we do it</span>
-79:         <span class="ruby-identifier">load!</span>
-80:         <span class="ruby-identifier">items</span>.<span class="ruby-identifier">size</span>
-81:       <span class="ruby-keyword kw">else</span>
-82:         <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">count</span>(<span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> {
-83:             <span class="ruby-value str">'subject_id'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">id</span>,
-84:             <span class="ruby-value str">'predicate_uri'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@assoc_predicate</span> })
-85:       <span class="ruby-keyword kw">end</span>
-86:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 103</span>
+103:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>
+104:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">items</span>.<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">loaded?</span>)
+105:       <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@items</span>)
+106:         <span class="ruby-comment cmt"># This is not really possible without loading, so we do it</span>
+107:         <span class="ruby-identifier">load!</span>
+108:         <span class="ruby-identifier">items</span>.<span class="ruby-identifier">size</span>
+109:       <span class="ruby-keyword kw">else</span>
+110:         <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">count</span>(<span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> {
+111:           <span class="ruby-value str">'subject_id'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">id</span>,
+112:           <span class="ruby-value str">'predicate_uri'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@assoc_predicate</span> })
+113:         <span class="ruby-keyword kw">end</span>
+114:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000363" class="method-detail">
-        <a name="M000363"></a>
+      <div id="method-M000375" class="method-detail">
+        <a name="M000375"></a>
 
         <div class="method-heading">
-          <a href="#M000363" class="method-signature">
+          <a href="#M000375" class="method-signature">
           <span class="method-name">values</span><span class="method-args">()</span>
           </a>
         </div>
@@ -843,16 +876,69 @@ Size of the collection.
         <div class="method-description">
           <p>
 Returns an array with all <a
-href="SemanticCollectionWrapper.html#M000363">values</a> in the collection
+href="SemanticCollectionWrapper.html#M000375">values</a> in the collection
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000363-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000363-source">
+            onclick="toggleCode('M000375-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000375-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 70</span>
 70:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">values</span>
 71:       <span class="ruby-identifier">items</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">value</span> }
 72:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000376" class="method-detail">
+        <a name="M000376"></a>
+
+        <div class="method-heading">
+          <a href="#M000376" class="method-signature">
+          <span class="method-name">values_with_lang</span><span class="method-args">(language = 'en')</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns only the <a
+href="SemanticCollectionWrapper.html#M000375">values</a> of the given
+language. (At the moment this is not aware of region codes or any
+specialities, it just does a string matching)
+</p>
+<p>
+If no <a href="SemanticCollectionWrapper.html#M000375">values</a> with the
+given locale are found, this will fall back on the default locale and then
+to the <a href="SemanticCollectionWrapper.html#M000375">values</a> that
+don&#8216;t have a locale <a
+href="SemanticCollectionWrapper.html#M000367">at</a> all.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000376-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000376-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/semantic_collection_wrapper.rb, line 81</span>
+ 81:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">values_with_lang</span>(<span class="ruby-identifier">language</span> = <span class="ruby-value str">'en'</span>)
+ 82:       <span class="ruby-identifier">language_is_default</span> = (<span class="ruby-identifier">language</span> <span class="ruby-operator">==</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">default_locale</span>.<span class="ruby-identifier">to_s</span>)
+ 83:       <span class="ruby-identifier">real</span> = []
+ 84:       <span class="ruby-identifier">default</span> = []
+ 85:       <span class="ruby-identifier">unset</span> = []
+ 86:       <span class="ruby-identifier">items</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
+ 87:         <span class="ruby-comment cmt"># FIXME: At the moment, this only works for value attributes, not for </span>
+ 88:         <span class="ruby-comment cmt"># sources</span>
+ 89:         <span class="ruby-keyword kw">if</span>((<span class="ruby-identifier">val</span> = <span class="ruby-identifier">item</span>.<span class="ruby-identifier">value</span>).<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:lang</span>))
+ 90:           <span class="ruby-identifier">real</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">val</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">val</span>.<span class="ruby-identifier">lang</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">language</span>)
+ 91:           <span class="ruby-identifier">default</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">val</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">language_is_default</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">val</span>.<span class="ruby-identifier">lang</span> <span class="ruby-operator">==</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">default_locale</span>.<span class="ruby-identifier">to_s</span>))
+ 92:           <span class="ruby-identifier">unset</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">val</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">val</span>.<span class="ruby-identifier">lang</span>.<span class="ruby-identifier">blank?</span>)
+ 93:         <span class="ruby-keyword kw">else</span>
+ 94:           <span class="ruby-identifier">default</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">val</span>
+ 95:         <span class="ruby-keyword kw">end</span>
+ 96:       <span class="ruby-keyword kw">end</span>
+ 97:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">real</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">real</span>.<span class="ruby-identifier">empty?</span>)
+ 98:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">default</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">default</span>.<span class="ruby-identifier">empty?</span>)
+ 99:       <span class="ruby-identifier">unset</span>
+100:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

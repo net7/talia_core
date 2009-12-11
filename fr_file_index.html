@@ -22,7 +22,6 @@
   <div id="index-entries">
     <a href="files/README_rdoc.html">README.rdoc</a><br />
     <a href="files/lib/JXslt/jxslt_rb.html">lib/JXslt/jxslt.rb</a><br />
-    <a href="files/lib/acts_as_roled_rb.html">lib/acts_as_roled.rb</a><br />
     <a href="files/lib/core_ext_rb.html">lib/core_ext.rb</a><br />
     <a href="files/lib/core_ext/platform_rb.html">lib/core_ext/platform.rb</a><br />
     <a href="files/lib/core_ext/string_rb.html">lib/core_ext/string.rb</a><br />
@@ -33,6 +32,7 @@
     <a href="files/lib/talia_core_rb.html">lib/talia_core.rb</a><br />
     <a href="files/lib/talia_core/active_source_rb.html">lib/talia_core/active_source.rb</a><br />
     <a href="files/lib/talia_core/active_source_parts/class_methods_rb.html">lib/talia_core/active_source_parts/class_methods.rb</a><br />
+    <a href="files/lib/talia_core/active_source_parts/finders_rb.html">lib/talia_core/active_source_parts/finders.rb</a><br />
     <a href="files/lib/talia_core/active_source_parts/predicate_handler_rb.html">lib/talia_core/active_source_parts/predicate_handler.rb</a><br />
     <a href="files/lib/talia_core/active_source_parts/rdf_rb.html">lib/talia_core/active_source_parts/rdf.rb</a><br />
     <a href="files/lib/talia_core/active_source_parts/sql_helper_rb.html">lib/talia_core/active_source_parts/sql_helper.rb</a><br />
@@ -44,7 +44,6 @@
     <a href="files/lib/talia_core/agent_rb.html">lib/talia_core/agent.rb</a><br />
     <a href="files/lib/talia_core/background_jobs/job_rb.html">lib/talia_core/background_jobs/job.rb</a><br />
     <a href="files/lib/talia_core/background_jobs/progress_job_rb.html">lib/talia_core/background_jobs/progress_job.rb</a><br />
-    <a href="files/lib/talia_core/collection_rb.html">lib/talia_core/collection.rb</a><br />
     <a href="files/lib/talia_core/data_types/data_loader_rb.html">lib/talia_core/data_types/data_loader.rb</a><br />
     <a href="files/lib/talia_core/data_types/data_record_rb.html">lib/talia_core/data_types/data_record.rb</a><br />
     <a href="files/lib/talia_core/data_types/delayed_copier_rb.html">lib/talia_core/data_types/delayed_copier.rb</a><br />
@@ -60,16 +59,11 @@
     <a href="files/lib/talia_core/data_types/simple_text_rb.html">lib/talia_core/data_types/simple_text.rb</a><br />
     <a href="files/lib/talia_core/data_types/temp_file_handling_rb.html">lib/talia_core/data_types/temp_file_handling.rb</a><br />
     <a href="files/lib/talia_core/data_types/xml_data_rb.html">lib/talia_core/data_types/xml_data.rb</a><br />
-    <a href="files/lib/talia_core/dc_resource_rb.html">lib/talia_core/dc_resource.rb</a><br />
     <a href="files/lib/talia_core/dummy_handler_rb.html">lib/talia_core/dummy_handler.rb</a><br />
-    <a href="files/lib/talia_core/dummy_source_rb.html">lib/talia_core/dummy_source.rb</a><br />
     <a href="files/lib/talia_core/errors_rb.html">lib/talia_core/errors.rb</a><br />
     <a href="files/lib/talia_core/initializer_rb.html">lib/talia_core/initializer.rb</a><br />
     <a href="files/lib/talia_core/ordered_source_rb.html">lib/talia_core/ordered_source.rb</a><br />
-    <a href="files/lib/talia_core/rails_ext_rb.html">lib/talia_core/rails_ext.rb</a><br />
-    <a href="files/lib/talia_core/rails_ext/actionpack_rb.html">lib/talia_core/rails_ext/actionpack.rb</a><br />
-    <a href="files/lib/talia_core/rails_ext/actionpack/action_controller_rb.html">lib/talia_core/rails_ext/actionpack/action_controller.rb</a><br />
-    <a href="files/lib/talia_core/rails_ext/actionpack/action_controller/record_identifier_rb.html">lib/talia_core/rails_ext/actionpack/action_controller/record_identifier.rb</a><br />
+    <a href="files/lib/talia_core/property_string_rb.html">lib/talia_core/property_string.rb</a><br />
     <a href="files/lib/talia_core/rdf_import_rb.html">lib/talia_core/rdf_import.rb</a><br />
     <a href="files/lib/talia_core/rdf_resource_rb.html">lib/talia_core/rdf_resource.rb</a><br />
     <a href="files/lib/talia_core/semantic_collection_item_rb.html">lib/talia_core/semantic_collection_item.rb</a><br />
@@ -78,6 +72,9 @@
     <a href="files/lib/talia_core/semantic_relation_rb.html">lib/talia_core/semantic_relation.rb</a><br />
     <a href="files/lib/talia_core/source_rb.html">lib/talia_core/source.rb</a><br />
     <a href="files/lib/talia_core/source_transfer_object_rb.html">lib/talia_core/source_transfer_object.rb</a><br />
+    <a href="files/lib/talia_core/source_types/collection_rb.html">lib/talia_core/source_types/collection.rb</a><br />
+    <a href="files/lib/talia_core/source_types/dc_resource_rb.html">lib/talia_core/source_types/dc_resource.rb</a><br />
+    <a href="files/lib/talia_core/source_types/dummy_source_rb.html">lib/talia_core/source_types/dummy_source.rb</a><br />
     <a href="files/lib/talia_core/workflow_rb.html">lib/talia_core/workflow.rb</a><br />
     <a href="files/lib/talia_core/workflow/base_rb.html">lib/talia_core/workflow/base.rb</a><br />
     <a href="files/lib/talia_core/workflow/publication_workflow_rb.html">lib/talia_core/workflow/publication_workflow.rb</a><br />
@@ -87,7 +84,6 @@
     <a href="files/lib/talia_util/configuration/config_file_rb.html">lib/talia_util/configuration/config_file.rb</a><br />
     <a href="files/lib/talia_util/configuration/database_config_rb.html">lib/talia_util/configuration/database_config.rb</a><br />
     <a href="files/lib/talia_util/configuration/mysql_database_setup_rb.html">lib/talia_util/configuration/mysql_database_setup.rb</a><br />
-    <a href="files/lib/talia_util/data_import_rb.html">lib/talia_util/data_import.rb</a><br />
     <a href="files/lib/talia_util/image_conversions_rb.html">lib/talia_util/image_conversions.rb</a><br />
     <a href="files/lib/talia_util/import_job_helper_rb.html">lib/talia_util/import_job_helper.rb</a><br />
     <a href="files/lib/talia_util/io_helper_rb.html">lib/talia_util/io_helper.rb</a><br />
@@ -97,7 +93,6 @@
     <a href="files/lib/talia_util/rdf_update_rb.html">lib/talia_util/rdf_update.rb</a><br />
     <a href="files/lib/talia_util/test_helpers_rb.html">lib/talia_util/test_helpers.rb</a><br />
     <a href="files/lib/talia_util/util_rb.html">lib/talia_util/util.rb</a><br />
-    <a href="files/lib/talia_util/yaml_import_rb.html">lib/talia_util/yaml_import.rb</a><br />
     <a href="files/lib/version_rb.html">lib/version.rb</a><br />
   </div>
 </div>

@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Oct 29 13:32:28 +0100 2009</td>
+      <td>Tue Nov 17 10:28:01 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -142,14 +142,14 @@ simply queue the job, and doesn&#8216;t start the runner by itself
             onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000001-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_util/rake_tasks.rb, line 214</span>
-214:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">background_job</span>(<span class="ruby-identifier">job</span>, <span class="ruby-identifier">options</span>)
-215:     <span class="ruby-comment cmt"># Use the current environment for the job</span>
-216:     <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:env</span>] = <span class="ruby-constant">ENV</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:env</span>] <span class="ruby-operator">||</span> {})
-217:     <span class="ruby-comment cmt"># Avoid &quot;tickling&quot; to start the background job from here</span>
-218:     <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:no_tickle</span>] = <span class="ruby-keyword kw">true</span>
-219:     <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">BackgroundJobs</span><span class="ruby-operator">::</span><span class="ruby-constant">Job</span>.<span class="ruby-identifier">submit_with_progress</span>(<span class="ruby-identifier">job</span>, <span class="ruby-identifier">options</span>)
-220:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_util/rake_tasks.rb, line 191</span>
+191:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">background_job</span>(<span class="ruby-identifier">job</span>, <span class="ruby-identifier">options</span>)
+192:     <span class="ruby-comment cmt"># Use the current environment for the job</span>
+193:     <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:env</span>] = <span class="ruby-constant">ENV</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:env</span>] <span class="ruby-operator">||</span> {})
+194:     <span class="ruby-comment cmt"># Avoid &quot;tickling&quot; to start the background job from here</span>
+195:     <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:no_tickle</span>] = <span class="ruby-keyword kw">true</span>
+196:     <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">BackgroundJobs</span><span class="ruby-operator">::</span><span class="ruby-constant">Job</span>.<span class="ruby-identifier">submit_with_progress</span>(<span class="ruby-identifier">job</span>, <span class="ruby-identifier">options</span>)
+197:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

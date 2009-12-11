@@ -87,7 +87,7 @@ that represent the properties/objects a class has for a given predicate
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000138">prefetch_relations_for</a>&nbsp;&nbsp;
+      <a href="#M000142">prefetch_relations_for</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -109,11 +109,11 @@ that represent the properties/objects a class has for a given predicate
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000138" class="method-detail">
-        <a name="M000138"></a>
+      <div id="method-M000142" class="method-detail">
+        <a name="M000142"></a>
 
         <div class="method-heading">
-          <a href="#M000138" class="method-signature">
+          <a href="#M000142" class="method-signature">
           <span class="method-name">prefetch_relations_for</span><span class="method-args">(sources, limit = 1024)</span>
           </a>
         </div>
@@ -129,8 +129,8 @@ accepted. (For a web application, if you go over the default, you&#8216;re
 probably doing it wrong).
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000138-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000138-source">
+            onclick="toggleCode('M000142-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000142-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 15</span>
 15:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prefetch_relations_for</span>(<span class="ruby-identifier">sources</span>, <span class="ruby-identifier">limit</span> = <span class="ruby-value">1024</span>)
@@ -138,7 +138,7 @@ probably doing it wrong).
 17:           <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RangeError</span>, <span class="ruby-value str">&quot;Too many sources for prefetching.&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">sources</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">limit</span>)
 18:           <span class="ruby-identifier">src_hash</span> = {}
 19:           <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">src</span><span class="ruby-operator">|</span> <span class="ruby-identifier">src_hash</span>[<span class="ruby-identifier">src</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">src</span> }
-20:           <span class="ruby-identifier">conditions</span> = [<span class="ruby-value str">'subject_id in (?)'</span>, <span class="ruby-identifier">src_hash</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">', '</span>)]
+20:           <span class="ruby-identifier">conditions</span> = { <span class="ruby-identifier">:subject_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">src_hash</span>.<span class="ruby-identifier">keys</span> }
 21:           <span class="ruby-identifier">joins</span> = <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">sources_join</span>
 22:           <span class="ruby-identifier">joins</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">props_join</span>
 23:           <span class="ruby-identifier">relations</span> = <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">conditions</span>,

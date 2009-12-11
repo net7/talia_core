@@ -94,13 +94,13 @@ operations will be cached and applied in one go.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000444">assign_root_pw</a>&nbsp;&nbsp;
-      <a href="#M000445">create_database</a>&nbsp;&nbsp;
-      <a href="#M000446">create_default_databases</a>&nbsp;&nbsp;
-      <a href="#M000447">execute</a>&nbsp;&nbsp;
-      <a href="#M000441">new</a>&nbsp;&nbsp;
-      <a href="#M000443">rails_credentials</a>&nbsp;&nbsp;
-      <a href="#M000442">root_credentials</a>&nbsp;&nbsp;
+      <a href="#M000453">assign_root_pw</a>&nbsp;&nbsp;
+      <a href="#M000454">create_database</a>&nbsp;&nbsp;
+      <a href="#M000455">create_default_databases</a>&nbsp;&nbsp;
+      <a href="#M000456">execute</a>&nbsp;&nbsp;
+      <a href="#M000450">new</a>&nbsp;&nbsp;
+      <a href="#M000452">rails_credentials</a>&nbsp;&nbsp;
+      <a href="#M000451">root_credentials</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -150,19 +150,19 @@ operations will be cached and applied in one go.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000441" class="method-detail">
-        <a name="M000441"></a>
+      <div id="method-M000450" class="method-detail">
+        <a name="M000450"></a>
 
         <div class="method-heading">
-          <a href="#M000441" class="method-signature">
+          <a href="#M000450" class="method-signature">
           <span class="method-name">new</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000441-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000441-source">
+            onclick="toggleCode('M000450-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000450-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_util/configuration/mysql_database_setup.rb, line 11</span>
 11:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>
@@ -175,22 +175,22 @@ operations will be cached and applied in one go.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000444" class="method-detail">
-        <a name="M000444"></a>
+      <div id="method-M000453" class="method-detail">
+        <a name="M000453"></a>
 
         <div class="method-heading">
-          <a href="#M000444" class="method-signature">
+          <a href="#M000453" class="method-signature">
           <span class="method-name">assign_root_pw</span><span class="method-args">(new_root_pw)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Assign a <a href="MysqlDatabaseSetup.html#M000441">new</a> root password
+Assign a <a href="MysqlDatabaseSetup.html#M000450">new</a> root password
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000444-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000444-source">
+            onclick="toggleCode('M000453-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000453-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_util/configuration/mysql_database_setup.rb, line 34</span>
 34:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assign_root_pw</span>(<span class="ruby-identifier">new_root_pw</span>)
@@ -203,11 +203,11 @@ Assign a <a href="MysqlDatabaseSetup.html#M000441">new</a> root password
         </div>
       </div>
 
-      <div id="method-M000445" class="method-detail">
-        <a name="M000445"></a>
+      <div id="method-M000454" class="method-detail">
+        <a name="M000454"></a>
 
         <div class="method-heading">
-          <a href="#M000445" class="method-signature">
+          <a href="#M000454" class="method-signature">
           <span class="method-name">create_database</span><span class="method-args">(database)</span>
           </a>
         </div>
@@ -217,8 +217,8 @@ Assign a <a href="MysqlDatabaseSetup.html#M000441">new</a> root password
 Create the given database and set the permssions on it
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000445-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000445-source">
+            onclick="toggleCode('M000454-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000454-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_util/configuration/mysql_database_setup.rb, line 41</span>
 41:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_database</span>(<span class="ruby-identifier">database</span>)
@@ -231,11 +231,11 @@ Create the given database and set the permssions on it
         </div>
       </div>
 
-      <div id="method-M000446" class="method-detail">
-        <a name="M000446"></a>
+      <div id="method-M000455" class="method-detail">
+        <a name="M000455"></a>
 
         <div class="method-heading">
-          <a href="#M000446" class="method-signature">
+          <a href="#M000455" class="method-signature">
           <span class="method-name">create_default_databases</span><span class="method-args">()</span>
           </a>
         </div>
@@ -246,8 +246,8 @@ Creates the default databases for the application. You can call back a
 block for each db to do something depending on the success of the operation
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000446-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000446-source">
+            onclick="toggleCode('M000455-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000455-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_util/configuration/mysql_database_setup.rb, line 50</span>
 50:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_default_databases</span>
@@ -262,11 +262,11 @@ block for each db to do something depending on the success of the operation
         </div>
       </div>
 
-      <div id="method-M000447" class="method-detail">
-        <a name="M000447"></a>
+      <div id="method-M000456" class="method-detail">
+        <a name="M000456"></a>
 
         <div class="method-heading">
-          <a href="#M000447" class="method-signature">
+          <a href="#M000456" class="method-signature">
           <span class="method-name">execute</span><span class="method-args">()</span>
           </a>
         </div>
@@ -276,8 +276,8 @@ block for each db to do something depending on the success of the operation
 Executes all stored statements
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000447-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000447-source">
+            onclick="toggleCode('M000456-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000456-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_util/configuration/mysql_database_setup.rb, line 59</span>
 59:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>
@@ -294,11 +294,11 @@ Executes all stored statements
         </div>
       </div>
 
-      <div id="method-M000443" class="method-detail">
-        <a name="M000443"></a>
+      <div id="method-M000452" class="method-detail">
+        <a name="M000452"></a>
 
         <div class="method-heading">
-          <a href="#M000443" class="method-signature">
+          <a href="#M000452" class="method-signature">
           <span class="method-name">rails_credentials</span><span class="method-args">(rails_user, rails_pw)</span>
           </a>
         </div>
@@ -308,8 +308,8 @@ Executes all stored statements
 Set the normal user/pw
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000443-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000443-source">
+            onclick="toggleCode('M000452-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000452-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_util/configuration/mysql_database_setup.rb, line 27</span>
 27:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rails_credentials</span>(<span class="ruby-identifier">rails_user</span>, <span class="ruby-identifier">rails_pw</span>)
@@ -321,11 +321,11 @@ Set the normal user/pw
         </div>
       </div>
 
-      <div id="method-M000442" class="method-detail">
-        <a name="M000442"></a>
+      <div id="method-M000451" class="method-detail">
+        <a name="M000451"></a>
 
         <div class="method-heading">
-          <a href="#M000442" class="method-signature">
+          <a href="#M000451" class="method-signature">
           <span class="method-name">root_credentials</span><span class="method-args">(root_user = 'root', root_pw = nil)</span>
           </a>
         </div>
@@ -335,8 +335,8 @@ Set the normal user/pw
 Set the root user/pw
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000442-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000442-source">
+            onclick="toggleCode('M000451-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000451-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_util/configuration/mysql_database_setup.rb, line 21</span>
 21:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">root_credentials</span>(<span class="ruby-identifier">root_user</span> = <span class="ruby-value str">'root'</span>, <span class="ruby-identifier">root_pw</span> = <span class="ruby-keyword kw">nil</span>)

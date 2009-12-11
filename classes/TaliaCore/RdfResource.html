@@ -97,19 +97,19 @@ avoids some of the pitfalls of the original class.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000340">[]</a>&nbsp;&nbsp;
-      <a href="#M000338">clear_rdf</a>&nbsp;&nbsp;
-      <a href="#M000334">default_types</a>&nbsp;&nbsp;
-      <a href="#M000343">direct_predicates</a>&nbsp;&nbsp;
-      <a href="#M000337">direct_write_predicate</a>&nbsp;&nbsp;
-      <a href="#M000341">inverse</a>&nbsp;&nbsp;
-      <a href="#M000344">inverse_predicates</a>&nbsp;&nbsp;
-      <a href="#M000336">new</a>&nbsp;&nbsp;
-      <a href="#M000335">object_class</a>&nbsp;&nbsp;
-      <a href="#M000339">remove</a>&nbsp;&nbsp;
-      <a href="#M000345">save</a>&nbsp;&nbsp;
-      <a href="#M000346">types</a>&nbsp;&nbsp;
-      <a href="#M000342">uri</a>&nbsp;&nbsp;
+      <a href="#M000352">[]</a>&nbsp;&nbsp;
+      <a href="#M000350">clear_rdf</a>&nbsp;&nbsp;
+      <a href="#M000346">default_types</a>&nbsp;&nbsp;
+      <a href="#M000355">direct_predicates</a>&nbsp;&nbsp;
+      <a href="#M000349">direct_write_predicate</a>&nbsp;&nbsp;
+      <a href="#M000353">inverse</a>&nbsp;&nbsp;
+      <a href="#M000356">inverse_predicates</a>&nbsp;&nbsp;
+      <a href="#M000348">new</a>&nbsp;&nbsp;
+      <a href="#M000347">object_class</a>&nbsp;&nbsp;
+      <a href="#M000351">remove</a>&nbsp;&nbsp;
+      <a href="#M000357">save</a>&nbsp;&nbsp;
+      <a href="#M000358">types</a>&nbsp;&nbsp;
+      <a href="#M000354">uri</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -155,23 +155,23 @@ href="RdfResource.html">RdfResource</a>
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000334" class="method-detail">
-        <a name="M000334"></a>
+      <div id="method-M000346" class="method-detail">
+        <a name="M000346"></a>
 
         <div class="method-heading">
-          <a href="#M000334" class="method-signature">
+          <a href="#M000346" class="method-signature">
           <span class="method-name">default_types</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-A list of &quot;default&quot; <a href="RdfResource.html#M000346">types</a>
+A list of &quot;default&quot; <a href="RdfResource.html#M000358">types</a>
 that will be added to all resources
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000334-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000334-source">
+            onclick="toggleCode('M000346-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000346-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 15</span>
 15:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_types</span>
@@ -184,23 +184,23 @@ that will be added to all resources
         </div>
       </div>
 
-      <div id="method-M000336" class="method-detail">
-        <a name="M000336"></a>
+      <div id="method-M000348" class="method-detail">
+        <a name="M000348"></a>
 
         <div class="method-heading">
-          <a href="#M000336" class="method-signature">
+          <a href="#M000348" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(uri)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Initialize a <a href="RdfResource.html#M000336">new</a> resource with the
+Initialize a <a href="RdfResource.html#M000348">new</a> resource with the
 given URI
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000336-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000336-source">
+            onclick="toggleCode('M000348-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000348-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 31</span>
 31:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">uri</span>)
@@ -213,11 +213,11 @@ given URI
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000340" class="method-detail">
-        <a name="M000340"></a>
+      <div id="method-M000352" class="method-detail">
+        <a name="M000352"></a>
 
         <div class="method-heading">
-          <a href="#M000340" class="method-signature">
+          <a href="#M000352" class="method-signature">
           <span class="method-name">[]</span><span class="method-args">(predicate)</span>
           </a>
         </div>
@@ -225,11 +225,11 @@ given URI
         <div class="method-description">
           <p>
 Returns the value(s) of the given predicates as a PropertyList filled with
-the defined <a href="RdfResource.html#M000335">object_class</a> objects.
+the defined <a href="RdfResource.html#M000347">object_class</a> objects.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000340-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000340-source">
+            onclick="toggleCode('M000352-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000352-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 53</span>
 53:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">predicate</span>)
@@ -244,11 +244,11 @@ the defined <a href="RdfResource.html#M000335">object_class</a> objects.
         </div>
       </div>
 
-      <div id="method-M000338" class="method-detail">
-        <a name="M000338"></a>
+      <div id="method-M000350" class="method-detail">
+        <a name="M000350"></a>
 
         <div class="method-heading">
-          <a href="#M000338" class="method-signature">
+          <a href="#M000350" class="method-signature">
           <span class="method-name">clear_rdf</span><span class="method-args">()</span>
           </a>
         </div>
@@ -258,8 +258,8 @@ the defined <a href="RdfResource.html#M000335">object_class</a> objects.
 Clears all rdf for this resource. FIXME: Not context-aware.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000338-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000338-source">
+            onclick="toggleCode('M000350-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000350-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 41</span>
 41:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear_rdf</span>
@@ -270,11 +270,11 @@ Clears all rdf for this resource. FIXME: Not context-aware.
         </div>
       </div>
 
-      <div id="method-M000343" class="method-detail">
-        <a name="M000343"></a>
+      <div id="method-M000355" class="method-detail">
+        <a name="M000355"></a>
 
         <div class="method-heading">
-          <a href="#M000343" class="method-signature">
+          <a href="#M000355" class="method-signature">
           <span class="method-name">direct_predicates</span><span class="method-args">()</span>
           </a>
         </div>
@@ -284,8 +284,8 @@ Clears all rdf for this resource. FIXME: Not context-aware.
 Returns the predicates that are directly defined for this resource
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000343-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000343-source">
+            onclick="toggleCode('M000355-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000355-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 95</span>
 95:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_predicates</span>
@@ -296,11 +296,11 @@ Returns the predicates that are directly defined for this resource
         </div>
       </div>
 
-      <div id="method-M000337" class="method-detail">
-        <a name="M000337"></a>
+      <div id="method-M000349" class="method-detail">
+        <a name="M000349"></a>
 
         <div class="method-heading">
-          <a href="#M000337" class="method-signature">
+          <a href="#M000349" class="method-signature">
           <span class="method-name">direct_write_predicate</span><span class="method-args">(predicate, value)</span>
           </a>
         </div>
@@ -310,8 +310,8 @@ Returns the predicates that are directly defined for this resource
 Direct writing of a predicate, with having to fetch a list first
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000337-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000337-source">
+            onclick="toggleCode('M000349-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000349-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 36</span>
 36:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_write_predicate</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span>)
@@ -322,11 +322,11 @@ Direct writing of a predicate, with having to fetch a list first
         </div>
       </div>
 
-      <div id="method-M000341" class="method-detail">
-        <a name="M000341"></a>
+      <div id="method-M000353" class="method-detail">
+        <a name="M000353"></a>
 
         <div class="method-heading">
-          <a href="#M000341" class="method-signature">
+          <a href="#M000353" class="method-signature">
           <span class="method-name">inverse</span><span class="method-args">()</span>
           </a>
         </div>
@@ -334,7 +334,7 @@ Direct writing of a predicate, with having to fetch a list first
         <div class="method-description">
           <p>
 Returns an on-the-fly object that can be used to query for &quot;<a
-href="RdfResource.html#M000341">inverse</a>&quot; properties of this
+href="RdfResource.html#M000353">inverse</a>&quot; properties of this
 resource (meaning triples that have the current resource as an object.)
 </p>
 <p>
@@ -346,11 +346,11 @@ Example: <tt>resource.inverse[N::DNCS::title]</tt>
 </p>
 <p>
 The [] method will return a list of objects that are instances of <a
-href="RdfResource.html#M000335">object_class</a>
+href="RdfResource.html#M000347">object_class</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000341-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000341-source">
+            onclick="toggleCode('M000353-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000353-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 71</span>
 71:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse</span>
@@ -374,24 +374,24 @@ href="RdfResource.html#M000335">object_class</a>
         </div>
       </div>
 
-      <div id="method-M000344" class="method-detail">
-        <a name="M000344"></a>
+      <div id="method-M000356" class="method-detail">
+        <a name="M000356"></a>
 
         <div class="method-heading">
-          <a href="#M000344" class="method-signature">
+          <a href="#M000356" class="method-signature">
           <span class="method-name">inverse_predicates</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns the &quot;<a href="RdfResource.html#M000341">inverse</a>&quot;
+Returns the &quot;<a href="RdfResource.html#M000353">inverse</a>&quot;
 predicates for the resource. these are the predicates for which this
 resource exists as an object
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000344-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000344-source">
+            onclick="toggleCode('M000356-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000356-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 101</span>
 101:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse_predicates</span>
@@ -404,19 +404,19 @@ resource exists as an object
         </div>
       </div>
 
-      <div id="method-M000335" class="method-detail">
-        <a name="M000335"></a>
+      <div id="method-M000347" class="method-detail">
+        <a name="M000347"></a>
 
         <div class="method-heading">
-          <a href="#M000335" class="method-signature">
+          <a href="#M000347" class="method-signature">
           <span class="method-name">object_class</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000335-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000335-source">
+            onclick="toggleCode('M000347-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000347-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 26</span>
 26:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">object_class</span>
@@ -427,11 +427,11 @@ resource exists as an object
         </div>
       </div>
 
-      <div id="method-M000339" class="method-detail">
-        <a name="M000339"></a>
+      <div id="method-M000351" class="method-detail">
+        <a name="M000351"></a>
 
         <div class="method-heading">
-          <a href="#M000339" class="method-signature">
+          <a href="#M000351" class="method-signature">
           <span class="method-name">remove</span><span class="method-args">(predicate, value = nil)</span>
           </a>
         </div>
@@ -442,8 +442,8 @@ Removes the given predicate (restrict to the triple with the given value if
 a value is given).
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000339-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000339-source">
+            onclick="toggleCode('M000351-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000351-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 47</span>
 47:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span> = <span class="ruby-keyword kw">nil</span>)
@@ -454,11 +454,11 @@ a value is given).
         </div>
       </div>
 
-      <div id="method-M000345" class="method-detail">
-        <a name="M000345"></a>
+      <div id="method-M000357" class="method-detail">
+        <a name="M000357"></a>
 
         <div class="method-heading">
-          <a href="#M000345" class="method-signature">
+          <a href="#M000357" class="method-signature">
           <span class="method-name">save</span><span class="method-args">()</span>
           </a>
         </div>
@@ -470,8 +470,8 @@ been optimized so that if only one RDF backend is present it won&#8216;t do
 any copying around.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000345-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000345-source">
+            onclick="toggleCode('M000357-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000357-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 110</span>
 110:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save</span>
@@ -487,23 +487,23 @@ any copying around.
         </div>
       </div>
 
-      <div id="method-M000346" class="method-detail">
-        <a name="M000346"></a>
+      <div id="method-M000358" class="method-detail">
+        <a name="M000358"></a>
 
         <div class="method-heading">
-          <a href="#M000346" class="method-signature">
+          <a href="#M000358" class="method-signature">
           <span class="method-name">types</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns the <a href="RdfResource.html#M000346">types</a> of this resource
+Returns the <a href="RdfResource.html#M000358">types</a> of this resource
 as N::SourceClass objects
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000346-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000346-source">
+            onclick="toggleCode('M000358-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000358-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 120</span>
 120:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">types</span>
@@ -521,23 +521,23 @@ as N::SourceClass objects
         </div>
       </div>
 
-      <div id="method-M000342" class="method-detail">
-        <a name="M000342"></a>
+      <div id="method-M000354" class="method-detail">
+        <a name="M000354"></a>
 
         <div class="method-heading">
-          <a href="#M000342" class="method-signature">
+          <a href="#M000354" class="method-signature">
           <span class="method-name">uri</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns the <a href="RdfResource.html#M000342">uri</a> of this resource as
+Returns the <a href="RdfResource.html#M000354">uri</a> of this resource as
 a string
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000342-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000342-source">
+            onclick="toggleCode('M000354-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000354-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 90</span>
 90:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">uri</span>

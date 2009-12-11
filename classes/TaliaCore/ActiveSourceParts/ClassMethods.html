@@ -84,16 +84,15 @@
       <a href="#M000120">create_from_xml</a>&nbsp;&nbsp;
       <a href="#M000121">create_multi_from</a>&nbsp;&nbsp;
       <a href="#M000119">create_source</a>&nbsp;&nbsp;
-      <a href="#M000128">db_attr?</a>&nbsp;&nbsp;
+      <a href="#M000127">db_attr?</a>&nbsp;&nbsp;
       <a href="#M000122">exists?</a>&nbsp;&nbsp;
-      <a href="#M000129">expand_uri</a>&nbsp;&nbsp;
-      <a href="#M000123">find</a>&nbsp;&nbsp;
+      <a href="#M000128">expand_uri</a>&nbsp;&nbsp;
       <a href="#M000118">new</a>&nbsp;&nbsp;
-      <a href="#M000126">paginate</a>&nbsp;&nbsp;
-      <a href="#M000125">rewrite</a>&nbsp;&nbsp;
-      <a href="#M000130">split_attribute_hash</a>&nbsp;&nbsp;
-      <a href="#M000124">update</a>&nbsp;&nbsp;
-      <a href="#M000127">value_for</a>&nbsp;&nbsp;
+      <a href="#M000125">paginate</a>&nbsp;&nbsp;
+      <a href="#M000124">rewrite</a>&nbsp;&nbsp;
+      <a href="#M000129">split_attribute_hash</a>&nbsp;&nbsp;
+      <a href="#M000123">update</a>&nbsp;&nbsp;
+      <a href="#M000126">value_for</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -160,7 +159,7 @@ of sources, depending on wether the XML contains multiple sources.
 The imported sources will be saved during import, to ensure that relations
 between them are resolved correctly. If one of the imported elements does
 already exist, the existing source will be rewritten using <a
-href="../ActiveSource.html#M000274">ActiveSource#rewrite_attributes</a>
+href="../ActiveSource.html#M000282">ActiveSource#rewrite_attributes</a>
 </p>
 <p>
 The options may contain:
@@ -174,7 +173,15 @@ run_with_progress(message, size, &amp;block)
 
 </dd>
 <dt><b>errors</b></dt><dd>If given, all erors will be looged to this array instead of raising an
-exception
+exception. See the <a
+href="ClassMethods.html#M000121">create_multi_from</a> method for more.
+
+</dd>
+<dt><b>duplicates</b></dt><dd>How to treat alredy existing sources. See ImportJobHelper for more
+documentation
+
+</dd>
+<dt><b>base_file_uri</b></dt><dd>The base uri to import file from
 
 </dd>
 </dl>
@@ -182,14 +189,16 @@ exception
             onclick="toggleCode('M000120-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000120-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 67</span>
-67:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_xml</span>(<span class="ruby-identifier">xml</span>, <span class="ruby-identifier">options</span> = {})
-68:         <span class="ruby-identifier">reader</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reader</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reader</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span> <span class="ruby-operator">:</span> <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSourceParts</span><span class="ruby-operator">::</span><span class="ruby-constant">Xml</span><span class="ruby-operator">::</span><span class="ruby-constant">SourceReader</span>
-69:         <span class="ruby-identifier">source_properties</span> = <span class="ruby-identifier">reader</span>.<span class="ruby-identifier">sources_from</span>(<span class="ruby-identifier">xml</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:progressor</span>])
-70:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">progressor</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:progressor</span>]
-71:         <span class="ruby-identifier">sources</span> = <span class="ruby-identifier">create_multi_from</span>(<span class="ruby-identifier">source_properties</span>)
-72:         (<span class="ruby-identifier">sources</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">sources</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">first</span>
-73:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 70</span>
+70:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_xml</span>(<span class="ruby-identifier">xml</span>, <span class="ruby-identifier">options</span> = {})
+71:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_options!</span>
+72:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">assert_valid_keys</span>(<span class="ruby-identifier">:reader</span>, <span class="ruby-identifier">:progressor</span>, <span class="ruby-identifier">:errors</span>, <span class="ruby-identifier">:duplicates</span>, <span class="ruby-identifier">:base_file_uri</span>)
+73:         <span class="ruby-identifier">reader</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:reader</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:reader</span>).<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span> <span class="ruby-operator">:</span> <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSourceParts</span><span class="ruby-operator">::</span><span class="ruby-constant">Xml</span><span class="ruby-operator">::</span><span class="ruby-constant">SourceReader</span>
+74:         <span class="ruby-identifier">source_properties</span> = <span class="ruby-identifier">reader</span>.<span class="ruby-identifier">sources_from</span>(<span class="ruby-identifier">xml</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:progressor</span>], <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:base_file_uri</span>))
+75:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">progressor</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:progressor</span>)
+76:         <span class="ruby-identifier">sources</span> = <span class="ruby-identifier">create_multi_from</span>(<span class="ruby-identifier">source_properties</span>, <span class="ruby-identifier">options</span>)
+77:         (<span class="ruby-identifier">sources</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">sources</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">first</span>
+78:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -214,8 +223,14 @@ correctly.
 Options:
 </p>
 <dl>
-<dt><b>errors</b></dt><dd>If given, all erors will be looged to this array instead of raising an
-exception
+<dt><b>errors</b></dt><dd>If given, all erors will be logged to this array instead of raising an
+exception. Each &quot;entry&quot; in the error array will be an Error
+object containing the origianl stack trace of the error
+
+</dd>
+<dt><b>duplicates</b></dt><dd>Indicates how to deal with sources that already exist in the datastore. See
+the ImportJobHelper class for a documentation of this option. Default is
+:skip
 
 </dd>
 </dl>
@@ -223,44 +238,40 @@ exception
             onclick="toggleCode('M000121-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000121-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 82</span>
- 82:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_multi_from</span>(<span class="ruby-identifier">sources</span>, <span class="ruby-identifier">options</span> = {})
- 83:         <span class="ruby-identifier">source_objects</span> = []
- 84:         <span class="ruby-identifier">run_with_progress</span>(<span class="ruby-value str">'Writing imported'</span>, <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">progress</span><span class="ruby-operator">|</span>
- 85:           <span class="ruby-identifier">source_objects</span> = <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">props</span><span class="ruby-operator">|</span>
- 86:             <span class="ruby-identifier">props</span>.<span class="ruby-identifier">to_options!</span>
- 87:             <span class="ruby-identifier">src</span> = <span class="ruby-keyword kw">nil</span>
- 88:             <span class="ruby-keyword kw">begin</span>
- 89:               <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:uri</span>] = <span class="ruby-identifier">uri_string_for</span>(<span class="ruby-identifier">props</span>[<span class="ruby-identifier">:uri</span>])
- 90:               <span class="ruby-identifier">assit</span>(<span class="ruby-identifier">props</span>[<span class="ruby-identifier">:uri</span>], <span class="ruby-value str">&quot;Must have a valid uri at this step&quot;</span>)
- 91:               <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">src</span> = <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:first</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:uri</span>] }))
- 92:                 <span class="ruby-comment cmt"># Deal with already existing sources</span>
- 93:                 <span class="ruby-identifier">src</span>.<span class="ruby-identifier">rewrite_attributes</span>(<span class="ruby-identifier">props</span>)
- 94:                 <span class="ruby-comment cmt"># Rewrite the type, if neccessary</span>
- 95:                 <span class="ruby-identifier">type</span> = <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:type</span>]
- 96:                 <span class="ruby-identifier">switch_type</span> = <span class="ruby-identifier">type</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">src</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">type</span>)
- 97:                 <span class="ruby-comment cmt"># Warn to the log if we have a problematic type change</span>
- 98:                 <span class="ruby-constant">TaliaCore</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-node">&quot;WARNING: Type change from #{src.type} to #{type}&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">switch_type</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">src</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">DummySource</span>))
- 99:                 <span class="ruby-identifier">src</span>.<span class="ruby-identifier">type</span> = <span class="ruby-identifier">type</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">switch_type</span>)
-100:                 <span class="ruby-identifier">src</span>
-101:               <span class="ruby-keyword kw">else</span>
-102:                 <span class="ruby-identifier">src</span> = <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">create_source</span>(<span class="ruby-identifier">props</span>)
-103:               <span class="ruby-keyword kw">end</span>
-104:               <span class="ruby-identifier">src</span>.<span class="ruby-identifier">save!</span>
-105:             <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-106:               <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:errors</span>]) 
-107:                 <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:errors</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;ERROR during import of #{props[:uri]}: #{e.message}&quot;</span> 
-108:                 <span class="ruby-constant">TALIA_CORE</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-node">&quot;Problems importing #{props[:uri]} (logged): #{e.message}&quot;</span>)
-109:               <span class="ruby-keyword kw">else</span>
-110:                 <span class="ruby-identifier">raise</span>
-111:               <span class="ruby-keyword kw">end</span>
-112:             <span class="ruby-keyword kw">end</span>
-113:             <span class="ruby-identifier">progress</span>.<span class="ruby-identifier">inc</span>
-114:             <span class="ruby-identifier">src</span>
-115:           <span class="ruby-keyword kw">end</span>
-116:         <span class="ruby-keyword kw">end</span>
-117:         <span class="ruby-identifier">source_objects</span>
-118:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 91</span>
+ 91:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_multi_from</span>(<span class="ruby-identifier">sources</span>, <span class="ruby-identifier">options</span> = {})
+ 92:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_options!</span>
+ 93:         <span class="ruby-identifier">options</span>.<span class="ruby-identifier">assert_valid_keys</span>(<span class="ruby-identifier">:errors</span>, <span class="ruby-identifier">:duplicates</span>)
+ 94:         <span class="ruby-identifier">source_objects</span> = []
+ 95:         <span class="ruby-identifier">run_with_progress</span>(<span class="ruby-value str">'Writing imported'</span>, <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">progress</span><span class="ruby-operator">|</span>
+ 96:           <span class="ruby-identifier">source_objects</span> = <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">props</span><span class="ruby-operator">|</span>
+ 97:             <span class="ruby-identifier">props</span>.<span class="ruby-identifier">to_options!</span>
+ 98:             <span class="ruby-identifier">src</span> = <span class="ruby-keyword kw">nil</span>
+ 99:             <span class="ruby-keyword kw">begin</span>
+100:               <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:uri</span>] = <span class="ruby-identifier">uri_string_for</span>(<span class="ruby-identifier">props</span>[<span class="ruby-identifier">:uri</span>])
+101:               <span class="ruby-identifier">assit</span>(<span class="ruby-identifier">props</span>[<span class="ruby-identifier">:uri</span>], <span class="ruby-value str">&quot;Must have a valid uri at this step&quot;</span>)
+102:               <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">src</span> = <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:first</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:uri</span>] }))
+103:                 <span class="ruby-identifier">src</span>.<span class="ruby-identifier">update_source</span>(<span class="ruby-identifier">props</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:duplicates</span>])
+104:               <span class="ruby-keyword kw">else</span>
+105:                 <span class="ruby-identifier">src</span> = <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">create_source</span>(<span class="ruby-identifier">props</span>)
+106:               <span class="ruby-keyword kw">end</span>
+107:               <span class="ruby-identifier">src</span>.<span class="ruby-identifier">save!</span>
+108:             <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+109:               <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:errors</span>]) 
+110:                 <span class="ruby-identifier">err</span> = <span class="ruby-constant">ImportError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;ERROR during import of #{props[:uri]}: #{e.message}&quot;</span>)
+111:                 <span class="ruby-identifier">err</span>.<span class="ruby-identifier">set_backtrace</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">backtrace</span>)
+112:                 <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:errors</span>] <span class="ruby-operator">&lt;&lt;</span>  <span class="ruby-identifier">err</span>
+113:                 <span class="ruby-constant">TaliaCore</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-node">&quot;Problems importing #{props[:uri]} (logged): #{e.message}&quot;</span>)
+114:               <span class="ruby-keyword kw">else</span>
+115:                 <span class="ruby-identifier">raise</span>
+116:               <span class="ruby-keyword kw">end</span>
+117:             <span class="ruby-keyword kw">end</span>
+118:             <span class="ruby-identifier">progress</span>.<span class="ruby-identifier">inc</span>
+119:             <span class="ruby-identifier">src</span>
+120:           <span class="ruby-keyword kw">end</span>
+121:         <span class="ruby-keyword kw">end</span>
+122:         <span class="ruby-identifier">source_objects</span>
+123:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -290,7 +301,7 @@ create a plain <a href="../ActiveSource.html">ActiveSource</a>.
     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 47</span>
 47:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_source</span>(<span class="ruby-identifier">args</span>)
 48:         <span class="ruby-identifier">args</span>.<span class="ruby-identifier">to_options!</span>
-49:         <span class="ruby-identifier">type</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:type</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'ActiveSource'</span>
+49:         <span class="ruby-identifier">type</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:type</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'TaliaCore::ActiveSource'</span>
 50:         <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">type</span>.<span class="ruby-identifier">constantize</span>
 51:         <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">args</span>)
 52:       <span class="ruby-keyword kw">end</span>
@@ -299,11 +310,11 @@ create a plain <a href="../ActiveSource.html">ActiveSource</a>.
         </div>
       </div>
 
-      <div id="method-M000128" class="method-detail">
-        <a name="M000128"></a>
+      <div id="method-M000127" class="method-detail">
+        <a name="M000127"></a>
 
         <div class="method-heading">
-          <a href="#M000128" class="method-signature">
+          <a href="#M000127" class="method-signature">
           <span class="method-name">db_attr?</span><span class="method-args">(attribute)</span>
           </a>
         </div>
@@ -313,13 +324,13 @@ create a plain <a href="../ActiveSource.html">ActiveSource</a>.
 Returns true if the given attribute is one that is stored in the database
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000128-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000128-source">
+            onclick="toggleCode('M000127-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000127-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 196</span>
-196:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>)
-197:         <span class="ruby-identifier">db_attributes</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">attribute</span>.<span class="ruby-identifier">to_s</span>)
-198:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 166</span>
+166:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>)
+167:         <span class="ruby-identifier">db_attributes</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">attribute</span>.<span class="ruby-identifier">to_s</span>)
+168:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -343,24 +354,24 @@ an &quot;id&quot;
             onclick="toggleCode('M000122-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000122-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 122</span>
-122:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">value</span>)
-123:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">uri_s</span> = <span class="ruby-identifier">uri_string_for</span>(<span class="ruby-identifier">value</span>))
-124:           <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">uri_s</span>)
-125:         <span class="ruby-keyword kw">else</span>
-126:           <span class="ruby-keyword kw">super</span>
-127:         <span class="ruby-keyword kw">end</span>
-128:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 127</span>
+127:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">value</span>)
+128:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">uri_s</span> = <span class="ruby-identifier">uri_string_for</span>(<span class="ruby-identifier">value</span>))
+129:           <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">uri_s</span>)
+130:         <span class="ruby-keyword kw">else</span>
+131:           <span class="ruby-keyword kw">super</span>
+132:         <span class="ruby-keyword kw">end</span>
+133:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000129" class="method-detail">
-        <a name="M000129"></a>
+      <div id="method-M000128" class="method-detail">
+        <a name="M000128"></a>
 
         <div class="method-heading">
-          <a href="#M000129" class="method-signature">
+          <a href="#M000128" class="method-signature">
           <span class="method-name">expand_uri</span><span class="method-args">(uri)</span>
           </a>
         </div>
@@ -375,84 +386,21 @@ This will assume a full URL if it finds a &quot;:/&quot; string inside the
 URI. Otherwise it will construct a namespace - name URI
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000129-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000129-source">
+            onclick="toggleCode('M000128-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000128-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 205</span>
-205:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">expand_uri</span>(<span class="ruby-identifier">uri</span>) <span class="ruby-comment cmt"># TODO: Merge with uri_for ?</span>
-206:         <span class="ruby-identifier">assit_block</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">errors</span><span class="ruby-operator">|</span> 
-207:           <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:uri</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">String</span>)) <span class="ruby-operator">||</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Symbol</span>)
-208:             <span class="ruby-identifier">errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Found strange object of type #{uri.class}&quot;</span>
-209:           <span class="ruby-keyword kw">end</span>
-210:           <span class="ruby-keyword kw">true</span>
-211:         <span class="ruby-keyword kw">end</span>
-212:         <span class="ruby-identifier">uri</span> = <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:uri</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>
-213:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">uri</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">':/'</span>))
-214:         <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">make_uri</span>(<span class="ruby-identifier">uri</span>).<span class="ruby-identifier">to_s</span>
-215:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000123" class="method-detail">
-        <a name="M000123"></a>
-
-        <div class="method-heading">
-          <a href="#M000123" class="method-signature">
-          <span class="method-name">find</span><span class="method-args">(*args)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-Finder also accepts uris as &quot;ids&quot;. There are also some additional
-options that are accepted:
-</p>
-<dl>
-<dt>*:find_through*</dt><dd>accepts and array with an predicate name and an object value/uri, to search
-for predicates that match the given predicate/value combination
-
-</dd>
-<dt>*:type*</dt><dd>specifically looks for sources with the given type.
-
-</dd>
-<dt>*:find_through_inv*</dt><dd>like :find_through, but for the &quot;inverse&quot; lookup
-
-</dd>
-<dt>*:prefetch_relations*</dt><dd>if set to &quot;true&quot;, this will pre-load all semantic relations for
-the sources (experimental, not fully implemented yet)
-
-</dd>
-</dl>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000123-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000123-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 141</span>
-141:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-142:         <span class="ruby-identifier">prefetching</span> = <span class="ruby-keyword kw">false</span>
-143:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>))
-144:           <span class="ruby-identifier">options</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>
-145:           <span class="ruby-identifier">prefetching</span> =  <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:prefetch_relations</span>)
-146:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-comment cmt"># If empty we remove the args hash, so that the 1-param uri search works</span>
-147:             <span class="ruby-identifier">args</span>.<span class="ruby-identifier">pop</span>
-148:           <span class="ruby-keyword kw">else</span>
-149:             <span class="ruby-identifier">prepare_options!</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>)
-150:           <span class="ruby-keyword kw">end</span>
-151:         <span class="ruby-keyword kw">end</span>
-152:         <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">uri_s</span> = <span class="ruby-identifier">uri_string_for</span>(<span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>])))
-153:           <span class="ruby-identifier">src</span> = <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">:first</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">uri_s</span> })
-154:           <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>, <span class="ruby-node">&quot;Not found: #{uri_s}&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">src</span>)
-155:           <span class="ruby-identifier">src</span>
-156:         <span class="ruby-keyword kw">else</span>
-157:           <span class="ruby-keyword kw">super</span>
-158:         <span class="ruby-keyword kw">end</span>
-159: 
-160:         <span class="ruby-identifier">prefetch_relations_for</span>(<span class="ruby-identifier">result</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">prefetching</span>)
-161: 
-162:         <span class="ruby-identifier">result</span>
-163:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 175</span>
+175:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">expand_uri</span>(<span class="ruby-identifier">uri</span>) <span class="ruby-comment cmt"># TODO: Merge with uri_for ?</span>
+176:         <span class="ruby-identifier">assit_block</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">errors</span><span class="ruby-operator">|</span> 
+177:           <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:uri</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">String</span>)) <span class="ruby-operator">||</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Symbol</span>)
+178:             <span class="ruby-identifier">errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Found strange object of type #{uri.class}&quot;</span>
+179:           <span class="ruby-keyword kw">end</span>
+180:           <span class="ruby-keyword kw">true</span>
+181:         <span class="ruby-keyword kw">end</span>
+182:         <span class="ruby-identifier">uri</span> = <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:uri</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>
+183:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">uri</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">':/'</span>))
+184:         <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">make_uri</span>(<span class="ruby-identifier">uri</span>).<span class="ruby-identifier">to_s</span>
+185:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -493,7 +441,7 @@ method on the object.
 21:         <span class="ruby-identifier">the_source</span> = <span class="ruby-keyword kw">if</span>((<span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)))
 22:           <span class="ruby-identifier">options</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
 23:           <span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_options!</span>
-24:           
+24: 
 25:           <span class="ruby-comment cmt"># We have an option hash to init the source</span>
 26:           <span class="ruby-identifier">files</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:files</span>)
 27:           <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:uri</span>] = <span class="ruby-identifier">uri_string_for</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:uri</span>])
@@ -517,11 +465,11 @@ method on the object.
         </div>
       </div>
 
-      <div id="method-M000126" class="method-detail">
-        <a name="M000126"></a>
+      <div id="method-M000125" class="method-detail">
+        <a name="M000125"></a>
 
         <div class="method-heading">
-          <a href="#M000126" class="method-signature">
+          <a href="#M000125" class="method-signature">
           <span class="method-name">paginate</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -532,53 +480,53 @@ The pagination will also use the prepare_options! to have access to the
 advanced finder options
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000126-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000126-source">
+            onclick="toggleCode('M000125-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000125-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 184</span>
-184:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">paginate</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-185:         <span class="ruby-identifier">prepare_options!</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>))
-186:         <span class="ruby-keyword kw">super</span>
-187:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 154</span>
+154:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">paginate</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+155:         <span class="ruby-identifier">prepare_options!</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>))
+156:         <span class="ruby-keyword kw">super</span>
+157:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000125" class="method-detail">
-        <a name="M000125"></a>
+      <div id="method-M000124" class="method-detail">
+        <a name="M000124"></a>
 
         <div class="method-heading">
-          <a href="#M000125" class="method-signature">
+          <a href="#M000124" class="method-signature">
           <span class="method-name">rewrite</span><span class="method-args">(id, attributes)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Like <a href="ClassMethods.html#M000124">update</a>, only that it will
+Like <a href="ClassMethods.html#M000123">update</a>, only that it will
 overwrite the given attributes instead of adding to them
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000125-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000125-source">
+            onclick="toggleCode('M000124-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000124-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 176</span>
-176:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rewrite</span>(<span class="ruby-identifier">id</span>, <span class="ruby-identifier">attributes</span>)
-177:         <span class="ruby-identifier">record</span> = <span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>)
-178:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">record</span>)
-179:         <span class="ruby-identifier">record</span>.<span class="ruby-identifier">rewrite_attributes</span>(<span class="ruby-identifier">attributes</span>)
-180:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 146</span>
+146:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rewrite</span>(<span class="ruby-identifier">id</span>, <span class="ruby-identifier">attributes</span>)
+147:         <span class="ruby-identifier">record</span> = <span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>)
+148:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">record</span>)
+149:         <span class="ruby-identifier">record</span>.<span class="ruby-identifier">rewrite_attributes</span>(<span class="ruby-identifier">attributes</span>)
+150:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000130" class="method-detail">
-        <a name="M000130"></a>
+      <div id="method-M000129" class="method-detail">
+        <a name="M000129"></a>
 
         <div class="method-heading">
-          <a href="#M000130" class="method-signature">
+          <a href="#M000129" class="method-signature">
           <span class="method-name">split_attribute_hash</span><span class="method-args">(attributes)</span>
           </a>
         </div>
@@ -587,7 +535,7 @@ overwrite the given attributes instead of adding to them
           <p>
 Splits the attribute hash that is given for <a
 href="ClassMethods.html#M000118">new</a>, <a
-href="ClassMethods.html#M000124">update</a> and the like. This will return
+href="ClassMethods.html#M000123">update</a> and the like. This will return
 another hash, where result[:db_attributes] will contain the hash of the
 database attributes while result[:semantic_attributes] will contain the
 other attributes.
@@ -600,33 +548,33 @@ This method will <b>not</b> check for attributes that correspond to
 singular property names.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000130-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000130-source">
+            onclick="toggleCode('M000129-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000129-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 226</span>
-226:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">split_attribute_hash</span>(<span class="ruby-identifier">attributes</span>)
-227:         <span class="ruby-identifier">assit_kind_of</span>(<span class="ruby-constant">Hash</span>, <span class="ruby-identifier">attributes</span>)
-228:         <span class="ruby-identifier">db_attributes</span> = {}
-229:         <span class="ruby-identifier">semantic_attributes</span> = {}
-230:         <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
-231:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">field</span>))
-232:             <span class="ruby-identifier">db_attributes</span>[<span class="ruby-identifier">field</span>] = <span class="ruby-identifier">value</span>
-233:           <span class="ruby-keyword kw">else</span>
-234:             <span class="ruby-identifier">semantic_attributes</span>[<span class="ruby-identifier">expand_uri</span>(<span class="ruby-identifier">field</span>)] = <span class="ruby-identifier">value</span>
-235:           <span class="ruby-keyword kw">end</span>
-236:         <span class="ruby-keyword kw">end</span>
-237:         { <span class="ruby-identifier">:semantic_attributes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">semantic_attributes</span>, <span class="ruby-identifier">:db_attributes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">db_attributes</span> }
-238:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 196</span>
+196:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">split_attribute_hash</span>(<span class="ruby-identifier">attributes</span>)
+197:         <span class="ruby-identifier">assit_kind_of</span>(<span class="ruby-constant">Hash</span>, <span class="ruby-identifier">attributes</span>)
+198:         <span class="ruby-identifier">db_attributes</span> = {}
+199:         <span class="ruby-identifier">semantic_attributes</span> = {}
+200:         <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+201:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">field</span>))
+202:             <span class="ruby-identifier">db_attributes</span>[<span class="ruby-identifier">field</span>] = <span class="ruby-identifier">value</span>
+203:           <span class="ruby-keyword kw">else</span>
+204:             <span class="ruby-identifier">semantic_attributes</span>[<span class="ruby-identifier">expand_uri</span>(<span class="ruby-identifier">field</span>)] = <span class="ruby-identifier">value</span>
+205:           <span class="ruby-keyword kw">end</span>
+206:         <span class="ruby-keyword kw">end</span>
+207:         { <span class="ruby-identifier">:semantic_attributes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">semantic_attributes</span>, <span class="ruby-identifier">:db_attributes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">db_attributes</span> }
+208:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000124" class="method-detail">
-        <a name="M000124"></a>
+      <div id="method-M000123" class="method-detail">
+        <a name="M000123"></a>
 
         <div class="method-heading">
-          <a href="#M000124" class="method-signature">
+          <a href="#M000123" class="method-signature">
           <span class="method-name">update</span><span class="method-args">(id, attributes)</span>
           </a>
         </div>
@@ -638,25 +586,25 @@ or an URL, and the attributes may contain semantic attributes. See the
 update_attributes method for details on how the semantic attributes behave.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000124-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000124-source">
+            onclick="toggleCode('M000123-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000123-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 168</span>
-168:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">id</span>, <span class="ruby-identifier">attributes</span>)
-169:         <span class="ruby-identifier">record</span> = <span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>)
-170:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">record</span>)
-171:         <span class="ruby-identifier">record</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">attributes</span>)
-172:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 138</span>
+138:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">id</span>, <span class="ruby-identifier">attributes</span>)
+139:         <span class="ruby-identifier">record</span> = <span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>)
+140:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">record</span>)
+141:         <span class="ruby-identifier">record</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">attributes</span>)
+142:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000127" class="method-detail">
-        <a name="M000127"></a>
+      <div id="method-M000126" class="method-detail">
+        <a name="M000126"></a>
 
         <div class="method-heading">
-          <a href="#M000127" class="method-signature">
+          <a href="#M000126" class="method-signature">
           <span class="method-name">value_for</span><span class="method-args">(thing)</span>
           </a>
         </div>
@@ -668,13 +616,13 @@ href="../SemanticProperty.html">SemanticProperty</a>, in which case it will
 return the property&#8216;s value.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000127-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000127-source">
+            onclick="toggleCode('M000126-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000126-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 191</span>
-191:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">thing</span>)
-192:         <span class="ruby-identifier">thing</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SemanticProperty</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">thing</span>.<span class="ruby-identifier">value</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">thing</span>
-193:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/class_methods.rb, line 161</span>
+161:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">thing</span>)
+162:         <span class="ruby-identifier">thing</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SemanticProperty</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">thing</span>.<span class="ruby-identifier">value</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">thing</span>
+163:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

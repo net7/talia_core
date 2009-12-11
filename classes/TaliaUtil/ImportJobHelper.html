@@ -83,28 +83,41 @@
 Helper methods that will be used during import job runs. The import jobs
 may use the following environment parameters:
 </p>
-<pre>
- [*base_url*] - The base URL or directory. This will be prefixed to all urls, or if it is
-                a local directory, it will be made the current directory during the import
- [*index*] - If given, the importer will try to read this document. While this will still
-             support the old-style &quot;hyper&quot; format with sigla, it should usually contain a
-             main element called &quot;index&quot; followed by &quot;url&quot; entries.
- [*xml*] - URL of an XML file to import. This is incompatible with the &quot;index&quot; option.
-           If neither &quot;xml&quot; nor &quot;index&quot; are given, the class will try to read the XML data from
-           STDIN
- [*importer*] - Name of the importer class to be used for the data. Uses the default class if not given
-</pre>
 <dl>
+<dt><b>base_url</b></dt><dd>The base URL or directory. This will be prefixed to all urls, or if it is a
+local directory, it will be made the current directory during the import
+
+</dd>
+<dt><b>index</b></dt><dd>If given, the importer will try to read this document. While this will
+still
+
+<pre>
+   support the old-style &quot;hyper&quot; format with sigla, it should usually contain a
+   main element called &quot;index&quot; followed by &quot;url&quot; entries.
+</pre>
+</dd>
+<dt><b>xml</b></dt><dd>URL of an XML file to import. This is incompatible with the
+&quot;index&quot; option.
+
+<pre>
+   If neither &quot;xml&quot; nor &quot;index&quot; are given, the class will try to read the XML data from
+   STDIN
+</pre>
+</dd>
+<dt><b>importer</b></dt><dd>Name of the importer class to be used for the data. Uses the default class
+if not given
+
+</dd>
 <dt><b>reset_store</b></dt><dd>- If this is set, the data store will be cleared before the import
 
 </dd>
-<dt><b>user</b></dt><dd>- Username for HTTP authentication, if required
+<dt><b>user</b></dt><dd>Username for HTTP authentication, if required
 
 </dd>
-<dt><b>pass</b></dt><dd>- Password for HTTP authentication, if required
+<dt><b>pass</b></dt><dd>Password for HTTP authentication, if required
 
 </dd>
-<dt><b>callback</b></dt><dd>- Name of a class. If given, the import will call the before_import and
+<dt><b>callback</b></dt><dd>Name of a class. If given, the import will call the before_import and
 after_import
 
 <pre>
@@ -113,7 +126,34 @@ after_import
    steps
 </pre>
 </dd>
-<dt><b>extension</b></dt><dd>- Only used with index files; file extension to use
+<dt><b>extension</b></dt><dd>Only used with index files; file extension to use
+
+</dd>
+<dt><b>duplicates</b></dt><dd>How to deal with elements that already exist in the datastore. This may be
+
+<pre>
+  set to one of the following options (default: :skip):
+  * :add - Database fields will be updated and the system will add semantic
+    properties as additional values, without removing any of the existing
+    semantic relations. Example: If the data store already
+    contains a title for an element, and the import file contains another
+    for that element, the element will have two titles after the import.
+    The system will not check for duplicates. Files will always be imported
+    in addition to the existing ones.
+  * :update - Database fields will be updated, and semantic properties will
+    be overwritten with the new value(s). Semantic properties that are not
+    included in the import data will be left untouched. In the example above,
+    the element would only contain the new title. If the element also contained
+    author information, and no author information was in the import file, the
+    existing author information will be untouched. Existing files are replaced
+    if the import contains new files
+  * :overwrite - Database fields will be updated. All semantic data will be
+    deleted before the import. Files are always removed.
+  * :skip - If an element already exists, the import will be skipped.
+</pre>
+</dd>
+<dt><b>trace</b></dt><dd>Enable tracing output for errors. (By default, this takes the rake
+task&#8216;s setting if possible)
 
 </dd>
 </dl>
@@ -127,12 +167,13 @@ after_import
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000459">do_import</a>&nbsp;&nbsp;
-      <a href="#M000460">import_from_index</a>&nbsp;&nbsp;
-      <a href="#M000458">init_data</a>&nbsp;&nbsp;
-      <a href="#M000461">make_url_from</a>&nbsp;&nbsp;
-      <a href="#M000457">new</a>&nbsp;&nbsp;
-      <a href="#M000462">run_callback</a>&nbsp;&nbsp;
+      <a href="#M000466">do_import</a>&nbsp;&nbsp;
+      <a href="#M000468">import_from_index</a>&nbsp;&nbsp;
+      <a href="#M000465">init_data</a>&nbsp;&nbsp;
+      <a href="#M000469">make_url_from</a>&nbsp;&nbsp;
+      <a href="#M000464">new</a>&nbsp;&nbsp;
+      <a href="#M000467">print_error</a>&nbsp;&nbsp;
+      <a href="#M000470">run_callback</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -175,6 +216,11 @@ after_import
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
+          <td class="context-item-name">duplicates</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
           <td class="context-item-name">importer</td>
           <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
@@ -200,6 +246,11 @@ after_import
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
+          <td class="context-item-name">trace</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
           <td class="context-item-name">xml_data</td>
           <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
@@ -214,11 +265,11 @@ after_import
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000457" class="method-detail">
-        <a name="M000457"></a>
+      <div id="method-M000464" class="method-detail">
+        <a name="M000464"></a>
 
         <div class="method-heading">
-          <a href="#M000457" class="method-signature">
+          <a href="#M000464" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(message_stream = STDOUT, progressor = TaliaCore::BackgroundJobs::Job)</span>
           </a>
         </div>
@@ -228,32 +279,34 @@ after_import
 The message_stream will be used for printing progress messages
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000457-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000457-source">
+            onclick="toggleCode('M000464-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000464-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 32</span>
-32:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">message_stream</span> = <span class="ruby-constant">STDOUT</span>, <span class="ruby-identifier">progressor</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">BackgroundJobs</span><span class="ruby-operator">::</span><span class="ruby-constant">Job</span>)
-33:       <span class="ruby-ivar">@progressor</span> = <span class="ruby-identifier">progressor</span>
-34:       <span class="ruby-ivar">@message_stream</span> = <span class="ruby-identifier">message_stream</span>
-35:       <span class="ruby-ivar">@importer</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'importer'</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'TaliaCore::ActiveSourceParts::Xml::SourceReader'</span>
-36:       <span class="ruby-ivar">@credentials</span> = { <span class="ruby-identifier">:http_basic_authentication</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'user'</span>], <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'pass'</span>]] } <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'user'</span>].<span class="ruby-identifier">blank?</span>)
-37:       <span class="ruby-identifier">assit</span>(<span class="ruby-operator">!</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'xml'</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'index'</span>]), <span class="ruby-value str">'Not both xml and index parameters allowed'</span>)
-38:       <span class="ruby-ivar">@reset</span> = [<span class="ruby-value str">'yes'</span>, <span class="ruby-value str">'true'</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'reset_store'</span>].<span class="ruby-identifier">downcase</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'reset_store'</span>])
-39: 
-40:       <span class="ruby-ivar">@base_url</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'base_url'</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-value">? </span><span class="ruby-value str">''</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'base_url'</span>]
-41:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">base_url</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">base_url</span>))
-42:         <span class="ruby-identifier">message_stream</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Setting directory to #{base_url}&quot;</span>
-43:         <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cd</span>(<span class="ruby-identifier">base_url</span>)
-44:       <span class="ruby-keyword kw">end</span>
-45: 
-46:       <span class="ruby-identifier">init_data</span>
-47:       
-48:       <span class="ruby-ivar">@callback</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'callback'</span>].<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'callback'</span>].<span class="ruby-identifier">blank?</span>)
-49:       
-50:       <span class="ruby-identifier">message_stream</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Registered callback (#{callback.class.name}) - (#{callback.respond_to?(:before_import)}|#{callback.respond_to?(:after_import)})&quot;</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">callback</span>)
-51:       
-52:       <span class="ruby-identifier">callback</span>.<span class="ruby-identifier">progressor</span> = <span class="ruby-identifier">progressor</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">callback</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">callback</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value str">'progressor='</span><span class="ruby-value str">'progressor='</span>))
-53:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 54</span>
+54:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">message_stream</span> = <span class="ruby-constant">STDOUT</span>, <span class="ruby-identifier">progressor</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">BackgroundJobs</span><span class="ruby-operator">::</span><span class="ruby-constant">Job</span>)
+55:       <span class="ruby-ivar">@trace</span> = (<span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">Rake</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">Rake</span>.<span class="ruby-identifier">application</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">trace</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'trace'</span>]
+56:       <span class="ruby-ivar">@progressor</span> = <span class="ruby-identifier">progressor</span>
+57:       <span class="ruby-ivar">@message_stream</span> = <span class="ruby-identifier">message_stream</span>
+58:       <span class="ruby-ivar">@duplicates</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'duplicates'</span>].<span class="ruby-identifier">to_sym</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'duplicates'</span>])
+59:       <span class="ruby-ivar">@importer</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'importer'</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'TaliaCore::ActiveSourceParts::Xml::SourceReader'</span>
+60:       <span class="ruby-ivar">@credentials</span> = { <span class="ruby-identifier">:http_basic_authentication</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'user'</span>], <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'pass'</span>]] } <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'user'</span>].<span class="ruby-identifier">blank?</span>)
+61:       <span class="ruby-identifier">assit</span>(<span class="ruby-operator">!</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'xml'</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'index'</span>]), <span class="ruby-value str">'Not both xml and index parameters allowed'</span>)
+62:       <span class="ruby-ivar">@reset</span> = [<span class="ruby-value str">'yes'</span>, <span class="ruby-value str">'true'</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'reset_store'</span>].<span class="ruby-identifier">downcase</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'reset_store'</span>])
+63: 
+64:       <span class="ruby-ivar">@base_url</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'base_url'</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-value">? </span><span class="ruby-value str">''</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'base_url'</span>]
+65:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">base_url</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">base_url</span>))
+66:         <span class="ruby-identifier">message_stream</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Setting directory to #{base_url}&quot;</span>
+67:         <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cd</span>(<span class="ruby-identifier">base_url</span>)
+68:       <span class="ruby-keyword kw">end</span>
+69: 
+70:       <span class="ruby-identifier">init_data</span>
+71:       
+72:       <span class="ruby-ivar">@callback</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'callback'</span>].<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'callback'</span>].<span class="ruby-identifier">blank?</span>)
+73:       
+74:       <span class="ruby-identifier">message_stream</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Registered callback (#{callback.class.name}) - (#{callback.respond_to?(:before_import)}|#{callback.respond_to?(:after_import)})&quot;</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">callback</span>)
+75:       
+76:       <span class="ruby-identifier">callback</span>.<span class="ruby-identifier">progressor</span> = <span class="ruby-identifier">progressor</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">callback</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">callback</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value str">'progressor='</span><span class="ruby-value str">'progressor='</span>))
+77:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -261,171 +314,194 @@ The message_stream will be used for printing progress messages
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000459" class="method-detail">
-        <a name="M000459"></a>
+      <div id="method-M000466" class="method-detail">
+        <a name="M000466"></a>
 
         <div class="method-heading">
-          <a href="#M000459" class="method-signature">
+          <a href="#M000466" class="method-signature">
           <span class="method-name">do_import</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000459-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000459-source">
+            onclick="toggleCode('M000466-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000466-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 70</span>
-70:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">do_import</span>
-71:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">reset</span>)
-72:         <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">full_reset</span>
-73:         <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Data Store has been completely reset&quot;</span>
-74:       <span class="ruby-keyword kw">end</span>
-75:       <span class="ruby-identifier">errors</span> = []
-76:       <span class="ruby-identifier">run_callback</span>(<span class="ruby-identifier">:before_import</span>)
-77:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">index_data</span>)
-78:         <span class="ruby-identifier">import_from_index</span>(<span class="ruby-identifier">errors</span>)
-79:       <span class="ruby-keyword kw">else</span>
-80:         <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Importing from single data file.&quot;</span>
-81:         <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">create_from_xml</span>(<span class="ruby-identifier">xml_data</span>, <span class="ruby-identifier">:progressor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">progressor</span>, <span class="ruby-identifier">:reader</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">importer</span>, <span class="ruby-identifier">:errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">errors</span>)
-82:       <span class="ruby-keyword kw">end</span>
-83:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
-84:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;WARNING: #{errors.size} errors during import:&quot;</span>
-85:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-identifier">e</span> }
-86:       <span class="ruby-keyword kw">end</span>
-87:       <span class="ruby-identifier">run_callback</span>(<span class="ruby-identifier">:after_import</span>)
-88:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 95</span>
+ 95:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">do_import</span>
+ 96:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">reset</span>)
+ 97:         <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">full_reset</span>
+ 98:         <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Data Store has been completely reset&quot;</span>
+ 99:       <span class="ruby-keyword kw">end</span>
+100:       <span class="ruby-identifier">errors</span> = []
+101:       <span class="ruby-identifier">run_callback</span>(<span class="ruby-identifier">:before_import</span>)
+102:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">index_data</span>)
+103:         <span class="ruby-identifier">import_from_index</span>(<span class="ruby-identifier">errors</span>)
+104:       <span class="ruby-keyword kw">else</span>
+105:         <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Importing from single data file.&quot;</span>
+106:         <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">create_from_xml</span>(<span class="ruby-identifier">xml_data</span>, <span class="ruby-identifier">:progressor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">progressor</span>, <span class="ruby-identifier">:reader</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">importer</span>, <span class="ruby-identifier">:base_file_uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@true_root</span>, <span class="ruby-identifier">:errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">errors</span>, <span class="ruby-identifier">:duplicates</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">duplicates</span>)
+107:       <span class="ruby-keyword kw">end</span>
+108:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
+109:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;WARNING: #{errors.size} errors during import:&quot;</span>
+110:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">print_error</span> <span class="ruby-identifier">e</span> }
+111:       <span class="ruby-keyword kw">end</span>
+112:       <span class="ruby-identifier">run_callback</span>(<span class="ruby-identifier">:after_import</span>)
+113:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000460" class="method-detail">
-        <a name="M000460"></a>
+      <div id="method-M000468" class="method-detail">
+        <a name="M000468"></a>
 
         <div class="method-heading">
-          <a href="#M000460" class="method-signature">
+          <a href="#M000468" class="method-signature">
           <span class="method-name">import_from_index</span><span class="method-args">(errors)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000460-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000460-source">
+            onclick="toggleCode('M000468-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000468-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 90</span>
- 90:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">import_from_index</span>(<span class="ruby-identifier">errors</span>)
- 91:       <span class="ruby-identifier">doc</span> = <span class="ruby-constant">Hpricot</span>.<span class="ruby-constant">XML</span>(<span class="ruby-identifier">index_data</span>)
- 92:       <span class="ruby-identifier">hyper_format</span> = (<span class="ruby-identifier">doc</span>.<span class="ruby-identifier">root</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'sigla'</span>)
- 93:       <span class="ruby-identifier">elements</span> = <span class="ruby-identifier">hyper_format</span> <span class="ruby-value">? </span>(<span class="ruby-identifier">doc</span><span class="ruby-operator">/</span><span class="ruby-identifier">:siglum</span>) <span class="ruby-operator">:</span> (<span class="ruby-identifier">doc</span><span class="ruby-operator">/</span><span class="ruby-identifier">:url</span>)
- 94:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Import from Index file, #{elements.size} elements&quot;</span>
- 95:       <span class="ruby-comment cmt"># Read the Attributes from the urls</span>
- 96:       <span class="ruby-identifier">source_attributes</span> = []
- 97:       <span class="ruby-identifier">my_importer</span> = <span class="ruby-identifier">importer</span>.<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>
- 98:       <span class="ruby-identifier">progressor</span>.<span class="ruby-identifier">run_with_progress</span>(<span class="ruby-value str">'Reading w/ index'</span>, <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prog</span><span class="ruby-operator">|</span>
- 99:         <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span>
-100:           <span class="ruby-identifier">url</span> = <span class="ruby-identifier">make_url_from</span>(<span class="ruby-node">&quot;#{element.inner_text}#{ENV['extension']}&quot;</span>)
-101:           <span class="ruby-keyword kw">begin</span>
-102:             <span class="ruby-identifier">open_generic</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">credentials</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
-103:               <span class="ruby-identifier">this_attribs</span> = <span class="ruby-identifier">my_importer</span>.<span class="ruby-identifier">sources_from</span>(<span class="ruby-identifier">io</span>)
-104:               <span class="ruby-identifier">source_attributes</span> = <span class="ruby-identifier">source_attributes</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">this_attribs</span>
-105:             <span class="ruby-keyword kw">end</span>
-106:           <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-107:             <span class="ruby-identifier">message_stream</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Problem importing #{url} (#{e.message})&quot;</span>
-108:             <span class="ruby-identifier">message_stream</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">backtrace</span>
-109:           <span class="ruby-keyword kw">end</span>
-110:           <span class="ruby-identifier">prog</span>.<span class="ruby-identifier">inc</span>
-111:         <span class="ruby-keyword kw">end</span>
-112:       <span class="ruby-keyword kw">end</span>
-113:       <span class="ruby-comment cmt"># Write the data</span>
-114:       <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">progressor</span> = <span class="ruby-identifier">progressor</span>
-115:       <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">create_multi_from</span>(<span class="ruby-identifier">source_attributes</span>, <span class="ruby-identifier">:errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">errors</span>)
-116:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 120</span>
+120:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">import_from_index</span>(<span class="ruby-identifier">errors</span>)
+121:       <span class="ruby-identifier">doc</span> = <span class="ruby-constant">Hpricot</span>.<span class="ruby-constant">XML</span>(<span class="ruby-identifier">index_data</span>)
+122:       <span class="ruby-identifier">hyper_format</span> = (<span class="ruby-identifier">doc</span>.<span class="ruby-identifier">root</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'sigla'</span>)
+123:       <span class="ruby-identifier">elements</span> = <span class="ruby-identifier">hyper_format</span> <span class="ruby-value">? </span>(<span class="ruby-identifier">doc</span><span class="ruby-operator">/</span><span class="ruby-identifier">:siglum</span>) <span class="ruby-operator">:</span> (<span class="ruby-identifier">doc</span><span class="ruby-operator">/</span><span class="ruby-identifier">:url</span>)
+124:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Import from Index file, #{elements.size} elements&quot;</span>
+125:       <span class="ruby-comment cmt"># Read the Attributes from the urls</span>
+126:       <span class="ruby-identifier">source_attributes</span> = []
+127:       <span class="ruby-identifier">my_importer</span> = <span class="ruby-identifier">importer</span>.<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>
+128:       <span class="ruby-identifier">progressor</span>.<span class="ruby-identifier">run_with_progress</span>(<span class="ruby-value str">'Reading w/ index'</span>, <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prog</span><span class="ruby-operator">|</span>
+129:         <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span>
+130:           <span class="ruby-identifier">url</span> = <span class="ruby-identifier">make_url_from</span>(<span class="ruby-node">&quot;#{element.inner_text}#{ENV['extension']}&quot;</span>)
+131:           <span class="ruby-keyword kw">begin</span>
+132:             <span class="ruby-identifier">this_attribs</span> = <span class="ruby-identifier">my_importer</span>.<span class="ruby-identifier">sources_from_url</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">credentials</span>)
+133:             <span class="ruby-identifier">source_attributes</span> = <span class="ruby-identifier">source_attributes</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">this_attribs</span>
+134:           <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+135:             <span class="ruby-identifier">message_stream</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Problem importing #{url} (#{e.message})&quot;</span>
+136:             <span class="ruby-identifier">message_stream</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">backtrace</span>
+137:           <span class="ruby-keyword kw">end</span>
+138:           <span class="ruby-identifier">prog</span>.<span class="ruby-identifier">inc</span>
+139:         <span class="ruby-keyword kw">end</span>
+140:       <span class="ruby-keyword kw">end</span>
+141:       <span class="ruby-comment cmt"># Write the data</span>
+142:       <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">progressor</span> = <span class="ruby-identifier">progressor</span>
+143:       <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">create_multi_from</span>(<span class="ruby-identifier">source_attributes</span>, <span class="ruby-identifier">:errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">errors</span>, <span class="ruby-identifier">:duplicates</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">duplicates</span>)
+144:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000458" class="method-detail">
-        <a name="M000458"></a>
+      <div id="method-M000465" class="method-detail">
+        <a name="M000465"></a>
 
         <div class="method-heading">
-          <a href="#M000458" class="method-signature">
+          <a href="#M000465" class="method-signature">
           <span class="method-name">init_data</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000458-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000458-source">
+            onclick="toggleCode('M000465-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000465-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 55</span>
-55:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init_data</span>
-56:       <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'index'</span>].<span class="ruby-identifier">blank?</span>)
-57:         <span class="ruby-ivar">@xml_data</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'xml'</span>].<span class="ruby-identifier">blank?</span>)
-58:           <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">read</span>
-59:         <span class="ruby-keyword kw">else</span>
-60:           <span class="ruby-identifier">xml_url</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'xml'</span>]
-61:           <span class="ruby-identifier">xml_url</span> = <span class="ruby-identifier">base_url</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">xml_url</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">xml_url</span>))
-62:           <span class="ruby-identifier">open_generic</span>(<span class="ruby-identifier">xml_url</span>, <span class="ruby-identifier">credentials</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span> <span class="ruby-identifier">io</span>.<span class="ruby-identifier">read</span> }
-63:         <span class="ruby-keyword kw">end</span>
-64:       <span class="ruby-keyword kw">else</span>
-65:         <span class="ruby-identifier">index</span> = <span class="ruby-identifier">make_url_from</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'index'</span>])
-66:         <span class="ruby-ivar">@index_data</span> = <span class="ruby-identifier">open_generic</span>(<span class="ruby-identifier">index</span>, <span class="ruby-identifier">credentials</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span> <span class="ruby-identifier">io</span>.<span class="ruby-identifier">read</span> }
-67:       <span class="ruby-keyword kw">end</span>
-68:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 79</span>
+79:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init_data</span>
+80:       <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'index'</span>].<span class="ruby-identifier">blank?</span>)
+81:         <span class="ruby-ivar">@xml_data</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'xml'</span>].<span class="ruby-identifier">blank?</span>)
+82:           <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">read</span>
+83:         <span class="ruby-keyword kw">else</span>
+84:           <span class="ruby-identifier">xml_url</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'xml'</span>]
+85:           <span class="ruby-identifier">xml_url</span> = <span class="ruby-identifier">base_url</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">xml_url</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">xml_url</span>))
+86:           <span class="ruby-ivar">@true_root</span> = <span class="ruby-identifier">base_for</span>(<span class="ruby-identifier">xml_url</span>)
+87:           <span class="ruby-identifier">open_generic</span>(<span class="ruby-identifier">xml_url</span>, <span class="ruby-identifier">credentials</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span> <span class="ruby-identifier">io</span>.<span class="ruby-identifier">read</span> }
+88:         <span class="ruby-keyword kw">end</span>
+89:       <span class="ruby-keyword kw">else</span>
+90:         <span class="ruby-identifier">index</span> = <span class="ruby-identifier">make_url_from</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'index'</span>])
+91:         <span class="ruby-ivar">@index_data</span> = <span class="ruby-identifier">open_generic</span>(<span class="ruby-identifier">index</span>, <span class="ruby-identifier">credentials</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span> <span class="ruby-identifier">io</span>.<span class="ruby-identifier">read</span> }
+92:       <span class="ruby-keyword kw">end</span>
+93:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000461" class="method-detail">
-        <a name="M000461"></a>
+      <div id="method-M000469" class="method-detail">
+        <a name="M000469"></a>
 
         <div class="method-heading">
-          <a href="#M000461" class="method-signature">
+          <a href="#M000469" class="method-signature">
           <span class="method-name">make_url_from</span><span class="method-args">(url)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000461-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000461-source">
+            onclick="toggleCode('M000469-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000469-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 118</span>
-118:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">make_url_from</span>(<span class="ruby-identifier">url</span>)
-119:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">url</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">url</span>))
-120:       <span class="ruby-node">&quot;#{base_url}#{url}&quot;</span>
-121:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 146</span>
+146:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">make_url_from</span>(<span class="ruby-identifier">url</span>)
+147:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">url</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">url</span>))
+148:       <span class="ruby-node">&quot;#{base_url}#{url}&quot;</span>
+149:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000462" class="method-detail">
-        <a name="M000462"></a>
+      <div id="method-M000467" class="method-detail">
+        <a name="M000467"></a>
 
         <div class="method-heading">
-          <a href="#M000462" class="method-signature">
+          <a href="#M000467" class="method-signature">
+          <span class="method-name">print_error</span><span class="method-args">(e)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000467-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000467-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 115</span>
+115:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_error</span>(<span class="ruby-identifier">e</span>)
+116:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">message</span>
+117:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">backtrace</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">trace</span>)
+118:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000470" class="method-detail">
+        <a name="M000470"></a>
+
+        <div class="method-heading">
+          <a href="#M000470" class="method-signature">
           <span class="method-name">run_callback</span><span class="method-args">(name)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000462-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000462-source">
+            onclick="toggleCode('M000470-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000470-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 123</span>
-123:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_callback</span>(<span class="ruby-identifier">name</span>)
-124:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">callback</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">callback</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">name</span>))
-125:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Running callback #{name}&quot;</span>
-126:         <span class="ruby-identifier">callback</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">name</span>)
-127:       <span class="ruby-keyword kw">end</span>
-128:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_util/import_job_helper.rb, line 151</span>
+151:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_callback</span>(<span class="ruby-identifier">name</span>)
+152:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">callback</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">callback</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">name</span>))
+153:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Running callback #{name}&quot;</span>
+154:         <span class="ruby-identifier">callback</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">name</span>)
+155:       <span class="ruby-keyword kw">end</span>
+156:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

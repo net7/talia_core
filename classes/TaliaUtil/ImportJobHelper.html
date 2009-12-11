@@ -89,20 +89,15 @@ local directory, it will be made the current directory during the import
 
 </dd>
 <dt><b>index</b></dt><dd>If given, the importer will try to read this document. While this will
-still
+still support the old-style &quot;hyper&quot; format with sigla, it should
+usually contain a main element called &quot;index&quot; followed by
+&quot;url&quot; entries.
 
-<pre>
-   support the old-style &quot;hyper&quot; format with sigla, it should usually contain a
-   main element called &quot;index&quot; followed by &quot;url&quot; entries.
-</pre>
 </dd>
 <dt><b>xml</b></dt><dd>URL of an XML file to import. This is incompatible with the
-&quot;index&quot; option.
+&quot;index&quot; option. If neither &quot;xml&quot; nor &quot;index&quot;
+are given, the class will try to read the XML data from STDIN
 
-<pre>
-   If neither &quot;xml&quot; nor &quot;index&quot; are given, the class will try to read the XML data from
-   STDIN
-</pre>
 </dd>
 <dt><b>importer</b></dt><dd>Name of the importer class to be used for the data. Uses the default class
 if not given
@@ -118,39 +113,46 @@ if not given
 
 </dd>
 <dt><b>callback</b></dt><dd>Name of a class. If given, the import will call the before_import and
-after_import
+after_import methods on an object of that class. The call will receive a
+block which may be yielded to for each progress step and which can receive
+the overall number of steps
 
-<pre>
-   methods on an object of that class. The call will receive a block which may be
-   yielded to for each progress step and which can receive the overall number of
-   steps
-</pre>
 </dd>
 <dt><b>extension</b></dt><dd>Only used with index files; file extension to use
 
 </dd>
 <dt><b>duplicates</b></dt><dd>How to deal with elements that already exist in the datastore. This may be
+set to one of the following options (default: :skip):
 
-<pre>
-  set to one of the following options (default: :skip):
-  * :add - Database fields will be updated and the system will add semantic
-    properties as additional values, without removing any of the existing
-    semantic relations. Example: If the data store already
-    contains a title for an element, and the import file contains another
-    for that element, the element will have two titles after the import.
-    The system will not check for duplicates. Files will always be imported
-    in addition to the existing ones.
-  * :update - Database fields will be updated, and semantic properties will
-    be overwritten with the new value(s). Semantic properties that are not
-    included in the import data will be left untouched. In the example above,
-    the element would only contain the new title. If the element also contained
-    author information, and no author information was in the import file, the
-    existing author information will be untouched. Existing files are replaced
-    if the import contains new files
-  * :overwrite - Database fields will be updated. All semantic data will be
-    deleted before the import. Files are always removed.
-  * :skip - If an element already exists, the import will be skipped.
-</pre>
+<ul>
+<li>:add - Database fields will be updated and the system will add semantic
+properties as additional values, without removing any of the existing
+semantic relations. Example: If the data store already contains a title for
+an element, and the import file contains another for that element, the
+element will have two titles after the import. The system will not check
+for duplicates. Files will always be imported in addition to the existing
+ones.
+
+</li>
+<li>:update - Database fields will be updated, and semantic properties will be
+overwritten with the <a href="ImportJobHelper.html#M000464">new</a>
+value(s). Semantic properties that are not included in the import data will
+be left untouched. In the example above, the element would only contain the
+<a href="ImportJobHelper.html#M000464">new</a> title. If the element also
+contained author information, and no author information was in the import
+file, the existing author information will be untouched. Existing files are
+replaced if the import contains <a
+href="ImportJobHelper.html#M000464">new</a> files
+
+</li>
+<li>:overwrite - Database fields will be updated. All semantic data will be
+deleted before the import. Files are always removed.
+
+</li>
+<li>:skip - If an element already exists, the import will be skipped.
+
+</li>
+</ul>
 </dd>
 <dt><b>trace</b></dt><dd>Enable tracing output for errors. (By default, this takes the rake
 task&#8216;s setting if possible)

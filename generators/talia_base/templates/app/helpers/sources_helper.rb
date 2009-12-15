@@ -43,7 +43,7 @@ module SourcesHelper
     data_records.each do |rec|
       link_data = data_record_options(rec)
       result << link_to(
-        image_tag("core/#{link_data.first}.png", :alt => rec.location, :title => rec.location),
+        image_tag("talia_core/#{link_data.first}.png", :alt => rec.location, :title => rec.location),
         { :controller => 'source_data',
           :action => 'show',
           :id => rec.id },
@@ -67,7 +67,7 @@ module SourcesHelper
     types.each do |t|
       image = @type_map[t] || 'source'
       name = t.local_name.titleize
-      result << link_to(image_tag("core/#{image}.png", :alt => name, :title => name),
+      result << link_to(image_tag("talia_core/#{image}.png", :alt => name, :title => name),
         :action => 'index', :filter => t.to_name_s('+')
       )
     end

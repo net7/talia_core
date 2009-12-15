@@ -1,0 +1,276 @@
+/* CSS Document */
+
+
+/* ***************** ************** ************** */
+/* ***************** TAG GENERICI ************** */
+/* ***************** ************** ************** */
+* {margin: 0; padding: 0;}
+
+
+body {
+    text-align:left;
+    color:#333;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: Avenir, "Lucida Grande", Verdana, "Bitstream Vera Sans", Arial, Helvetica, sans-serif;
+    font-size:0.8125em;
+    background: #FFF url(images/left_edge.gif) top left repeat-y;
+}
+
+
+/* DEFINIZIONE TAG */
+a{
+    color: #355a8e;
+    text-decoration: none;
+    outline: none;
+}
+a:hover{
+    color: #355a8e;
+    text-decoration: underline;
+    background-color: transparent;
+}
+h1{
+    font-size:1.3em;
+    margin-bottom: 5px;
+}
+h2{
+    font-size:1.2em;
+    margin-bottom: 5px;
+}
+h3{
+    font-size:1.1em;
+    margin-bottom: 5px;
+}
+p{
+    color:#333333;
+    line-height:1.7em;
+    font-size:0.9em;
+    margin-bottom: 5px;
+}
+
+td {
+    padding-right: 3ex;
+}
+/* DEFINIZIONE TAG */
+
+
+/* Taglist */
+div.tags {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    padding: 0.3em;
+    background-color: #F1F1F1;
+    line-height: 1.5em;
+}
+
+span.tag {
+    background-color: #C0C0C0;
+    margin: 5px;
+}
+
+span.tag_selected {
+    background-color: #A0A0E0;
+    margin: 5px;
+}
+
+/* ***************** ************** ************** */
+/* ***************** CLASSI RICORRENTI ************** */
+/* ***************** ************** ************** */
+.hidden{
+    display:none;
+}
+
+.floatClear{
+    clear:both;
+}
+
+/* ***************** ************** ************** */
+/* ***************** HEADER ************** */
+/* ***************** ************** ************** */
+
+
+#title_bar h1{
+    padding: 13px 0 0 13px;
+}
+#title_bar h1 a{
+    font-size:1.7em;
+    color:#FFFFFF;
+    display: block;
+    width: 235px;
+    height: 97px;
+    background: transparent url(images/logo.gif) top left no-repeat;
+    text-indent: -9999px;
+}
+
+#title_bar p.header_subtitle{
+    display: none;
+}
+
+div#title_bar{
+    height: 122px;
+    margin:0;
+    padding:0;
+    border:0;
+    width:100%;
+    background:#666 url(images/header_bg.gif) top left repeat;
+}
+
+/* ***************** ************** ************** */
+/* ***************** CONTENTS ************** */
+/* ***************** ************** ************** */
+#contents {
+    padding: 25px;
+    background:transparent url(images/contents_top_left.gif) top left repeat-x;
+}
+
+/* ***************** ************** ************** */
+/* ***************** FOOTER ************** */
+/* ***************** ************** ************** */
+/* tree: #footer h1, #footer p */
+#footer.open{
+    margin: 0 0 0 300px;
+}
+
+/* !!!! SIDE BAR CHIUSO !!!! */
+#footer.closed{
+    margin-left:73px;
+}
+
+#select-container {
+    margin-bottom: 3ex;
+}
+
+
+/* ***************** ************** ************** */
+/* ***************** Barbz demo stuff ************** */
+/* ***************** ************** ************** */
+.sources_list ul {
+	width: 100%;
+	list-style: none;
+}
+
+.sources_list ul li {
+	border-bottom: 1px solid #d8d8d8;
+	width: 100%;
+	padding-bottom: 0;
+	float: left;
+}
+
+.sources_list ul li p {
+	float: left;
+	width: 100%;
+	background: #f9f9f9;
+	margin: 0;
+	padding:0 }
+
+.sources_list ul li p .source_type {
+	display: block;
+	float: left;
+	width: 10%;
+	padding:6px 1%;
+	/*background:#f8f8f8 url(img/type.png) repeat-x bottom;*/
+	/*border-bottom: 1px solid #ccc;*/
+	voice-family: "\"}\"";
+voice-family:inherit;
+	width:8%
+}
+
+.sources_list ul li p .source_title {
+	display: block;
+	float: left;
+	width: 45%;
+	font-size:12px ;	
+	background: #f2f2f2;
+	font-weight: bold;
+	padding:6px 1% ;
+	voice-family: "\"}\"";
+voice-family:inherit;
+	width:43%
+}
+
+
+
+.sources_list ul li p .source-data {
+	display: block;
+	float: left;
+	width: 35%;
+	padding:  7px 1% 7px 1%;
+	voice-family: "\"}\"";
+voice-family:inherit;
+	width:33%
+}
+
+.sources_list ul li p .more {
+	width: 10%;
+	float: left;
+	padding: 6px 0;	font-size:12px ;	
+	background: url(images/arrow.png) no-repeat right;
+	display: block;
+}
+
+
+
+.sources_list ul li p .more a{
+	color: #999;
+}
+
+a img {
+	border: 0px none;
+}
+
+/* Styles for the Person template*/
+
+div#tl {
+	margin-bottom: 30px;
+	margin-top: 30px;
+}
+
+
+.properties_list ul {
+	width: 100%;
+	list-style: none;
+}
+
+.properties_list ul li {
+	border-bottom: 1px solid #d8d8d8;
+	width: 100%;
+	padding-bottom: 0;
+	float: left;
+}
+
+.properties_list ul li p {
+	float: left;
+	width: 100%;
+	background: #f9f9f9;
+	margin: 0;
+	padding:0 }
+
+.properties_list ul li p .predicate {
+	display: block;
+	float: left;
+	width: 10%;
+	padding:6px 1%;
+	/*background:#f8f8f8 url(img/type.png) repeat-x bottom;*/
+	/*border-bottom: 1px solid #ccc;*/
+	voice-family: "\"}\"";
+	voice-family:inherit;
+	width:8%
+}
+
+.properties_list ul li p .value {
+	display: block;
+	float: left;
+	width: 45%;
+	font-size:12px ;	
+	background: #f2f2f2;
+	font-weight: bold;
+	padding:6px 1% ;
+	voice-family: "\"}\"";
+	voice-family:inherit;
+	width:43%
+}
+.person hr
+{
+	margin-top:30px;
+}

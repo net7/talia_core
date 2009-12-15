@@ -12,8 +12,6 @@ module TaliaCore
       before_create :set_mime_type # Mime type must be saved before the record is written
       
       # validates_presence_of :source
-      
-      extend MimeMapping
 
       # Declaration of main abstract methods ======================
       # Some notes: every subclasses of DataRecord must implement

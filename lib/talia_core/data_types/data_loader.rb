@@ -77,10 +77,10 @@ module TaliaCore
         # in a different way. If it is a file, the file name will be passed in here. If it is
         # a URL, the method will receive the io object of the open connection as the source
         def open_and_create(mime_type, location, source, is_file)
-          data_type = loader_type_from(mime_type)
+          data_type = MimeMapping.loader_type_from(mime_type)
           if(data_type.is_a?(Symbol))
             raise(ArgumentError, "No handler found for loading: #{data_type}") unless(self.respond_to?(data_type))
-            self.send(data_type, mime_type, location, source, is_file)
+            MimeMapping.class_type_from(mime_type).send(data_type, mime_type, location, source, is_file)
           else
             raise(ArgumentError, "Registered handler for loading must be a method symbol or class. (#{data_type})") unless(data_type.is_a?(Class))
             data_record = data_type.new

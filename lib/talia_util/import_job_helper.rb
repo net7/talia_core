@@ -5,42 +5,42 @@ module TaliaUtil
   # Helper methods that will be used during import job runs.
   # The import jobs may use the following environment parameters:
   #
-  #  [*base_url*] The base URL or directory. This will be prefixed to all urls, or if it is 
-  #                 a local directory, it will be made the current directory during the import
-  #  [*index*] If given, the importer will try to read this document. While this will still
-  #              support the old-style "hyper" format with sigla, it should usually contain a
-  #              main element called "index" followed by "url" entries. 
-  #  [*xml*] URL of an XML file to import. This is incompatible with the "index" option. 
-  #            If neither "xml" nor "index" are given, the class will try to read the XML data from
-  #            STDIN
-  #  [*importer*] Name of the importer class to be used for the data. Uses the default class if not given
+  # [*base_url*] The base URL or directory. This will be prefixed to all urls, or if it is 
+  #              a local directory, it will be made the current directory during the import
+  # [*index*] If given, the importer will try to read this document. While this will still
+  #           support the old-style "hyper" format with sigla, it should usually contain a
+  #           main element called "index" followed by "url" entries. 
+  # [*xml*] URL of an XML file to import. This is incompatible with the "index" option. 
+  #         If neither "xml" nor "index" are given, the class will try to read the XML data from
+  #         STDIN
+  # [*importer*] Name of the importer class to be used for the data. Uses the default class if not given
   # [*reset_store*] - If this is set, the data store will be cleared before the import
   # [*user*] Username for HTTP authentication, if required
   # [*pass*] Password for HTTP authentication, if required
   # [*callback*] Name of a class. If given, the import will call the #before_import and #after_import
-  #                 methods on an object of that class. The call will receive a block which may be
-  #                 yielded to for each progress step and which can receive the overall number of
-  #                 steps
+  #              methods on an object of that class. The call will receive a block which may be
+  #              yielded to for each progress step and which can receive the overall number of
+  #              steps
   # [*extension*] Only used with index files; file extension to use
   # [*duplicates*] How to deal with elements that already exist in the datastore. This may be
-  #                  set to one of the following options (default: :skip):
-  #                  * :add - Database fields will be updated and the system will add semantic
-  #                    properties as additional values, without removing any of the existing
-  #                    semantic relations. Example: If the data store already
-  #                    contains a title for an element, and the import file contains another
-  #                    for that element, the element will have two titles after the import. 
-  #                    The system will not check for duplicates. Files will always be imported
-  #                    in addition to the existing ones.
-  #                  * :update - Database fields will be updated, and semantic properties will
-  #                    be overwritten with the new value(s). Semantic properties that are not
-  #                    included in the import data will be left untouched. In the example above,
-  #                    the element would only contain the new title. If the element also contained
-  #                    author information, and no author information was in the import file, the
-  #                    existing author information will be untouched. Existing files are replaced
-  #                    if the import contains new files
-  #                  * :overwrite - Database fields will be updated. All semantic data will be
-  #                    deleted before the import. Files are always removed.
-  #                  * :skip - If an element already exists, the import will be skipped.
+  #                set to one of the following options (default: :skip):
+  #                * :add - Database fields will be updated and the system will add semantic
+  #                  properties as additional values, without removing any of the existing
+  #                  semantic relations. Example: If the data store already
+  #                  contains a title for an element, and the import file contains another
+  #                  for that element, the element will have two titles after the import. 
+  #                  The system will not check for duplicates. Files will always be imported
+  #                  in addition to the existing ones.
+  #                * :update - Database fields will be updated, and semantic properties will
+  #                  be overwritten with the new value(s). Semantic properties that are not
+  #                  included in the import data will be left untouched. In the example above,
+  #                  the element would only contain the new title. If the element also contained
+  #                  author information, and no author information was in the import file, the
+  #                  existing author information will be untouched. Existing files are replaced
+  #                  if the import contains new files
+  #                * :overwrite - Database fields will be updated. All semantic data will be
+  #                  deleted before the import. Files are always removed.
+  #                * :skip - If an element already exists, the import will be skipped.
   #
   # [*trace*] Enable tracing output for errors. (By default, this takes the rake task's setting
   #           if possible)

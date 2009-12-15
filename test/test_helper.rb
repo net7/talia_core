@@ -24,6 +24,13 @@ module TaliaCore
     # Check if we have old (1.2.3-Rails) style ActiveRecord without fixture cache
     @@new_ar = Fixtures.respond_to?(:reset_cache)
     
+    # The tests expect the system to be set to iip creation
+    TaliaCore::DataTypes::MimeMapping.add_mapping(:jpeg, DataTypes::ImageData, :create_iip)
+    TaliaCore::DataTypes::MimeMapping.add_mapping(:tiff, DataTypes::ImageData, :create_iip)
+    TaliaCore::DataTypes::MimeMapping.add_mapping(:png, DataTypes::ImageData, :create_iip)
+    TaliaCore::DataTypes::MimeMapping.add_mapping(:bmp, DataTypes::ImageData, :create_iip)
+    TaliaCore::DataTypes::MimeMapping.add_mapping(:gif, DataTypes::ImageData, :create_iip)
+    
     # connect the database
     def self.startup
       if(!TaliaCore::Initializer.initialized)

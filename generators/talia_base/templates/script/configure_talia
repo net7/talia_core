@@ -129,6 +129,18 @@ print "Enter the URI for your site: "
 site_url = readl(true)
 
 if(read_yn('Do you want to use the IIP image server?'))
+  init_file = File.join(rails_dir, 'config', 'initializers', 'talia.rb')
+  if(File.exist?(init_file))
+    puts "Adding the creation handler to your talia_initializer. Note that you will need 'vips' installed."
+    File.open(init_file, 'a')  do |io|
+      io.puts ''
+      io.puts '# IIP creation handlers, added automatically'
+      %w(jpeg tiff png gif bmp).each { |t| io.puts "TaliaCore::DataTypes::MimeMapping.add_mapping(:#{t}, TaliaCore::DataTypes::ImageData, :create_iip)" }
+      io.puts ''
+    end
+  else
+    puts "WARNING: Initializer file for Talia not found. You will need to add the image handler for the MIME types manually."
+  end
   puts
   print "Enter the URL of your IIP server, or the port number (for default URL on localhost): "
   iip_url = readl
@@ -150,10 +162,14 @@ puts
 puts "Configuring the Sesame RDF store (change the config by hand for stores other than Sesame)"
 puts
 backends = %w(native memory rdbms http)
-print "Enter the sesame backend to use (#{backends.join('|')}): "
-while(!(backends.include?(backend = readl)))
+print "Enter the sesame backend to use (#{backends.join('|')}) (default: native): "
+backend = readl
+backend = 'native' if(backend.blank?)
+while(!(backends.include?(backend)))
   puts "#{backend} is not a valid backend"
   print "Enter the backend (#{backends.join('|')}: )"
+  backend = readl
+  backend = 'native' if(backend.blank?)
 end
 
 %w(production test development).each do |env|
@@ -181,7 +197,7 @@ when 'rdbms':
     print "Enter the password for the connection: "
     pass = readl
   end
-  %(production test development).each do |env|
+  %w(production test development).each do |env|
     rdf_config[env]['driver'] = driver
     rdf_config[env]['user'] = user
     rdf_config[env]['pass'] = pass
@@ -196,10 +212,9 @@ when 'http':
     print "Enter the password for the connection: "
     pass = readl
   end
-  %(production test development).each do |env|
-    rdf_config[env]['driver'] = driver
-    rdf_config[env]['user'] = user
-    rdf_config[env]['pass'] = pass
+  %w(production test development).each do |env|
+    rdf_config[env]['user'] = user unless(user.blank?)
+    rdf_config[env]['pass'] = pass unless(pass.blank?)
     print "Enter the URL for the '#{env}' environment: "
     rdf_config[env]['url'] = readl(true)
   end
@@ -211,7 +226,8 @@ if(iip_directory != '')
   talia_config.iip_root_directory_location = iip_directory
 end
 
-print "Enter the path to store the data files (return for default): "
+puts ''
+print "Enter the path to store general data files (return for default): "
 data_directory = readl
 
 if(data_directory != '')

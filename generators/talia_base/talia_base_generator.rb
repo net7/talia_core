@@ -13,7 +13,8 @@ class TaliaBaseGenerator < Rails::Generator::Base
       m.directory 'config/initializers'
       m.file "config/talia_initializer.rb", "config/initializers/talia.rb"
       m.file "config/routes.rb", "config/routes.rb", :collision => :ask
-      m.file "talia.sh", "talia.sh", :shebang => '/bin/sh', :chmod => 0755
+      m.file "talia.sh", "talia.sh", :shebang => '/bin/sh', :chmod => 0755=
+      m.file "config/warble.rb", "config/warble.rb"
       
       # Install the scripts
       m.directory 'script'

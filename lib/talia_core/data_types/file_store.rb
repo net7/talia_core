@@ -114,7 +114,7 @@ module TaliaCore
       
       # Assign the STI subclass, perfoming a mime-type lookup.
       def assign_type(content_type)
-        self.type = self.class.class_type_from(content_type).name
+        self.type = MimeMapping.class_type_from(content_type).name
       end
       
       

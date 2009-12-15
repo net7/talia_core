@@ -44,7 +44,7 @@ begin
     s.homepage = "http://trac.talia.discovery-project.eu/"
     s.description = "This is the core plugin for building a digital library with Talia/Rails."
     s.required_ruby_version = '>= 1.8.6'
-    s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Daniel Hahn"]
+    s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
     s.files = FileList["{lib}/**/*", "{generators}/**/*", "{config}/**/*", "{tasks}/**/*", "VERSION.yml"]
     s.extra_rdoc_files = ["README.rdoc", "CHANGES", "LICENSE"]
     s.add_dependency('activerecord', '>= 2.0.5')
@@ -52,7 +52,7 @@ begin
     s.add_dependency('activerdf_net7', '>= 1.6.13')
     s.add_dependency('assit', '>= 0.1.2')
     s.add_dependency('semantic_naming', '>= 2.0.6')
-    s.add_dependency('averell23-bj', '>= 1.0.2')
+    s.add_dependency('bjj', '>= 1.0.2')
     s.add_dependency('hpricot', '>= 0.6.1')
     s.add_dependency('oai', '>= 0.0.12')
     s.add_dependency('builder', '>= 2.1.2')

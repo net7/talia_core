@@ -153,20 +153,6 @@ module TaliaCore
       new_rec = DataTypes::DataRecord.find(data_record.id)
       assert_equal(expected_content, new_rec.content_string)
     end
-  
-    def test_class_type_from
-      ['text/plain'].each do |mime|
-        assert_equal('SimpleText', DataTypes::FileRecord.class_type_from(mime))
-      end
-
-      @image_mime_types.each { |mime| assert_equal('ImageData', DataTypes::FileRecord.class_type_from(mime)) }
-      
-      ['text/xml', 'application/xml'].each do |mime|
-        assert_equal('XmlData', DataTypes::FileRecord.class_type_from(mime))
-      end
-      
-      assert_equal('DataRecord', DataTypes::FileRecord.class_type_from('application/rtf'))
-    end
     
   end
 end

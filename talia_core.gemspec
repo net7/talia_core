@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{talia_core}
-  s.version = "0.4.7"
+  s.version = "0.4.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
@@ -131,24 +131,24 @@ Gem::Specification.new do |s|
      "generators/talia_base/templates/ontologies/hyper_ontology.pprj",
      "generators/talia_base/templates/ontologies/hyper_ontology.repository",
      "generators/talia_base/templates/ontologies/scholar_0.1.owl",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/building.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/document-horizontal-text.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/document.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/gear.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/group.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/image.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/imagebig.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/letter.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/map.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/period.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/person.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/person_default.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/place.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/source.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/television.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/text.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/type.png",
-     "generators/talia_base/templates/public/images/talia_core/talia_core/video.png",
+     "generators/talia_base/templates/public/images/talia_core/building.png",
+     "generators/talia_base/templates/public/images/talia_core/document-horizontal-text.png",
+     "generators/talia_base/templates/public/images/talia_core/document.png",
+     "generators/talia_base/templates/public/images/talia_core/gear.png",
+     "generators/talia_base/templates/public/images/talia_core/group.png",
+     "generators/talia_base/templates/public/images/talia_core/image.png",
+     "generators/talia_base/templates/public/images/talia_core/imagebig.png",
+     "generators/talia_base/templates/public/images/talia_core/letter.png",
+     "generators/talia_base/templates/public/images/talia_core/map.png",
+     "generators/talia_base/templates/public/images/talia_core/period.png",
+     "generators/talia_base/templates/public/images/talia_core/person.png",
+     "generators/talia_base/templates/public/images/talia_core/person_default.png",
+     "generators/talia_base/templates/public/images/talia_core/place.png",
+     "generators/talia_base/templates/public/images/talia_core/source.png",
+     "generators/talia_base/templates/public/images/talia_core/television.png",
+     "generators/talia_base/templates/public/images/talia_core/text.png",
+     "generators/talia_base/templates/public/images/talia_core/type.png",
+     "generators/talia_base/templates/public/images/talia_core/video.png",
      "generators/talia_base/templates/public/stylesheets/talia_core/images/arrow.png",
      "generators/talia_base/templates/public/stylesheets/talia_core/images/contents_top_left.gif",
      "generators/talia_base/templates/public/stylesheets/talia_core/images/header_bg.gif",

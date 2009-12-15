@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{talia_core}
-  s.version = "0.4.5"
+  s.version = "0.4.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
-  s.date = %q{2009-12-14}
+  s.date = %q{2009-12-15}
   s.default_executable = %q{talia}
   s.description = %q{This is the core plugin for building a digital library with Talia/Rails.}
   s.email = %q{ghub@limitedcreativity.org}
@@ -116,6 +116,7 @@ Gem::Specification.new do |s|
      "generators/talia_base/templates/app/views/types/show.html.erb",
      "generators/talia_base/templates/config/routes.rb",
      "generators/talia_base/templates/config/talia_initializer.rb",
+     "generators/talia_base/templates/config/warble.rb",
      "generators/talia_base/templates/migrations/bj_migration.rb",
      "generators/talia_base/templates/migrations/constraint_migration.rb",
      "generators/talia_base/templates/migrations/create_active_sources.rb",
@@ -286,26 +287,24 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<activerdf_net7>, [">= 1.6.13"])
       s.add_runtime_dependency(%q<assit>, [">= 0.1.2"])
       s.add_runtime_dependency(%q<semantic_naming>, [">= 2.0.6"])
-      s.add_runtime_dependency(%q<averell23-bj>, [">= 1.0.2"])
+      s.add_runtime_dependency(%q<bjj>, [">= 1.0.2"])
       s.add_runtime_dependency(%q<hpricot>, [">= 0.6.1"])
       s.add_runtime_dependency(%q<oai>, [">= 0.0.12"])
       s.add_runtime_dependency(%q<builder>, [">= 2.1.2"])
       s.add_runtime_dependency(%q<optiflag>, [">= 0.6.5"])
       s.add_runtime_dependency(%q<rake>, [">= 0.7.1"])
-      s.add_runtime_dependency(%q<foobar>, [">= 0.0.1"])
     else
       s.add_dependency(%q<activerecord>, [">= 2.0.5"])
       s.add_dependency(%q<activesupport>, [">= 2.0.5"])
       s.add_dependency(%q<activerdf_net7>, [">= 1.6.13"])
       s.add_dependency(%q<assit>, [">= 0.1.2"])
       s.add_dependency(%q<semantic_naming>, [">= 2.0.6"])
-      s.add_dependency(%q<averell23-bj>, [">= 1.0.2"])
+      s.add_dependency(%q<bjj>, [">= 1.0.2"])
       s.add_dependency(%q<hpricot>, [">= 0.6.1"])
       s.add_dependency(%q<oai>, [">= 0.0.12"])
       s.add_dependency(%q<builder>, [">= 2.1.2"])
       s.add_dependency(%q<optiflag>, [">= 0.6.5"])
       s.add_dependency(%q<rake>, [">= 0.7.1"])
-      s.add_dependency(%q<foobar>, [">= 0.0.1"])
     end
   else
     s.add_dependency(%q<activerecord>, [">= 2.0.5"])
@@ -313,13 +312,12 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<activerdf_net7>, [">= 1.6.13"])
     s.add_dependency(%q<assit>, [">= 0.1.2"])
     s.add_dependency(%q<semantic_naming>, [">= 2.0.6"])
-    s.add_dependency(%q<averell23-bj>, [">= 1.0.2"])
+    s.add_dependency(%q<bjj>, [">= 1.0.2"])
     s.add_dependency(%q<hpricot>, [">= 0.6.1"])
     s.add_dependency(%q<oai>, [">= 0.0.12"])
     s.add_dependency(%q<builder>, [">= 2.1.2"])
     s.add_dependency(%q<optiflag>, [">= 0.6.5"])
     s.add_dependency(%q<rake>, [">= 0.7.1"])
-    s.add_dependency(%q<foobar>, [">= 0.0.1"])
   end
 end
 

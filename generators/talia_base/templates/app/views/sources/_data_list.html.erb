@@ -8,7 +8,7 @@
             <%= link_to(record.location, { :controller => 'source_data', :action => 'show', :id => record.id }, record_options.last )%>
           </span>
           <span class="value">
-            <%=  image_tag("demo/#{record_options.first}.png", :alt => record.mime, :title => record.mime) %> (<%= record.mime %>)
+            <%=  image_tag("talia_core/#{record_options.first}.png", :alt => record.mime, :title => record.mime) %> (<%= record.mime %>)
           </span>
         </p>
       </li>

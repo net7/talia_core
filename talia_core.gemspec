@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{talia_core}
-  s.version = "0.4.8"
+  s.version = "0.4.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
-  s.date = %q{2009-12-15}
+  s.date = %q{2009-12-16}
   s.default_executable = %q{talia}
   s.description = %q{This is the core plugin for building a digital library with Talia/Rails.}
   s.email = %q{ghub@limitedcreativity.org}
@@ -51,16 +51,16 @@ Gem::Specification.new do |s|
      "generators/talia_admin/templates/public/javascripts/backend.js",
      "generators/talia_admin/templates/public/javascripts/lowpro.js",
      "generators/talia_admin/templates/public/stylesheets/talia_core/backend.css",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/body_bg.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/footer_bg.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/header.jpg",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/header_bg.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/menu.jpg",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/menu_bg.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/opednid.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/page_bg.jpg",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/triangolino.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/triangolino_full.gif",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/body_bg.gif",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/footer_bg.gif",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/header.jpg",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/header_bg.gif",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/menu.jpg",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/menu_bg.gif",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/opednid.gif",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/page_bg.jpg",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/triangolino.gif",
+     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/triangolino_full.gif",
      "generators/talia_admin/templates/test/functional/admin/custom_templates_controller_test.rb",
      "generators/talia_admin/templates/test/functional/admin/locales_controller_test.rb",
      "generators/talia_admin/templates/test/functional/admin/sources_controller_test.rb",

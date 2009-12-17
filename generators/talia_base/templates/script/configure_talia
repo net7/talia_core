@@ -250,7 +250,7 @@ when 'http':
     rdf_config[env]['user'] = user unless(user.blank?)
     rdf_config[env]['pass'] = pass unless(pass.blank?)
     print "Enter the URL for the '#{env}' environment: "
-    rdf_config[env]['url'] = readl(true, /\Ahttp:\/\/.+\/\Z/)
+    rdf_config[env]['url'] = readl(true, /\Ahttp:\/\/.+\//)
   end
 else
   puts "ERROR: ILLEGAL BACKEND #{backend} - you shouldn't see this..."

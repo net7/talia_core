@@ -5,6 +5,11 @@ require "#{RAILS_ROOT}/config/environment"
 require 'rails_generator'
 require 'rails_generator/scripts/generate'
 
+# Generate the admin first - this will also load the monkeypatches to prevent
+# duplicate migration ids
+puts "Install the adminstration backend"
+Rails::Generator::Scripts::Generate.new.run(%w(talia_admin))
+
 puts "Install and configure restful authentication"
 # First time plugin, has to be done this way since it can not be loaded in
 # a different way
@@ -26,9 +31,6 @@ end
 
 puts "Install the auto completion plugin"
 Commands::Plugin.parse!(['install', 'auto_complete'])
-
-puts "Install the adminstration backend"
-Rails::Generator::Scripts::Generate.new.run(%w(talia_admin))
 
 puts "Migrating the database"
 system("rake db:migrate")

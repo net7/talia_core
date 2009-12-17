@@ -1,10 +1,10 @@
 # Utility module for tests, rake tasks etc.
 module TaliaUtil
-  
+
   # Main utility functions for Talia
   class Util
     class << self
-    
+
       # Get the list of files from the "files" option
       def get_files
         puts "Files given: #{ENV['files']}"
@@ -13,7 +13,7 @@ module TaliaUtil
           print_options
           exit(1)
         end
-    
+
         FileList.new(ENV['files'])
       end
 
@@ -44,37 +44,44 @@ module TaliaUtil
       # Init the talia core system
       def init_talia
         return if(TaliaCore::Initializer.initialized)
-    
-        # If options are not set, the initializer will fall back to the internal default
-        TaliaCore::Initializer.talia_root = ENV['talia_root']
-        TaliaCore::Initializer.environment = ENV['environment']
-    
-        config_file = ENV['config'] ? ENV['config'] : 'talia_core'
-    
-        # run the initializer
-        TaliaCore::Initializer.run(config_file) do |config|
-          unless(flag?('no_standalone'))
-            puts "Always using standalone db from utilities."
-            puts "Give the no_standalone option to override it."
-            config['standalone_db'] = "true"
+
+        # If we have Rails installed, just call the Rails config 
+        # instead of running the manual init
+        if(defined?(RAILS_ROOT) && File.exist?(File.join(RAILS_ROOT, 'config', 'environment.rb')))
+          puts "\nInitializing Talia through Rails"
+          load(File.join(RAILS_ROOT, 'config', 'environment.rb'))
+        else
+
+          # If options are not set, the initializer will fall back to the internal default
+          TaliaCore::Initializer.talia_root = ENV['talia_root']
+          TaliaCore::Initializer.environment = ENV['environment']
+
+          config_file = ENV['config'] ? ENV['config'] : 'talia_core'
+
+          # run the initializer
+          TaliaCore::Initializer.run(config_file) do |config|
+            unless(flag?('no_standalone'))
+              puts "Always using standalone db from utilities."
+              puts "Give the no_standalone option to override it."
+              config['standalone_db'] = "true"
+            end
           end
         end
-    
         puts("\nTaliaCore initialized")
-    
+
         # # Flush the database if requested
         if(flag?('reset_db'))
           flush_db
           puts "DB flushed"
         end
-    
+
         # Flus the rdf if requested
         if(flag?('reset_rdf'))
           flush_rdf
           puts "RDF flushed"
         end
       end
-  
+
       # Get info from the Talia configuraion
       def talia_config
         puts "Talia configuration"
@@ -85,25 +92,25 @@ module TaliaUtil
         puts "Data Directory: #{TaliaCore::CONFIG['data_directory_location']}"
         puts "Local Domain: #{N::LOCAL}"
       end
-  
+
       # Put the title for Talia
       def title
         puts "\nTalia Digital Library system. Version: #{TaliaCore::Version::STRING}" 
-        puts "http://www.talia.discovery-project.eu/\n\n"
+        puts "http://www.muruca.org/\n\n"
       end
-  
+
       # Flush the database. This only flushes the main data tables!
       def flush_db
         [ 'active_sources', 'data_records', 'semantic_properties', 'semantic_relations', 'workflows'].reverse.each { |f| ActiveRecord::Base.connection.execute "DELETE FROM #{f}" }
         # Also remove the "unsaved cache" for the wrappers (may be important during testing)
         TaliaCore::SemanticCollectionWrapper.instance_variable_set(:'@unsaved_source_cache', {})
       end
-  
+
       # Flush the RDF store
       def flush_rdf
         ConnectionPool.write_adapter.clear
       end
-      
+
       # Remove the data directories
       def clear_data
         data_dir = TaliaCore::CONFIG['data_directory_location']
@@ -111,8 +118,8 @@ module TaliaUtil
         FileUtils.rm_rf(data_dir) if(File.exist?(data_dir))
         FileUtils.rm_rf(iip_dir) if(File.exist?(iip_dir))
       end
-      
-      
+
+
       # Do a full reset of the data store
       def full_reset
         flush_db
@@ -129,7 +136,7 @@ module TaliaUtil
         flush_rdf
         # We'll get all data from single query.
         fat_rels = TaliaCore::SemanticRelation.find(:all, :joins => fat_record_joins,
-          :select => fat_record_select)
+        :select => fat_record_select)
         fat_rels.each do |rec|
           subject = N::URI.new(rec.subject_uri)
           predicate = N::URI.new(rec.predicate_uri)
@@ -167,13 +174,13 @@ module TaliaUtil
           Fixtures.create_fixtures(File.join('test', 'fixtures'), File.basename(fixture_file, '.*'))  
         end  
       end
-  
+
       # Do migrations
       def do_migrations
         migration_path = File.join("generators", "talia", "templates", "migrations")
         ActiveRecord::Migrator.migrate(migration_path, ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
       end
-  
+
       # Check if the given flag is set on the command line
       def flag?(the_flag)
         assit_not_nil(the_flag)
@@ -220,7 +227,7 @@ module TaliaUtil
         puts "verbose={yes|no}    - Show some additional info"
         puts ""
       end
-  
+
     end
   end
 end

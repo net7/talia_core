@@ -42,7 +42,7 @@ namespace :talia_core do
     end
 
     # Invoke the init after the setup
-    Rake::Task["talia_core:init"].invoke
+    # Rake::Task["talia_core:init"].invoke
   end
 
   # Test task

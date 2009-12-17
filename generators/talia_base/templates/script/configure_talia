@@ -19,11 +19,35 @@ talia_dir = TALIA_CODE_ROOT
 config_dir = File.join(rails_dir, 'config')
 config_template_dir = File.join(talia_dir, 'config')
 
-def readl(required = false)
+def check_result(value, regexp)
+  if(regexp && !regexp.match(value))
+    puts "Value does not have the right format (must match #{regexp})"
+    value = ''
+  end
+  value
+end
+
+def raw_read(default, regexp)
   result = gets.chomp.strip
+  result = default if(default && result == '')
+  check_result(result, regexp)
+end
+
+def readl(required_or_default = false, match_check = nil)
+  # Checks if we have a default value or a "required" bool
+  required = required_or_default
+  default = nil
+  if(required_or_default.is_a?(String))
+    reuqired = false
+    default = required_or_default
+  end
+  
+  match_check = Regexp.new(match_check) if(match_check.is_a?(String))
+  
+  result = raw_read(default, match_check)
   while(result == '' && required)
     print 'Must enter a value, retry: '
-    result = gets.chomp.strip
+    result = raw_read(default, match_check)
   end
   result
 end
@@ -110,8 +134,7 @@ puts " done."
 
 puts
 print "Enter the sql driver you want to use (e.g. jdbcmysql, mysql, ...) [jdbcmysql]: "
-adapter = readl
-adapter = (adapter == '') ? 'jdbcmysql' : adapter
+adapter = readl('jdbcmysql')
 
 
 db_config.set_adapter(adapter)
@@ -126,7 +149,7 @@ talia_config.site_name = readl
 
 puts
 print "Enter the URI for your site: "
-site_url = readl(true)
+site_url = readl(true, /\Ahttp:\/\/.+\/\Z/)
 
 if(read_yn('Do you want to use the IIP image server?'))
   init_file = File.join(rails_dir, 'config', 'initializers', 'talia.rb')
@@ -143,7 +166,7 @@ if(read_yn('Do you want to use the IIP image server?'))
   end
   puts
   print "Enter the URL of your IIP server, or the port number (for default URL on localhost): "
-  iip_url = readl
+  iip_url = readl('', /\A\d{2,}\Z|\Ahttp:\/\/.*/)
 
   # If only numerals, we'll create the URL
   if(iip_url =~ /^\d*$/)
@@ -156,6 +179,17 @@ if(read_yn('Do you want to use the IIP image server?'))
   puts
   print "Enter the path to store the IIP image files (return for default): "
   iip_directory = readl
+  
+  vips_default_command = `which vips`.gsub("\n", '')
+  print "Enter the path to the vips command (default: #{vips_default_command.inspect}): "
+  vips_command = readl((vips_default_command == '') ? true : vips_default_command)
+  talia_config.vips_command = vips_command
+  
+  convert_default_command = `which convert`.gsub("\n", '')
+  print "Enter the path to the convert command (default: #{convert_default_command.inspect}): "
+  convert_command = readl((convert_default_command == '') ? true : convert_default_command)
+  talia_config.convert_command = convert_command
+  
 end
 
 puts
@@ -216,7 +250,7 @@ when 'http':
     rdf_config[env]['user'] = user unless(user.blank?)
     rdf_config[env]['pass'] = pass unless(pass.blank?)
     print "Enter the URL for the '#{env}' environment: "
-    rdf_config[env]['url'] = readl(true)
+    rdf_config[env]['url'] = readl(true, /\Ahttp:\/\/.+\/\Z/)
   end
 else
   puts "ERROR: ILLEGAL BACKEND #{backend} - you shouldn't see this..."
@@ -279,29 +313,6 @@ end
 puts "Importing ontologies"
 system('rake talia_core:rdf_import files=ontologies/*.owl rdf_syntax=rdfxml')
 system('rake talia_core:owl_to_rdfs_update')
-
-# print "Importing language files..."
-# Dir[File.join(rails_dir, 'languages', '*_glob.csv')].each do |lang_file|
-#   language = File.basename(lang_file)[0..1] # first two chars are the lang code
-#   print " #{language}"
-#   raise("Error importing language #{language}") unless(system("rake discovery:import_language language=#{language} file=#{File.expand_path(lang_file)}"))
-# end
-# puts " ... done."
-# puts
-
-puts "Customize the start page. The following custom start pages are available:"
-cust_pages = Dir[File.join(rails_dir, 'customization_files', 'start_page', '_start_page_*.html.erb')]
-cust_pages.each do |cust_page|
-  # Get the descriptive name
-  md = /_start_page_(.*)\.html\.erb/.match(cust_page)
-  puts "#{cust_pages.index(cust_page)} - #{md[1]}"
-end
-
-if(read_yn('Do you want to build a war file now?'))
-  puts
-  puts "Building the war file"
-  system("warble")
-end
 
 puts
 puts "Configuration complete"

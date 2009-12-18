@@ -35,5 +35,8 @@ system("rake db:migrate")
 puts "Install the adminstration backend"
 Rails::Generator::Scripts::Generate.new.run(%w(talia_admin))
 
+# Reload the "boot" file
+load File.dirname(__FILE__) + '/../config/boot'
+
 migration_path = File.join(RAILS_ROOT, 'db', 'migrate')
 ActiveRecord::Migrator.migrate(migration_path)

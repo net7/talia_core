@@ -1,13 +1,7 @@
 --- 
 production: 
   type: sesame
-  location: ./sesame_production.db
-  backend: native
 test: 
   type: sesame
-  location: ./sesame_test.db
-  backend: native
 development: 
   type: sesame
-  location: ./sesame_development.db
-  backend: native

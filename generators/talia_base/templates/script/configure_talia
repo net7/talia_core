@@ -305,14 +305,14 @@ end
 puts 
 puts "Now migrating the databases"
 %w(test development production).each do |env|
+  puts "Init database for #{env}"
   raise("Error migrating #{env}") unless(system("rake db:migrate RAILS_ENV=#{env}"))
   # raise("Error creating globalize tables in #{env}") unless(system("rake globalize:setup RAILS_ENV=#{env}"))
+  puts "Importing ontologies for #{env}"
+  system("rake talia_core:rdf_import files=ontologies/*.owl rdf_syntax=rdfxml RAILS_ENV=#{env}")
+  system("rake talia_core:owl_to_rdfs_update RAILS_ENV=#{env}")
   puts "Migrated #{env}"
 end
-
-puts "Importing ontologies"
-system('rake talia_core:rdf_import files=ontologies/*.owl rdf_syntax=rdfxml')
-system('rake talia_core:owl_to_rdfs_update')
 
 puts
 puts "Configuration complete"

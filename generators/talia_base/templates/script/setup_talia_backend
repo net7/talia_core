@@ -4,21 +4,16 @@ require File.dirname(__FILE__) + '/../config/boot'
 require "#{RAILS_ROOT}/config/environment"
 require 'rails_generator'
 require 'rails_generator/scripts/generate'
+# Load the monkeypatching for the migrations
+require "#{TALIA_CODE_ROOT}/generators/generator_helpers.rb"
 
 # First time plugin, has to be done this way since it can not be loaded in
 # a different way
-puts "Install the restful authentication plugin"
+puts "Install and configure the restful authentication plugin"
 ARGV = ['install', 'git://github.com/technoweenie/restful-authentication.git']
 require 'commands/plugin'
 orig_name = $0
 $0 = 'generate'
-
-# Generate the admin first - this will also load the monkeypatches to prevent
-# duplicate migration ids
-puts "Install the adminstration backend"
-Rails::Generator::Scripts::Generate.new.run(%w(talia_admin))
-
-puts "Configure restful authentication"
 Rails::Generator::Scripts::Generate.new.run(%w(authenticated user sessions))
 
 puts "Install and configure role-requirements"
@@ -36,6 +31,9 @@ Commands::Plugin.parse!(['install', 'auto_complete'])
 
 puts "Migrating the database"
 system("rake db:migrate")
+
+puts "Install the adminstration backend"
+Rails::Generator::Scripts::Generate.new.run(%w(talia_admin))
 
 migration_path = File.join(RAILS_ROOT, 'db', 'migrate')
 ActiveRecord::Migrator.migrate(migration_path)

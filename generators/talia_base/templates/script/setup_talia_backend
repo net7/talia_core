@@ -29,14 +29,12 @@ end
 puts "Install the auto completion plugin"
 Commands::Plugin.parse!(['install', 'auto_complete'])
 
-puts "Migrating the database"
-system("rake db:migrate")
-
 puts "Install the adminstration backend"
 Rails::Generator::Scripts::Generate.new.run(%w(talia_admin))
 
-# Reload the "boot" file
-load File.dirname(__FILE__) + '/../config/boot'
+# Add some dependencies that have been just installed
+ActiveSupport::Dependencies.load_paths << File.join(RAILS_ROOT, 'vendor', 'plugins', 'restful-authentication')
+ActiveSupport::Dependencies.load_paths << File.join(RAILS_ROOT, 'vendor', 'plugins', 'role_requirement')
 
 migration_path = File.join(RAILS_ROOT, 'db', 'migrate')
 ActiveRecord::Migrator.migrate(migration_path)

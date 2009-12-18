@@ -33,8 +33,8 @@ puts "Install the adminstration backend"
 Rails::Generator::Scripts::Generate.new.run(%w(talia_admin))
 
 # Add some dependencies that have been just installed
-ActiveSupport::Dependencies.load_paths << File.join(RAILS_ROOT, 'vendor', 'plugins', 'restful-authentication')
-ActiveSupport::Dependencies.load_paths << File.join(RAILS_ROOT, 'vendor', 'plugins', 'role_requirement')
+ActiveSupport::Dependencies.load_paths << File.join(RAILS_ROOT, 'vendor', 'plugins', 'restful-authentication', 'lib')
+ActiveSupport::Dependencies.load_paths << File.join(RAILS_ROOT, 'vendor', 'plugins', 'role_requirement', 'lib')
 
 migration_path = File.join(RAILS_ROOT, 'db', 'migrate')
 ActiveRecord::Migrator.migrate(migration_path)

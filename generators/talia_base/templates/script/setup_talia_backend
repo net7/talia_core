@@ -5,18 +5,20 @@ require "#{RAILS_ROOT}/config/environment"
 require 'rails_generator'
 require 'rails_generator/scripts/generate'
 
+# First time plugin, has to be done this way since it can not be loaded in
+# a different way
+puts "Install the restful authentication plugin"
+ARGV = ['install', 'git://github.com/technoweenie/restful-authentication.git']
+require 'commands/plugin'
+orig_name = $0
+$0 = 'generate'
+
 # Generate the admin first - this will also load the monkeypatches to prevent
 # duplicate migration ids
 puts "Install the adminstration backend"
 Rails::Generator::Scripts::Generate.new.run(%w(talia_admin))
 
-puts "Install and configure restful authentication"
-# First time plugin, has to be done this way since it can not be loaded in
-# a different way
-ARGV = ['install', 'git://github.com/technoweenie/restful-authentication.git']
-require 'commands/plugin'
-orig_name = $0
-$0 = 'generate'
+puts "Configure restful authentication"
 Rails::Generator::Scripts::Generate.new.run(%w(authenticated user sessions))
 
 puts "Install and configure role-requirements"

@@ -37,7 +37,7 @@ ActiveSupport::Dependencies.load_paths << File.join(RAILS_ROOT, 'vendor', 'plugi
 ActiveSupport::Dependencies.load_paths << File.join(RAILS_ROOT, 'vendor', 'plugins', 'role_requirement', 'lib')
 
 # Init the auth thing for the migration
-require "#{RAILS_ROOT}/vendor/plugins/restful-authentication/lib/init"
+require "#{RAILS_ROOT}/vendor/plugins/restful-authentication/init"
 
 migration_path = File.join(RAILS_ROOT, 'db', 'migrate')
 ActiveRecord::Migrator.migrate(migration_path)

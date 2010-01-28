@@ -20,6 +20,10 @@ module TaliaCore
         if(args.last.is_a?(Hash))
           options = args.last
           options.to_options!
+          
+          # Hack the "default" ordering
+          options[:order] = 'id' if(options[:order] == :default)
+          
           prefetching =  options.delete(:prefetch_relations)
           if(options.empty?) # If empty we remove the args hash, so that the 1-param uri search works
             args.pop

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
-  s.date = %q{2009-12-18}
+  s.date = %q{2009-12-21}
   s.default_executable = %q{talia}
   s.description = %q{This is the core plugin for building a digital library with Talia/Rails.}
   s.email = %q{ghub@limitedcreativity.org}
@@ -95,7 +95,6 @@ Gem::Specification.new do |s|
      "generators/talia_base/templates/app/controllers/types_controller.rb",
      "generators/talia_base/templates/app/helpers/custom_templates_helper.rb",
      "generators/talia_base/templates/app/helpers/ontologies_helper.rb",
-     "generators/talia_base/templates/app/helpers/sessions_helper.rb",
      "generators/talia_base/templates/app/helpers/source_data_helper.rb",
      "generators/talia_base/templates/app/helpers/sources_helper.rb",
      "generators/talia_base/templates/app/helpers/types_helper.rb",

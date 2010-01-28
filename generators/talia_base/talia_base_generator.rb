@@ -4,9 +4,7 @@ class TaliaBaseGenerator < Rails::Generator::Base
   
   include GeneratorHelpers
   
-  def manifest    
-    install_plugin("git://github.com/activescaffold/active_scaffold.git")
-    install_plugin("git://github.com/timcharper/role_requirement.git")
+  def manifest
     
     record do |m|
       # Some initialization stuff
@@ -23,13 +21,13 @@ class TaliaBaseGenerator < Rails::Generator::Base
       m.file 'script/setup_talia_backend', 'script/setup_talia_backend', :shebang => DEFAULT_SHEBANG, :chmod => 0755
       
       # The whole app shebang of files
-      files_in m, 'app'
+      m.files_in 'app'
       
       # The default ontologies
-      files_in m, 'ontologies'
+      m.files_in 'ontologies'
       
       # The whole public dir
-      files_in m, 'public'
+      m.files_in 'public'
       
       # Set up the rake tasks, only if we come from a gem
       if(Gem.source_index.find_name('talia_core').first)
@@ -40,15 +38,15 @@ class TaliaBaseGenerator < Rails::Generator::Base
       # Add the migrations
       m.directory 'db/migrate'
       m.file "migrations/constraint_migration.rb", "db/migrate/constraint_migration.rb"
-      make_migration m, "create_active_sources.rb"
-      make_migration m, "create_semantic_relations.rb"
-      make_migration m, "create_semantic_properties.rb"
-      make_migration m, "create_data_records.rb"
-      make_migration m, "create_workflows.rb"
-      make_migration m, "create_custom_templates.rb"
-      make_migration m, "upgrade_relations.rb"
-      make_migration m, "create_progress_jobs.rb"
-      make_migration m, "bj_migration.rb"
+      m.make_migration "create_active_sources.rb"
+      m.make_migration "create_semantic_relations.rb"
+      m.make_migration "create_semantic_properties.rb"
+      m.make_migration "create_data_records.rb"
+      m.make_migration "create_workflows.rb"
+      m.make_migration "create_custom_templates.rb"
+      m.make_migration "upgrade_relations.rb"
+      m.make_migration "create_progress_jobs.rb"
+      m.make_migration "bj_migration.rb"
       
       m.readme 'README'
     end

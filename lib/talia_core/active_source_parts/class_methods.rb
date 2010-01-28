@@ -276,7 +276,7 @@ module TaliaCore
       # that method exists; otherwise it'll return nil
       def uri_string_for(value)
         result = if value.is_a? String
-          return nil if(value  =~ /\A\d+\Z/) # This looks like a record id, encoded as a string
+          return nil if(value  =~ /\A\d+(-.*)?\Z/) # This looks like a record id or record param, encoded as a string
           # if this is a local name, prepend the local namespace
           (value =~ /:/) ? value : (N::LOCAL + value).uri
         elsif(value.respond_to?(:uri))

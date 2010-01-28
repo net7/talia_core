@@ -54,7 +54,7 @@ begin
     s.add_dependency('semantic_naming', '>= 2.0.6')
     s.add_dependency('bjj', '>= 1.0.2')
     s.add_dependency('hpricot', '>= 0.6.1')
-    s.add_dependency('oai', '>= 0.0.12')
+    s.add_dependency('oai_talia', '>= 0.0.15')
     s.add_dependency('builder', '>= 2.1.2')
     s.add_dependency('optiflag', '>= 0.6.5')
     s.add_dependency('rake', '>= 0.7.1')

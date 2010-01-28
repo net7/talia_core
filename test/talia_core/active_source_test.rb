@@ -365,6 +365,19 @@ module TaliaCore
       src = ActiveSource.new('http://testassignandsave_nil/')
       assert_raise(ArgumentError) { src['rdfs:something'] << nil }
     end
+
+    def test_find_default_order
+      result = ActiveSource.find(:all, :order => :default)
+      assert_equal(result.size, ActiveSource.count)
+    end
+  
+    def test_find_with_param
+      first = ActiveSource.find(:first)
+      param = first.to_param
+      param += "-more-garbage"
+      refound = ActiveSource.find(param)
+      assert_equal(first, refound)
+    end
     
     def test_find_through
       result = ActiveSource.find(:all, :find_through => ['http://testvalue.org/pred_find_through', active_sources(:find_through_target).uri])

@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{talia_core}
-  s.version = "0.4.22"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
-  s.date = %q{2009-12-21}
+  s.date = %q{2010-01-29}
   s.default_executable = %q{talia}
   s.description = %q{This is the core plugin for building a digital library with Talia/Rails.}
   s.email = %q{ghub@limitedcreativity.org}
@@ -30,61 +30,66 @@ Gem::Specification.new do |s|
      "generators/generator_helpers.rb",
      "generators/talia_admin/USAGE",
      "generators/talia_admin/talia_admin_generator.rb",
-     "generators/talia_admin/templates/controllers/admin/background_controller.rb",
-     "generators/talia_admin/templates/controllers/admin/custom_templates_controller.rb",
-     "generators/talia_admin/templates/controllers/admin/locales_controller.rb",
-     "generators/talia_admin/templates/controllers/admin/roles_controller.rb",
-     "generators/talia_admin/templates/controllers/admin/sources_controller.rb",
-     "generators/talia_admin/templates/controllers/admin/translations_controller.rb",
-     "generators/talia_admin/templates/controllers/admin/users_controller.rb",
-     "generators/talia_admin/templates/controllers/admin_controller.rb",
-     "generators/talia_admin/templates/helpers/admin/background_helper.rb",
-     "generators/talia_admin/templates/helpers/admin/custom_templates_helper.rb",
-     "generators/talia_admin/templates/helpers/admin/locales_helper.rb",
-     "generators/talia_admin/templates/helpers/admin/roles_helper.rb",
-     "generators/talia_admin/templates/helpers/admin/sources_helper.rb",
-     "generators/talia_admin/templates/helpers/admin/translations_helper.rb",
-     "generators/talia_admin/templates/helpers/admin/users_helper.rb",
-     "generators/talia_admin/templates/helpers/admin_helper.rb",
-     "generators/talia_admin/templates/migrations/populate_users.rb",
-     "generators/talia_admin/templates/models/role.rb",
-     "generators/talia_admin/templates/public/javascripts/backend.js",
+     "generators/talia_admin/templates/app/controllers/admin/admin_site_controller.rb",
+     "generators/talia_admin/templates/app/controllers/admin/custom_templates_controller.rb",
+     "generators/talia_admin/templates/app/controllers/admin/front_controller.rb",
+     "generators/talia_admin/templates/app/controllers/admin/talia_collections_controller.rb",
+     "generators/talia_admin/templates/app/controllers/admin/talia_sources_controller.rb",
+     "generators/talia_admin/templates/app/controllers/admin/users_controller.rb",
+     "generators/talia_admin/templates/app/controllers/users_controller.rb",
+     "generators/talia_admin/templates/app/helpers/admin/front_helper.rb",
+     "generators/talia_admin/templates/app/helpers/admin/talia_sources_helper.rb",
+     "generators/talia_admin/templates/app/helpers/users_helper.rb",
+     "generators/talia_admin/templates/app/models/guest.rb",
+     "generators/talia_admin/templates/app/models/talia_collection.rb",
+     "generators/talia_admin/templates/app/models/talia_source.rb",
+     "generators/talia_admin/templates/app/models/user.rb",
+     "generators/talia_admin/templates/app/models/user_mailer.rb",
+     "generators/talia_admin/templates/app/viewhints/talia_source_hints.rb",
+     "generators/talia_admin/templates/app/views/admin/custom_templates/index.dryml",
+     "generators/talia_admin/templates/app/views/admin/front/index.dryml",
+     "generators/talia_admin/templates/app/views/admin/front/summary.dryml",
+     "generators/talia_admin/templates/app/views/admin/talia_collections/index.dryml",
+     "generators/talia_admin/templates/app/views/admin/talia_sources/index.dryml",
+     "generators/talia_admin/templates/app/views/admin/talia_sources/show.dryml",
+     "generators/talia_admin/templates/app/views/admin/users/index.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/admin_site.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/application.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/auto/admin/rapid/cards.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/auto/admin/rapid/forms.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/auto/admin/rapid/pages.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/auto/rapid/cards.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/auto/rapid/forms.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/auto/rapid/pages.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/front_site.dryml",
+     "generators/talia_admin/templates/app/views/taglibs/themes/clean/clean.dryml",
+     "generators/talia_admin/templates/app/views/user_mailer/forgot_password.erb",
+     "generators/talia_admin/templates/config/hobo_initializer.rb",
+     "generators/talia_admin/templates/migrations/create_users.rb",
+     "generators/talia_admin/templates/public/hobothemes/clean/images/101-3B5F87-ACD3E6.png",
+     "generators/talia_admin/templates/public/hobothemes/clean/images/30-3E547A-242E42.png",
+     "generators/talia_admin/templates/public/hobothemes/clean/images/30-DBE1E5-FCFEF5.png",
+     "generators/talia_admin/templates/public/hobothemes/clean/images/300-ACD3E6-fff.png",
+     "generators/talia_admin/templates/public/hobothemes/clean/images/50-ACD3E6-fff.png",
+     "generators/talia_admin/templates/public/hobothemes/clean/images/fieldbg.gif",
+     "generators/talia_admin/templates/public/hobothemes/clean/images/pencil.png",
+     "generators/talia_admin/templates/public/hobothemes/clean/images/small_close.png",
+     "generators/talia_admin/templates/public/hobothemes/clean/images/spinner.gif",
+     "generators/talia_admin/templates/public/hobothemes/clean/stylesheets/clean.css",
+     "generators/talia_admin/templates/public/hobothemes/clean/stylesheets/rapid-ui.css",
+     "generators/talia_admin/templates/public/javascripts/IE7.js",
+     "generators/talia_admin/templates/public/javascripts/blank.gif",
+     "generators/talia_admin/templates/public/javascripts/dryml-support.js",
+     "generators/talia_admin/templates/public/javascripts/hobo-rapid.js",
+     "generators/talia_admin/templates/public/javascripts/ie7-recalc.js",
      "generators/talia_admin/templates/public/javascripts/lowpro.js",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/backend.css",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/body_bg.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/footer_bg.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/header.jpg",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/header_bg.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/menu.jpg",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/menu_bg.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/opednid.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/page_bg.jpg",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/triangolino.gif",
-     "generators/talia_admin/templates/public/stylesheets/talia_core/images/backend/triangolino_full.gif",
-     "generators/talia_admin/templates/test/functional/admin/custom_templates_controller_test.rb",
-     "generators/talia_admin/templates/test/functional/admin/locales_controller_test.rb",
-     "generators/talia_admin/templates/test/functional/admin/sources_controller_test.rb",
-     "generators/talia_admin/templates/test/functional/admin/translations_controller_test.rb",
-     "generators/talia_admin/templates/test/functional/admin/users_controller_test.rb",
-     "generators/talia_admin/templates/test/functional/admin_controller_test.rb",
-     "generators/talia_admin/templates/views/admin/background/_finished.html.erb",
-     "generators/talia_admin/templates/views/admin/background/_pending.html.erb",
-     "generators/talia_admin/templates/views/admin/background/_progress.html.erb",
-     "generators/talia_admin/templates/views/admin/background/_running.html.erb",
-     "generators/talia_admin/templates/views/admin/background/environment.html.erb",
-     "generators/talia_admin/templates/views/admin/background/show.html.erb",
-     "generators/talia_admin/templates/views/admin/background/stderr.html.erb",
-     "generators/talia_admin/templates/views/admin/background/stdin.html.erb",
-     "generators/talia_admin/templates/views/admin/background/stdout.html.erb",
-     "generators/talia_admin/templates/views/admin/custom_templates/_content_form_column.rhtml",
-     "generators/talia_admin/templates/views/admin/custom_templates/_template_type_form_column.rhtml",
-     "generators/talia_admin/templates/views/admin/index.html.erb",
-     "generators/talia_admin/templates/views/admin/locales/new.html.erb",
-     "generators/talia_admin/templates/views/admin/sources/_show.html.erb",
-     "generators/talia_admin/templates/views/admin/translations/_new_translation.html.erb",
-     "generators/talia_admin/templates/views/admin/translations/_translation.html.erb",
-     "generators/talia_admin/templates/views/admin/translations/edit.html.erb",
-     "generators/talia_admin/templates/views/layouts/admin.html.erb",
+     "generators/talia_admin/templates/public/stylesheets/application.css",
+     "generators/talia_admin/templates/public/stylesheets/hobo-rapid.css",
+     "generators/talia_admin/templates/public/stylesheets/reset.css",
+     "generators/talia_admin/templates/test/fixtures/users.yml",
+     "generators/talia_admin/templates/test/functional/admin/front_controller_test.rb",
+     "generators/talia_admin/templates/test/functional/users_controller_test.rb",
+     "generators/talia_admin/templates/test/unit/user_test.rb",
      "generators/talia_base/USAGE",
      "generators/talia_base/talia_base_generator.rb",
      "generators/talia_base/templates/README",
@@ -157,9 +162,12 @@ Gem::Specification.new do |s|
      "generators/talia_base/templates/public/stylesheets/talia_core/main.css",
      "generators/talia_base/templates/script/configure_talia",
      "generators/talia_base/templates/script/prepare_images",
-     "generators/talia_base/templates/script/setup_talia_backend",
      "generators/talia_base/templates/talia.sh",
      "generators/talia_base/templates/tasks/talia_core.rk",
+     "generators/talia_oai/USAGE",
+     "generators/talia_oai/talia_oai_generator.rb",
+     "generators/talia_oai/templates/oai_controller.rb",
+     "generators/talia_oai/templates/oai_initializer.rb",
      "lib/JXslt/jxslt.rb",
      "lib/core_ext.rb",
      "lib/core_ext/platform.rb",
@@ -183,6 +191,7 @@ Gem::Specification.new do |s|
      "lib/talia_core/agent.rb",
      "lib/talia_core/background_jobs/job.rb",
      "lib/talia_core/background_jobs/progress_job.rb",
+     "lib/talia_core/collection.rb",
      "lib/talia_core/data_types/data_loader.rb",
      "lib/talia_core/data_types/data_record.rb",
      "lib/talia_core/data_types/delayed_copier.rb",
@@ -201,6 +210,9 @@ Gem::Specification.new do |s|
      "lib/talia_core/dummy_handler.rb",
      "lib/talia_core/errors.rb",
      "lib/talia_core/initializer.rb",
+     "lib/talia_core/oai/active_source_model.rb",
+     "lib/talia_core/oai/active_source_oai_adapter.rb",
+     "lib/talia_core/oai/active_source_oai_adapter/class_methods.rb",
      "lib/talia_core/ordered_source.rb",
      "lib/talia_core/property_string.rb",
      "lib/talia_core/rdf_import.rb",
@@ -287,7 +299,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<semantic_naming>, [">= 2.0.6"])
       s.add_runtime_dependency(%q<bjj>, [">= 1.0.2"])
       s.add_runtime_dependency(%q<hpricot>, [">= 0.6.1"])
-      s.add_runtime_dependency(%q<oai>, [">= 0.0.12"])
+      s.add_runtime_dependency(%q<oai_talia>, [">= 0.0.15"])
       s.add_runtime_dependency(%q<builder>, [">= 2.1.2"])
       s.add_runtime_dependency(%q<optiflag>, [">= 0.6.5"])
       s.add_runtime_dependency(%q<rake>, [">= 0.7.1"])
@@ -299,7 +311,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<semantic_naming>, [">= 2.0.6"])
       s.add_dependency(%q<bjj>, [">= 1.0.2"])
       s.add_dependency(%q<hpricot>, [">= 0.6.1"])
-      s.add_dependency(%q<oai>, [">= 0.0.12"])
+      s.add_dependency(%q<oai_talia>, [">= 0.0.15"])
       s.add_dependency(%q<builder>, [">= 2.1.2"])
       s.add_dependency(%q<optiflag>, [">= 0.6.5"])
       s.add_dependency(%q<rake>, [">= 0.7.1"])
@@ -312,7 +324,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<semantic_naming>, [">= 2.0.6"])
     s.add_dependency(%q<bjj>, [">= 1.0.2"])
     s.add_dependency(%q<hpricot>, [">= 0.6.1"])
-    s.add_dependency(%q<oai>, [">= 0.0.12"])
+    s.add_dependency(%q<oai_talia>, [">= 0.0.15"])
     s.add_dependency(%q<builder>, [">= 2.1.2"])
     s.add_dependency(%q<optiflag>, [">= 0.6.5"])
     s.add_dependency(%q<rake>, [">= 0.7.1"])

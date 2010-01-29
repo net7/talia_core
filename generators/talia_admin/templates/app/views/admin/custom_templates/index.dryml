@@ -1,0 +1,7 @@
+<index-page>
+	<collection: replace>
+		<table-plus fields="this, template_type, content">
+			<empty-message:>No templates match your criteria</empty-message:>
+		</table-plus>
+	</collection:>
+</index-page>

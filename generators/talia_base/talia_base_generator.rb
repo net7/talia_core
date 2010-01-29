@@ -7,10 +7,20 @@ class TaliaBaseGenerator < Rails::Generator::Base
   def manifest
     
     record do |m|
+      # Write the routes. Remember that these end up in the file in the reverse order of the calls
+      m.rewrite_file 'config/routes.rb', "map.connect ':controller/:action/:id.:format'", "# map.connect ':controller/:action/:id.:format'"
+      m.route "# Default semantic dispatch\n  map.connect ':dispatch_uri.:format', :controller => 'sources', :action => 'dispatch',\n    :requirements => { :dispatch_uri => /[^\\.]+/ }"
+      m.route "# Routes for the sources\n  map.resources :sources, :requirements => { :id => /.+/  }"
+      m.route "# Routes for types\n  map.resources :types"
+      m.route "map.resources :data_records, :controller => 'source_data'"
+      m.route "map.connect 'source_data/:type/:location', :controller => 'source_data',\n    :action => 'show_tloc',\n    :requirements => { :location => /[^\\/]+/ } # Force the location to match also filenames with points etc."
+      m.route "# Routes for the source data\n  map.connect 'source_data/:id', :controller => 'source_data',\n    :action => 'show'"
+      m.route "# Ontologies\n  map.resources :ontologies"
+      m.route "# Autocomplete on URI\n  map.connect 'sources/auto_complete_for_uri', :controller => 'sources', :action => 'auto_complete_for_uri'"
+      
       # Some initialization stuff
       m.directory 'config/initializers'
       m.file "config/talia_initializer.rb", "config/initializers/talia.rb"
-      m.file "config/routes.rb", "config/routes.rb", :collision => :ask
       m.file "talia.sh", "talia.sh", :shebang => '/bin/sh', :chmod => 0755
       m.file "config/warble.rb", "config/warble.rb"
       

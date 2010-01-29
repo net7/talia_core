@@ -1,0 +1,7 @@
+<index-page>
+	<collection: replace>
+		<table-plus fields="this, uri">
+			<empty-message:>No collections match your criteria</empty-message:>
+		</table-plus>
+	</collection:>
+</index-page>

@@ -46,9 +46,23 @@ module CreatorHelpers
     sentinel = 'ActionController::Routing::Routes.draw do |map|'
     logger.route route
     gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |m|
-      "#{m}\n\n  #{route}\n"
+      "#{m}\n  #{route}\n"
     end
   end
+  
+  def gem_dependency(gem_name)
+    sentinel = 'Rails::Initializer.run do |config|'
+    logger.gem_depend gem_name
+    gsub_file 'config/environment.rb', /(#{Regexp.escape(sentinel)})/mi do |m|
+      "#{m}\n  # Autoconfigured gem dependency\n  config.gem \"#{gem_name}\"\n"
+    end
+  end
+  
+  def rewrite_file(relative_file, old_value, new_value)
+    logger.rewrite_file "#{relative_file} from #{old_value} to #{new_value}"
+    gsub_file relative_file, /(#{Regexp.escape(old_value)})/mi, new_value
+  end
+  
 end
 
 module DestructorHelpers

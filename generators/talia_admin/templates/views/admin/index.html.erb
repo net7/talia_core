@@ -1,5 +1,0 @@
-<% for admin_page in active_pages %>
-  <div id="<%= admin_page  %>_access" class="main_menu_box">
-    <%= link_to h(admin_page.titleize), :controller => "admin/#{h(admin_page)}" %>
-  </div>
-<% end %>

@@ -1,0 +1,8 @@
+<show-page>
+	<content-body: replace>
+		<section class="content-body">
+			<field-list replace fields="name, uri, type" />
+			<properties />
+		</section>
+	</content-body:>
+</show-page>

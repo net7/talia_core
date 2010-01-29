@@ -1,0 +1,91 @@
+<!-- Tag definitions for the Admin subsite -->
+ 
+<include src="rapid" plugin="hobo"/>
+
+<include src="taglibs/auto/admin/rapid/cards"/>
+<include src="taglibs/auto/admin/rapid/pages"/>
+<include src="taglibs/auto/admin/rapid/forms"/>
+
+<set-theme name="clean"/>
+
+<def tag="app-name">Talia Admin Panel</def>
+
+<def tag="prop-language">
+	<b>Language:</b> <this.lang if="lang" />
+	<else>n/a (default)</else>
+</def>
+
+<def tag="semlabel"><this.label if="respond_to?(:label)" /><else><do if="respond_to?(:uri)"><%= this.to_uri.to_name_s %></do><else><%= this.to_s %></else></else></def>
+
+<def tag="prop-type">
+	<b>Type:</b> <this.type if="type" />
+	<else>n/a (String)</else>
+</def>
+
+<def tag="property-string-card">
+	<card>
+		<header:><h4>"<this/>"</h4></header:>
+		<body:>
+			<p><prop-type /> <prop-language /></p>
+		</body:>
+	</card>
+</def>
+
+<def tag="property-relation-card">
+	<card>
+		<header:>
+			<h4>
+				<wrap tag="a" href="&url_for(:controller => 'admin/talia_sources', :action => this.id)" when="is_a?(TaliaCore::ActiveSource)">
+					&lt;<semlabel />&gt;
+				</wrap>
+			</h4>
+		</header:>
+		<body:><p><%= this.uri.to_s %></p></body:>
+	</card>
+	
+</def>
+
+<def tag="property-card">
+	<property-string-card if="is_a?(TaliaCore::PropertyString)" />
+	<else><property-relation-card /></else>
+</def>
+
+<def tag="properties">
+	<repeat: with="&@properties">
+		<h3><%= this_key.to_uri.to_name_s %></h3>
+		<property-card repeat param/>
+	</repeat:>
+</def>
+
+<def tag="sidebared-content">
+	<section-group>
+		<section param="main-content">
+			<header param="content-header">
+				<h2 param="heading">
+         				<ht key="talia_sources.index.heading">
+						<%= model.name.titleize.pluralize %>
+         				</ht>
+       			</h2>
+
+				<p param="count" if>
+					<ht key="talia_sources.collection.count" count="&this.size">
+						There <count prefix="are"/>
+					</ht>
+				</p>
+			</header>
+
+			<section param="content-body">
+				<a action="new" to="&model" param="new-link">
+					<ht key="talia_sources.actions.new">New <%= model.name.titleize %></ht>
+				</a>
+
+				<page-nav param="top-page-nav"/>
+				
+				<section>
+					<collection param />
+				</section>
+			</section>
+		</section>
+		<aside param />
+	</section-group>
+</def>

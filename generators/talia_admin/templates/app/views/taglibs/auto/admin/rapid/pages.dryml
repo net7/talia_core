@@ -1,0 +1,543 @@
+<!-- AUTOMATICALLY GENERATED FILE - DO NOT EDIT -->
+
+<!-- ====== Main Navigation ====== -->
+
+<def tag="main-nav">
+  <navigation class="main-nav" merge-attrs param="default">
+    <nav-item href="#{base_url}/">Home</nav-item>
+    <nav-item with="&CustomTemplate"><ht key="custom_templates.nav_item">Custom Templates</ht></nav-item>
+    <nav-item with="&TaliaCollection"><ht key="talia_collections.nav_item">Talia Collections</ht></nav-item>
+    <nav-item with="&TaliaSource"><ht key="talia_sources.nav_item">Talia Sources</ht></nav-item>
+    <nav-item with="&User"><ht key="users.nav_item">Users</ht></nav-item>
+  </navigation>
+</def>
+
+
+
+
+<!-- ====== CustomTemplate Pages ====== -->
+
+<def tag="index-page" for="CustomTemplate">
+  <page merge title="#{ht 'custom_templates.index.title', :default=>['Custom Templates'] }">
+    <body: class="index-page custom-template" param/>
+
+    <content: param>
+      <header param="content-header">
+        <h2 param="heading">
+          <ht key="custom_templates.index.heading">
+            Custom Templates
+          </ht>
+        </h2>
+
+        <p param="count" if>
+          <ht key="custom_templates.collection.count" count="&this.size">
+            There <count prefix="are"/>
+          </ht>
+        </p>
+      </header>
+
+      <section param="content-body">
+        <a action="new" to="&model" param="new-link">
+          <ht key="custom_templates.actions.new">New Custom Template</ht>
+        </a>
+
+        <page-nav param="top-page-nav"/>
+
+        <collection param/>
+
+        <page-nav param="bottom-page-nav"/>
+
+
+      </section>
+    </content:>
+  </page>
+</def>
+
+
+<def tag="new-page" for="CustomTemplate">
+  <page merge title="#{ht 'custom_templates.new.title', :default=>[' New Custom Template'] }">
+    <body: class="new-page custom-template" param/>
+
+    <content: param>
+      <section param="content-header">
+        <h2 param="heading">
+          <ht key="custom_templates.new.heading">
+            New Custom Template
+          </ht>
+        </h2>
+      </section>
+
+      <section param="content-body">
+        <form param>
+          <submit: label="#{ht 'custom_templates.actions.create', :default=>['Create Custom Template']}"/>
+        </form>
+      </section>
+    </content:>
+  </page>
+</def>
+
+
+<def tag="show-page" for="CustomTemplate">
+  <page merge title="#{ht 'custom_templates.show.title', :default=>['Custom Template'] }">
+
+    <body: class="show-page custom-template" param/>
+
+    <content: param>
+          <header param="content-header">
+            <h2 param="heading">
+              <ht key="custom_templates.show.heading" name="&this.respond_to?(:name) ? this.name : ''">
+                <name/>
+              </ht>
+            </h2>
+
+            <record-flags fields="" param/>
+
+            <a action="edit" if="&can_edit?" param="edit-link">
+              <ht key="custom_templates.actions.edit" name="&this.respond_to?(:name) ? this.name : ''">
+                Edit Custom Template
+              </ht>
+            </a>
+          </header>
+
+          <section param="content-body">
+            <view:content param="description"/>
+            <field-list fields="template_type" param/>
+          </section>
+    </content:>
+
+  </page>
+</def>
+
+
+<def tag="edit-page" for="CustomTemplate">
+  <page merge title="#{ht 'custom_templates.edit.title', :default=>['Edit Custom Template'] }">
+
+    <body: class="edit-page custom-template" param/>
+
+    <content:>
+      <section param="content-header">
+        <h2 param="heading">
+          <ht key="custom_templates.edit.heading" name="&this.respond_to?(:name) ? this.name : ''">
+            Edit <type-name/>
+          </ht>
+        </h2>
+        <delete-button label="#{ht 'custom_templates.actions.delete', :default=>['Remove This Custom Template']}" param/>
+      </section>
+
+      <section param="content-body">
+        <form param/>
+      </section>
+    </content:>
+
+  </page>
+</def>
+
+
+
+
+
+<!-- ====== TaliaCollection Pages ====== -->
+
+<def tag="index-page" for="TaliaCollection">
+  <page merge title="#{ht 'talia_collections.index.title', :default=>['Talia Collections'] }">
+    <body: class="index-page talia-collection" param/>
+
+    <content: param>
+      <header param="content-header">
+        <h2 param="heading">
+          <ht key="talia_collections.index.heading">
+            Talia Collections
+          </ht>
+        </h2>
+
+        <p param="count" if>
+          <ht key="talia_collections.collection.count" count="&this.size">
+            There <count prefix="are"/>
+          </ht>
+        </p>
+      </header>
+
+      <section param="content-body">
+        <a action="new" to="&model" param="new-link">
+          <ht key="talia_collections.actions.new">New Talia Collection</ht>
+        </a>
+
+        <page-nav param="top-page-nav"/>
+
+        <collection param/>
+
+        <page-nav param="bottom-page-nav"/>
+
+
+      </section>
+    </content:>
+  </page>
+</def>
+
+
+<def tag="new-page" for="TaliaCollection">
+  <page merge title="#{ht 'talia_collections.new.title', :default=>[' New Talia Collection'] }">
+    <body: class="new-page talia-collection" param/>
+
+    <content: param>
+      <section param="content-header">
+        <h2 param="heading">
+          <ht key="talia_collections.new.heading">
+            New Talia Collection
+          </ht>
+        </h2>
+      </section>
+
+      <section param="content-body">
+        <form param>
+          <submit: label="#{ht 'talia_collections.actions.create', :default=>['Create Talia Collection']}"/>
+        </form>
+      </section>
+    </content:>
+  </page>
+</def>
+
+
+<def tag="show-page" for="TaliaCollection">
+  <page merge title="#{ht 'talia_collections.show.title', :default=>['Talia Collection'] }">
+
+    <body: class="show-page talia-collection" param/>
+
+    <content: param>
+          <header param="content-header">
+            <h2 param="heading">
+              <ht key="talia_collections.show.heading" name="&this.respond_to?(:name) ? this.name : ''">
+                <name/>
+              </ht>
+            </h2>
+
+            <record-flags fields="" param/>
+
+            <a action="edit" if="&can_edit?" param="edit-link">
+              <ht key="talia_collections.actions.edit" name="&this.respond_to?(:name) ? this.name : ''">
+                Edit Talia Collection
+              </ht>
+            </a>
+          </header>
+
+          <section param="content-body">
+            <field-list fields="uri" param/>
+          </section>
+    </content:>
+
+  </page>
+</def>
+
+
+<def tag="edit-page" for="TaliaCollection">
+  <page merge title="#{ht 'talia_collections.edit.title', :default=>['Edit Talia Collection'] }">
+
+    <body: class="edit-page talia-collection" param/>
+
+    <content:>
+      <section param="content-header">
+        <h2 param="heading">
+          <ht key="talia_collections.edit.heading" name="&this.respond_to?(:name) ? this.name : ''">
+            Edit <type-name/>
+          </ht>
+        </h2>
+        <delete-button label="#{ht 'talia_collections.actions.delete', :default=>['Remove This Talia Collection']}" param/>
+      </section>
+
+      <section param="content-body">
+        <form param/>
+      </section>
+    </content:>
+
+  </page>
+</def>
+
+
+
+
+
+<!-- ====== TaliaSource Pages ====== -->
+
+<def tag="index-page" for="TaliaSource">
+  <page merge title="#{ht 'talia_sources.index.title', :default=>['Talia Sources'] }">
+    <body: class="index-page talia-source" param/>
+
+    <content: param>
+      <header param="content-header">
+        <h2 param="heading">
+          <ht key="talia_sources.index.heading">
+            Talia Sources
+          </ht>
+        </h2>
+
+        <p param="count" if>
+          <ht key="talia_sources.collection.count" count="&this.size">
+            There <count prefix="are"/>
+          </ht>
+        </p>
+      </header>
+
+      <section param="content-body">
+        <a action="new" to="&model" param="new-link">
+          <ht key="talia_sources.actions.new">New Talia Source</ht>
+        </a>
+
+        <page-nav param="top-page-nav"/>
+
+        <collection param/>
+
+        <page-nav param="bottom-page-nav"/>
+
+
+      </section>
+    </content:>
+  </page>
+</def>
+
+
+<def tag="new-page" for="TaliaSource">
+  <page merge title="#{ht 'talia_sources.new.title', :default=>[' New Talia Source'] }">
+    <body: class="new-page talia-source" param/>
+
+    <content: param>
+      <section param="content-header">
+        <h2 param="heading">
+          <ht key="talia_sources.new.heading">
+            New Talia Source
+          </ht>
+        </h2>
+      </section>
+
+      <section param="content-body">
+        <form param>
+          <submit: label="#{ht 'talia_sources.actions.create', :default=>['Create Talia Source']}"/>
+        </form>
+      </section>
+    </content:>
+  </page>
+</def>
+
+
+<def tag="show-page" for="TaliaSource">
+  <page merge title="#{ht 'talia_sources.show.title', :default=>['Talia Source'] }">
+
+    <body: class="show-page talia-source" param/>
+
+    <content: param>
+          <header param="content-header">
+            <h2 param="heading">
+              <ht key="talia_sources.show.heading" name="&this.respond_to?(:name) ? this.name : ''">
+                <name/>
+              </ht>
+            </h2>
+
+            <record-flags fields="" param/>
+
+            <a action="edit" if="&can_edit?" param="edit-link">
+              <ht key="talia_sources.actions.edit" name="&this.respond_to?(:name) ? this.name : ''">
+                Edit Talia Source
+              </ht>
+            </a>
+          </header>
+
+          <section param="content-body">
+            <field-list fields="uri, type" param/>
+          </section>
+    </content:>
+
+  </page>
+</def>
+
+
+<def tag="edit-page" for="TaliaSource">
+  <page merge title="#{ht 'talia_sources.edit.title', :default=>['Edit Talia Source'] }">
+
+    <body: class="edit-page talia-source" param/>
+
+    <content:>
+      <section param="content-header">
+        <h2 param="heading">
+          <ht key="talia_sources.edit.heading" name="&this.respond_to?(:name) ? this.name : ''">
+            Edit <type-name/>
+          </ht>
+        </h2>
+        <delete-button label="#{ht 'talia_sources.actions.delete', :default=>['Remove This Talia Source']}" param/>
+      </section>
+
+      <section param="content-body">
+        <form param/>
+      </section>
+    </content:>
+
+  </page>
+</def>
+
+
+
+
+
+<!-- ====== User Pages ====== -->
+
+<def tag="index-page" for="User">
+  <page merge title="#{ht 'users.index.title', :default=>['Users'] }">
+    <body: class="index-page user" param/>
+
+    <content: param>
+      <header param="content-header">
+        <h2 param="heading">
+          <ht key="users.index.heading">
+            Users
+          </ht>
+        </h2>
+
+        <p param="count" if>
+          <ht key="users.collection.count" count="&this.size">
+            There <count prefix="are"/>
+          </ht>
+        </p>
+      </header>
+
+      <section param="content-body">
+        <a action="new" to="&model" param="new-link">
+          <ht key="users.actions.new">New User</ht>
+        </a>
+
+        <page-nav param="top-page-nav"/>
+
+        <collection param/>
+
+        <page-nav param="bottom-page-nav"/>
+
+
+      </section>
+    </content:>
+  </page>
+</def>
+
+
+<def tag="new-page" for="User">
+  <page merge title="#{ht 'users.new.title', :default=>[' New User'] }">
+    <body: class="new-page user" param/>
+
+    <content: param>
+      <section param="content-header">
+        <h2 param="heading">
+          <ht key="users.new.heading">
+            New User
+          </ht>
+        </h2>
+      </section>
+
+      <section param="content-body">
+        <form param>
+          <submit: label="#{ht 'users.actions.create', :default=>['Create User']}"/>
+        </form>
+      </section>
+    </content:>
+  </page>
+</def>
+
+
+<def tag="show-page" for="User">
+  <page merge title="#{ht 'users.show.title', :default=>['User'] }">
+
+    <body: class="show-page user" param/>
+
+    <content: param>
+          <header param="content-header">
+            <h2 param="heading">
+              <ht key="users.show.heading" name="&this.respond_to?(:name) ? this.name : ''">
+                <name/>
+              </ht>
+            </h2>
+
+            <record-flags fields="administrator" param/>
+
+            <a action="edit" if="&can_edit?" param="edit-link">
+              <ht key="users.actions.edit" name="&this.respond_to?(:name) ? this.name : ''">
+                Edit User
+              </ht>
+            </a>
+          </header>
+
+          <section param="content-body">
+            <field-list fields="email_address, state" param/>
+          </section>
+    </content:>
+
+  </page>
+</def>
+
+
+<def tag="edit-page" for="User">
+  <page merge title="#{ht 'users.edit.title', :default=>['Edit User'] }">
+
+    <body: class="edit-page user" param/>
+
+    <content:>
+      <section param="content-header">
+        <h2 param="heading">
+          <ht key="users.edit.heading" name="&this.respond_to?(:name) ? this.name : ''">
+            Edit <type-name/>
+          </ht>
+        </h2>
+        <delete-button label="#{ht 'users.actions.delete', :default=>['Remove This User']}" param/>
+      </section>
+
+      <section param="content-body">
+        <form param/>
+      </section>
+    </content:>
+
+  </page>
+</def>
+
+
+<def tag="signup-page" polymorphic/>
+<def tag="signup-page" for="User">
+  
+  <page title="#{ht 'users.signup.title', :default=>['Signup']}" merge>  
+
+    <body: class="lifecycle-start-page signup-page" param/>
+
+    <content: param>
+      <header param="content-header">
+        <h2 param="heading">
+          <ht key="users.signup.heading">
+            Signup
+          </ht>
+        </h2>
+      </header>
+
+      <section param="content-body">
+        <signup-form param="form"/>
+      </section>
+    </content:>
+
+  </page>
+</def>
+
+<def tag="reset-password-page" polymorphic/>
+<def tag="reset-password-page" for="User">
+  <page title="#{ht 'users.reset_password.title', :default=>['Reset Password']}" merge>
+
+    <body: class="lifecycle-transition-page reset-password-page" param/>
+
+    <content:>
+      <header param="content-header">
+        <h2 param="heading">
+          <ht key="users.reset_password.heading">
+            Reset Password
+          </ht>
+        </h2>
+      </header>
+
+      <section param="content-body">
+        <reset-password-form param="form"/>
+      </section>
+    </content:>
+
+  </page>
+</def>
+
+

@@ -1,0 +1,7 @@
+<index-page>
+	<collection: replace>
+		<table-plus fields="this, email_address, administrator, state">
+			<empty-message:>No users match your criteria</empty-message:>
+		</table-plus>
+	</collection:>
+</index-page>

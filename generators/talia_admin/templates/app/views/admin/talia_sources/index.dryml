@@ -1,0 +1,17 @@
+<index-page>
+	<content: replace>
+		<sidebared-content>
+			<collection: replace>
+				<table-plus fields="this, uri, short_type">
+					<empty-message:>No sources match your criteria</empty-message:>
+				</table-plus>
+			</collection:>
+			<aside:>
+				<h2>Collections</h2>
+				<collection with="&all_collections">
+					<empty-message:>No collections found</empty-message>
+				</collection>
+			</aside:>
+		</sidebared-content>
+	</content:>
+</index-page>

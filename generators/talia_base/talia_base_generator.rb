@@ -28,7 +28,6 @@ class TaliaBaseGenerator < Rails::Generator::Base
       m.directory 'script'
       m.file 'script/configure_talia', 'script/configure_talia', :shebang => DEFAULT_SHEBANG, :chmod => 0755
       m.file 'script/prepare_images', 'script/prepare_images', :shebang => DEFAULT_SHEBANG, :chmod => 0755
-      m.file 'script/setup_talia_backend', 'script/setup_talia_backend', :shebang => DEFAULT_SHEBANG, :chmod => 0755
       
       # The whole app shebang of files
       m.files_in 'app'

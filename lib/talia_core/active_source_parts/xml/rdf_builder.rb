@@ -24,6 +24,14 @@ module TaliaCore
               write_predicate(predicate, source[predicate])
             end
           end
+
+          source.inverse_predicates.each do |predicate|
+            source.inverse[predicate].each do |inverse_subject|
+              @builder.rdf :Description, 'rdf:about' => inverse_subject do
+                write_predicate(predicate, [source])
+              end
+            end
+          end
         end
 
         private 
@@ -31,7 +39,7 @@ module TaliaCore
         # Build the structure for the XML file and pass on to
         # the given block
         def build_structure
-          @builder.rdf :RDF, self.class.namespaces do 
+          @builder.rdf :RDF, self.class.namespaces do
             yield
           end
         end

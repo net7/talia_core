@@ -21,7 +21,7 @@ module TaliaCore
   class ActiveSource < ActiveRecord::Base
     
     # Act like an ActiveRdfResource
-    include RDFS::ResourceLike
+    include ActiveRDF::ResourceLike
     
     extend ActiveSourceParts::ClassMethods
     extend ActiveSourceParts::Finders

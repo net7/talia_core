@@ -49,7 +49,7 @@ begin
     s.extra_rdoc_files = ["README.rdoc", "CHANGES", "LICENSE"]
     s.add_dependency('activerecord', '>= 2.0.5')
     s.add_dependency('activesupport', '>= 2.0.5')
-    s.add_dependency('activerdf_net7', '>= 1.6.13')
+    s.add_dependency('activerdf_net7', '>= 1.7.0')
     s.add_dependency('assit', '>= 0.1.2')
     s.add_dependency('semantic_naming', '>= 2.1.3')
     s.add_dependency('bjj', '>= 1.0.2')

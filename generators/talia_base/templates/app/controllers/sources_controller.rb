@@ -158,7 +158,7 @@ class SourcesController < ApplicationController
 
     def source_types
       return @source_types if(@source_types)
-      @source_types = Query.new(N::URI).select(:type).distinct.where(:source, N::RDF.type, :type).execute
+      @source_types = ActiveRDF::Query.new(N::URI).select(:type).distinct.where(:source, N::RDF.type, :type).execute
       @source_types
     end
 

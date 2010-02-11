@@ -7,7 +7,7 @@ module TaliaCore
   # of the pitfalls of the original class.
   class RdfResource
 
-    include RDFS::ResourceLike
+    include ActiveRDF::ResourceLike
     
     class << self
       
@@ -34,18 +34,18 @@ module TaliaCore
 
     # Direct writing of a predicate, with having to fetch a list first
     def direct_write_predicate(predicate, value)
-      FederationManager.add(self, predicate, value)
+      ActiveRDF::FederationManager.add(self, predicate, value)
     end
 
     # Clears all rdf for this resource. FIXME: Not context-aware.
     def clear_rdf
-      FederationManager.delete_all(self)
+      ActiveRDF::FederationManager.delete_all(self)
     end
 
     # Removes the given predicate (restrict to the triple with the
     # given value if a value is given).
     def remove(predicate, value = nil)
-      FederationManager.delete(self, predicate, value)
+      ActiveRDF::FederationManager.delete(self, predicate, value)
     end
 
     # Returns the value(s) of the given predicates as a PropertyList filled
@@ -53,7 +53,7 @@ module TaliaCore
     def [](predicate)
       predicate = N::URI.new(predicate) unless(predicate.kind_of?(N::URI))
       
-      property_list = Query.new(object_class).distinct(:o).where(self, predicate, :o).execute
+      property_list = ActiveRDF::Query.new(object_class).distinct(:o).where(self, predicate, :o).execute
       
       PropertyList.new(predicate, property_list, self, source_exists?)
     end
@@ -77,7 +77,7 @@ module TaliaCore
         
         def [](property)
           property = N::URI.new(property) unless(property.kind_of?(N::URI))
-          Query.new(@obj_class).distinct(:s).where(:s, property, @obj_uri).execute
+          ActiveRDF::Query.new(@obj_class).distinct(:s).where(:s, property, @obj_uri).execute
         end
         private(:type)
       end
@@ -93,13 +93,13 @@ module TaliaCore
     
     # Returns the predicates that are directly defined for this resource
     def direct_predicates
-      Query.new(N::Predicate).distinct(:p).where(self, :p, :o).execute
+      ActiveRDF::Query.new(N::Predicate).distinct(:p).where(self, :p, :o).execute
     end
     
     # Returns the "inverse" predicates for the resource. these are the predicates
     # for which this resource exists as an object
     def inverse_predicates
-      qry = Query.new.distinct.select(:p)
+      qry = ActiveRDF::Query.new.distinct.select(:p)
       qry.where(:s, :p, N::URI.new(uri.to_s))
       qry.execute.collect{ |res| N::Predicate.new(res.uri) }
     end
@@ -108,8 +108,8 @@ module TaliaCore
     # been optimized so that if only one RDF backend is present it won't do
     # any copying around.
     def save
-      if((ConnectionPool.read_adapters.size == 1) &&
-            (ConnectionPool.write_adapter == ConnectionPool.read_adapters.first))
+      if((ActiveRDF::ConnectionPool.read_adapters.size == 1) &&
+            (ActiveRDF::ConnectionPool.write_adapter == ActiveRDF::ConnectionPool.read_adapters.first))
         save_default_types # Only write the "default" types to the store
       else
         full_save # Do the full save operation
@@ -118,7 +118,7 @@ module TaliaCore
     
     # Returns the types of this resource as N::SourceClass objects
     def types
-      types = Query.new(N::SourceClass).distinct(:t).where(self,N::RDF::type,:t).execute
+      types = ActiveRDF::Query.new(N::SourceClass).distinct(:t).where(self,N::RDF::type,:t).execute
       # Add the "default" types if necessary
       self.class.default_types.each do |def_type|
         types << def_type unless(types.include?(def_type))
@@ -133,7 +133,7 @@ module TaliaCore
     # Saves the the "default" types of this resource to the writing adapter
     def save_default_types
       self.class.default_types.each do |t|
-        FederationManager.add(self, N::RDF::type, t)
+        ActiveRDF::FederationManager.add(self, N::RDF::type, t)
       end
     end
     
@@ -141,11 +141,11 @@ module TaliaCore
     # the writing adapter. This operation can be very slow.
     def full_save
       types.each do |t|
-        FederationManager.add(self, N::RDF::type, t)
+        ActiveRDF::FederationManager.add(self, N::RDF::type, t)
       end
 
-      Query.new(N::URI).distinct(:p,:o).where(self, :p, :o).execute do |p, o|
-        FederationManager.add(self, p, o)
+      ActiveRDF::Query.new(N::URI).distinct(:p,:o).where(self, :p, :o).execute do |p, o|
+        ActiveRDF::FederationManager.add(self, p, o)
       end
     end
     

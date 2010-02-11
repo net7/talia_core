@@ -25,7 +25,7 @@ module TaliaUtil
       # Set up the ontologies from the given folder
       def setup_ontologies
         # Clear the ontologies from RDF, if possible
-        adapter = ConnectionPool.write_adapter
+        adapter = ActiveRDF::ConnectionPool.write_adapter
         if(adapter.supports_context?)
           TaliaCore::RdfImport.clear_file_contexts
         else
@@ -108,7 +108,7 @@ module TaliaUtil
 
       # Flush the RDF store
       def flush_rdf
-        ConnectionPool.write_adapter.clear
+        ActiveRDF::ConnectionPool.write_adapter.clear
       end
 
       # Remove the data directories
@@ -145,7 +145,7 @@ module TaliaUtil
           else
             rec.property_value
           end
-          FederationManager.add(subject, predicate, object)
+          ActiveRDF::FederationManager.add(subject, predicate, object)
           yield if(block_given?)
         end
 
@@ -155,7 +155,7 @@ module TaliaUtil
         # are defined outside the core.
         TaliaCore::ActiveSource.find(:all, :select => 'uri, type AS runtime_type').each do |src|
           type = (src.runtime_type || 'ActiveSource')
-          FederationManager.add(src, N::RDF.type, N::TALIA + type)
+          ActiveRDF::FederationManager.add(src, N::RDF.type, N::TALIA + type)
           yield if(block_given?)
         end
       end

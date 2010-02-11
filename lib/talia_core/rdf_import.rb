@@ -53,17 +53,17 @@ module TaliaCore
       # Clear the currently registered ontologies
       def clear_file_contexts
         # Remove all registered contexts
-        to_clear = Query.new(N::URI).select(:context).distinct.where(N::TALIA.rdf_context_space, N::TALIA.rdf_file_context, :context).execute
+        to_clear = ActiveRDF::Query.new(N::URI).select(:context).distinct.where(N::TALIA.rdf_context_space, N::TALIA.rdf_file_context, :context).execute
         to_clear.each do |context|
           adapter.clear(context) 
         end
-        FederationManager.delete(N::TALIA.rdf_context_space, N::TALIA.rdf_file_context, nil)
+        ActiveRDF::FederationManager.delete(N::TALIA.rdf_context_space, N::TALIA.rdf_file_context, nil)
       end
 
       private
 
       def adapter
-        @adapter ||= ConnectionPool.write_adapter
+        @adapter ||= ActiveRDF::ConnectionPool.write_adapter
       end
 
       # Prepare the context for the ontology import. All contexts will be registered
@@ -80,7 +80,7 @@ module TaliaCore
           N::URI.new(N::TALIA + context)
         end
         
-        FederationManager.add(N::TALIA.rdf_context_space, N::TALIA.rdf_file_context, file_context)
+        ActiveRDF::FederationManager.add(N::TALIA.rdf_context_space, N::TALIA.rdf_file_context, file_context)
         
         file_context
       end

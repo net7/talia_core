@@ -303,7 +303,7 @@ module TaliaCore
         # Logginging goes to standard talia logger
         ActiveRdfLogger.logger = talia_logger
 
-        ConnectionPool.add_data_source(rdf_connection_opts)
+        ActiveRDF::ConnectionPool.add_data_source(rdf_connection_opts)
       end
 
       # Configure the namespaces
@@ -353,7 +353,7 @@ module TaliaCore
         return unless(@config['auto_ontologies'] && !['false', 'no'].include?(@config['auto_ontologies'].downcase))
         onto_dir = File.join(TALIA_ROOT, @config['auto_ontologies'])
         raise(SystemInitializationError, "Cannot find configured ontology dir #{onto_dir}") unless(File.directory?(onto_dir))
-        adapter = ConnectionPool.write_adapter
+        adapter = ActiveRDF::ConnectionPool.write_adapter
         raise(SystemInitializationError, "Ontology autoloading without a context-aware adapter deletes all RDF data. This is only allowed in testing, please load the ontology manually.") unless(adapter.supports_context? || (@environment == 'testing'))
         raise(SystemInitializationError, "Ontology autoloading requires 'load' capability on the adapter.") unless(adapter.respond_to?(:load))
 

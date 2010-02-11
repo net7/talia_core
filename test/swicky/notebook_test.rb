@@ -8,6 +8,7 @@ module Swicky
     
     
     def setup
+      setup_once(:flush) { TaliaCore::TestHelper::flush_store }
       @notebook = Notebook.new('dan', 'booky')
       @testpointer = "http://dbin.org/swickynotes/demo/HanselAndGretel.htm#xpointer(start-point(string-range(//DIV[@id='http://dbin.org/swickynotes/demo/HG_1']/P[1]/SPAN[1]/text()[1],'',0))/range-to(string-range(//DIV[@id='http://dbin.org/swickynotes/demo/HG_1']/P[1]/SPAN[1]/text()[1],'',266)))"
     end
@@ -77,24 +78,24 @@ module Swicky
     
     def test_annotations_for_url
       load_notebook
-      assert_equal(293, Notebook.annotations_for_url("http://discovery-project.eu/ontologies/philoSpace/SourceFragment#ec9796a5349b290a7610763dcbc47af2").size)
+      assert_equal(180, Notebook.annotations_for_url("http://discovery-project.eu/ontologies/philoSpace/SourceFragment#ec9796a5349b290a7610763dcbc47af2").size)
     end
     
     def test_annotations_for_xpointer
       load_notebook
-      assert_equal(293, Notebook.annotations_for_xpointer(@testpointer).size)
+      assert_equal(180, Notebook.annotations_for_xpointer(@testpointer).size)
     end
     
     private
     
     def assert_notebook_empty
-      assert_equal(0, Query.new(N::URI).select(:s, :p, :o).distinct.where(:s, :p, :o, @notebook.url).execute.size)
-      assert_equal(0, Query.new(N::URI).select(:user).where(:user, N::TALIA.hasSwickyNotebook, :notebook).where(:notebook, N::RDF.type, N::TALIA.SwickyNotebook).execute.size)
+      assert_equal(0, ActiveRDF::Query.new(N::URI).select(:s, :p, :o).distinct.where(:s, :p, :o, @notebook.url).execute.size)
+      assert_equal(0, ActiveRDF::Query.new(N::URI).select(:user).where(:user, N::TALIA.hasSwickyNotebook, :notebook).where(:notebook, N::RDF.type, N::TALIA.SwickyNotebook).execute.size)
     end
     
     def assert_notebook_full
-      assert_equal(236, Query.new(N::URI).select(:s, :p, :o).distinct.where(:s, :p, :o, @notebook.url).execute.size)
-      assert_equal(1, Query.new(N::URI).select(:user).where(:user, N::TALIA.hasSwickyNotebook, :notebook).where(:notebook, N::RDF.type, N::TALIA.SwickyNotebook).execute.size)
+      assert_equal(236, ActiveRDF::Query.new(N::URI).select(:s, :p, :o).distinct.where(:s, :p, :o, @notebook.url).execute.size)
+      assert_equal(1, ActiveRDF::Query.new(N::URI).select(:user).where(:user, N::TALIA.hasSwickyNotebook, :notebook).where(:notebook, N::RDF.type, N::TALIA.SwickyNotebook).execute.size)
     end
     
     def load_notebook

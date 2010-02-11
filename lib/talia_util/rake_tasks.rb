@@ -141,7 +141,7 @@ namespace :talia_core do
 
     rdf_cfg[:new] = "yes"
 
-    ConnectionPool.add_data_source(rdf_cfg)
+    ActiveRDF::ConnectionPool.add_data_source(rdf_cfg)
   end
 
   # Help info

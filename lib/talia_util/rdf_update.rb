@@ -36,15 +36,15 @@ module TaliaUtil
       # number of blank nodes
       def rdfs_from_owl
         # Remove previous auto rdfs triples
-        FederationManager.clear(N::TALIA.auto_rdfs.context)
+        ActiveRDF::FederationManager.clear(N::TALIA.auto_rdfs.context)
         
         # This gets all OWL classes in the store
-        all_qry = Query.new(N::URI).distinct.select(:class)
+        all_qry = ActiveRDF::Query.new(N::URI).distinct.select(:class)
         all_qry.where(:class, N::RDF::type, N::OWL.Class)
         all_owl = all_qry.execute
         
         # This gets all OWL classes that already have an RDF class attached
-        qry_rdfs = Query.new(N::URI).distinct.select(:class)
+        qry_rdfs = ActiveRDF::Query.new(N::URI).distinct.select(:class)
         qry_rdfs.where(:class, N::RDF::type, N::OWL.Class)
         qry_rdfs.where(:class, N::RDF::type, N::RDFS.Class)
         classes_with_rdfs = qry_rdfs.execute
@@ -76,7 +76,7 @@ module TaliaUtil
         class_hash.each do |klass, status|
           if(status == :has_rdfs_class)
             modified = modified + 1
-            FederationManager.add(N::URI.new(klass), N::RDF.type, N::RDFS.Class, N::TALIA.auto_rdfs_context)
+            ActiveRDF::FederationManager.add(N::URI.new(klass), N::RDF.type, N::RDFS.Class, N::TALIA.auto_rdfs_context)
           end
           yield(class_hash.size) if(block_given?)
         end

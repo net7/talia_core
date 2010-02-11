@@ -84,7 +84,7 @@ module TaliaCore
       res.save
       
       # Check if the defaul type was written
-      rdfs_prop = Query.new(N::SourceClass).distinct(:t).where(res,N::RDF::type,:t).execute
+      rdfs_prop = ActiveRDF::Query.new(N::SourceClass).distinct(:t).where(res,N::RDF::type,:t).execute
       assert_equal(2, rdfs_prop.size)
       assert(rdfs_prop.include?(N::RDFS.Resource))
     end

@@ -7,7 +7,7 @@ module TaliaCore
 
         def self.build_source(source)
           make_xml_string { |build| build.write_source(source) }
-        end
+          end
 
         # Writes a complete source to the rdf
         def write_source(source)
@@ -17,10 +17,18 @@ module TaliaCore
               write_predicate(predicate, source[predicate])
             end
           end
+
+          source.inverse_predicates.each do |predicate|
+            source.inverse[predicate].each do |inverse_subject|
+              @builder.rdf :Description, 'rdf:about' => inverse_subject do
+                write_predicate(predicate, [source])
+              end
+            end
+          end
         end
 
-        
-      end
-    end 
-  end
-end
+
+          end
+        end
+          end
+        end

@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{talia_core}
-  s.version = "0.5.0"
+  s.version = "0.5.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
-  s.date = %q{2010-02-01}
+  s.date = %q{2010-02-11}
   s.default_executable = %q{talia}
   s.description = %q{This is the core plugin for building a digital library with Talia/Rails.}
   s.email = %q{ghub@limitedcreativity.org}
@@ -176,6 +176,9 @@ Gem::Specification.new do |s|
      "lib/loader_helper.rb",
      "lib/mysql.rb",
      "lib/progressbar.rb",
+     "lib/swicky/api_result.rb",
+     "lib/swicky/json_encoder.rb",
+     "lib/swicky/notebook.rb",
      "lib/talia_core.rb",
      "lib/talia_core/active_source.rb",
      "lib/talia_core/active_source_parts/class_methods.rb",
@@ -183,7 +186,6 @@ Gem::Specification.new do |s|
      "lib/talia_core/active_source_parts/predicate_handler.rb",
      "lib/talia_core/active_source_parts/rdf.rb",
      "lib/talia_core/active_source_parts/sql_helper.rb",
-     "lib/talia_core/active_source_parts/xml/base_builder.rb",
      "lib/talia_core/active_source_parts/xml/generic_reader.rb",
      "lib/talia_core/active_source_parts/xml/rdf_builder.rb",
      "lib/talia_core/active_source_parts/xml/source_builder.rb",
@@ -242,9 +244,11 @@ Gem::Specification.new do |s|
      "lib/talia_util/progressbar.rb",
      "lib/talia_util/rake_tasks.rb",
      "lib/talia_util/rdf_update.rb",
-     "lib/talia_util/some_sigla.xml",
      "lib/talia_util/test_helpers.rb",
+     "lib/talia_util/uri_helper.rb",
      "lib/talia_util/util.rb",
+     "lib/talia_util/xml/base_builder.rb",
+     "lib/talia_util/xml/rdf_builder.rb",
      "lib/version.rb",
      "tasks/talia_core_tasks.rake"
   ]
@@ -259,6 +263,8 @@ Gem::Specification.new do |s|
     "test/custom_template_test.rb",
      "test/test_helper.rb",
      "test/core_ext/string_test.rb",
+     "test/swicky/json_encoder_test.rb",
+     "test/swicky/notebook_test.rb",
      "test/talia_core/active_source_predicate_test.rb",
      "test/talia_core/active_source_rdf_test.rb",
      "test/talia_core/active_source_test.rb",
@@ -284,7 +290,8 @@ Gem::Specification.new do |s|
      "test/talia_core/workflow/user_class_for_workflow.rb",
      "test/talia_core/workflow/workflow_base_test.rb",
      "test/talia_util/import_job_helper_test.rb",
-     "test/talia_util/io_helper_test.rb"
+     "test/talia_util/io_helper_test.rb",
+     "test/talia_util/rdf_builder_test.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -294,9 +301,9 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<activerecord>, [">= 2.0.5"])
       s.add_runtime_dependency(%q<activesupport>, [">= 2.0.5"])
-      s.add_runtime_dependency(%q<activerdf_net7>, [">= 1.6.13"])
+      s.add_runtime_dependency(%q<activerdf_net7>, [">= 1.7.0"])
       s.add_runtime_dependency(%q<assit>, [">= 0.1.2"])
-      s.add_runtime_dependency(%q<semantic_naming>, [">= 2.0.6"])
+      s.add_runtime_dependency(%q<semantic_naming>, [">= 2.1.3"])
       s.add_runtime_dependency(%q<bjj>, [">= 1.0.2"])
       s.add_runtime_dependency(%q<hpricot>, [">= 0.6.1"])
       s.add_runtime_dependency(%q<oai_talia>, [">= 0.0.15"])
@@ -306,9 +313,9 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<activerecord>, [">= 2.0.5"])
       s.add_dependency(%q<activesupport>, [">= 2.0.5"])
-      s.add_dependency(%q<activerdf_net7>, [">= 1.6.13"])
+      s.add_dependency(%q<activerdf_net7>, [">= 1.7.0"])
       s.add_dependency(%q<assit>, [">= 0.1.2"])
-      s.add_dependency(%q<semantic_naming>, [">= 2.0.6"])
+      s.add_dependency(%q<semantic_naming>, [">= 2.1.3"])
       s.add_dependency(%q<bjj>, [">= 1.0.2"])
       s.add_dependency(%q<hpricot>, [">= 0.6.1"])
       s.add_dependency(%q<oai_talia>, [">= 0.0.15"])
@@ -319,9 +326,9 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<activerecord>, [">= 2.0.5"])
     s.add_dependency(%q<activesupport>, [">= 2.0.5"])
-    s.add_dependency(%q<activerdf_net7>, [">= 1.6.13"])
+    s.add_dependency(%q<activerdf_net7>, [">= 1.7.0"])
     s.add_dependency(%q<assit>, [">= 0.1.2"])
-    s.add_dependency(%q<semantic_naming>, [">= 2.0.6"])
+    s.add_dependency(%q<semantic_naming>, [">= 2.1.3"])
     s.add_dependency(%q<bjj>, [">= 1.0.2"])
     s.add_dependency(%q<hpricot>, [">= 0.6.1"])
     s.add_dependency(%q<oai_talia>, [">= 0.0.15"])

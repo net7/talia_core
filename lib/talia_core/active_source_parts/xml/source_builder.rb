@@ -27,7 +27,11 @@ module TaliaCore
       #     </source>
       #     ...
       #   </sources>
-      class SourceBuilder < BaseBuilder
+      class SourceBuilder < TaliaUtil::Xml::BaseBuilder
+        
+        def self.build_source(source)
+          make_xml_string { |build| build.write_source(source) }
+        end
         
         # Builds the RDF for a single source
         def write_source(source)

@@ -15,10 +15,12 @@ module TaliaCore
       # present. If attributes for one source are imported in more than one place, all
       # subsequent calls will merge the newly imported attributes with the existing ones.
       class GenericReader
+        
 
         extend TaliaUtil::IoHelper
         include TaliaUtil::IoHelper
         include TaliaUtil::Progressable
+        include TaliaUtil::UriHelper
 
         # Helper class for state
         class State
@@ -162,13 +164,6 @@ module TaliaCore
         end
 
         private
-
-
-        # Removes all characters that are illegal in IRIs, so that the
-        # URIs can be imported
-        def irify(uri)
-          N::URI.new(uri.to_s.gsub( /[{}|\\^`\s]/, '+')).to_s
-        end
 
         # Call the handler method for the given element. If a block is given, that
         # will be called instead

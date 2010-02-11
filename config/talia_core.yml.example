@@ -45,3 +45,5 @@ namespaces:
     talias: http://trac.talia.discovery-project.eu/wiki/StructuralOntology#
     taliadom: http://trac.talia.discovery-project.eu/wiki/SampleDomainOntology#
     sesame: http://www.openrdf.org/schema/sesame#
+    swicky: http://discovery-project.eu/ontologies/philoSpace/
+    discovery: http://discovery-project.eu/ontologies/scholar/0.1/

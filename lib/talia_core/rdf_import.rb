@@ -14,7 +14,7 @@ module TaliaCore
       def import(rdf_syntax, files, context=nil)
         puts "Importing #{files.size} files into the triple store."
         
-        raise(ArgumentError, "Cannot use context, adapter doesn't support it.") if(context && !adapter.contexts)
+        raise(ArgumentError, "Cannot use context, adapter doesn't support it.") if(context && !adapter.contexts?)
         
         # check if the connection to te triplestore is ok...otherwise exit the script
         if !adapter

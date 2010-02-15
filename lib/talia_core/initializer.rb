@@ -354,11 +354,11 @@ module TaliaCore
         onto_dir = File.join(TALIA_ROOT, @config['auto_ontologies'])
         raise(SystemInitializationError, "Cannot find configured ontology dir #{onto_dir}") unless(File.directory?(onto_dir))
         adapter = ActiveRDF::ConnectionPool.write_adapter
-        raise(SystemInitializationError, "Ontology autoloading without a context-aware adapter deletes all RDF data. This is only allowed in testing, please load the ontology manually.") unless(adapter.contexts || (@environment == 'testing'))
+        raise(SystemInitializationError, "Ontology autoloading without a context-aware adapter deletes all RDF data. This is only allowed in testing, please load the ontology manually.") unless(adapter.contexts? || (@environment == 'testing'))
         raise(SystemInitializationError, "Ontology autoloading requires 'load' capability on the adapter.") unless(adapter.respond_to?(:load))
 
         # Clear out the RDF
-        if(adapter.contexts)
+        if(adapter.contexts?)
           TaliaCore::RdfImport.clear_file_contexts
         else
           adapter.respond_to?(:clear) ? adapter.clear : TaliaUtil::Util::flush_rdf
@@ -369,7 +369,7 @@ module TaliaCore
         Dir.foreach(onto_dir) do |file|
           if(file =~ /\.owl$|\.rdf$|\.rdfs$/)
             file = File.expand_path(File.join(onto_dir, file))
-            adapter.contexts ? TaliaCore::RdfImport.import_file(file, 'rdfxml', :auto) : TaliaCore::RdfImport.import_file(file, 'rdfxml')
+            adapter.contexts? ? TaliaCore::RdfImport.import_file(file, 'rdfxml', :auto) : TaliaCore::RdfImport.import_file(file, 'rdfxml')
             loaded_ontos << File.basename(file)
           end
         end

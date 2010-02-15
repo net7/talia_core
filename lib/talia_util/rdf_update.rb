@@ -11,8 +11,8 @@ module TaliaUtil
       def owl_to_rdfs
         puts "Checking for OWL classes."
         # Register the namespaces for ActiveRDF
-        Namespace.register(:rdfs, N::RDFS.to_s)
-        Namespace.register(:owl, N::OWL.to_s)
+        ActiveRDF::Namespace.register(:rdfs, N::RDFS.to_s)
+        ActiveRDF::Namespace.register(:owl, N::OWL.to_s)
         progress = nil
         size, modified, blanks = rdfs_from_owl do |size|
           progress ||= begin

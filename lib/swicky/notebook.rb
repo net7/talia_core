@@ -112,9 +112,9 @@ module Swicky
         # TODO: Fix this to better query once available in ActiveRDF
         additional_triples = []
         result_triples.each do |trip|
-          additional_triples += ActiveRDF::Query.new(N::URI).select(:predicate, :object).where(trip[1].to_uri, :predicate, :object).execute.collect { |result| [trip[1].to_uri] + result }
+          additional_triples += ActiveRDF::Query.new(N::URI).select(:predicate, :object).distinct.where(trip[1].to_uri, :predicate, :object).execute.collect { |result| [trip[1].to_uri] + result }
           if(trip.last.respond_to?(:uri))
-            additional_triples += ActiveRDF::Query.new(N::URI).select(:predicate, :object).where(trip.last, :predicate, :object).execute.collect { |result| [trip.last] + result }
+            additional_triples += ActiveRDF::Query.new(N::URI).select(:predicate, :object).distinct.where(trip.last, :predicate, :object).execute.collect { |result| [trip.last] + result }
           end
         end
         

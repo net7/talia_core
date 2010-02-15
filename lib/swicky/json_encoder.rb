@@ -12,6 +12,7 @@ module Swicky
     end
 
     def to_json
+      puts @triples.inspect
       @items ||= begin
         items = []
         # First a round to make sure that each item has a label
@@ -20,7 +21,8 @@ module Swicky
         triple_hash.each { |object, values| items += build_item(object, values) }
         items
       end
-      hashy = { 'items' => @items, 'types' => @types_hash, 'properties' => @properties_hash }
+      # hashy = { 'items' => @items, 'types' => @types_hash, 'properties' => @properties_hash }
+      # puts hashy.inspect
       { 'items' => @items, 'types' => @types_hash, 'properties' => @properties_hash }.to_json
     end  
 
@@ -73,6 +75,7 @@ module Swicky
         additional_items << additional if(additional)
         label
       end
+      labels.uniq!
       [(labels.size == 1) ? labels.first : labels, additional_items]
     end
     
@@ -94,6 +97,7 @@ module Swicky
       end
       # All types will be referred to by their local name
       types.collect! { |type| make_type_local(type) }
+      types.uniq!
       types
     end
     

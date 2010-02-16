@@ -63,6 +63,8 @@ module Swicky
     end
     
     class << self
+      
+      # Find all notebooks for the given user
       def find_all(user_name = nil)
         nb_query = ActiveRDF::Query.new(N::URI).select(:notebook).distinct
         nb_query.where(:notebook, N::RDF.type, N::TALIA.SwickyNotebook)
@@ -70,14 +72,18 @@ module Swicky
         nb_query.execute
       end
       
+      # Construct the "user" url for the given user name
       def user_url(user_name)
         sanitize_sparql(N::LOCAL + "users/#{user_name}").to_uri
       end
       
+      # Construct the URL for a notebook from the user and notebook name
       def notebook_url(user_name, notebook_name)
         sanitize_sparql(user_url(user_name) + '/swicky_notebooks/' + notebook_name).to_uri
       end
       
+      # Get the "coordinates" (an xpointer in the case of HTML fragments) for all the
+      # fragments that are part of the element with the given url.
       def coordinates_for(url)
         url = sanitize_sparql(url).to_uri
         frag_qry = ActiveRDF::Query.new(N::URI).select(:coordinates).distinct
@@ -87,11 +93,19 @@ module Swicky
         frag_qry.execute.collect { |coord| coord.to_s }
       end
       
+      def annotation_list_for_url(url)
+        qry = ActiveRDF::Query.new(N::URI).distinct.select(:note).where(:fragment, N::DISCOVERY.isPartOf, url).where(:note, N::SWICKY.refersTo, :fragment).execute
+      end
+      
+      # Select all the triples for all the annotations (notes) that refer to the given
+      # URL
       def annotations_for_url(url)
         url = sanitize_sparql(url).to_uri
         select_annotations([:note, N::SWICKY.refersTo, url])
       end
       
+      # Select all the annotations on the note that uses the fragment identified by the given XPOINTER
+      # string
       def annotations_for_xpointer(xpointer)
         xpointer = sanitize_sparql(xpointer).to_uri
         select_annotations([:note, N::SWICKY.refersTo, :fragment], [:fragment, N::SWICKY.hasCoordinates, xpointer])
@@ -99,6 +113,14 @@ module Swicky
       
       private
       
+      # Select annotation triples. This expects an array of "where" conditions (that is, arrays with a 
+      # subject-predicate-object pattern). One of the conditions must match a :note variable.
+      # 
+      # This will return all triples where:
+      # 
+      # * :note is the subject of the triple
+      # * That have :statement as their subject, and :statement is a statement on one of the notes above
+      # * That have any of the predicates or objects of the results above as their subject
       def select_annotations(*note_matching)
         # Select all triples on the notes
         note_triples_qry = ActiveRDF::Query.new(N::URI).select(:note, :predicate, :object).distinct

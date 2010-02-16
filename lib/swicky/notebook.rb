@@ -94,7 +94,7 @@ module Swicky
       end
       
       def annotation_list_for_url(url)
-        qry = ActiveRDF::Query.new(N::URI).distinct.select(:note).where(:fragment, N::DISCOVERY.isPartOf, url).where(:note, N::SWICKY.refersTo, :fragment).execute
+        qry = ActiveRDF::Query.new(N::URI).distinct.select(:note).where(:fragment, N::DISCOVERY.isPartOf, url.to_uri).where(:note, N::SWICKY.refersTo, :fragment).execute
       end
       
       # Select all the triples for all the annotations (notes) that refer to the given

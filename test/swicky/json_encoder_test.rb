@@ -6,43 +6,17 @@ module Swicky
   class JsonEncoderTest < ActiveSupport::TestCase
     
     def setup
-      @encoder = JsonEncoder.new(test_triples)
+      @encoder = ExhibitJson::ItemCollection.new(test_triples)
     end
     
-    def test_make_predicate_local
-      local = @encoder.send(:make_predicate_local, N::TALIA.foobar)
-      assert_equal('foobar', local)
-      assert_equal({ 'foobar' => { 'uri' => N::TALIA.foobar.to_s, 'valueType' => 'item' } }, @encoder.instance_variable_get(:@properties_hash))
+    def test_item_label
+      fake_item = ExhibitJson::Item.new(N::TALIA.item_label_test, @encoder)
+      assert_equal('item_label_test', fake_item.label)
     end
     
-    def test_make_predicate_local_multi
-      @encoder.send(:make_predicate_local, N::TALIA.foobar)
-      @encoder.send(:make_predicate_local, N::LOCAL.foobar)
-      @encoder.send(:make_predicate_local, N::TALIA.foobar)
-      local = @encoder.send(:make_predicate_local, N::RDF.foobar)
-      assert_equal('foobar3', local)
-    end
-    
-    def test_make_type_local
-      local = @encoder.send(:make_type_local, N::TALIA.Foobar)
-      assert_equal('Foobar', local)
-      assert_equal({ 'Foobar' => { 'uri' => N::TALIA.Foobar.to_s } }, @encoder.instance_variable_get(:@types_hash))
-    end
-    
-    def test_build_item
-      item = @encoder.send(:build_item, N::LOCAL.Foo, {
-        N::RDF.type => [ N::TALIA.Foobar ],
-        N::TALIA.hasIt => ['blarg', 'bar'],
-        N::TALIA.strangeThing => ['what'],
-        'label' => 'bar'
-      })
-      assert_equal([{
-        'uri' => N::LOCAL.Foo.to_s,
-        'type' => [ 'Foobar' ],
-        'label' => 'bar',
-        'hasIt' => ['blarg', 'bar'],
-        'strangeThing' => 'what'
-      }], item)
+    def test_make_id
+      fake_item = ExhibitJson::Item.new(N::TALIA.test_make_id, @encoder)
+      assert_equal('test_make_id', @encoder.make_id(fake_item))
     end
     
     def test_to_json
@@ -55,50 +29,78 @@ module Swicky
       {
         "items" => [
           {
+            
+            "label"=>"foobar",
             "uri"=>N::LOCAL.foobar.to_s, 
+            "id"=>"foobar",
+            "hash"=>digest(N::LOCAL.foobar.to_s),
             "type"=>["MyType"], 
             "label"=>"foobar",
             "first"=>["worksit", "worksit2"]
           }, 
           {
-            "uri"=>N::TALIA.whatever.to_s, 
-            "type"=>["Resource"], 
             "label"=>"whatever",
-            "predicate"=>"The cool thing", 
-            "first2"=>"The cool thing"
+            "uri"=>N::TALIA.whatever.to_s, 
+            "id"=>"whatever",
+            "hash"=>digest(N::TALIA.whatever.to_s),
+            "type"=>["Resource"],
+            "predicate"=>"fun", 
+            "first2"=>"fun"
           },
           {
-            "uri"=>"http://www.barbaa.com/fun",
-            "type"=>["Resource"],
             "label"=>"The cool thing",
+            "uri"=>"http://www.barbaa.com/fun",
+            "id"=>"fun",
+            "hash"=>digest("http://www.barbaa.com/fun"),
+            "type"=>["Resource"],
             "predicate"=>"whatever"
           }
         ], 
         "types" => {
           "MyType"=>
           {
-            "uri"=>N::TALIA.MyType.to_s
+            "label"=>"MyType",
+            "uri"=>N::TALIA.MyType.to_s,
+            "id"=>"MyType",
+            "hash"=>digest(N::TALIA.MyType.to_s)
           }, 
           "Resource"=> {
-            "uri"=>"http://www.w3.org/1999/02/22-rdf-syntax-ns#Resource"
+            "label"=>"Resource",
+            "uri"=>"http://www.w3.org/1999/02/22-rdf-syntax-ns#Resource",
+            "id"=>"Resource",
+            "hash"=>digest("http://www.w3.org/1999/02/22-rdf-syntax-ns#Resource")
           }
         }, 
         "properties"=> {
           "first"=> {
+            "label"=>"first",
             "uri"=>"http://www.foobar.com/bar/moo/first", 
-            "valueType"=>"item"
+            "id"=>"first",
+            "hash"=>digest("http://www.foobar.com/bar/moo/first"),
+            "valueType"=>"text"
           }, 
           "predicate"=>{
+            "label"=>"predicate",
             "uri"=>N::TALIA.predicate.to_s, 
+            "id"=>"predicate",
+            "hash"=>digest(N::TALIA.predicate.to_s),
             "valueType"=>"item"
           }, 
           "first2"=>{
-            "uri"=>"http://www.foobar.com/bar/moo#first", "valueType"=>"item"
+            "label"=>"first",
+            "uri"=>"http://www.foobar.com/bar/moo#first", 
+            "id"=>"first2",
+            "hash"=>digest("http://www.foobar.com/bar/moo#first"),
+            "valueType"=>"item"
           }
         }
       }
     end
     
+    
+    def digest(value)
+      ('h_' << Digest::MD5.hexdigest(value))
+    end
     
     def test_triples
       [

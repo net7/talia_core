@@ -16,9 +16,13 @@ module Swicky
     
     attr_reader :user_url, :url
     
-    def initialize(user_name, notebook_name)
-      @user_url = self.class.user_url(user_name)
-      @url = self.class.notebook_url(user_name, notebook_name)
+    def initialize(user_name_or_uri, notebook_name = nil)
+      if(notebook_name)
+        @user_url = self.class.user_url(user_name_or_uri)
+        @url = self.class.notebook_url(user_name_or_uri, notebook_name)
+      else
+        @url = sanitize_sparql(user_name_or_uri)
+      end
     end
     
     def data
@@ -66,7 +70,7 @@ module Swicky
       
       # Find all notebooks for the given user
       def find_all(user_name = nil)
-        nb_query = ActiveRDF::Query.new(N::URI).select(:notebook).distinct
+        nb_query = ActiveRDF::Query.new(Notebook).select(:notebook).distinct
         nb_query.where(:notebook, N::RDF.type, N::TALIA.SwickyNotebook)
         nb_query.where(user_url(user_name), N::TALIA.hasSwickyNotebook, :notebook) if(user_name)
         nb_query.execute

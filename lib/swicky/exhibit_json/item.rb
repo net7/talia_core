@@ -74,6 +74,7 @@ module Swicky
         types = delete_with_key(N::RDF.type)
         types = [ N::RDF.Resource ] if(types.blank?)
         types.collect! { |t| collection.add_type(t) }
+        types.uniq!
         @properties['type'] = types
       end
       
@@ -84,6 +85,7 @@ module Swicky
           prop_values = values.collect do |object| 
             object.respond_to?(:uri) ? collection.add_item(object) : object
           end
+          prop_values.uniq!
           if(@properties[prop].blank?)
             @properties[prop] = (prop_values.size == 1) ? prop_values.first : prop_values
           else

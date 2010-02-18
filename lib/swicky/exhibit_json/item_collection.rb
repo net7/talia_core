@@ -5,8 +5,9 @@ module Swicky
     # See http://simile.mit.edu/wiki/Exhibit/Understanding_Exhibit_Database
     class ItemCollection
 
-      def initialize(triples)
+      def initialize(triples, original_xpointer = nil)
         @triples = triples
+        @original_xpointer = original_xpointer
         triple_hash.each { |object, values| add_item(object, values) }
       end
 
@@ -15,11 +16,13 @@ module Swicky
         types.values.each { |t| my_types[t.id] = t }
         my_properties = {}
         properties.values.each { |p| my_properties[p.id] = p }
-        {
+        result = {
           'items' => items.values,
           'types' => my_types,
           'properties' => my_properties
-        }.to_json(*a)
+        }
+        result['annotation-for'] = @original_xpointer if(@original_xpointer)
+        result.to_json(*a)
       end
 
       def triple_hash

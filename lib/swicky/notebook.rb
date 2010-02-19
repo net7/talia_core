@@ -69,6 +69,10 @@ module Swicky
       ActiveRDF::Query.new(N::URI).select(:user).where(:user, N::TALIA.hasSwickyNotebook, url).execute.size > 0
     end
     
+    def to_uri
+      N::URI.new(uri)
+    end
+    
     class << self
       
       # Find all notebooks for the given user
@@ -116,10 +120,6 @@ module Swicky
       def annotations_for_xpointer(xpointer)
         xpointer = sanitize_sparql(xpointer).to_uri
         select_annotations([:note, N::SWICKY.refersTo, :fragment], [:fragment, N::SWICKY.hasCoordinates, xpointer])
-      end
-      
-      def to_uri
-        N::URI.new(uri)
       end
       
       private

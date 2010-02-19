@@ -12,9 +12,12 @@ module Swicky
   class Notebook
     
     include TaliaUtil::UriHelper
+    include ActiveRDF::ResourceLike
     extend TaliaUtil::UriHelper
     
     attr_reader :user_url, :url
+    
+    alias :uri :url
     
     def initialize(user_name_or_uri, notebook_name = nil)
       if(notebook_name)

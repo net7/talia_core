@@ -5,12 +5,15 @@ module Swicky
     # See http://simile.mit.edu/wiki/Exhibit/Understanding_Exhibit_Database
     class ItemCollection
 
+      # Intialize with the given triples. The original xpointer will (optionally)
+      # be passed into the resulting JSON for reference
       def initialize(triples, original_xpointer = nil)
         @triples = triples
         @original_xpointer = original_xpointer
         triple_hash.each { |object, values| add_item(object, values) }
       end
 
+      # Returns the Exhibit-compatible JSON representation
       def to_json(*a)
         my_types = {}
         types.values.each { |t| my_types[t.id] = t }
@@ -24,35 +27,23 @@ module Swicky
         result['annotation-for'] = @original_xpointer if(@original_xpointer)
         result.to_json(*a)
       end
-
-      def triple_hash
-        @triple_hash ||= begin
-          triple_hash = {}
-          # Sort all the triples into a hash, mapping all predicates
-          # to a single subject entry and all objects into a single
-          # predicate entry for each subject or predicate
-          @triples.each do |triple|
-            subject = triple.shift.to_uri
-            triple_hash[subject] ||= {}
-            predicate = triple.shift.to_uri
-            triple_hash[subject][predicate] ||= []
-            triple_hash[subject][predicate] << triple.first
-          end
-          triple_hash
-        end
-      end
-
+      
+      # Add a new item to the collection. This passes in a resource-like
+      # object and returns the id of the resulting item
       def add_item(item, values = nil)
         items[item.to_s] = Item.new(item, self) if(!items[item.to_s])
         items[item.to_s].add_properties(values) if(values)
         items[item.to_s].id
       end
 
+      # As #add_item, but for types
       def add_type(type)
         types[type.to_s] = Item.new(type, self) if(!types[type.to_s])
         types[type.to_s].id
       end
       
+      # As #add_item, but for properties. This must have a value type
+      # which will be added to the resulting property description
       def add_property(prop, value_type)
         properties[prop.to_s] = Item.new(prop, self) if(!properties[prop.to_s])
         if(!properties[prop.to_s]['valueType'])
@@ -70,7 +61,24 @@ module Swicky
         end
       end
 
-      private 
+      private
+
+      def triple_hash
+        @triple_hash ||= begin
+          triple_hash = {}
+          # Sort all the triples into a hash, mapping all predicates
+          # to a single subject entry and all objects into a single
+          # predicate entry for each subject or predicate
+          @triples.each do |triple|
+            subject = triple.shift.to_uri
+            triple_hash[subject] ||= {}
+            predicate = triple.shift.to_uri
+            triple_hash[subject][predicate] ||= []
+            triple_hash[subject][predicate] << triple.first
+          end
+          triple_hash
+        end
+      end
 
       # Finds the first "free" element in the hash. This checks
       # if hash[initial_value] is empty or equal to "value", if that is not the

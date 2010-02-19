@@ -118,6 +118,10 @@ module Swicky
         select_annotations([:note, N::SWICKY.refersTo, :fragment], [:fragment, N::SWICKY.hasCoordinates, xpointer])
       end
       
+      def to_uri
+        N::URI.new(uri)
+      end
+      
       private
       
       # Select annotation triples. This expects an array of "where" conditions (that is, arrays with a 

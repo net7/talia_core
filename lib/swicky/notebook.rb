@@ -137,15 +137,21 @@ module Swicky
         note_triples_qry = ActiveRDF::Query.new(N::URI).select(:note, :predicate, :object).distinct
         note_matching.each { |conditions| note_triples_qry.where(*conditions) }
         note_triples = note_triples_qry.where(:note, :predicate, :object).execute
-        # Select all statements on the triples
+        # Select all statements on the fragments themselves
+        fragment_triples_qry = ActiveRDF::Query.new(N::URI).select(:fragment, :predicate, :object).distinct
+        note_matching.each { |conditions| fragment_triples_qry.where(*conditions) }
+        fragment_triples_qry.where(:note, N::SWICKY.refersTo, :fragment)
+        fragment_triples_qry.where(:fragment, :predicate, :object)
+        fragment_triples = fragment_triples_qry.execute
+        # Select all the triples in statements
         statement_triples_qry = ActiveRDF::Query.new(N::URI).select(:subject, :predicate, :object).distinct
         note_matching.each { |conditions| statement_triples_qry.where(*conditions) }
-        statement_triples_qry.where(:note, N::SWICKY.refersTo, :fragment)
-        statement_triples_qry.where(:fragment, N::SWICKY.hasStatement, :statement)
+        fragment_triples_qry.where(:note, N::SWICKY.refersTo, :fragment)
+        fragment_triples_qry.where(:fragment, N::SWICKY.hasStatement, :statement)
         statement_triples_qry.where(:statement, N::RDF.subject, :subject)
         statement_triples_qry.where(:statement, N::RDF.predicate, :predicate)
         statement_triples_qry.where(:statement, N::RDF.object, :object)
-        result_triples = note_triples + statement_triples_qry.execute
+        result_triples = note_triples + fragment_triples + statement_triples_qry.execute
         # TODO: Fix this to better query once available in ActiveRDF
         additional_triples = []
         result_triples.each do |trip|

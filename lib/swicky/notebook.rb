@@ -140,7 +140,8 @@ module Swicky
         # Select all statements on the triples
         statement_triples_qry = ActiveRDF::Query.new(N::URI).select(:subject, :predicate, :object).distinct
         note_matching.each { |conditions| statement_triples_qry.where(*conditions) }
-        statement_triples_qry.where(:note, N::SWICKY.hasStatement, :statement)
+        statement_triples_qry.where(:note, N::SWICKY.refersTo, :fragment)
+        statement_triples_qry.where(:fragment, N::SWICKY.hasStatement, :statement)
         statement_triples_qry.where(:statement, N::RDF.subject, :subject)
         statement_triples_qry.where(:statement, N::RDF.predicate, :predicate)
         statement_triples_qry.where(:statement, N::RDF.object, :object)

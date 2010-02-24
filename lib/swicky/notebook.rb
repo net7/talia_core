@@ -73,6 +73,10 @@ module Swicky
       N::URI.new(uri)
     end
     
+    def ==(value)
+      (value.class == self.class) && (value.uri == self.uri)
+    end
+    
     class << self
       
       # Find all notebooks for the given user

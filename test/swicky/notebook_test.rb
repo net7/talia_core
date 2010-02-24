@@ -57,12 +57,12 @@ module Swicky
       
     def test_find_all_existing
       load_notebook
-      assert_equal([@notebook.url], Notebook.find_all)
+      assert_equal([Notebook.new(@notebook.url)], Notebook.find_all)
     end
       
     def test_find_all_user
       load_notebook
-      assert_equal([@notebook.url], Notebook.find_all('dan'))
+      assert_equal([Notebook.new(@notebook.url)], Notebook.find_all('dan'))
     end
     
     def test_find_all_user_nonexistent
@@ -78,12 +78,12 @@ module Swicky
     
     def test_annotations_for_url
       load_notebook
-      assert_equal(180, Notebook.annotations_for_url("http://discovery-project.eu/ontologies/philoSpace/SourceFragment#ec9796a5349b290a7610763dcbc47af2").size)
+      assert_equal(135, Notebook.annotations_for_url("http://discovery-project.eu/ontologies/philoSpace/SourceFragment#ec9796a5349b290a7610763dcbc47af2").size)
     end
     
     def test_annotations_for_xpointer
       load_notebook
-      assert_equal(180, Notebook.annotations_for_xpointer(@testpointer).size)
+      assert_equal(135, Notebook.annotations_for_xpointer(@testpointer).size)
     end
     
     private

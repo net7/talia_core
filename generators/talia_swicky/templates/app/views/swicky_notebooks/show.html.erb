@@ -1,0 +1,11 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<ul>
+		<% for data in @notebook.data %>
+			<li><%= data.join(', ')%></li>
+		<% end %>
+		</ul>
+	</body>
+</html>

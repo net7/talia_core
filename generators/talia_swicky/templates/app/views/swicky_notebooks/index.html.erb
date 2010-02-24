@@ -1,0 +1,10 @@
+<html>
+<head></head>
+<body>
+	<ul>
+		<% for notebook in @notebooks%>
+			<li><%= notebook.to_uri.to_s %></li>
+		<% end %>
+	</ul>
+</body>
+</html>

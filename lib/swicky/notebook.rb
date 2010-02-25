@@ -24,7 +24,7 @@ module Swicky
         @user_url = self.class.user_url(user_name_or_uri)
         @url = self.class.notebook_url(user_name_or_uri, notebook_name)
       else
-        @url = sanitize_sparql(user_name_or_uri)
+        @url = sanitize_sparql(user_name_or_uri).to_uri
       end
     end
     

@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 module Swicky
   module ExhibitJson
 
@@ -24,7 +26,12 @@ module Swicky
           'types' => my_types,
           'properties' => my_properties
         }
-        result['annotation-for'] = @original_xpointer if(@original_xpointer)
+        if(@original_xpointer)
+          result['annotation-for'] = {
+            'uri' => @original_xpointer,
+            'hash' => ('h_' << Digest::MD5.hexdigest(@original_xpointer))
+          }
+        end
         result.to_json(*a)
       end
       

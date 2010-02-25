@@ -29,7 +29,13 @@ module Swicky
       {
         "items" => [
           {
-            
+            "label" => 'toplevel',
+            "uri" => "http://toplevel.org/",
+            "id" => "toplevel",
+            "hash" => "h_d11eb7d2122d6af02a9079d975eaec35",
+            "type" => [ "MyType" ]
+          },
+          { 
             "label"=>"foobar",
             "uri"=>N::LOCAL.foobar.to_s, 
             "id"=>"foobar",
@@ -104,6 +110,7 @@ module Swicky
     
     def test_triples
       [
+        [ 'http://toplevel.org/', N::RDF.type, N::TALIA.MyType ],
         [ N::LOCAL.foobar, 'http://www.foobar.com/bar/moo/first', "worksit"],
         [ N::LOCAL.foobar, 'http://www.foobar.com/bar/moo/first', "worksit2"],
         [ N::LOCAL.foobar, N::RDF.type, N::TALIA.MyType ],

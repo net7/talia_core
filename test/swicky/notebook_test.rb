@@ -25,6 +25,12 @@ module Swicky
       assert_equal(@notebook.user_url, N::LOCAL + 'users/dan')
     end
     
+    def test_url_from_string
+      nb = Notebook.new('http://foobar.org/')
+      assert_kind_of(N::URI, nb.uri)
+      assert_equal(nb.uri, 'http://foobar.org/'.to_uri)
+    end
+    
     def test_load
       assert_notebook_empty
       load_notebook

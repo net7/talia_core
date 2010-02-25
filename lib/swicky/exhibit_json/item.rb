@@ -109,12 +109,19 @@ module Swicky
         if(uri =~ /xpointer/)
           'An Xpointer'
         else
-          last_fragment_of(uri)
+          uri_fragment(uri)
         end
       end
 
-      def last_fragment_of(uri)
-        URI.escape(/[\/#]?([^\/#]+)\Z/.match(uri.to_s)[1])
+      def uri_fragment(uri)
+        raise(ArgumentError, "Must have a real uri") unless(uri)
+        fragment_match = /[\/#]?([^\/#]+)\Z/.match(uri.to_s)
+        fragment_match ||= /([^\.\/]+)\.[^\.]*\Z/.match(uri.to_s)
+        if(fragment_match && fragment_match[1] && (fragment_match[1].size > 2))
+          URI.escape(fragment_match[1])
+        else
+          Digest::MD5.hexdigest(uri.to_s)
+        end
       end
 
     end

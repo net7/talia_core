@@ -464,6 +464,18 @@ module TaliaCore
       assert(ActiveSource.exists?(uri + '_target'))
     end
     
+    def test_collection
+      collection = Collection.new(N::LOCAL.CollectionAssignTest)
+      source = Source.new(N::LOCAL.CollectionAssignSource)
+      source.save!
+      collection << source
+      collection.save!
+      assert_equal([collection.uri], source.collections.collect { |c| c.uri })
+      collection.clear
+      collection.save!
+      assert_equal([], source.collections)
+    end
+    
     
   end
 end

@@ -186,6 +186,11 @@ module TaliaCore
         self.class.normalize_uri(uri, label)
       end
 
+      # Returns the collections this source is in
+      def collections
+        Collection.find(:all, :find_through => [N::DCT.hasPart, self])
+      end
+
       protected
 
       # Look at the given attributes and choose to instantiate

@@ -305,8 +305,8 @@ module TaliaCore
     end
     
     def test_sti_simple # Single table inheritance
-      assert_kind_of(TaliaCore::OrderedSource, ActiveSource.find(:first, :conditions => { :uri => active_sources(:sti_source).uri }  ))
-      assert_kind_of(TaliaCore::OrderedSource, active_sources(:sti_source))
+      assert_kind_of(TaliaCore::Collection, ActiveSource.find(:first, :conditions => { :uri => active_sources(:sti_source).uri.to_s }  ))
+      assert_kind_of(TaliaCore::Collection, active_sources(:sti_source))
     end
     
     def test_sti_relation_create
@@ -316,14 +316,14 @@ module TaliaCore
       src.save!
       assert_equal(1, src['http://reltest_test'].size)
       assert_equal(1, src['http://reltest_test_b'].size)
-      assert_equal(TaliaCore::OrderedSource, src['http://reltest_test'][0].class)
+      assert_equal(TaliaCore::Collection, src['http://reltest_test'][0].class)
       assert_equal(TaliaCore::ActiveSource, src['http://reltest_test_b'][0].class)
     end
     
     def test_sti_relation_inverse
       assert_equal(1, active_sources(:sti_source_b).subjects.size)
-      assert_equal(TaliaCore::OrderedSource, active_sources(:sti_source_b).subjects[0].class)
-      assert_equal(TaliaCore::OrderedSource, active_sources(:sti_source_b).inverse['http://testvalue.org/sti_test'][0].class)
+      assert_equal(TaliaCore::Collection, active_sources(:sti_source_b).subjects[0].class)
+      assert_equal(TaliaCore::Collection, active_sources(:sti_source_b).inverse['http://testvalue.org/sti_test'][0].class)
       assert_equal(active_sources(:sti_source).uri, active_sources(:sti_source_b).inverse['http://testvalue.org/sti_test'][0].uri)
     end
     

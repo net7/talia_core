@@ -141,7 +141,7 @@ module TaliaCore
       # Adds the object and gives the relation the given order. 
       def add_with_order(value, order)
         # We use order exclusively for "ordering" predicates
-        assit_equal(TaliaCore::OrderedSource.index_to_predicate(order), @assoc_predicate) if(order)
+        assit_equal(TaliaCore::Collection.index_to_predicate(order), @assoc_predicate) if(order)
         raise(ArgumentError, "cannot add nil") unless(value != nil)
         if(value.kind_of?(Array))
           value.each { |v| add_record_for(v, order) }

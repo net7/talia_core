@@ -51,7 +51,7 @@ begin
     s.add_dependency('activesupport', '>= 2.0.5')
     s.add_dependency('activerdf_net7', '>= 1.7.0')
     s.add_dependency('assit', '>= 0.1.2')
-    s.add_dependency('semantic_naming', '>= 2.1.3')
+    s.add_dependency('semantic_naming', '>= 2.2.0')
     s.add_dependency('bjj', '>= 1.0.2')
     s.add_dependency('hpricot', '>= 0.6.1')
     s.add_dependency('oai_talia', '>= 0.0.15')

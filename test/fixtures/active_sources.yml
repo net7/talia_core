@@ -59,18 +59,18 @@ type_b:
 
 sti_source:
     uri: http://testy.com/sti_source
-    type: TaliaCore::OrderedSource
+    type: TaliaCore::Collection
 
 sti_source_b:
     uri: http://testy.com/sti_source_b
 
 sti_source_reltest:
     uri: http://testy.com/sti_source_reltest
-    type: TaliaCore::OrderedSource
+    type: TaliaCore::Collection
 
 sti_source_reltest_b:
     uri: http://testy.com/sti_source_reltest_b
-    type: TaliaCore::OrderedSource
+    type: TaliaCore::Collection
 
 sti_source_reltest_c:
     uri: http://testy.com/sti_source_reltest_c

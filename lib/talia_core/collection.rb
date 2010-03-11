@@ -27,13 +27,13 @@ module TaliaCore
     include Enumerable
 
     before_save :rewrite_order_relations
+    after_save :force_rdf_rewrite
 
     # Initialize SeqContainer
     def self.new(uri)
-      @resource = super(uri)
-      #      @resource.save!
-      #      @resource.types << RDF::Seq.uri
-      #      @resource
+      collection = super(uri)
+      collection.autosave_rdf = false # Will do this by ourselves
+      collection
     end
     
     # Many methods are directly forwarded to the underlying array
@@ -126,13 +126,20 @@ module TaliaCore
       objects = ordered_objects # Fetch them before deleting
       # Now destroy the existing elements
       SemanticRelation.destroy_all(['subject_id = ? AND rel_order IS NOT NULL', self.id])
+      SemanticRelation.destroy_all(['subject_id = ? AND predicate_uri = ?', self.id, N::DCT.hasPart.to_s])
       # rewrite from the relations array
       objects.each_index do |index|
         if(obj = objects.at(index)) # Check if there's a value to handle
           # Create a new relation with an order
           self[index_to_predicate(index)].add_with_order(obj, index)
+          self[N::DCT.hasPart] << obj
         end
       end
+    end
+    
+    
+    def force_rdf_rewrite
+      create_rdf(:force)
     end
 
     # execute query and return the result

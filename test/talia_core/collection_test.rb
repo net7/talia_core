@@ -258,6 +258,38 @@ module TaliaCore
       reload = Collection.find(ordered.id)
       assert_equal(item_1, reload.at(15))
     end
+    
+    def test_has_part
+      # create new Collection
+      collection = Collection.new('http://testvalue.org/has_part')
+      collection.save!
+      assert collection.empty?
+      
+      # create 3 items
+      item_1 = ActiveSource.new('http://testvalue.org/item_1')
+       
+      # add item to ordered source
+      collection << item_1
+      collection.save!
+      
+      assert_equal([item_1], ActiveRDF::Query.new(ActiveSource).select(:item).where(collection, N::DCT.hasPart, :item).execute)
+    end
+    
+    def test_clear_collection_on_rdf
+      # create new Collection
+      collection = Collection.new('http://testvalue.org/has_clear_test')
+      item = ActiveSource.new('http://testvalue.org/item_1')
+      collection << item
+      collection.save!
+      assert_equal(1, collection.size)
+      
+      assert_not_equal([], ActiveRDF::Query.new(ActiveSource).select(:predicate).where(collection, :predicate, item).execute)
+      
+      collection.clear
+      collection.save!
+      
+      assert_equal([], ActiveRDF::Query.new(ActiveSource).select(:predicate).where(collection, :predicate, item).execute)
+    end
 
   end
 end

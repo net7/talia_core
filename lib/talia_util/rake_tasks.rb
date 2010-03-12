@@ -56,13 +56,6 @@ namespace :talia_core do
     t.verbose = true
   end
 
-  # Queue an import in the background
-  desc "Xml Background import. Options: [index=<indexfile>] [xml=<datafile>] [importer=<importclass>] [reset_store=true] [...]"
-  task :xml_background_import do 
-    background_job('xml_import', :tag => 'import')
-    puts "Queued XML background import."
-  end
-
   desc "Xml Import. Options: see xml_background_import"
   task :xml_import => :init do
     importer = TaliaUtil::ImportJobHelper.new(STDOUT, TaliaUtil::BarProgressor)
@@ -184,16 +177,5 @@ namespace :talia_core do
   end
 
   # Helper methods
-
-  # Queue the long-running task in the background processing queue.
-  # This will simply queue the job, and doesn't start the runner
-  # by itself
-  def background_job(job, options)
-    # Use the current environment for the job
-    options[:env] = ENV.merge(options[:env] || {})
-    # Avoid "tickling" to start the background job from here
-    options[:no_tickle] = true
-    TaliaCore::BackgroundJobs::Job.submit_with_progress(job, options)
-  end
 
 end

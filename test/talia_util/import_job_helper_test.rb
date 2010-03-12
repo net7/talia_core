@@ -9,14 +9,6 @@ module TaliaCore
     def setup
       setup_once(:flush) { TestHelper::flush_store }
       
-      setup_once(:job) do
-        Bj::Table::Job.delete_all
-        Bj::Table::Job.new.save
-        job = Bj::Table::Job.find(:first)
-        ENV['JOB_ID'] = job.id.to_s
-        job
-      end
-      
       setup_once(:imported) do
         ENV['xml'] = TestHelper.fixture_file('xml_test.xml')
         importer = TaliaUtil::ImportJobHelper.new

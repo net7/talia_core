@@ -51,7 +51,7 @@ module TaliaUtil
     attr_reader :importer, :credentials, :index_data, :xml_data, :reset, :callback, :base_url, :message_stream, :progressor, :duplicates, :trace
 
     # The message_stream will be used for printing progress messages
-    def initialize(message_stream = STDOUT, progressor = TaliaCore::BackgroundJobs::Job)
+    def initialize(message_stream = STDOUT, progressor = TaliaUtil::BarProgressor)
       @trace = (defined?(Rake) ? Rake.application.options.trace : false) || ENV['trace']
       @progressor = progressor
       @message_stream = message_stream

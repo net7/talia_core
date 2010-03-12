@@ -55,7 +55,6 @@ class TaliaBaseGenerator < Rails::Generator::Base
       m.make_migration "create_custom_templates.rb"
       m.make_migration "upgrade_relations.rb"
       m.make_migration "create_progress_jobs.rb"
-      m.make_migration "bj_migration.rb"
       
       m.readme 'README'
     end

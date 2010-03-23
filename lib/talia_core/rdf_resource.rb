@@ -29,6 +29,7 @@ module TaliaCore
     
     # Initialize a new resource with the given URI
     def initialize(uri)
+      raise ArgumentError, "No blank URI allowed here" if(uri.blank?)
       @uri = N::URI.new(uri)
     end
 

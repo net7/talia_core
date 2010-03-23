@@ -171,7 +171,7 @@ module TaliaCore
             :predicate_uri => @assoc_predicate
             )
           end
-          @assoc_source.my_rdf.remove(N::URI.new(@assoc_predicate))
+          @assoc_source.my_rdf.remove(@assoc_predicate.to_uri)
           @items = []
           @loaded = true
         end
@@ -287,6 +287,7 @@ module TaliaCore
       # to the colleciton in a specific way.
       # are loaded.
       def add_record_for(value, order = nil)
+        assit_not_nil(value)
         if(@force_type)
           # If we have a type, we must transform the value
           value = value.respond_to?(:uri) ? value.uri : value

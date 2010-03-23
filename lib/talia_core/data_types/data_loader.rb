@@ -51,6 +51,8 @@ module TaliaCore
           # File.basename would use the system file separator)
           location ||= uri.rindex('/') ? uri[(uri.rindex('/') + 1)..-1] : uri
           
+          assit(!location.blank?)
+          
           if(is_file)
             mime_type ||= mime_by_location(location)
             open_and_create(mime_type, location, uri, true)
@@ -69,7 +71,9 @@ module TaliaCore
         
         # Get the mime type from the location
         def mime_by_location(location)
-          Mime::Type.lookup_by_extension(File.extname(location)[1..-1].downcase)
+          extname = File.extname(location)[1..-1]
+          assit(!extname.blank?, 'No extname found for ' << location)
+          Mime::Type.lookup_by_extension(extname.downcase)
         end
 
         # The main loader. This will handle the lookup from the mapping and the creating of the

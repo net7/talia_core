@@ -348,9 +348,10 @@ module TaliaCore
     def attach_files(files)
       files = [ files ] unless(files.is_a?(Array))
       files.each do |file|
-        filename = file[:url] || file['url']
+        file.to_options!
+        filename = file[:url]
         assit(filename)
-        options = file[:options] || file['options'] || {}
+        options = file[:options] || {}
         records = DataTypes::FileRecord.create_from_url(filename, options)
         records.each { |rec| self.data_records << rec }
       end

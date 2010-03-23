@@ -35,9 +35,11 @@ module TaliaCore
         assit(object, "Must have object for #{relation.predicate_uri}")
         raise(ArgumentError, 'Must not have a property for a typed item') if(semprop)
         @object_type.new(object.uri.to_s)
-      else
+      elsif(semprop)
         # Plain, return the object or the value for SemanticProperties
-        semprop ? PropertyString.parse(object.value) : object
+        object.value ? PropertyString.parse(object.value) : object.value
+      else
+        object
       end
     end
 

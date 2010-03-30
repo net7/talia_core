@@ -227,7 +227,13 @@ module TaliaCore
       #     JRuby only.
       def copy_or_move(original, target)
         if(@delete_original_file)
-          FileUtils.move(original, target)
+          #FIXME: this doesn't work in linux
+          #   FileUtils.move(original, target)
+          # we have to use the system call as a workaround
+          from_file = File.expand_path(original)
+          to_file = File.expand_path(target)
+          system_success = system("mv '#{from_file}' '#{to_file}'")
+          raise(IOError, "move error '#{from_file}' '#{to_file}'") unless system_success
         else
           # Delay can be enabled through enviroment
           if(delay_copies)

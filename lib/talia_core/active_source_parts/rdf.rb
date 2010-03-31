@@ -125,6 +125,12 @@ module TaliaCore
       def auto_create_rdf
         create_rdf(:create) if(autosave_rdf?)
       end
+      
+      # Cleans out the RDF data before the source is destroyed
+      def clear_rdf
+        ActiveRDF::FederationManager.delete(self, :predicate, :object)
+        ActiveRDF::FederationManager.delete(:subject, :predicate, self)
+      end
 
     end
   end

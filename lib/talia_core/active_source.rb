@@ -36,6 +36,7 @@ module TaliaCore
     after_update :auto_update_rdf
     after_create :auto_create_rdf
     after_save :save_wrappers # Save the cache wrappers
+    before_destroy :clear_rdf
 
     
     # Relations where this source is the subject of the triple

@@ -25,6 +25,10 @@ module TaliaCore
   class Collection < Source
     
     include Enumerable
+    
+    has_rdf_type N::DCNS.Collection
+    has_rdf_type N::SKOS.Collection
+    has_rdf_type N::DCMIT.Collection
 
     before_save :rewrite_order_relations
     after_save :force_rdf_rewrite

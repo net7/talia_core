@@ -762,6 +762,44 @@ module TaliaCore
       assert_equal(3, src.data_records.size)
     end
     
+    def test_destroy_source
+      # Set up some sources that are interlinked
+      sources = (0..2).collect do |idx|
+        src = ActiveSource.new("http://as_test/destroy_source_#{idx}")
+        src.save!
+        src
+      end
+      
+      sources[0][N::TALIA.test_pred] << sources[1]
+      sources[0][N::TALIA.test_pred] << sources[2]
+      sources[1][N::TALIA.testy_pred] << sources[0]
+      sources[1][N::TALIA.testy_pred] << sources[2]
+      
+      sources.each { |s| s.save! }
+      
+      # Check if everything is set up correctly
+      assert_property(sources[0][N::TALIA.test_pred], sources[1], sources[2])
+      assert_property(sources[1][N::TALIA.testy_pred], sources[0], sources[2])
+      
+      # Destroy one source
+      destroyed_id = sources[1].id
+      sources[1].destroy
+      
+      # Check if it took all the links with it
+      test_source = TaliaCore::ActiveSource.find(sources[0].id)
+      assert_property(test_source[N::TALIA.test_pred], sources[2]) # This one should have the "destroyed" connection removed
+      # All relations related to that source should be gone
+      assert_equal(0, TaliaCore::SemanticRelation.all(:conditions => { :subject_id => destroyed_id }).size)
+      assert_equal(0, TaliaCore::SemanticRelation.all(:conditions => { :object_id => destroyed_id }).size)
+      # The source should be gone
+      assert(!TaliaCore::ActiveSource.exists?(sources[1].uri))
+      # The RDF should be gone
+      forward_result = ActiveRDF::Query.new(N::URI).select(:thing).where(sources[0], N::TALIA.test_pred, :thing).execute
+      assert_equal(1, forward_result.size, "Found more than one : #{forward_result.inspect}")
+      backward_result = ActiveRDF::Query.new(N::URI).select(:thing).where(sources[1], :all, :thing).execute
+      assert_equal(0, backward_result.size)
+    end
+    
     def test_to_uri
       src = ActiveSource.new('http://xsource/has_type_test')
       assert_equal(N::URI.new('http://xsource/has_type_test'), src.to_uri)

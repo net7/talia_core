@@ -20,6 +20,15 @@ module TaliaCore
       #      assert_equal 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq', collection.types.to_s
     end
     
+    def test_rdf_types
+      collection = Collection.new('http://testvalue.org/ordered_set/types')
+      collection.save!
+      types = ActiveRDF::Query.new(N::URI).select(:type).where(collection, N::RDF.type, :type).execute
+      assert(types.include?(N::DCNS.Collection))
+      assert(types.include?(N::SKOS.Collection))
+      assert(types.include?(N::DCMIT.Collection))
+    end
+    
     def test_elements
       # create new Collection
       collection = Collection.new('http://testvalue.org/ordered_set/elenments')

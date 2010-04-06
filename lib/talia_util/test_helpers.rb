@@ -129,7 +129,11 @@ class Test::Unit::TestCase
   
   # Lets the class suppress the fixtures for the tests
   def self.suppress_fixtures
+    # Activates the suppress mechanism for older versions of rails
     @suppress_fixtures = true
+    # This overwrites the setup/teardown callbacks for Rails 2.3.*
+    define_method(:setup_fixtures) { }
+    define_method(:teardown_fixtures) { }
   end
   
   def self.suppress_fixtures?

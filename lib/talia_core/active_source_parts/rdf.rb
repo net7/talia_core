@@ -58,6 +58,7 @@ module TaliaCore
             # the value. If not the RDF handler will detect the #uri method and
             # will add it as Resource.
             obj = sem_ref.object
+            assit(obj, "Must have an object here. #{sem_ref.inspect}")
             value = obj.is_a?(SemanticProperty) ? obj.value : obj
             my_rdf.direct_write_predicate(N::URI.new(sem_ref.predicate_uri), value)
           end

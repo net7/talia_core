@@ -32,10 +32,12 @@ module TaliaCore
 
     before_save :rewrite_order_relations
     after_save :force_rdf_rewrite
+    
+    singular_property :title, N::DCNS.title
 
     # Initialize SeqContainer
-    def self.new(uri)
-      collection = super(uri)
+    def self.new(*params)
+      collection = super(*params)
       collection.autosave_rdf = false # Will do this by ourselves
       collection
     end

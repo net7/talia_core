@@ -171,7 +171,7 @@ module TaliaCore
             :predicate_uri => @assoc_predicate
             )
           end
-          @assoc_source.my_rdf.remove(@assoc_predicate.to_uri)
+          @assoc_source.my_rdf.remove(@assoc_predicate.to_uri) unless(@assoc_source.uri.to_s.blank?)
           @items = []
           @loaded = true
         end

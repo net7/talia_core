@@ -299,6 +299,18 @@ module TaliaCore
       
       assert_equal([], ActiveRDF::Query.new(ActiveSource).select(:predicate).where(collection, :predicate, item).execute)
     end
+    
+    def test_title
+      collection = Collection.new('http://testvalue.org/test_title')
+      collection.title = 'Foo! Bar!'
+      assert_equal(collection.title, 'Foo! Bar!')
+    end
+    
+    def test_create_empty
+      collection = Collection.new
+      collection.title = 'Foo!'
+      assert_equal(collection.title, 'Foo!')
+    end
 
   end
 end

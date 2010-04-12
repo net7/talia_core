@@ -98,6 +98,8 @@ module TaliaCore
     def [](attribute)
       if(db_attr?(attribute))
         super(attribute)
+      elsif(singular_property?(attribute))
+        self.send(attribute)
       else
         get_objects_on(attribute)
       end
@@ -108,6 +110,8 @@ module TaliaCore
     def []=(attribute, value)
       if(db_attr?(attribute))
         super(attribute, value)
+      elsif(singular_property?(attribute))
+        self.send("#{attribute}=", value)
       else
         pred = get_attribute(attribute)
         pred.remove
@@ -205,10 +209,14 @@ module TaliaCore
     # the attribute values will be added to the existing ones
     def add_semantic_attributes(overwrite, attributes)
       attributes.each do |attr, value|
-        value = [ value ] unless(value.is_a?(Array))
-        attr_wrap = self[attr]
-        attr_wrap.remove if(overwrite)
-        value.each { |val |self[attr] << target_for(val) }
+        if(singular_property?(attr))
+          self[attr] = value
+        else
+          value = [ value ] unless(value.is_a?(Array))
+          attr_wrap = self[attr]
+          attr_wrap.remove if(overwrite)
+          value.each { |val |self[attr] << target_for(val) }
+        end
       end
     end
 
@@ -280,6 +288,10 @@ module TaliaCore
     # True if the given attribute is a database attribute
     def db_attr?(attribute)
       ActiveSource.db_attr?(attribute)
+    end
+    
+    def singular_property?(prop_name)
+      self.class.singular_property?(prop_name)
     end
 
     # Writes the predicate directly to the database and the rdf store. The
@@ -382,7 +394,7 @@ module TaliaCore
     # to add_semantic_attributes with the given overwrite flag.  
     # The database attributes are returned by the method
     def process_attributes(overwrite, attributes)
-      attributes = ActiveSource.split_attribute_hash(attributes)
+      attributes = self.class.split_attribute_hash(attributes)
       add_semantic_attributes(overwrite, attributes[:semantic_attributes])
       attributes[:db_attributes]
     end

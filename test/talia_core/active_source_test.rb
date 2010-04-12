@@ -559,6 +559,12 @@ module TaliaCore
       assert_property(src[N::LOCAL.relatit], N::LOCAL.attr_update_test_dummy, N::LOCAL.another_attribute_save_dummy)
     end
     
+    def test_update_attribute_singular
+      src = SingularAccessorTest.new('http://as_test/test_update_attribute_singular')
+      src.update_attributes(:siglum => "foo my ass")
+      assert_equal('foo my ass', src.siglum)
+    end
+    
     def test_update_adding
       src = ActiveSource.new('http://as_test/test_update_adding')
       src[N::RDF.something] << 'value1'
@@ -803,6 +809,23 @@ module TaliaCore
     def test_to_uri
       src = ActiveSource.new('http://xsource/has_type_test')
       assert_equal(N::URI.new('http://xsource/has_type_test'), src.to_uri)
+    end
+    
+    def test_has_singular_property
+      assert(SingularAccessorTest.singular_property?(:siglum))
+    end
+    
+    def test_no_singular_property
+      assert(!ActiveSource.singular_property?(:siglum))
+    end
+    
+    
+    def test_singular_property_bracket_access
+      singi = SingularAccessorTest.new('http://www.test.org/singular_property_bracket_access')
+      singi.siglum = 'foo'
+      assert_equal('foo', singi[:siglum])
+      singi[:siglum] = 'bar'
+      assert_equal('bar', singi.siglum)
     end
     
     private

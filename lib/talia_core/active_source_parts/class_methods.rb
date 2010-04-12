@@ -200,11 +200,19 @@ module TaliaCore
         attributes.each do |field, value|
           if(db_attr?(field))
             db_attributes[field] = value
+          elsif(singular_property?(field))
+            semantic_attributes[field] = value
           else
             semantic_attributes[expand_uri(field)] = value
           end
         end
         { :semantic_attributes => semantic_attributes, :db_attributes => db_attributes }
+      end
+      
+      def singular_property?(prop_name)
+        return false unless(@singular_props)
+        prop_name = prop_name.to_s
+        @singular_props.include?(prop_name)
       end
 
       private

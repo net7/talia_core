@@ -62,7 +62,7 @@ module TaliaCore
 
     # if the object is a relation, it will r
 
-    # Creates an object frm the given "fat" relation. This retrieves the data
+    # Creates an object from the given "fat" relation. This retrieves the data
     # from the relation object and instantiates it just like it would be after
     # a find operation.
     def create_object_from(fat_relation)

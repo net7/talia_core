@@ -111,7 +111,7 @@ module TaliaCore
       if(db_attr?(attribute))
         super(attribute, value)
       elsif(singular_property?(attribute))
-        self.send("#{attribute}=", value)
+        self.send("#{attribute}=", value) unless(value.blank?)
       else
         pred = get_attribute(attribute)
         pred.remove

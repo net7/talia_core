@@ -210,9 +210,8 @@ module TaliaCore
       end
       
       def singular_property?(prop_name)
-        return false unless(@singular_props)
         prop_name = prop_name.to_s
-        @singular_props.include?(prop_name) || (superclass.respond_to?(:singular_property?) && superclass.singular_property?(prop_name))
+        (@singular_props && @singular_props.include?(prop_name)) || (superclass.respond_to?(:singular_property?) && superclass.singular_property?(prop_name))
       end
 
       private

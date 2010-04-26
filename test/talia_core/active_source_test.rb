@@ -11,6 +11,9 @@ module TaliaCore
     singular_property :title, N::RDFS.title
   end
   
+  class SingularAccessorSubNaked < SingularAccessorTest
+  end
+  
   # Test the ActiveSource
   class ActiveSourceTest < ActiveSupport::TestCase
     fixtures :active_sources, :semantic_properties, :semantic_relations, :data_records
@@ -827,6 +830,10 @@ module TaliaCore
     def test_has_singular_property_on_subclass
       assert(SingularAccessorSubTest.singular_property?(:title))
       assert(SingularAccessorSubTest.singular_property?(:siglum))
+    end
+    
+    def test_naked_has_singular_property_on_subclass
+      assert(SingularAccessorSubNaked.singular_property?(:siglum))
     end
     
     def test_singular_property_bracket_access

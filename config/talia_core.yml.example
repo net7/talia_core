@@ -47,3 +47,4 @@ namespaces:
     sesame: http://www.openrdf.org/schema/sesame#
     swicky: http://discovery-project.eu/ontologies/philoSpace/
     discovery: http://discovery-project.eu/ontologies/scholar/0.1/
+    marcont: http://www.marcont.org/ontology/2.1/

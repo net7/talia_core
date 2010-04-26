@@ -5,11 +5,9 @@ module TaliaCore
     # a taxonomy, thesaurus or the like.
     #
     # TODO: Stub class at the moment
-    class SkosConcept < Source
+    class MarcontResource < Source
       
-      N::SKOS.Concept
-
-      singular_property :pref_label, N::SKOS.prefLabel
+      has_rdf_type N::MARCONT.Resource
 
     end
 

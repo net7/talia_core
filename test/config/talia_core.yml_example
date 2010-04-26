@@ -38,6 +38,7 @@ namespaces:
     dcmit:    "http://purl.org/dc/dcmitype/"
     discovery: http://discovery-project.eu/ontologies/scholar/0.1/
     swicky: http://discovery-project.eu/ontologies/philoSpace/
+    marcont: http://www.marcont.org/ontology/2.1/
 
 
 

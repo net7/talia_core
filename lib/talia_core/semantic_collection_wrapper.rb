@@ -325,6 +325,8 @@ module TaliaCore
 
         if(value.is_a?(TaliaCore::ActiveSource) || value.is_a?(TaliaCore::SemanticProperty))
           to_add.object = value
+        elsif(value.respond_to?(:uri)) # This appears to refer to a Source. We only add if we can find that source
+          to_add.object = TaliaCore::ActiveSource.find(value.uri)
         else
           prop = TaliaCore::SemanticProperty.new
           # Check if we need to add from a PropertyString

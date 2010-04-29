@@ -844,6 +844,38 @@ module TaliaCore
       assert_equal('bar', singi.siglum)
     end
     
+    def test_singular_property_with_source
+      related = ActiveSource.new('http://www.test.org/prop_with_sources_friend/')
+      related.save!
+      singi = SingularAccessorTest.new('http://www.test.org/singular_property_with_source')
+      singi.siglum = related
+      singi.save!
+      singi = SingularAccessorTest.find(singi.id)
+      assert_kind_of(ActiveSource, singi.siglum)
+      assert_equal(related.uri, singi.siglum.uri)
+    end
+    
+    def test_singular_property_with_uri
+      related = ActiveSource.new('http://www.test.org/prop_with_uri_friend/')
+      related.save!
+      singi = SingularAccessorTest.new('http://www.test.org/singular_property_with_uri')
+      singi.siglum = related.to_uri
+      singi.save!
+      singi = SingularAccessorTest.find(singi.id)
+      assert_kind_of(ActiveSource, singi.siglum)
+      assert_equal(related.uri, singi.siglum.uri)
+    end
+    
+    def test_assign_throug_uri
+      related = ActiveSource.new('http://www.test.org/assign_through_friend/')
+      related.save!
+      src = ActiveSource.new('http://www.test.org/assign_throug_uri')
+      src[N::RDF.foo] = related.to_uri
+      src.save!
+      src = ActiveSource.find(src.id)
+      assert_property(src[N::RDF.foo], related)
+    end
+    
     private
     
     def make_data_source

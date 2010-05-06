@@ -212,10 +212,9 @@ module TaliaCore
         if(singular_property?(attr))
           self[attr] = value
         else
-          value = [ value ] unless(value.is_a?(Array))
           attr_wrap = self[attr]
           attr_wrap.remove if(overwrite)
-          value.each { |val |self[attr] << target_for(val) }
+          value.to_a.each { |val |self[attr] << target_for(val) }
         end
       end
     end

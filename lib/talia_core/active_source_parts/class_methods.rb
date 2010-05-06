@@ -253,7 +253,7 @@ module TaliaCore
         define_method("#{prop_name}=") do |value|
           prop = self[property]
           prop.remove
-          prop << value
+          prop << value unless(value.blank?)
         end
 
         # define the finder

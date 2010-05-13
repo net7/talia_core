@@ -1,6 +1,6 @@
 include Java if jruby?
 module JXslt
-  Dir["#{RAILS_ROOT}/lib/saxon*.jar"].each { |jar| require jar }
+  Dir["lib/saxon*.jar"].each { |jar| require jar }
   include_class "javax.xml.transform.TransformerFactory"
   include_class "javax.xml.transform.Transformer"
   include_class "javax.xml.transform.stream.StreamSource"
@@ -11,6 +11,18 @@ module JXslt
 
     puts $CLASSPATH
 
+    # This is used to perform xsltransformation, you should pass it the xsl and
+    # xml file paths, and some parameters (an hash) if you need them
+    def self.perform_transformation(xsl_file, xml_file, transformer_parameters=nil)
+      file = File.open(xsl_file)
+      xsl = file.read
+      file.close
+      file = File.open(xml_file)
+      xml = file.read
+      file.close
+      saxon = JXslt::Saxon.new
+      output = saxon.transform(xsl, xml, nil, options = {:in => "string", :out => "string", :xsl => "string", :transformer_parameters => transformer_parameters})
+    end
 
     def transform(xslt, infile, outfile, options)
       if options[:in] == "stream"
@@ -50,11 +62,13 @@ module JXslt
       @tf = TransformerFactory.newInstance
     end
   end
-  class Xalan < XsltProcessor
-    TRANSFORMER_FACTORY_IMPL = "org.apache.xalan.processor.TransformerFactoryImpl"
-    def initialize
-      System.setProperty("javax.xml.transform.TransformerFactory", TRANSFORMER_FACTORY_IMPL)
-    @tf = TransformerFactory.newInstance
-  end
+  # This class can be used in order to use Xalan as a XSLTransformer
+  # of course xalan jars must be added and included in this file as well
+  #  class Xalan < XsltProcessor
+  #    TRANSFORMER_FACTORY_IMPL = "org.apache.xalan.processor.TransformerFactoryImpl"
+  #    def initialize
+  #      System.setProperty("javax.xml.transform.TransformerFactory", TRANSFORMER_FACTORY_IMPL)
+  #    @tf = TransformerFactory.newInstance
+  #  end
 end
 end if jruby?

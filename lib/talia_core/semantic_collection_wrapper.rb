@@ -134,7 +134,7 @@ module TaliaCore
       # Push to collection. Giving a string will create a property to be created,
       # saved and associated.
       def <<(value)
-        assit(!value.blank?)
+        raise(ArgumentError, "Blank value assigned") if(value.blank? && !value.is_a?(Enumerable))
         add_with_order(value, nil)
       end
       alias_method :concat, '<<'

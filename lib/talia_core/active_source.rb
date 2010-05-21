@@ -98,7 +98,7 @@ module TaliaCore
     def [](attribute)
       if(db_attr?(attribute))
         super(attribute)
-      elsif(singular_property?(attribute))
+      elsif(defined_property?(attribute))
         self.send(attribute)
       else
         get_objects_on(attribute)
@@ -110,7 +110,7 @@ module TaliaCore
     def []=(attribute, value)
       if(db_attr?(attribute))
         super(attribute, value)
-      elsif(singular_property?(attribute))
+      elsif(defined_property?(attribute))
         self.send("#{attribute}=", value) unless(value.blank?)
       else
         pred = get_attribute(attribute)
@@ -209,7 +209,7 @@ module TaliaCore
     # the attribute values will be added to the existing ones
     def add_semantic_attributes(overwrite, attributes)
       attributes.each do |attr, value|
-        if(singular_property?(attr))
+        if(defined_property?(attr))
           self[attr] = value
         else
           attr_wrap = self[attr]
@@ -289,8 +289,8 @@ module TaliaCore
       ActiveSource.db_attr?(attribute)
     end
     
-    def singular_property?(prop_name)
-      self.class.singular_property?(prop_name)
+    def defined_property?(prop_name)
+      self.class.defined_property?(prop_name)
     end
 
     # Writes the predicate directly to the database and the rdf store. The

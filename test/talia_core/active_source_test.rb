@@ -2,16 +2,19 @@ require File.join(File.dirname(__FILE__), '..', 'test_helper')
 
 module TaliaCore
   
-  class SingularAccessorTest < ActiveSource
+  class DefinedAccessorTest < ActiveSource
     singular_property :siglum, N::RDFS.siglum
+    multi_property :authors, N::RDFS.author
+    singular_property :forcy_single, N::RDFS.forcy_single, :force_relation => true
+    multi_property :forcy, N::RDFS.forcy, :force_relation => true
     has_rdf_type N::TALIA.foo
   end
   
-  class SingularAccessorSubTest < SingularAccessorTest
+  class DefinedAccessorSubTest < DefinedAccessorTest
     singular_property :title, N::RDFS.title
   end
   
-  class SingularAccessorSubNaked < SingularAccessorTest
+  class DefinedAccessorSubNaked < DefinedAccessorTest
   end
   
   # Test the ActiveSource
@@ -421,7 +424,7 @@ module TaliaCore
     end
     
     def test_singular_accessor
-      src = SingularAccessorTest.new('http://testvalue.org/singular_acc_test')
+      src = DefinedAccessorTest.new('http://testvalue.org/singular_acc_test')
       assert_equal(nil, src.siglum)
       src.siglum = 'foo'
       src.save!
@@ -430,8 +433,35 @@ module TaliaCore
       assert_equal('bar', src.siglum)
     end
     
+    def test_singular_accessor_forcing
+      src = DefinedAccessorTest.new('http://testvalue.org/singular_acc_forcing_test')
+      assert_equal(nil, src.forcy_single)
+      src.forcy_single = active_sources(:testy).uri.to_s
+      src.save!
+      assert_kind_of(TaliaCore::ActiveSource, src.forcy_single)
+      assert_equal(active_sources(:testy).uri, src.forcy_single.uri)
+    end
+    
+    def test_multi_accessor_forcing
+      src = DefinedAccessorTest.new('http://testvalue.org/multi_acc_forcing_test')
+      assert(src.forcy.blank?)
+      src.forcy = [ active_sources(:testy).uri.to_s, active_sources(:testy_two).uri.to_s ]
+      src.save!
+      assert_property(src.forcy, active_sources(:testy), active_sources(:testy_two))
+    end
+    
+    def test_multi_accessor
+      src = DefinedAccessorTest.new('http://testvalue.org/multi_acc_test')
+      assert(src.authors.blank?)
+      src.authors = [ "foo", "bar", "dingdong" ]
+      src.save!
+      assert_equal([ "foo", "bar", "dingdong" ].sort, src.authors.sort)
+      src.authors = 'bar'
+      assert_equal(['bar'], src.authors.values)
+    end
+    
     def test_singular_accessor_with_blank
-      src = SingularAccessorTest.new('http://testvalue.org/singular_acc_test')
+      src = DefinedAccessorTest.new('http://testvalue.org/singular_acc_test')
       assert_equal(nil, src.siglum)
       src.siglum = 'foo'
       src.save!
@@ -440,14 +470,14 @@ module TaliaCore
       assert_equal(nil, src.siglum)
     end
     
-    def test_singular_accessor_finder
-      src = SingularAccessorTest.new('http://testvalue.org/singular_find_test')
+    def test_defined_accessor_finder
+      src = DefinedAccessorTest.new('http://testvalue.org/singular_find_test')
       src.siglum = 'foo'
       src.save!
-      src2 = SingularAccessorTest.new('http://testvalue.org/singular_find_test2')
+      src2 = DefinedAccessorTest.new('http://testvalue.org/singular_find_test2')
       src2.siglum = 'bar'
       src2.save!
-      assert_equal(SingularAccessorTest.find_by_siglum('foo'), [ src ])
+      assert_equal(DefinedAccessorTest.find_by_siglum('foo'), [ src ])
     end
     
     def test_autosave_rdf
@@ -577,9 +607,30 @@ module TaliaCore
     end
     
     def test_update_attribute_singular
-      src = SingularAccessorTest.new('http://as_test/test_update_attribute_singular')
+      src = DefinedAccessorTest.new('http://as_test/test_update_attribute_singular')
       src.update_attributes(:siglum => "foo my ass")
       assert_equal('foo my ass', src.siglum)
+    end
+    
+    def test_update_attribute_singular_forced
+      src = DefinedAccessorTest.new('http://as_test/test_update_attribute_singular_forced')
+      src.update_attributes(:forcy_single => active_sources(:testy).uri.to_s)
+      assert_kind_of(TaliaCore::ActiveSource, src.forcy_single)
+      assert_equal(active_sources(:testy).uri, src.forcy_single.uri)
+    end
+    
+    def test_update_attribute_multi
+      src = DefinedAccessorTest.new('http://as_test/test_update_attribute_multi')
+      src.update_attributes(:authors => [ "fooby", "barni", "doc garfield" ])
+      assert_equal([ "fooby", "barni", "doc garfield" ].sort, src.authors.sort)
+    end
+    
+    def test_update_attribute_multi_forced
+      src = DefinedAccessorTest.new('http://testvalue.org/test_update_attribute_multi_forced')
+      assert(src.forcy.blank?)
+      src.update_attributes(:forcy => [ active_sources(:testy).uri.to_s, active_sources(:testy_two).uri.to_s ])
+      src.save!
+      assert_property(src.forcy, active_sources(:testy), active_sources(:testy_two))
     end
     
     def test_update_adding
@@ -598,14 +649,14 @@ module TaliaCore
     
     def test_rewrite_type
       src = ActiveSource.new('http://as_test/test_update_rewrite_type')
-      src.rewrite_attributes!({}) { |src| src.type = 'TaliaCore::SingularAccessorTest' }
-      assert_kind_of(SingularAccessorTest, ActiveSource.find(src.uri))
+      src.rewrite_attributes!({}) { |src| src.type = 'TaliaCore::DefinedAccessorTest' }
+      assert_kind_of(DefinedAccessorTest, ActiveSource.find(src.uri))
     end
     
     def test_rewrite_type
       src = ActiveSource.new('http://as_test/test_update_type')
-      src.update_attributes!({}) { |src| src.type = 'TaliaCore::SingularAccessorTest' }
-      assert_kind_of(SingularAccessorTest, ActiveSource.find(src.uri))
+      src.update_attributes!({}) { |src| src.type = 'TaliaCore::DefinedAccessorTest' }
+      assert_kind_of(DefinedAccessorTest, ActiveSource.find(src.uri))
     end
     
     def test_update_static
@@ -639,15 +690,15 @@ module TaliaCore
     end
     
     def test_create_source
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_with_type', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::SingularAccessorTest')
-      assert_kind_of(SingularAccessorTest, src)
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_with_type', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::DefinedAccessorTest')
+      assert_kind_of(DefinedAccessorTest, src)
       assert_equal('value', src[N::LOCAL.localthi].first)
       assert_property(src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
       assert_property(src.types, N::TALIA.foo, src.rdf_selftype)
     end
     
     def test_create_for_existing
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_existing', ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::SingularAccessorTest')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_existing', ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::DefinedAccessorTest')
       src.save!
       assert_equal('valueFOOOO', src[N::LOCAL.localthi].first)
       xml = src.to_xml
@@ -663,15 +714,15 @@ module TaliaCore
     
     def test_create_multi
       src_attribs = [
-        { :uri => N::LOCAL.test_create_multi_stuff, 'rdf:relatit' => [ "<#{N::LOCAL.test_create_multi_stuff_two}>" ], 'type' => 'TaliaCore::SingularAccessorTest' },
-        { :uri => N::LOCAL.test_create_multi_stuff_two, ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<#{N::LOCAL.test_create_multi_stuff}>"], 'type' => 'TaliaCore::SingularAccessorTest' }
+        { :uri => N::LOCAL.test_create_multi_stuff, 'rdf:relatit' => [ "<#{N::LOCAL.test_create_multi_stuff_two}>" ], 'type' => 'TaliaCore::DefinedAccessorTest' },
+        { :uri => N::LOCAL.test_create_multi_stuff_two, ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<#{N::LOCAL.test_create_multi_stuff}>"], 'type' => 'TaliaCore::DefinedAccessorTest' }
       ]
       ActiveSource.create_multi_from(src_attribs, :duplicates => :update)
       src = TaliaCore::ActiveSource.find(N::LOCAL.test_create_multi_stuff)
       src_two = TaliaCore::ActiveSource.find(N::LOCAL.test_create_multi_stuff_two)
       assert(src && src_two)
-      assert_kind_of(SingularAccessorTest, src)
-      assert_kind_of(SingularAccessorTest, src_two)
+      assert_kind_of(DefinedAccessorTest, src)
+      assert_kind_of(DefinedAccessorTest, src_two)
       assert_property(src_two[N::RDF.relatit], N::LOCAL.test_create_multi_stuff)
       assert_property(src[N::RDF.relatit], N::LOCAL.test_create_multi_stuff_two)
       assert_property(src_two[N::LOCAL.localthi], 'valueFOOOO')
@@ -685,11 +736,11 @@ module TaliaCore
       # Quickly change the URI for the new thing
       xml.gsub!(src.uri.to_s, 'http://as_test/create_forth_and_forth')
       # this is for the type attribute in the xml
-      xml.gsub!('SourceTypes::DummySource', 'SingularAccessorTest')
+      xml.gsub!('SourceTypes::DummySource', 'DefinedAccessorTest')
       # The next is for the 'type' semantic triple already existing
-      xml.gsub!('DummySource', 'SingularAccessorTest')
+      xml.gsub!('DummySource', 'DefinedAccessorTest')
       new_src = ActiveSource.create_from_xml(xml, :duplicates => :update)
-      assert_kind_of(TaliaCore::SingularAccessorTest, new_src)
+      assert_kind_of(TaliaCore::DefinedAccessorTest, new_src)
       # Now test as above
       assert_equal('http://as_test/create_forth_and_forth', new_src.uri.to_s)
       assert_equal('value', new_src[N::LOCAL.localthi].first)
@@ -828,26 +879,26 @@ module TaliaCore
       assert_equal(N::URI.new('http://xsource/has_type_test'), src.to_uri)
     end
     
-    def test_has_singular_property
-      assert(SingularAccessorTest.singular_property?(:siglum))
-      assert(!SingularAccessorTest.singular_property?(:title))
+    def test_has_defined_property
+      assert(DefinedAccessorTest.defined_property?(:siglum))
+      assert(!DefinedAccessorTest.defined_property?(:title))
     end
     
-    def test_no_singular_property
-      assert(!ActiveSource.singular_property?(:siglum))
+    def test_no_defined_property
+      assert(!ActiveSource.defined_property?(:siglum))
     end
     
-    def test_has_singular_property_on_subclass
-      assert(SingularAccessorSubTest.singular_property?(:title))
-      assert(SingularAccessorSubTest.singular_property?(:siglum))
+    def test_has_defined_property_on_subclass
+      assert(DefinedAccessorSubTest.defined_property?(:title))
+      assert(DefinedAccessorSubTest.defined_property?(:siglum))
     end
     
-    def test_naked_has_singular_property_on_subclass
-      assert(SingularAccessorSubNaked.singular_property?(:siglum))
+    def test_naked_has_defined_property_on_subclass
+      assert(DefinedAccessorSubNaked.defined_property?(:siglum))
     end
     
     def test_singular_property_bracket_access
-      singi = SingularAccessorTest.new('http://www.test.org/singular_property_bracket_access')
+      singi = DefinedAccessorTest.new('http://www.test.org/singular_property_bracket_access')
       singi.siglum = 'foo'
       assert_equal('foo', singi[:siglum])
       singi[:siglum] = 'bar'
@@ -857,10 +908,10 @@ module TaliaCore
     def test_singular_property_with_source
       related = ActiveSource.new('http://www.test.org/prop_with_sources_friend/')
       related.save!
-      singi = SingularAccessorTest.new('http://www.test.org/singular_property_with_source')
+      singi = DefinedAccessorTest.new('http://www.test.org/singular_property_with_source')
       singi.siglum = related
       singi.save!
-      singi = SingularAccessorTest.find(singi.id)
+      singi = DefinedAccessorTest.find(singi.id)
       assert_kind_of(ActiveSource, singi.siglum)
       assert_equal(related.uri, singi.siglum.uri)
     end
@@ -868,10 +919,10 @@ module TaliaCore
     def test_singular_property_with_uri
       related = ActiveSource.new('http://www.test.org/prop_with_uri_friend/')
       related.save!
-      singi = SingularAccessorTest.new('http://www.test.org/singular_property_with_uri')
+      singi = DefinedAccessorTest.new('http://www.test.org/singular_property_with_uri')
       singi.siglum = related.to_uri
       singi.save!
-      singi = SingularAccessorTest.find(singi.id)
+      singi = DefinedAccessorTest.find(singi.id)
       assert_kind_of(ActiveSource, singi.siglum)
       assert_equal(related.uri, singi.siglum.uri)
     end

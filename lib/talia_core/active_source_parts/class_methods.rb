@@ -200,7 +200,7 @@ module TaliaCore
         attributes.each do |field, value|
           if(db_attr?(field))
             db_attributes[field] = value
-          elsif(singular_property?(field))
+          elsif(defined_property?(field))
             semantic_attributes[field] = value
           else
             semantic_attributes[expand_uri(field)] = value
@@ -209,9 +209,9 @@ module TaliaCore
         { :semantic_attributes => semantic_attributes, :db_attributes => db_attributes }
       end
       
-      def singular_property?(prop_name)
+      def defined_property?(prop_name)
         prop_name = prop_name.to_s
-        (@singular_props && @singular_props.include?(prop_name)) || (superclass.respond_to?(:singular_property?) && superclass.singular_property?(prop_name))
+        (@defined_props && @defined_props.include?(prop_name)) || (superclass.respond_to?(:defined_property?) && superclass.defined_property?(prop_name))
       end
 
       private
@@ -233,28 +233,40 @@ module TaliaCore
       # single property value directly and an assignment method that replaces
       # the property with the value.
       #
+      # A find_by_<property> finder method is also created.
+      #
       # The Source will cache newly set singular properties internally, so that
       # the new value is immediately reflected on the object. However, the
       # change will only be made permanent on #save! - and saving will also clear
       # the cache
-      def singular_property(prop_name, property)
+      #
+      # The one option recognized at this time is :force_relation, which will force
+      # the given value to be a relation to an existing source.
+      def singular_property(prop_name, property, options = {})
+        define_property(true, prop_name, property, options)
+      end
+      
+      
+      # Defines a multi-value property in the same way as #singular_property
+      def multi_property(prop_name, property, options = {})
+        define_property(false, prop_name, property, options)
+      end
+      
+      # Defines a property (multi or single). This makes the property available as a 
+      # ActiveRecord-like accessor. See documentation on singular_property
+      def define_property(single_access, prop_name, property, options = {}) # :nodoc:
         prop_name = prop_name.to_s
-        @singular_props ||= []
-        return if(@singular_props.include?(prop_name))
+        options.to_options!
+        options.assert_valid_keys(:force_relation)
+        @defined_props ||= []
+        return if(@defined_props.include?(prop_name))
         raise(ArgumentError, "Cannot overwrite method #{prop_name}") if(self.instance_methods.include?(prop_name) || self.instance_methods.include?("#{prop_name}="))
+        
         # define the accessor
-        define_method(prop_name) do
-          prop = self[property]
-          assit_block { |err| (prop.size > 1) ? err << "Must have at most 1 value for singular property #{prop_name} on #{self.uri}. Values #{self[property]}" : true }
-          prop.size > 0 ? prop[0] : nil
-        end
+        single_access ? define_singular_reader(prop_name, property) : define_multi_reader(prop_name, property)
 
         # define the writer
-        define_method("#{prop_name}=") do |value|
-          prop = self[property]
-          prop.remove
-          prop << value unless(value.blank?)
-        end
+        define_writer(single_access, prop_name, property, options)
 
         # define the finder
         (class << self ; self; end).module_eval do
@@ -266,15 +278,40 @@ module TaliaCore
           end
         end
 
-        @singular_props << prop_name
+        @defined_props << prop_name
         true
       end
-
-      # Helper to creat an accessor for the given predicate. This will shortcut
-      # the prop_name method to self[property]
-      def simple_property(prop_name, property)
+      
+      
+      # Helper to dynamically define the singular accessor
+      def define_singular_reader(prop_name, property)
+        define_method(prop_name) do
+          prop = self[property]
+          assit_block { |err| (prop.size > 1) ? err << "Must have at most 1 value for singular property #{prop_name} on #{self.uri}. Values #{self[property]}" : true }
+          prop.size > 0 ? prop.first : nil
+        end
+      end
+      
+      # Helper to dynamically define the multiple-value accessor
+      def define_multi_reader(prop_name, property)
         define_method(prop_name) do
           self[property]
+        end
+      end
+      
+      # Helper to dynamically define the singular or multi-value assignment accessor
+      def define_writer(singular_access, prop_name, property, options = {})
+        force_link = options[:force_relation] || false
+        define_method("#{prop_name}=") do |values|
+          values = [ values ] unless(values.is_a?(Array)) 
+          raise(ArgumentError, "Must assign a single value here") if(singular_access && (values.size > 1))
+          prop = self[property]
+          prop.remove
+          values.each do |value|
+            next if(value.blank?)
+            value = ActiveSource.find(value) if(force_link && !value.is_a?(ActiveSource))
+            prop << value
+          end
         end
       end
 

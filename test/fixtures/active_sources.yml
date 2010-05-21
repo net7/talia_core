@@ -2,6 +2,9 @@
 
 testy:
     uri: http://testy.com/testme/hard
+    
+testy_two:
+    uri: http://testy.com/testme/harder
 
 duplicator:
     uri: http://testy.com/testme/duplicator

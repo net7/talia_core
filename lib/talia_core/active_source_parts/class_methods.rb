@@ -214,6 +214,10 @@ module TaliaCore
         (@defined_props && @defined_props.include?(prop_name)) || (superclass.respond_to?(:defined_property?) && superclass.defined_property?(prop_name))
       end
 
+      def props_to_destroy
+        @props_to_destroy ||= []
+      end
+
       private
 
       # The attributes stored in the database
@@ -240,8 +244,13 @@ module TaliaCore
       # change will only be made permanent on #save! - and saving will also clear
       # the cache
       #
-      # The one option recognized at this time is :force_relation, which will force
-      # the given value to be a relation to an existing source.
+      # The options recognized at this time are 
+      #  [*:force_relation*] Forces the the values to be relations. This means that
+      #                      each and every value passed to the generated accessors
+      #                      will be interpreted as a URL. *Issue/Note*: The 
+      #                      values will not be forced of you assign using << on the
+      #                      multi accessors.
+      #  [*:dependent*] You may pass :dependend => :destroy as for ActiveRecord relations
       def singular_property(prop_name, property, options = {})
         define_property(true, prop_name, property, options)
       end
@@ -257,8 +266,9 @@ module TaliaCore
       def define_property(single_access, prop_name, property, options = {}) # :nodoc:
         prop_name = prop_name.to_s
         options.to_options!
-        options.assert_valid_keys(:force_relation)
+        options.assert_valid_keys(:force_relation, :dependent)
         @defined_props ||= []
+        @props_to_destroy ||= []
         return if(@defined_props.include?(prop_name))
         raise(ArgumentError, "Cannot overwrite method #{prop_name}") if(self.instance_methods.include?(prop_name) || self.instance_methods.include?("#{prop_name}="))
         
@@ -279,6 +289,7 @@ module TaliaCore
         end
 
         @defined_props << prop_name
+        @props_to_destroy << prop_name if(options[:dependent] && (options[:dependent].to_sym == :destroy))
         true
       end
       
@@ -302,10 +313,12 @@ module TaliaCore
       # Helper to dynamically define the singular or multi-value assignment accessor
       def define_writer(singular_access, prop_name, property, options = {})
         force_link = options[:force_relation] || false
+        destroy_dependent = (options[:dependent] && (options[:dependent].to_sym == :destroy))
         define_method("#{prop_name}=") do |values|
           values = [ values ] unless(values.is_a?(Array)) 
           raise(ArgumentError, "Must assign a single value here") if(singular_access && (values.size > 1))
           prop = self[property]
+          destroy_elements(prop, values) if(destroy_dependent)
           prop.remove
           values.each do |value|
             next if(value.blank?)
@@ -314,7 +327,7 @@ module TaliaCore
           end
         end
       end
-
+      
       # This gets the URI string from the given value. This will just return
       # the value if it's a string. It will return the result of value.uri, if
       # that method exists; otherwise it'll return nil

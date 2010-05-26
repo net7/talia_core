@@ -36,6 +36,7 @@ module TaliaCore
     after_update :auto_update_rdf
     after_create :auto_create_rdf
     after_save :save_wrappers # Save the cache wrappers
+    before_destroy :destroy_dependent_props
     after_destroy :clear_rdf
 
     
@@ -111,7 +112,7 @@ module TaliaCore
       if(db_attr?(attribute))
         super(attribute, value)
       elsif(defined_property?(attribute))
-        self.send("#{attribute}=", value) unless(value.blank?)
+        self.send("#{attribute}=", value)
       else
         pred = get_attribute(attribute)
         pred.remove
@@ -389,6 +390,17 @@ module TaliaCore
     
     private
     
+    # Removes dependent properties
+    def destroy_dependent_props
+      self.class.props_to_destroy.each do |prop|
+        values = self.send(prop)
+        values = [values] unless(values.is_a?(SemanticCollectionWrapper))
+        values.each do |val|
+          val.destroy if(val.is_a?(TaliaCore::ActiveSource))
+        end
+      end
+    end
+    
     # Extracts the semantic attributes from the attribute hash and passes them
     # to add_semantic_attributes with the given overwrite flag.  
     # The database attributes are returned by the method
@@ -440,6 +452,16 @@ module TaliaCore
     # through the polymorphic relation automatically could be a bit fishy...
     def remove_inverse_properties
       SemanticRelation.delete_all(["object_type = 'TaliaCore::ActiveSource' AND object_id = ?", self.id])
+    end
+    
+    # Destroy the elements that are not in the "keep" list
+    def destroy_elements(to_destroy, keep_list)
+      to_destroy.each do |element|
+        if(element.is_a?(ActiveSource))
+          exists = keep_list.find { |keep_el| (keep_el.to_uri == element.uri) }
+          element.destroy unless(exists)
+        end
+      end
     end
     
   end

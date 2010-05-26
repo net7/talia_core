@@ -3,10 +3,10 @@ require File.join(File.dirname(__FILE__), '..', 'test_helper')
 module TaliaCore
   
   class DefinedAccessorTest < ActiveSource
-    singular_property :siglum, N::RDFS.siglum
+    singular_property :siglum, N::RDFS.siglum, :dependent => :destroy
     multi_property :authors, N::RDFS.author
     singular_property :forcy_single, N::RDFS.forcy_single, :force_relation => true
-    multi_property :forcy, N::RDFS.forcy, :force_relation => true
+    multi_property :forcy, N::RDFS.forcy, :force_relation => true, :dependent => :destroy
     has_rdf_type N::TALIA.foo
   end
   
@@ -442,6 +442,16 @@ module TaliaCore
       assert_equal(active_sources(:testy).uri, src.forcy_single.uri)
     end
     
+    def test_singular_accessor_destroy_dependent
+      src = DefinedAccessorTest.new('http://testvalue.org/test_update_attribute_multi_forced')
+      assert(src.forcy.blank?)
+      src.update_attributes(:siglum => active_sources(:deltest))
+      src.save!
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+      src.destroy
+      assert(!TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+    end
+    
     def test_multi_accessor_forcing
       src = DefinedAccessorTest.new('http://testvalue.org/multi_acc_forcing_test')
       assert(src.forcy.blank?)
@@ -458,6 +468,16 @@ module TaliaCore
       assert_equal([ "foo", "bar", "dingdong" ].sort, src.authors.sort)
       src.authors = 'bar'
       assert_equal(['bar'], src.authors.values)
+    end
+    
+    def test_multi_accessor_destroy_dependent
+      src = DefinedAccessorTest.new('http://testvalue.org/test_update_attribute_multi_forced')
+      assert(src.forcy.blank?)
+      src.update_attributes(:forcy => [ active_sources(:deltest).uri.to_s ])
+      src.save!
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+      src.destroy
+      assert(!TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
     end
     
     def test_singular_accessor_with_blank
@@ -619,6 +639,15 @@ module TaliaCore
       assert_equal(active_sources(:testy).uri, src.forcy_single.uri)
     end
     
+    def test_update_attribute_singular_destroy
+      src = DefinedAccessorTest.new(:uri => 'http://as_test/test_update_attribute_singular_destroy', 
+      :siglum => active_sources(:deltest))
+      src.save!
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+      src.update_attributes(:siglum => "")
+      assert(!TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+    end
+    
     def test_update_attribute_multi
       src = DefinedAccessorTest.new('http://as_test/test_update_attribute_multi')
       src.update_attributes(:authors => [ "fooby", "barni", "doc garfield" ])
@@ -631,6 +660,15 @@ module TaliaCore
       src.update_attributes(:forcy => [ active_sources(:testy).uri.to_s, active_sources(:testy_two).uri.to_s ])
       src.save!
       assert_property(src.forcy, active_sources(:testy), active_sources(:testy_two))
+    end
+    
+    def test_update_attribute_multi_destroy
+      src = DefinedAccessorTest.new(:uri => 'http://as_test/test_update_attribute_multi_destroy', 
+      :forcy => active_sources(:deltest))
+      src.save!
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+      src.update_attributes(:forcy => [])
+      assert(!TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
     end
     
     def test_update_adding

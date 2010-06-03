@@ -3,6 +3,7 @@ require File.join(File.dirname(__FILE__), '..', 'test_helper')
 module TaliaCore
   
   class DefinedAccessorTest < ActiveSource
+    autofill_uri
     singular_property :siglum, N::RDFS.siglum, :dependent => :destroy
     multi_property :authors, N::RDFS.author
     singular_property :forcy_single, N::RDFS.forcy_single, :force_relation => true
@@ -973,6 +974,33 @@ module TaliaCore
       src.save!
       src = ActiveSource.find(src.id)
       assert_property(src[N::RDF.foo], related)
+    end
+    
+    def test_autofill_url
+      new_thing = DefinedAccessorTest.new
+      assert(!new_thing.uri.blank?)
+    end
+    
+    def test_autofill_url_params
+      new_thing = DefinedAccessorTest.new(:siglumm => "foo")
+      assert(!new_thing.uri.blank?)
+    end
+    
+    def test_autofill_url_params_and_save
+      new_thing = DefinedAccessorTest.new(:siglumm => "foo")
+      new_thing.save!
+      assert(DefinedAccessorTest.exists?(new_thing.uri))
+    end
+    
+    def test_autofill_url_not
+      new_thing = DefinedAccessorSubNaked.new(:siglum => "foo")
+      assert(new_thing.uri.blank?)
+    end
+    
+    def test_manual_url_and_save
+      new_thing = DefinedAccessorTest.new(:siglumm => "foo", :uri => "http://foobar.com")
+      new_thing.save!
+      assert(DefinedAccessorTest.exists?(new_thing.uri))
     end
     
     private

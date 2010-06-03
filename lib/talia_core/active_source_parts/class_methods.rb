@@ -25,6 +25,11 @@ module TaliaCore
           # We have an option hash to init the source
           files = options.delete(:files)
           options[:uri] = uri_string_for(options[:uri])
+          if(autofill_overwrites?)
+            options[:uri] = auto_uri
+          elsif(autofill_uri?)
+            options[:uri] ||= auto_uri
+          end
           attributes = split_attribute_hash(options)
           the_source = super(attributes[:db_attributes])
           the_source.add_semantic_attributes(false, attributes[:semantic_attributes])
@@ -33,6 +38,10 @@ module TaliaCore
         elsif(args.size == 1 && ( uri_s = uri_string_for(args[0]))) # One string argument should be the uri
           # Either the current object from the db, or a new one if it doesn't exist in the db
           find(:first, :conditions => { :uri => uri_s } ) || super(:uri => uri_s)
+        elsif(args.size == 0 && autofill_uri?)
+          auto = auto_uri
+          raise(ArgumentError, "Record already exists #{auto}") if(ActiveSource.exists?(auto))
+          super(:uri => auto)
         else
           # In this case, it's a generic "new" call
           super
@@ -40,6 +49,7 @@ module TaliaCore
         the_source.add_additional_rdf_types if(the_source.new_record?)
         the_source
       end
+      
 
       # Retrieves a new source with the given type. This gets a propety hash
       # like #new, but it will correctly initialize a source of the type given
@@ -219,6 +229,11 @@ module TaliaCore
       end
 
       private
+      
+      # Make URL for autofilling
+      def auto_uri
+        (N::LOCAL + self.name.tableize + "/#{rand Time.now.to_i}").to_s
+      end
 
       # The attributes stored in the database
       def db_attributes
@@ -230,6 +245,28 @@ module TaliaCore
       def has_rdf_type(*types)
         @additional_rdf_types ||= []
         types.each { |t| @additional_rdf_types << t.to_s }
+      end
+      
+      # Class helper to declare that this Source model is allowed to automatically
+      # create uri values for new elements. In that case, the model will
+      # automatically assign a URL to all new records to which no url value has
+      # been passed.
+      #
+      # If the :force option is set, the autofill will overwrite an existing uri that
+      # is passed in during creation.
+      def autofill_uri(options = {})
+        options.to_options!
+        options.assert_valid_keys(:force)
+        @can_autofill = true
+        @autofill_overwrites = options[:force]
+      end
+      
+      def autofill_uri?
+        @can_autofill
+      end
+      
+      def autofill_overwrites?
+        @autofill_overwrites
       end
 
       # Helper to define a "singular accessor" for something (e.g. siglum, catalog)

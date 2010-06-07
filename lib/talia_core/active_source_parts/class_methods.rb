@@ -297,7 +297,15 @@ module TaliaCore
       def multi_property(prop_name, property, options = {})
         define_property(false, prop_name, property, options)
       end
-      
+
+      # Defines a "manual" property. This means that getters and setters are provided
+      # by the user and this statement only declares that the system may autoassign to
+      # that property
+      def manual_property(prop_name)
+        @defined_props ||= []
+        @defined_props << prop_name.to_s
+      end
+
       # Defines a property (multi or single). This makes the property available as a 
       # ActiveRecord-like accessor. See documentation on singular_property
       def define_property(single_access, prop_name, property, options = {}) # :nodoc:

@@ -83,8 +83,9 @@ module TaliaCore
         def open_and_create(mime_type, location, source, is_file)
           data_type = MimeMapping.loader_type_from(mime_type)
           if(data_type.is_a?(Symbol))
-            raise(ArgumentError, "No handler found for loading: #{data_type}") unless(self.respond_to?(data_type))
-            MimeMapping.class_type_from(mime_type).send(data_type, mime_type, location, source, is_file)
+            type = MimeMapping.class_type_from(mime_type)
+            raise(ArgumentError, "No handler found for loading: #{data_type}") unless(type.respond_to?(data_type))
+            type.send(data_type, mime_type, location, source, is_file)
           else
             raise(ArgumentError, "Registered handler for loading must be a method symbol or class. (#{data_type})") unless(data_type.is_a?(Class))
             data_record = data_type.new

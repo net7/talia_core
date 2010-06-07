@@ -103,6 +103,12 @@ module TaliaCore
       predicate.sub('http://www.w3.org/1999/02/22-rdf-syntax-ns#_', '').to_i
     end
     
+    def reload
+      @ordered_objects = nil
+      ordered_objects
+      super
+    end
+    
     private
 
     # Returns all the objects that are ordered in an array where the array
@@ -142,7 +148,6 @@ module TaliaCore
         end
       end
     end
-    
     
     def force_rdf_rewrite
       create_rdf(:force)

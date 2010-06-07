@@ -1,8 +1,6 @@
 class TaliaCollection < ActiveRecord::Base
   hobo_model # Don't put anything above this
   
-  puts "WONGO"
-  
   include DefaultPermissions
   include FakeSource
   extend FakeSource::ClassMethods

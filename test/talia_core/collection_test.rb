@@ -311,6 +311,22 @@ module TaliaCore
       collection.title = 'Foo!'
       assert_equal(collection.title, 'Foo!')
     end
+    
+    def test_reload
+      collection = Collection.new('http://testvalue.org/relaod_testing_for_collection')
+      item1 = ActiveSource.new("http://testvalue.org/new_reload_item1")
+      item1.save!
+      collection << item1
+      collection.save!
+      assert_equal(1, collection.size)
+      new_collection = Collection.find(collection.id)
+      item2 = ActiveSource.new("http://testvalue.org/new_reload_item2")
+      item2.save!
+      new_collection << item2
+      new_collection.save
+      collection.reload
+      assert_equal(2, collection.size)
+    end
 
   end
 end

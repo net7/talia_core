@@ -387,7 +387,12 @@ module TaliaCore
     def rdf_selftype
       (N::TALIA + self.class.name.demodulize)
     end
-    
+
+    def reload
+      reset! # Clear the property cache
+      super
+    end
+
     private
     
     # Removes dependent properties

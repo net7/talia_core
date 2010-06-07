@@ -8,7 +8,10 @@ module TaliaCore
     multi_property :authors, N::RDFS.author
     singular_property :forcy_single, N::RDFS.forcy_single, :force_relation => true
     multi_property :forcy, N::RDFS.forcy, :force_relation => true, :dependent => :destroy
+    manual_property :blinko
     has_rdf_type N::TALIA.foo
+    
+    attr_accessor :blinko
   end
   
   class DefinedAccessorSubTest < DefinedAccessorTest
@@ -1001,6 +1004,22 @@ module TaliaCore
       new_thing = DefinedAccessorTest.new(:siglumm => "foo", :uri => "http://foobar.com")
       new_thing.save!
       assert(DefinedAccessorTest.exists?(new_thing.uri))
+    end
+    
+    def test_manual_property
+      new_thing = DefinedAccessorTest.new(:blinko => "Bing!")
+      assert_equal(new_thing.blinko, "Bing!")
+    end
+    
+    def test_reload
+      new_thing = ActiveSource.new('http://testme/testing_reload')
+      new_thing.save!
+      assert_property(new_thing[N::RDF.somethink])
+      other_thing = ActiveSource.find(new_thing.id)
+      other_thing[N::RDF.somethink] << "Bongo"
+      other_thing.save!
+      new_thing.reload
+      assert_property(new_thing[N::RDF.somethink], "Bongo")
     end
     
     private

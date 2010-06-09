@@ -111,15 +111,27 @@ module TaliaCore
           raise(ArgumentError, "Cannot pass custom join conditions with :find_through") if(options.has_key?(:joins))
           predicate = f_through[0]
           obj_val = f_through[1]
-          search_prop = (f_through.size > 2) ? f_through[2] : !(obj_val.to_s =~ /:/)
+          search_prop = check_if_search_value(f_through)
           options[:joins] = default_joins(!search_prop, search_prop)
           options[:conditions] ||= {}
           options[:conditions]['semantic_relations.predicate_uri'] = predicate.to_s
           if(search_prop)
             options[:conditions]['obj_props.value'] = obj_val.to_s
           else
-            options[:conditions]['obj_sources.uri'] = obj_val.to_s
+            options[:conditions]['obj_sources.uri'] = (obj_val.respond_to?(:uri) ? obj_val.uri.to_s : obj_val.to_s)
           end
+        end
+      end
+
+      # Checks if the given find_through options should search for a value or
+      # an object. See #check_for_find_through
+      def check_if_search_value(finder_array)
+        if(finder_array.size > 2)
+          finder_array[2]
+        elsif(finder_array[1].respond_to?(:uri))
+          false
+        else
+          !(finder_array[1].to_s =~ /:/)
         end
       end
 

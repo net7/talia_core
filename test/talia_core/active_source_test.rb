@@ -399,6 +399,27 @@ module TaliaCore
       assert_equal(active_sources(:find_through_test), result[0])
     end
     
+    def test_find_through_evil # Checks what happens if #to_s returns a random string instead of the uri
+      foo = Object.new 
+      class << foo
+        def uri
+          @uri
+        end
+        
+        def to_s
+          'abcd'
+        end
+      end
+      foo.instance_variable_set(:@uri, active_sources(:find_through_target).uri)
+      
+      assert_equal(active_sources(:find_through_target).uri, foo.uri)
+      assert_equal('abcd', foo.to_s)
+      
+      result = ActiveSource.find(:all, :find_through => ['http://testvalue.org/pred_find_through', foo])
+      assert_equal(1, result.size)
+      assert_equal(active_sources(:find_through_test), result[0])
+    end
+    
     def test_count_through
       result = ActiveSource.count(:find_through => ['http://testvalue.org/pred_find_through', active_sources(:find_through_target).uri])
       assert_equal(1, result)

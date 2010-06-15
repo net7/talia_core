@@ -368,6 +368,11 @@ module TaliaCore
       assert_equal(N::LOCAL.testlocalthing, src.uri)
     end
     
+    def test_create_local_strange
+      src = ActiveSource.new(:uri => '504-10,E2')
+      assert_equal(N::LOCAL + '504-10,E2', src.uri)
+    end
+    
     def test_assign_and_save
       src = ActiveSource.new('http://testassignandsave/')
       src[N::LOCAL.something] << ActiveSource.new('http://types_test/assign_and_save_a')

@@ -24,7 +24,7 @@ module TaliaCore
 
           # We have an option hash to init the source
           files = options.delete(:files)
-          options[:uri] = uri_string_for(options[:uri])
+          options[:uri] = uri_string_for(options[:uri], false)
           if(autofill_overwrites?)
             options[:uri] = auto_uri
           elsif(autofill_uri?)
@@ -107,7 +107,7 @@ module TaliaCore
             props.to_options!
             src = nil
             begin
-              props[:uri] = uri_string_for(props[:uri])
+              props[:uri] = uri_string_for(props[:uri], false)
               assit(props[:uri], "Must have a valid uri at this step")
               if(src = ActiveSource.find(:first, :conditions => { :uri => props[:uri] }))
                 src.update_source(props, options[:duplicates])
@@ -376,15 +376,18 @@ module TaliaCore
       # This gets the URI string from the given value. This will just return
       # the value if it's a string. It will return the result of value.uri, if
       # that method exists; otherwise it'll return nil
-      def uri_string_for(value)
+      #
+      # If the id_aware flag is set this will return nil for any uri string that
+      # appears to be a numeric id.
+       def uri_string_for(value, id_aware = true)
         result = if value.is_a? String
-          return nil if(value  =~ /\A\d+(-.*)?\Z/) # This looks like a record id or record param, encoded as a string
+          return nil if((value  =~ /\A\d+(-.*)?\Z/) && id_aware) # This looks like a record id or record param, encoded as a string
           # if this is a local name, prepend the local namespace
           (value =~ /:/) ? value : (N::LOCAL + value).uri
         elsif(value.respond_to?(:uri))
           value.uri
         else
-          nil
+          id_aware ? nil : value
         end
         result = result.to_s if result
         result

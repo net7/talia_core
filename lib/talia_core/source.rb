@@ -64,11 +64,11 @@ module TaliaCore
       joins << "LEFT JOIN active_sources AS t_sources ON semantic_relations.object_id = t_sources.id AND semantic_relations.object_type = 'TaliaCore::ActiveSource' "
       joins << "LEFT JOIN semantic_properties ON semantic_relations.object_id = semantic_properties.id AND semantic_relations.object_type = 'TaliaCore::SemanticProperty' "
 
-      property = uri_string_for(property)
+      property = uri_string_for(property, false)
       results = {}
       for val in values
         find(:all )
-        val_str = uri_string_for(val)
+        val_str = uri_string_for(val, false)
         find_parms = params.merge(
         :conditions => ['semantic_properties.value = ? OR t_sources.uri = ?', val_str, val_str],
         :joins => joins

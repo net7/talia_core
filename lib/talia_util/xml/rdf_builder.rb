@@ -1,6 +1,30 @@
 module TaliaUtil
   module Xml
-    # Class for creating xml-rdf data
+    # Extends the BaseBuilder to allow for easy writing of xml-rdf data. This can
+    # be used in a very self-contained way, by simply passing the triples to write
+    # out to the #open_for_triples or #xml_string_for_triples methods. 
+    #
+    # If those self-contained methods are used the, builder will also "group" the
+    # rdf triples, by including all relations for a single subjects in a single tag,
+    # etc.
+    #
+    # Each triple is expected to be an array of 3 elements, for subject, predicate
+    # and object. Multiple triples are passed as an array of such arrays.
+    #
+    # It is also possible to create a builder manually and use the #write_triple
+    # inside.
+    # 
+    # The resulting XML will contain namespace definitions for all namespaces 
+    # currently known by N::Namespace. 
+    #
+    # If the self-contained writer methods is used, it will also build namespace 
+    # definitions for all predicates (so that each predicate is expressed as 
+    # namespace:name).
+    #
+    # The namespaces for predicates are not built when using write 
+    # methods like write_triple directly. In that case a predicate that is
+    # outside a known namespace would cause an invalid xml-rdf, as predicates
+    # must not be expressed as full URIs in that format.
     class RdfBuilder < BaseBuilder
 
       # Writes a simple "flat" triple. If the object is a string, it will be
@@ -24,7 +48,9 @@ module TaliaUtil
         end
       end
       
-      # 
+      # Opens a new builder with the given options (see BaseBuilder.open) and
+      # writes all the triples given into an xml-rdf document. This will 
+      # try to intelligently group the tags to make the result more compact.
       def self.open_for_triples(triples, options = nil)
         my_builder = self.new(options)
         
@@ -36,6 +62,8 @@ module TaliaUtil
       end
       
 
+      # Same as open_for_triples, but writes into a string and returns that
+      # string.
       def self.xml_string_for_triples(triples)
         xml = ''
         open_for_triples(triples, :target => xml, :indent => 2)
@@ -44,7 +72,19 @@ module TaliaUtil
 
       private 
       
-      
+      # "Prepares" all the triples into a hash of hashes. This will take the triples
+      # and build a hash which has all subjects as keys. The value for each subject
+      # will be another hash that has all predicates as keys. The value for each
+      # predicate will be an array with all object values for the triple.
+      #
+      # = Pseudo-Example:
+      #  # Input:
+      #  [["subject", "predicate1", "value"], ["subject", "predicate2", "value2"], ["subject", "predicate2", "value3"]]
+      #  # Output:
+      #  {
+      #    "subject" => { "predicate1" => ["value", "value2"], "predicate2" => ["value3"] }
+      #  }
+      #
       def prepare_triples(triples)
         triple_hash = {}
         triples.each do |triple|
@@ -63,7 +103,8 @@ module TaliaUtil
         triple_hash
       end
       
-      # Write for the open_for_triples
+      # Special writer that takes a hash of triples that is produced by #prepare_triples
+      # and writes it out to the XML document.
       def write_for_triples(triple_hash)
         triple_hash.each do |subject, values|
           @builder.rdf :Description, 'rdf:about' => subject.to_uri.to_name_s do # Element describing this resource
@@ -74,6 +115,12 @@ module TaliaUtil
         end
       end
       
+      # This is used to make a namespace for a given predicate. It splits
+      # the URI using #split_uri! and passes the "namespace" part of the 
+      # URI to #make_namespace to create a symbolic name for it.
+      #
+      # The method returns the uri of the predicate in a "namespace:local_name"
+      # notation.
       def make_predicate_namespace(predicate)
         pred_uri = URI.parse(predicate.to_s)
         path_parts = split_uri!(pred_uri)
@@ -82,6 +129,12 @@ module TaliaUtil
         "#{namespace}:#{path_parts[1]}"
       end
 
+
+      # Split a URI into a namespace part and local part. The local part
+      # is either the fragment (part after the # character), or the part
+      # after the last forward slash.
+      #
+      # This method needs an URI object from the standard ruby library.
       def split_uri!(uri)
         if(uri.fragment)
           fragment = uri.fragment
@@ -94,6 +147,15 @@ module TaliaUtil
         end
       end
 
+      # Create a namespace from a given uri. The method creates a 
+      # symbolic name for the namespace from the uri; it will try to
+      # create a "readable" result. 
+      #
+      # The method checks all the previously created namespaces, in case
+      # of a name collision, a number is added to the namespace name.
+      # 
+      # All newly created namespaces are added to a hash that can be
+      # accessed with #additional_namespaces
       def make_namespace(namespace_uri)
         candidate = /([^\.]+)(\.[^\.]*)?\Z/.match(namespace_uri.host)[1]
         raise(ArgumentError, "Illegal namespace #{namespace_uri.to_s}") if(candidate.blank?)
@@ -117,16 +179,27 @@ module TaliaUtil
         end
       end
       
+      # Automatically created namespaces for predicates as a hash. Namespaces
+      # are added when they are created using the #make_namespace method.
       def additional_namespaces
         @additional_namespaces ||= {}
       end
       
+      # Returns all namespaces configured in N::Namespace and adds the
+      # #additional_namespaces to the result
+      #
+      # Returns a hash where the keys are the xmlns namespace name and the values are
+      # the namespace URIs
       def namespaces
         namespaces = self.class.namespaces
         additional_namespaces.each { |key, value| namespaces["xmlns:#{key.to_s}"] = value.to_s }
         namespaces
       end
 
+      # Returns all namespaces configured in N::Namespace
+      #
+      # Returns a hash where the keys are the xmlns namespace name and the values are
+      # the namespace URIs
       def self.namespaces
         @namespaces ||= begin
           namespaces = {}
@@ -135,11 +208,14 @@ module TaliaUtil
         end
       end
 
-      # Build an rdf/xml string for one predicate, with the given values
+      # Build an rdf/xml string for one predicate, with the given values. This is the
+      # same as #write_single_predicate for multiple values.
       def write_predicate(predicate, values, check_predicate = true)
         values.each { |val| write_single_predicate(predicate, val, check_predicate) }
       end # end method
 
+      # Writes a single predicate with the given value. When check_predicate is set, this
+      # will raise an error if the predicate cannot be represented as "namespace:name"
       def write_single_predicate(predicate, value, check_predicate = true)
         is_property = value.respond_to?(:uri)
         value_properties = is_property ? { 'value' => value } : extract_values(value.to_s)

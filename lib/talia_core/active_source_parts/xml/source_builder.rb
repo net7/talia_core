@@ -29,11 +29,13 @@ module TaliaCore
       #   </sources>
       class SourceBuilder < TaliaUtil::Xml::BaseBuilder
         
+        # Builds the XML for a single source, and returns the result as
+        # a string
         def self.build_source(source)
           make_xml_string { |build| build.write_source(source) }
         end
         
-        # Builds the RDF for a single source
+        # Build the XML for a single source.
         def write_source(source)
           @builder.source do 
             source.attributes.each { |attrib, value| write_attribute(attrib, value) }
@@ -43,7 +45,7 @@ module TaliaCore
         
         private
         
-        # build an attribute entry in a source
+        # Builds an attribute tag (with contents) in a source
         def write_attribute(predicate, values)
           predicate = predicate.respond_to?(:uri) ? predicate.uri.to_s : predicate.to_s
           values = [ values ] unless(values.respond_to?(:each))
@@ -53,7 +55,7 @@ module TaliaCore
           end
         end
         
-        # Writes a value or object tag, depeding on the target
+        # Writes a value or object tag, depeding on the target.
         def write_target(target)
           if(target.respond_to?(:uri))
             @builder.object { @builder.text!(target.uri.to_s) }

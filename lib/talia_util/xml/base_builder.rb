@@ -7,7 +7,34 @@ module TaliaUtil
     # All builders will be used through the #open method, which can be passed either a Builder::XmlMarkup
     # object, or the options to create one.
     #
-    # Subclasses must provide a build_structure method that creates the outer structure of the XML
+    # Subclasses must provide a method named "build_structure" method. The method must accept a block,
+    # and should create the outer structure of the XML document and yield to the block to build the
+    # inner content.
+    #
+    # = Example:
+    #
+    #  class ABuilder < BaseBuilder
+    #   
+    #    def build_structure
+    #      @builder.div { yield }
+    #    end
+    #   
+    #    def write_stuff(text)
+    #      @builder.p { @builder.text!(text) }
+    #    end  
+    #  end
+    #
+    #  xml = ABuilder.make_xml_string do |builder|
+    #     builder.write_stuff("Hello")
+    #     builder.write_stuff("world")
+    #  end
+    #
+    # Which would result in:
+    #
+    #  <div>
+    #    <p>Hello</p>
+    #    <p>World</p>
+    #  </div>
     class BaseBuilder
       
       # Creates a new builder. The options are equivalent for the options of the

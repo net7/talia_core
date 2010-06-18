@@ -5,15 +5,28 @@ module TaliaCore
   module ActiveSourceParts
     module Xml
 
-      # Superclass for importers/readers of generic xml files. This is as close as possible
-      # to the SourceReader class, and will (obviously) only work if a subclass fleshes out
-      # the mappings.
+      # Superclass for importers/readers of generic xml files. The idea is that the
+      # user can very easily create subclasses of this that can import almost any XML
+      # format imaginable - see the SourceReader class for a simple example.
       #
-      # See the SourceReader class for a simple example.
+      # The result of the "import" is a hash (available through #sources) which contains
+      # all the data from the import file in a standardized format. This hash can then
+      # be processed by the ActiveSource class to create the actual sources.
       #
-      # When adding new sources, the reader will always check if the element is already
-      # present. If attributes for one source are imported in more than one place, all
-      # subsequent calls will merge the newly imported attributes with the existing ones.
+      # = Writing XML importers
+      #
+      # Writing an importer is quite easy, all it takes is to subclass this class and
+      # then describe the structure of the element using the methods defined here.
+      #
+      # The reader subclass should declare handlers for the various XML tags that are
+      # in the file. See GenericReaderImportStatements for an explanation of how the
+      # handlers work and how they are declared. This module also contains methods to
+      # retrieve data from the XML in order to use it in the import
+      #
+      # The GenericReaderAddStatements contain the methods that are used to add data
+      # to the source that is currently being imported.
+      #
+      # There are also some GenericReaderHelpers that can be used during the import
       class GenericReader
         
 
@@ -21,6 +34,12 @@ module TaliaCore
         include TaliaUtil::IoHelper
         include TaliaUtil::Progressable
         include TaliaUtil::UriHelper
+        
+        # Include all the parts
+        include GenericReaderImportStatements
+        extend GenericReaderImportStatements::Handlers
+        include GenericReaderAddStatements
+        include GenericReaderHelpers
 
         # Helper class for state
         class State
@@ -42,17 +61,6 @@ module TaliaCore
             reader.base_file_url = base_url if(base_url)
             reader.progressor = progressor
             reader.sources
-          end
-
-          # Create a handler for an element from which a source will be created
-          def element(element_name, &handler_block)
-            element_handler(element_name, true, &handler_block)
-          end
-
-          # Create a handler for an element which will be processed but from which
-          # no source will be created
-          def plain_element(element_name, &handler_block)
-            element_handler(element_name, false, &handler_block)
           end
 
           # Set the reader to allow the use of root elements for import
@@ -88,6 +96,7 @@ module TaliaCore
           @doc = Hpricot.XML(source)
         end
 
+        # This builds
         def sources
           return @sources if(@sources)
           @sources = {}
@@ -193,183 +202,6 @@ module TaliaCore
           raise(RuntimeError, "Illegal operation when not creating a source") unless(@current.attributes)
         end
 
-        # Adds a value for the given predicate (may also be a database field)
-        def add(predicate, object, required = false)
-          # We need to check if the object elements are already strings -
-          # otherwise we would *.to_s the PropertyString objects, which would
-          # destroy the metadata in them.
-          if(object.kind_of?(Array))
-            object.each { |obj| set_element(predicate, obj.is_a?(String) ? obj : obj.to_s, required) }
-          else
-            set_element(predicate, object.is_a?(String) ? object : object.to_s, required)
-          end
-        end
-        
-        # Adds a value with the given prediate and language/type information
-        def add_i18n(predicate, object, lang, type=nil)
-          object = object.blank? ? nil : TaliaCore::PropertyString.new(object, lang, type)
-          add(predicate, object)
-        end
-        
-        # Adds a date field. This will attempt to parse the original string
-        # and write the result as an ISO 8061 compliant date string. Note
-        # that this won't be able to parse everything you throw at it, though.
-        def add_date(predicate, date, required = false, fmt = nil)
-          add(predicate, to_iso8601(parse_date(date, fmt)), required)
-        end
-        
-        # Adds a date interval as an ISO 8061 compliant date string. See
-        # add_date for more info. If only one of the dates is given this
-        # will add a normal date string instead of an interval.
-        def add_date_interval(predicate, start_date, end_date, fmt = nil)
-          return if(start_date.blank? && end_date.blank?)
-          if(start_date.blank?)
-            add_date(predicate, start_date, true, fmt)
-          elsif(end_date.blank?)
-            add_date(predicate, end_date, true, fmt)
-          else
-            add(predicate, "#{to_iso8601(parse_date(start_date, fmt))}/#{to_iso8601(parse_date(end_date, fmt))}", required)
-          end
-        end
-
-        # Adds a relation for the given predicate
-        def add_rel(predicate, object, required = false)
-          object = check_objects(object)
-          if(!object)
-            raise(ArgumentError, "Relation with empty object on #{predicate} (#{@current.attributes['uri']}).") if(required)
-            return
-          end
-          if(object.kind_of?(Array))
-            object.each do |obj| 
-              raise(ArgumentError, "Cannot add relation on database field <#{predicate}> - <#{object.inspect}>") if(ActiveSource.db_attr?(predicate))
-              set_element(predicate, "<#{irify(obj)}>", required) 
-            end
-          else
-            raise(ArgumentError, "Cannot add relation on database field") if(ActiveSource.db_attr?(predicate))
-            set_element(predicate, "<#{irify(object)}>", required)
-          end
-        end
-
-        # Add a file to the source being imported. See the DataLoader module for a description of
-        # the possible options
-        def add_file(urls, options = {})
-          return if(urls.blank?)
-          urls = [ urls ] unless(urls.is_a?(Array))
-          files = urls.collect { |url| { :url => get_absolute_file_url(url), :options => options } }
-          @current.attributes[:files] = files if(files.size > 0)
-        end
-
-        # Gets an absolute path to the given file url, using the base_file_url
-        def get_absolute_file_url(url)
-          orig_url = url.to_s.strip
-          
-          url = file_url(orig_url)
-          # If a file:// was stripped from the url, this means it will always point
-          # to a file
-          force_file = (orig_url != url)
-          # Indicates wether the base url is a network url or a file/directory
-          base_is_net = !base_file_url.is_a?(String)
-          # Try to find if we have a "net" URL if we aren't sure if this is a file. In
-          # case the base url is a network url, we'll always assume that the
-          # url is also a net thing. Otherwise we only have a net url if it contains a
-          # '://' string
-          is_net_url = !force_file && (base_is_net || url.include?('://'))
-          # The url is absolute if there is a : character to be found
-          
-          
-          if(is_net_url)
-            base_is_net ? join_url(base_file_url, url) : url
-          else
-            base_is_net ? url : join_files(base_file_url, url)
-          end
-        end
-        
-        # Joins the two files. If the path is an absolute path,
-        # the base_dir is ignored
-        def join_files(base_dir, path)
-          if(Pathname.new(path).relative?)
-            File.join(base_dir, path)
-          else
-            path
-          end
-        end
-        
-        # Joins the two url parts. If the path is an absolute URL,
-        # the base_url is ignored.
-        def join_url(base_url, path)
-          return path if(path.include?(':')) # Absolute URL contains ':'
-          if(path[0..0] == '/')
-            new_url = base_url.clone
-            new_url.path = path
-            new_url.to_s
-          else
-            (base_file_url + path).to_s
-          end
-        end
-
-        # Returns true if the given source was already imported. This can return false
-        # if you call this for the currently importing source. 
-        def source_exists?(uri)
-          !@sources[uri].blank?
-        end
-
-        # Adds a source from the given sub-element. You may either pass a block with
-        # the code to import or the name of an already registered element. If the
-        # special value :from_all_sources is given, it will read from all sub-elements for which
-        # there are registered handlers
-        def add_source(sub_element = nil, &block)
-          if(sub_element)
-            if(sub_element == :from_all_sources)
-              read_children_of(@current.element)
-            else
-              @current.element.search("/#{sub_element}").each { |sub_elem| read_source(sub_elem, &block) }
-            end
-          else
-            raise(ArgumentError, "When adding elements on the fly, you must use a block") unless(block)
-            attribs = call_handler(@current.element, &block)
-            add_source_with_check(attribs) if(attribs)
-          end
-        end
-
-        # Returns true if the currently imported element already contains type information
-        # AND is of the given type.
-        def current_is_a?(type)
-          assit_kind_of(Class, type)
-          @current.attributes['type'] && ("TaliaCore::#{@current.attributes['type']}".constantize <= type)
-        end
-
-        # Adds a nested element. This will not change the currently importing source, but
-        # it will set the currently active element to the nested element. 
-        # If a block is given, it will execute for each of the nested elements that
-        # are found. Otherwise, a method name must be given, and that method will
-        # be executed instead of the block
-        def nested(sub_element, handler_method = nil)
-          original_element = @current.element
-          begin
-            @current.element.search("#{sub_element}").each do |sub_elem|
-              @current.element = sub_elem
-              assit(block_given? ^ (handler_method.is_a?(Symbol)), 'Must have either a handler (x)or a block.')
-              block_given? ? yield : self.send(handler_method)
-            end
-          ensure
-            @current.element = original_element
-          end
-        end
-
-        # Imports another source like add_source and also assigns the new source as
-        # a part of the current one
-        def add_part(sub_element = nil, &block)
-          raise(RuntimeError, "Cannot add child before having an uri to refer to.") unless(@current.attributes['uri'])
-          @current.element.search("/#{sub_element}").each do |sub_elem|
-            attribs = call_handler(sub_elem, &block)
-            if(attribs)
-              attribs[N::TALIA.part_of.to_s] ||= []
-              attribs[N::TALIA.part_of.to_s] << "<#{@current.attributes['uri']}>"
-              add_source_with_check(attribs)
-            end
-          end
-        end
-
         # Add a property to the source currently being imported
         def set_element(predicate, object, required)
           chk_create
@@ -390,53 +222,13 @@ module TaliaCore
 
         # Check the objects and sort out the blank ones (which should not be used).
         # If no usable object 
-        def check_objects(objects)
+        def check_objects(objects) 
           if(objects.kind_of?(Array))
             objects.reject! { |obj| obj.blank? }
             (objects.size == 0) ? nil : objects
           else
             objects.blank? ? nil : objects
           end
-        end
-
-        # Get an attribute from the current xml element
-        def from_attribute(attrib)
-          @current.element[attrib]
-        end
-
-        # Get the content of exactly one child element of type "elem" of the
-        # currently importing element.
-        #
-        # If elem is set to :self, this will give the content of the current element
-        def from_element(elem)
-          return @current.element.inner_text.strip if(elem == :self)
-          elements = all_elements(elem)
-          elements = elements.uniq if(elements.size > 1) # Try to ignore dupes
-          raise(ArgumentError, "More than one element of #{elem} in #{@current.element.inspect}") if(elements.size > 1)
-          elements.first
-        end
-
-        # Get the content of all child elements of type "elem" of the currently
-        # importing element
-        def all_elements(elem)
-          result = []
-          @current.element.search("/#{elem}").each { |el| result << el.inner_text.strip }
-          result
-        end
-        
-        # Get the iso8601 string for the date
-        def to_iso8601(date)
-          return nil unless(date)
-          date = DateTime.parse(date) unless(date.respond_to?(:strftime))
-          date.strftime('%Y-%m-%dT%H:%M:%SZ')
-        end
-        
-        # Parses the given string and returns it as a date object
-        def parse_date(date, fmt = nil)
-          return nil if(date.blank?)
-          return DateTime.strptime(date, fmt) if(fmt) # format given
-          return DateTime.new(date.to_i) if(date.size < 5) # this short should be a year
-          DateTime.parse(date)
         end
         
       end

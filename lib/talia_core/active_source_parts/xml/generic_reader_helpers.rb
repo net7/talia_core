@@ -3,7 +3,7 @@ module TaliaCore
     module Xml
       
       # Helper methods that can be used during the import operation
-      module GenericReaderImportStatements
+      module GenericReaderHelpers
         
         # Returns true if the given source was already imported. This can return false
         # if you call this for the currently importing source. 

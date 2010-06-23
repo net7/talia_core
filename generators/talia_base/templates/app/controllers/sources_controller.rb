@@ -132,7 +132,7 @@ class SourcesController < ApplicationController
       end
     end
     template = template_map[source.class.name.demodulize]
-    template ? template : "semantic_templates/default/default"
+    template || File.join(template_path, 'default', 'default')
   end
 
   def template_map

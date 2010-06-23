@@ -2,7 +2,8 @@ module TaliaCore
   module ActiveSourceParts
     module Xml
 
-      # Class for creating xml-rdf Data from a source. See the base class for more documentation
+      # Class for creating xml-rdf Data from a source. See the parent class, TaliaUtil::Xml::RdfBuilder, for
+      # more information.
       class RdfBuilder < TaliaUtil::Xml::RdfBuilder
 
         # Builds the RDF for a source and returns the result as a string

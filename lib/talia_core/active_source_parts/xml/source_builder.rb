@@ -27,6 +27,8 @@ module TaliaCore
       #     </source>
       #     ...
       #   </sources>
+      #
+      # Also see the parent class, TaliaUtil::Xml::BaseBuilder, for more information
       class SourceBuilder < TaliaUtil::Xml::BaseBuilder
         
         # Builds the XML for a single source, and returns the result as

@@ -24,7 +24,7 @@ module TaliaCore
     # Catch the invocations
     def method_missing(method, *args)
       # read value
-      raise(SemanticNamingError, "Wrong number of arguments") if(args.size != 0)
+      raise(ArgumentError, "Wrong number of arguments") if(args.size != 0)
       @subject[@namespace + method.to_s]
     end
     

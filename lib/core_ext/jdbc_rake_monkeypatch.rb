@@ -3,18 +3,20 @@
 # to "mysql" instead of "jdbcmysql"
 
 if((RUBY_PLATFORM =~ /java/) && defined?(ActiveRecord::ConnectionAdapters::JdbcAdapter))
-  
+
   require 'jdbc_adapter/jdbc_mysql'
 
   assit(defined?(JdbcSpec::MySQL))
-  
-  module JdbcSpec::MySQL
-    
-    alias_method :real_recreate_database, :recreate_database
-    def recreate_database(name, dummy = nil)
-      real_recreate_database(name)
+
+  module JdbcSpec # :nodoc:
+    module MySQL # :nodoc: 
+
+      alias_method :real_recreate_database, :recreate_database
+      def recreate_database(name, dummy = nil) # :nodoc:
+        real_recreate_database(name)
+      end
+
     end
-    
   end
-  
+
 end

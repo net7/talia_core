@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'progressbar')
+require File.join(File.dirname(__FILE__), '..', 'progressbar')
 
 module TaliaUtil
   

@@ -2,29 +2,94 @@ module TaliaCore
   module DataTypes
 
     # Used for attaching data items by laoding them from files and/or URLs. This will also attempt to
-    # create the correct data type for any given file.
+    # create the correct data type for any given file. See DataLoader::ClassMethods
+    
     module DataLoader
 
+      # The create_from_url method will create a new FileRecord from a 
+      # data source (file or web URL). The exact mechansim for creating
+      # the record will depend on the MIME type of the data.
+      #
+      # =How the MIME type is determined
+      # 
+      # * If the :mime_type options is provided, the system will _always_ use 
+      #   that MIME type for the new record
+      # * If the :location option is provided, the system will _always_ attempt
+      #   to determine the MIME type from the "file extension" of the location,
+      #   unless the :mime_type option is set
+      # * If the uri is a file, the system will use the file extension to
+      #   determine the MIME type automatically
+      # * If the uri is a web URL, the system will first check if the server
+      #   provided a MIME type in the response. If not, it will use the
+      #   "file extension" of the uri to determine the MIME type as above
+      #
+      # =If the loader is a FileRecord class (no loader method)
+      #
+      # If no loader method is specified, the loader will simply create a 
+      # new FileRecord object of the type specified in the loader. It will
+      # then use create_from_file (for files) or create_from_data (for 
+      # a web uri) to load the data into the new record. 
+      #
+      # Example:
+      # 
+      #  # Set a loader for png (usually done in the initializer, 
+      #  # this one is equal to the default)
+      #  TaliaCore::DataTypes::MimeMapping.add_mapping(:png, DataTypes::ImageData)
+      #  
+      #  # Call the loader
+      #  FileRecord.create_from_url('test.png')
+      #  # This will result in the following:
+      #  # DataTypes::ImageData.new.create_from_file('test.png', 'test.png')
+      # 
+      # = If the loader is a method
+      # 
+      # In case a loader method is specified, the system will simply call that
+      # method on the _class_ provided by the loader. The loader method must
+      # take the following paramters: mime_type, location, source, is_file:
+      #
+      # * _mime_type_ is the MIME type for the object being imported
+      # * _location_ is the location string for the current record. This
+      #   is either the location passed in as an option, or the base name
+      #   of the uri
+      # * _source_ is either the io object from which to read the data,
+      #   or a file name
+      # * _is_file_ is set to true in case the _source_ is a file name
+      #
+      # Example:
+      # 
+      #  # Set the handler for tiff files, usually done in the initializer
+      #  TaliaCore::DataTypes::MimeMapping.add_mapping(:tiff, :image_data, :create_iip)
+      #  
+      #  # Call the loader
+      #  FileRecord.create_from_url('test.tiff')
+      #  # This will result in the following:
+      #  # DataTypes::ImageData.create_iip(Mime::Type.lookup(:tiff), 'test.tif', 'test.tif', true)
       module ClassMethods
 
-        # Load the data from the given URL. If the mime_type option is given, the handler will always
-        # use the parameter for the MIME type (which can be a Mime::Type object or a string like
-        # 'text/html', or a mime type symbol).
+        # Load data from the given url and create FileRecord objects,
+        # as appropriate.
         #
-        # *Attention:* This method will return an *Array* of data objects. This is for those cases,
-        # where a single data file will be processed into multiple objects (e.g. IIP data).
+        # The way the FileRecord is created is determined by the MIME type 
+        # for the data. Talia has a "loader" for each MIME type - see the 
+        # MimeMapping class to see the default loaders and to find out how to
+        # configure them.
         #
-        # If the mime type is not given, the method will attempt to automatically determine the
-        # type, using the file extension or the response code.
+        # Each "loader" contains the FileRecord class that is used for new
+        # records, and (optionally) the name of a loader method which 
+        # creates the new records. If no loader method is provided, a default
+        # mechanism is used.
         #
-        # The :http_credentials option may be used to pass login information for http like this:
-        #   http_credentials = { :http_basic_authentication => [login, password] }
-        # See the openuri documentation for more.
+        # *Options*
         #
-        # You may pass the :location parameter to identify the "location" value for the new
-        # data record. In general, this is not neccessary. If the location is given, the system
-        # will *always* attempt to determine the mime type through the location parameter, unless
-        # an explicit mime type is given.
+        # [*mime_type*] - Specify the MIME type to use for the import. The parameter can either be
+        #                 a MIME::TYPE object, a string like 'text/html' or a MIME type symbol like :jpeg
+        # [*http_credentials*] - Credentials for http authentication, if the uri requires
+        #                        that. These are the same options that openuri accepts, so see
+        #                        the documentation for that library for more information.
+        #                        _Example:_ :http_credentials => { :http_basic_authentication => [login, password] }
+        # [*location*] - The location (e.g. filename) for the new FileRecord. If a location is
+        #                given, it will _always_ be used to determine the MIME type, unless a
+        #                MIME type is passed explicitly as an option
         def create_from_url(uri, options = {})
           options.to_options!
           options.assert_valid_keys(:mime_type, :location, :http_credentials)

@@ -2,26 +2,34 @@ module TaliaCore
 
   # Represents a collection of sources. In addition to being a container for 
   # sources, the Collection class will also provide an ordering of the contained
-  # soruces.
+  # sources. 
+  #
+  # In a nutshell, this behaves like an array of sources that preserves
+  # the order when saved.
   # 
   # The ordering will always assign a ''unique'' integer value to each contained
-  # source, that define it's position in the order of elements. (The collection will
+  # source that defines its position in the order of elements. The collection will
   # keep an internal array where each object's index maps directly to its position 
-  # in the collection).
+  # in the collection; the array and ordering are saved to the data store when
+  # the collection itself is saved.
   #
   # The collection class is relatively lightweight and will behave mostly like
-  # the underlying array.
+  # the underlying array - most operations are simply passed through to the array and
+  # nothing is saved before the collection itself is saved.
+  #
+  # Operations that are passed to the underlying array are: +, <<, ==, []=, at, clear,
+  # collect, delete_at, delete, each, each_index, empty?, include?, index, join, 
+  # last, length and size.
   #
   # This also means that all checks on added objects will only be performed when
   # the collection is saved, and not much checking is done when the array is
   # modified.
   #
+  # In the RDF, the collection is represented as a seqContainer, using a predicate of
+  # "http://www.w3.org/1999/02/22-rdf-syntax-ns#_<index of element x>" to connect an
+  # element x with the collection.
+  #
   # '''Note''': This class replaces the previous OrderedSource class
-  # 
-  # The collection is contained in the ordered_objects - if you ever use that
-  # accessor all "ordering" relations for the object will be completely overwritten
-  # on saving. (You can still assign the predicates manually as long as the
-  # ordered_objects accesssor is not called before saving.)
   class Collection < Source
     
     include Enumerable
@@ -35,7 +43,8 @@ module TaliaCore
     
     singular_property :title, N::DCNS.title
 
-    # Initialize SeqContainer
+    # Creates a new Collection. Takes the same parameters as
+    # ActiveSource.new
     def self.new(*params)
       collection = super(*params)
       collection.autosave_rdf = false # Will do this by ourselves
@@ -52,9 +61,10 @@ module TaliaCore
       EOM
     end
     
-    # This can be used both for predicates and collection items - if an integer
-    # value is passed, the method will assume that it is an access on the 
-    # collection item with that number
+    # This accessor can be used for both collection items and predicates.
+    # If a number is passed in, the object will behave like an Array and
+    # the source at the given index is returned. Otherwise the parameter
+    # is treated like a predicate and it behaves like ActiveSource#[].
     def [](index_or_predicate)
       if(index_or_predicate.is_a?(Fixnum))
         ordered_objects[index_or_predicate]
@@ -63,7 +73,7 @@ module TaliaCore
       end
     end
     
-    # See #[] method
+    # Writer that behaves in the same way as [] 
     def []=(index_or_predicate, value)
       if(index_or_predicate.is_a?(Fixnum))
         ordered_objects[index_or_predicate] = value
@@ -72,38 +82,41 @@ module TaliaCore
       end
     end
     
-    # Returns all elements (not the relations) in an ordered array. 
+    # Returns all contained sources in an ordered array. 
+    #
     # The contained sources will appear in the sequential order in which they
     # are contained in the collection, but there is no direct relation between
     # the index in the collection and the index returned through this method.
-    #
-    # The ordering of the elements will be preserved, though.
     def elements
       # execute query
       ordered_objects.compact
     end
       
-    # return string for index
+    # See Collection.index_to_predicate
     def index_to_predicate(index)
       self.class.index_to_predicate(index)
     end
       
-    # return index of predicate
+    # See Collection.predicate_to_index
     def predicate_to_index(predicate)
       self.class.predicate_to_index(predicate)
     end
     
-    # return string for index
+    # Returns the predicate that will be used for the collection element with the
+    # given index. The result will be:
+    #   http://www.w3.org/1999/02/22-rdf-syntax-ns#_<index>
     def self.index_to_predicate(index)
       'http://www.w3.org/1999/02/22-rdf-syntax-ns#_' << ("%06d" % index.to_i) 
     end
     
-    # return index of predicate
+    # Takes a predicate of the form produced by index_to_predicate and returns 
+    # the numeric index of the element
     def self.predicate_to_index(predicate)
       predicate.sub('http://www.w3.org/1999/02/22-rdf-syntax-ns#_', '').to_i
     end
     
-    def reload
+    # Reloading from database by clearing the internal array
+    def reload # :nodoc:
       @ordered_objects = nil
       ordered_objects
       super

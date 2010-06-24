@@ -80,7 +80,7 @@ module TaliaCore
       # For now, the values are documented in the code below and in the default
       # configuration file.
       def run(config_file = nil, &initializer)
-        raise(SystemInitializationError, "System cannot be initialized twice") if(@@initialized || @@init_started)
+        raise(Errors::SystemInitializationError, "System cannot be initialized twice") if(@@initialized || @@init_started)
 
         @@init_started = true
 
@@ -352,10 +352,10 @@ module TaliaCore
       def load_ontologies
         return unless(@config['auto_ontologies'] && !['false', 'no'].include?(@config['auto_ontologies'].downcase))
         onto_dir = File.join(TALIA_ROOT, @config['auto_ontologies'])
-        raise(SystemInitializationError, "Cannot find configured ontology dir #{onto_dir}") unless(File.directory?(onto_dir))
+        raise(Errors::SystemInitializationError, "Cannot find configured ontology dir #{onto_dir}") unless(File.directory?(onto_dir))
         adapter = ActiveRDF::ConnectionPool.write_adapter
-        raise(SystemInitializationError, "Ontology autoloading without a context-aware adapter deletes all RDF data. This is only allowed in testing, please load the ontology manually.") unless(adapter.contexts? || (@environment == 'testing'))
-        raise(SystemInitializationError, "Ontology autoloading requires 'load' capability on the adapter.") unless(adapter.respond_to?(:load))
+        raise(Errors::SystemInitializationError, "Ontology autoloading without a context-aware adapter deletes all RDF data. This is only allowed in testing, please load the ontology manually.") unless(adapter.contexts? || (@environment == 'testing'))
+        raise(Errors::SystemInitializationError, "Ontology autoloading requires 'load' capability on the adapter.") unless(adapter.respond_to?(:load))
 
         # Clear out the RDF
         if(adapter.contexts?)

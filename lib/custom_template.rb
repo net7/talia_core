@@ -1,4 +1,6 @@
-class CustomTemplate < ActiveRecord::Base
+# Class for custom templates (e.g. css and xslt). Mainly created for customization in the
+# Discovery project. May need a major rework prior of being generally useful.
+class CustomTemplate < ActiveRecord::Base # :nodoc:
   hobo_model # Don't put anything above this
   
   validates_presence_of :name, :content

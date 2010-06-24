@@ -1,5 +1,13 @@
 module TaliaCore
   module ActiveSourceParts
+    
+    # Class methods for ActiveSource:
+    #
+    # * Property definitions for source classes (singular_property, multi_property, manual_property)
+    # * Logic for the creation of new sources, and things like exists?
+    # * "Import" methods for the class: create_from_xml, create_multi_from
+    # * autofill_uri logic
+    # * Various utility method
     module ClassMethods
 
       # Accessor for addtional rdf types that will automatically be added to each
@@ -117,7 +125,7 @@ module TaliaCore
               src.save!
             rescue Exception => e
               if(options[:errors]) 
-                err = ImportError.new("ERROR during import of #{props[:uri]}: #{e.message}")
+                err = Errors::ImportError.new("ERROR during import of #{props[:uri]}: #{e.message}")
                 err.set_backtrace(e.backtrace)
                 options[:errors] <<  err
                 TaliaCore.logger.warn("Problems importing #{props[:uri]} (logged): #{e.message}")

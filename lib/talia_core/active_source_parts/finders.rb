@@ -1,20 +1,31 @@
 module TaliaCore
   module ActiveSourceParts
 
-    # All class methods that are used for finding sources.
+    # Class method for ActiveSource that deal with #find and friends, and other forms of querying the
+    # data store. 
     module Finders
 
 
-      # Finder also accepts uris as "ids". There are also some additional options
-      # that are accepted:
+      # Extends the functionality of the ActiveRecord #find. This version also accepts URIs as
+      # "ids" and has a few additional options:
       # 
-      # [*:find_through*] accepts and array with an predicate name and an object
-      #                   value/uri, to search for predicates that match the given predicate/value 
-      #                   combination
-      # [*:type*] specifically looks for sources with the given type.
-      # [*:find_through_inv*] like :find_through, but for the "inverse" lookup
-      # [*:prefetch_relations*] if set to "true", this will pre-load all semantic
-      #                         relations for the sources (experimental, not fully implemented yet)
+      # [*find_through*] accepts and array with an predicate name and an object
+      #                  value/uri, to search for predicates that match the given predicate/value 
+      #                  combination
+      # [*type*] specifically looks for sources with the given type.
+      # [*find_through_inv*] like :find_through, but for the "inverse" lookup
+      # [*prefetch_relations*] if set to "true", this will pre-load all semantic
+      #                        relations for the sources (experimental, not fully implemented yet)
+      #
+      # == Examples:
+      #  # With a URI as id
+      #  ActiveSource.find(N::LOCAL.mySource) 
+      #  
+      #  # A URI as a string, same as above
+      #  ActiveSource.find('http://www.foobar.org')
+      #  
+      #  # Find through a given attribute, and prefetch all attributes for the found sources
+      #  ActiveSource.find(:all, :find_through => [N::DCT.creator, N::LOCAL.schopenhauer], :prefetch_relations => true)
       def find(*args)
         prefetching = false
         if(args.last.is_a?(Hash))
@@ -45,8 +56,7 @@ module TaliaCore
         result
       end
       
-      # Modify the count helper so that it can use the advanced options of the 
-      # ActiveSource #find routine
+      # The count for ActiveSource will accept the same options as the find method
       def count(*args)
         if((options = args.last).is_a?(Hash))
           options.to_options!
@@ -57,23 +67,28 @@ module TaliaCore
       end
 
       # Find a list of sources which contains the given token inside the local name.
-      # This means that the namespace it will be excluded.
+      # This means that the namespace it will be excluded from the toke search
       #
-      #   Sources in system:
-      #     * http://talia.org/one
-      #     * http://talia.org/two
+      # == Example
+      #
+      # Sources in system:
+      # * http://talia.org/one
+      # * http://talia.org/two
+      #
+      # With these sources, you will get:
       #
       #   Source.find_by_uri_token('a') # => [ ]
       #   Source.find_by_uri_token('o') # => [ 'http://talia.org/one', 'http://talia.org/two' ]
       #
-      # NOTE: It internally use a MySQL function, as sql condition, to find the local name of the uri.
+      # NOTE: It internally uses a MySQL function, as sql condition, to find the local name of the uri.
       def find_by_uri_token(token, options = {})
         find(:all, { 
           :conditions => [ "LOWER(SUBSTRING_INDEX(uri, '/', -1)) LIKE ?", '%' + token.downcase + '%' ], 
           :order => "uri ASC" }.merge!(options))
       end
 
-      # Find the Sources within the given namespace by a partial local name
+      # Find the Sources within the given namespace by a partial local name. Works like
+      # #find_by_uri_token, except that only sources from the given namspace are returned
       def find_by_partial_local(namespace, local_part, options = {})
         namesp = N::URI[namespace]
         return [] unless(namesp)
@@ -82,12 +97,8 @@ module TaliaCore
           :order => "uri ASC"}.merge!(options))
       end
 
-      # Find the fist Source that matches the given URI.
-      # It's useful for admin pane, because users visit:
-      #   /admin/sources/<source_id>/edit
-      # but that information is not enough, since we store
-      # into the database the whole reference as URI:
-      #   http://localnode.org/av_media_sources/source_id
+      # Find the fist Source that matches the given URI. This works like #find_by_uri_token,
+      # except that the whole URI is matched, not only the local name.
       def find_by_partial_uri(id, options = {})
         find(:all, { :conditions => ["uri LIKE ?", '%' + id + '%'] }.merge!(options))
       end

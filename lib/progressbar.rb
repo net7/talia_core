@@ -9,7 +9,7 @@
 # of Ruby's license.
 #
 
-class ProgressBar
+class ProgressBar # :nodoc:
   VERSION = "0.9"
 
   def initialize (title, total, out = STDERR)
@@ -228,7 +228,7 @@ class ProgressBar
   end
 end
 
-class ReversedProgressBar < ProgressBar
+class ReversedProgressBar < ProgressBar # :nodoc:
   def do_percentage
     100 - super
   end

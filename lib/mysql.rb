@@ -4,7 +4,7 @@
 # tommy@tmtm.org
 #
 
-class Mysql
+class Mysql # :nodoc:
 
   VERSION = "4.0-ruby-0.2.6-plus-changes"
 
@@ -576,7 +576,7 @@ class Mysql
     raise Error::new(@errno, @error)
   end
 
-  class Result
+  class Result # :nodoc:
     def initialize(mysql, fields, field_count, data=nil)
       @handle = mysql
       @fields = fields
@@ -691,7 +691,7 @@ class Mysql
 
   end
 
-  class Field
+  class Field # :nodoc:
     # Field type
     TYPE_DECIMAL = 0
     TYPE_TINY = 1
@@ -759,7 +759,7 @@ class Mysql
     end
   end
 
-  class Error < StandardError
+  class Error < StandardError # :nodoc:
     # Server Error
     ER_HASHCHK			= 1000
     ER_NISAMCHK			= 1001
@@ -1076,7 +1076,7 @@ class Mysql
     end
   end
 
-  class Net
+  class Net # :nodoc:
     def initialize(sock)
       @sock = sock
       @pkt_nr = 0
@@ -1145,7 +1145,7 @@ class Mysql
 
   end
 
-  class Random
+  class Random # :nodoc:
     def initialize(seed1, seed2)
       @max_value = 0x3FFFFFFF
       @seed1 = seed1 % @max_value
@@ -1161,7 +1161,7 @@ class Mysql
 
 end
 
-class << Mysql
+class << Mysql # :nodoc:
   def init()
     Mysql::new :INIT
   end

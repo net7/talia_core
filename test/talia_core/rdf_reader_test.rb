@@ -7,11 +7,9 @@ module TaliaCore
     suppress_fixtures
     
     def setup
-
-
-      @test_ntriple  = '<http://foodonga.com> <http://bongobongo.com> "foo" .'
-      @test_ntriple << '<http://foodonga.com> <http://bongobongo.com> "bar@en" .'
-      @test_ntriple << '<http://foodonga.com> <http://bongobongo.com> <http:/bingobongo.com> .'
+      @test_ntriples  = "<http://foodonga.com> <http://bongobongo.com> \"foo\" .\n"
+      @test_ntriples << "<http://foodonga.com> <http://bongobongo.com> \"bar@en\" .\n"
+      @test_ntriples << "<http://foodonga.com> <http://bongobongo.com> <http:/bingobongo.com> ."
 
       @sources = ActiveSourceParts::Rdf::RdfReader.sources_from(@test_ntriples)
     end
@@ -33,7 +31,7 @@ module TaliaCore
     end
     
     def test_i18n_value
-      assert_equal('en', @sources.first['http://bongobongo.com'].detect { |el| el == 'bar'}.lang)
+      assert_equal('en', @sources.first['http://bongobongo.com'].detect {|el| el == 'bar'}.lang)
     end
     
   end

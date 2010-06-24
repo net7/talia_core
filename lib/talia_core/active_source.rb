@@ -28,7 +28,7 @@ module TaliaCore
     extend ActiveSourceParts::SqlHelper
     include ActiveSourceParts::PredicateHandler
     extend ActiveSourceParts::PredicateHandler::ClassMethods
-    include ActiveSourceParts::Rdf
+    include ActiveSourceParts::RdfHandler
     extend TaliaUtil::Progressable # Progress for import methods on class
     
     # Set the handlers for the callbacks defined in the other modules. The

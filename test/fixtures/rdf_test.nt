@@ -1,0 +1,3 @@
+<http://rdf_test/from_file> <http://localnode.org/localthi> "value" .
+<http://rdf_test/from_file> <http://www.w3.org/1999/02/22-rdf-syntax-ns#relatit> <http://localnode.org/as_create_attr_dummy_1>
+<http://rdf_test/from_file> <http://www.w3.org/1999/02/22-rdf-syntax-ns#relatit> <http://localnode.org/as_create_attr_dummy_2>

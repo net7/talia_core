@@ -6,7 +6,7 @@ module TaliaCore
     #
     # The RDF for a source will be automatically created through the auto_create_rdf
     # callback when the source is set (and autosave_rdf is set)
-    module Rdf
+    module RdfHandler
 
       # Returns the value of the autosave_rdf flag, as set by autosave_rdf=
       def autosave_rdf?

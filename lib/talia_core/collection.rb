@@ -26,10 +26,10 @@ module TaliaCore
   # modified.
   #
   # In the RDF, the collection is represented as a seqContainer, using a predicate of
-  # "http://www.w3.org/1999/02/22-rdf-syntax-ns#_<index of element x>" to connect an
+  # "http://www.w3.org/1999/02/22-rdf-syntax-ns#_[index of element x]" to connect an
   # element x with the collection.
   #
-  # '''Note''': This class replaces the previous OrderedSource class
+  # *Note*: This class replaces the previous OrderedSource class
   class Collection < Source
     
     include Enumerable

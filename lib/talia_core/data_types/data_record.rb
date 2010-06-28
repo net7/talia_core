@@ -1,10 +1,27 @@
 module TaliaCore
   
   # Contains all data types that are handled by the Talia system. All data elements
-  # should be subclasses of DataRecord
+  # should be subclasses of DataRecord. Records that have data files attached are 
+  # subclasses of FileRecord
   module DataTypes
    
-    # ActiveRecord interface to the data record in the database
+    # Base class for all data records in Talia. This only contains a basic interface,
+    # without much functionality. All data-related methods will return a 
+    # NotImplementedError
+    #
+    # The DataRecord provides an interface to access a generic array/buffer of bytes,
+    # with the base class not making any assumptions on how these bytes are stored.
+    #
+    # Subclasses should usually provide the inferface of this class, which is more
+    # or less like the standard file interface.
+    #
+    # Each data record has a "location" field, which is roughly equivalent to the file
+    # name, and a MIME type. The default behaviour is that, if not set manually,
+    # the MIME type is automatically set before saving. It will be determined by
+    # the "file extension" of the location field.
+    #
+    # Each data record must belong to an ActiveSource. For more information on how to 
+    # handle records with files, see the FileRecord class
     class DataRecord < ActiveRecord::Base
       # Attention: These need to come before the extends, otherwise it'll blow the
       # tests
@@ -20,6 +37,7 @@ module TaliaCore
 
       # returns all bytes in the object as an array of unsigned integers
       def all_bytes
+        raise NotImplementedError
       end
     
       # Returns all_bytes as an binary string
@@ -29,18 +47,22 @@ module TaliaCore
 
       # returns the next byte from the object, or nil at EOS  
       def get_byte(close_after_single_read=false)
+        raise NotImplementedError
       end
     
       # returns the current position of the read cursor
       def position
+        raise NotImplementedError
       end
     
       # adjust the position of the read cursor
       def seek(new_position)
+        raise NotImplementedError
       end
 
       # returns the size of the object in bytes
       def size
+        raise NotImplementedError
       end
     
       # reset the cursor to the initial state

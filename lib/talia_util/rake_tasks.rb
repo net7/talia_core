@@ -56,7 +56,7 @@ namespace :talia_core do
     t.verbose = true
   end
 
-  desc desc "Xml import. Options: [index=<indexfile>] [xml=<datafile>] [importer=<importclass>] [reset_store=true] [...]"
+  desc "Xml import. Options: [index=<indexfile>] [xml=<datafile>] [importer=<importclass>] [reset_store=true] [...]"
   task :xml_import => :init do
     importer = TaliaUtil::ImportJobHelper.new(STDOUT, TaliaUtil::BarProgressor)
     importer.do_import

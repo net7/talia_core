@@ -1,7 +1,21 @@
 module TaliaCore
   module DataTypes
     
-    # Base class for all data records that use a plain file for data storage
+    # Base class for all data records that use a plain file for data storage. This 
+    # implements the DataRecord API so that all byte methods work on a file in the 
+    # File system. 
+    #
+    # Most of the operations are defined in the FileStore module, see there on how
+    # to create and work with file records.
+    #
+    # See the DataLoader and MimeMapping modules to see new file records are 
+    # created automatically, depending on the MIME type.
+    #
+    # The data paths are set automatically by the class, see PathHelpers
+    #
+    # There is also an IipLoader module, that contains the loader mechanism for
+    # creating Iip images - you can also use that as an example to create
+    # new loaders for other file types.
     class FileRecord < DataRecord
       include FileStore
       extend FileStore::ClassMethods
@@ -23,32 +37,33 @@ module TaliaCore
       
       # Returns and, if necessary, creates the file for "delayed" copy operations
       
-      # returns all bytes in the object as an array
+      # Return all bytes from the file as a byte array.
       def all_bytes
         read_all_bytes
       end
       
-      # returns the next byte from the object, or nil at EOS
+      # Returns the next byte from the file (at the position of the
+      # read cursor), or EOS if the end of the file has been reached.
       def get_byte(close_after_single_read=false)
         next_byte(close_after_single_read)
       end
 
-      # returns the current position of the read cursor (binary access)
+      # Returns the current position of the read cursor
       def position
         return (@position != nil) ? @position : 0
       end
    
-      # reset the cursor to the initial state
+      # Reset the cursor to the beginning of the file
       def reset
         set_position(0)
       end
     
-      # set the new position of the reding cursors
+      # Set a new position for the read cursor
       def seek(new_position)
         set_position(new_position)
       end
     
-      # returns the size of the object in bytes
+      # Returns the file size in bytes
       def size
         data_size
       end

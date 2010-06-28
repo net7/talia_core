@@ -21,7 +21,15 @@ module TaliaCore
         end
       end
       
+      # This writes the "cp" command to the output script. It will also
+      # add a "mkdir" command to create the directory for the target file,
+      # if necessary.
+      #
+      # At the moment,
+      # this will always use UNIX-style "cp" and "mkdir" commands.
       def self.cp(source, target)
+        # We use the << in-place string concenation, 'cause if there
+        # are a lot of files, it really makes a speed difference
         unless(dir_seen?(File.expand_path(target)))
           mkdir_string = 'mkdir -vp "'
           mkdir_string << File.dirname(File.expand_path(target))
@@ -47,7 +55,8 @@ module TaliaCore
       
       private
       
-      
+      # Returns true if the directory has already been seen by
+      # the copier before.
       def self.dir_seen?(directory)
         @seen_dirs = {}
         return true if(@seen_dirs[directory])
@@ -55,12 +64,13 @@ module TaliaCore
         false
       end
       
-      # The file name for the delayed copy
+      # The file name for the delayed copy (the file where the
+      # commands are written out)
       def self.delay_file_name
         File.join(RAILS_ROOT, 'delayed_copy.sh')
       end
       
-      # Backs up an existing file if necessary
+      # Backs up an existing file with delayed commands, if necessary
       def self.backup_file
         round = 1
         file_name = 'nil'

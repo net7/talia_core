@@ -38,8 +38,8 @@ namespaces:
     dcmit:    "http://purl.org/dc/dcmitype/"
     discovery: http://discovery-project.eu/ontologies/scholar/0.1/
     swicky: http://discovery-project.eu/ontologies/philoSpace/
+    skos: http://www.w3.org/2004/02/skos/core#
     marcont: http://www.marcont.org/ontology/2.1/
-
-
-
-
+    
+# vips_command: /opt/local/bin/vips
+# convert_command: /opt/local/bin/convert

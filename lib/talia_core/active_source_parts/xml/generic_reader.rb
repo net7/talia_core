@@ -65,7 +65,10 @@ module TaliaCore
         include GenericReaderAddStatements
         include GenericReaderHelpers
 
-        # Helper class for state
+        # Class for the current import state. This contains the XML element that
+        # is currently imported, and the hash with the attributes for the currently
+        # importing source. In the importer, the current State will be available as
+        # @current
         class State
           attr_accessor :attributes, :element
         end
@@ -132,6 +135,20 @@ module TaliaCore
         #
         # The result will be cached and once read, subsequent calls will return
         # the same set of "sources" again
+        #
+        # *Example of Result*:
+        #
+        #  [
+        #    {
+        #      'uri' => 'http://foobar.com',
+        #      'type' => 'TaliaCore::Collection',
+        #      'http://rdfbar/foo' => '<http://taliainstall/otherthing'
+        #    },
+        #    {
+        #      'uri' => 'http://taliainstall/otherthing',
+        #      'type' => 'TaliaCore::DataTypes::DummySource'
+        #    }
+        #  ]
         def sources
           return @sources if(@sources)
           @sources = {}

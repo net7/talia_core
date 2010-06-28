@@ -2,6 +2,53 @@ require 'fileutils'
 
 module TaliaCore
   module DataTypes
+    
+    # The "hevy lifting" for FileRecords, handling the actual creation and
+    # manipulation of the files. 
+    #
+    # A record can be created with create_from_file (passing a filename) or 
+    # with create_from_data, passing a byte array.
+    #
+    # While a "location" can be passed to the record (which will be save 
+    # in the database), the actual file name will be determined by the system.
+    # Also see the PathHelpers for info
+    #
+    # The base directory for file storage can be configured in the 
+    # talia_core.yml file as "data_directory_location". Otherwise,
+    # RAILS_ROOT/data. Inside, each record will be stored at 
+    # "<data class of the record>/<last three numbers of the id>/<record id>"
+    # 
+    # So, for example, a "XmlData" record with the id "123456" would be stored
+    # as "DATA_ROOT/XmlData/456/123456"
+    #
+    # = Creating new records
+    #
+    # When creating a new record using create_from_data, the data will be cached
+    # inside the object and only be saved when the record itself is saved. In 
+    # this case, the file data is simply written to file during the save operation.
+    #
+    # When the record is created using create_from_file, the behaviour depens on
+    # the parameters passed and the system settings.
+    #
+    # * In case the delete_original flag is set, the system will try to move the
+    #   file to the new location. If both are on the same file system, this will
+    #   be quicker than a copy operation.
+    # * Currently, the move operation uses the "mv" command. This is does not work
+    #   on windows, but is a workaround to stability problems with the file handling
+    #   in JRuby
+    # * If the delete_original flag is not set, the system will attempt to copy the
+    #   files:
+    #   * If the "delay_file_copies" options is set in talia_core.yml, no copy
+    #     operation will be done. Instead, the system will create a "delayed_copies.sh"
+    #     script that can be executed from a UNIX shell to do the actual copying.
+    #     This is extremely fast and stable, as no actual copying is done.
+    #   * Otherwise Talia will attempt to copy the file by itself. If the "fast_copies"
+    #     flag is set in talia_core.yml, it will use the internal copy routine
+    #     which will work on any system. Otherwise, it will call the system's "cp"
+    #     command, which can sometimes be more stable with jruby.
+    #
+    # Also see the DataLoader module to see how the creation of records automatically
+    # selects the record type and loader, depending on the MIME type of the data.
     module FileStore
   
       # the handle for the file
@@ -14,7 +61,7 @@ module TaliaCore
       
       module ClassMethods
       
-        # Find or create a record for the given location and source_id, then it saves the given file.
+        # Does a #find_and_create_by_location_and_sourc
         def find_or_create_and_assign_file(params)
           data_record = self.find_or_create_by_location_and_source_id(extract_filename(params[:file]), params[:source_id])
           data_record.file = params[:file]

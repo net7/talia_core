@@ -81,15 +81,15 @@ module TaliaCore
         #
         # *Options*
         #
-        # [*mime_type*] - Specify the MIME type to use for the import. The parameter can either be
-        #                 a MIME::TYPE object, a string like 'text/html' or a MIME type symbol like :jpeg
-        # [*http_credentials*] - Credentials for http authentication, if the uri requires
-        #                        that. These are the same options that openuri accepts, so see
-        #                        the documentation for that library for more information.
-        #                        _Example:_ :http_credentials => { :http_basic_authentication => [login, password] }
-        # [*location*] - The location (e.g. filename) for the new FileRecord. If a location is
-        #                given, it will _always_ be used to determine the MIME type, unless a
-        #                MIME type is passed explicitly as an option
+        # [*mime_type*] Specify the MIME type to use for the import. The parameter can either be
+        #               a MIME::TYPE object, a string like 'text/html' or a MIME type symbol like :jpeg
+        # [*http_credentials*] Credentials for http authentication, if the uri requires
+        #                      that. These are the same options that openuri accepts, so see
+        #                      the documentation for that library for more information.
+        #                      _Example_: :http_credentials => { :http_basic_authentication => [login, password] }
+        # [*location*] The location (e.g. filename) for the new FileRecord. If a location is
+        #              given, it will _always_ be used to determine the MIME type, unless a
+        #              MIME type is passed explicitly as an option
         def create_from_url(uri, options = {})
           options.to_options!
           options.assert_valid_keys(:mime_type, :location, :http_credentials)

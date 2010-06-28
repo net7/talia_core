@@ -78,7 +78,7 @@ module TaliaCore
             open_generic(url, options) { |io| sources_from(io, progressor, url) }
           end
 
-          # Reader the sources from the given IO stream. You may specify a base
+          # Read the sources from the given IO stream. You may specify a base
           # url to help the reader to decide from where files should be opened.
           def sources_from(source, progressor = nil, base_url=nil)
             reader = self.new(source)

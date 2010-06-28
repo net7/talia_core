@@ -228,6 +228,32 @@ module TaliaUtil
         puts ""
       end
 
+      # Force-loads all Talia related models.
+      def load_all_models
+        return if @models_loaded
+        load_models_from File.join(RAILS_ROOT, 'app', 'models', '**', '*.rb') if(defined? RAILS_ROOT)
+        load_models_from File.join(TALIA_CODE_ROOT, 'lib', 'talia_core', 'source_types',  '**',  '*.rb'), 'TaliaCore::SourceTypes::'
+        TaliaCore::Source
+        TaliaCore::Collection
+
+        @models_loaded = true
+      end
+
+      def load_models_from(dir, prefix='')
+        # Appends a file system directory separator to the directory if needed.
+        dir = File.join(dir, '')
+        Dir[File.join(dir, '**', '*.rb')].each do |f| 
+          # For every rb file we try to gues and instantiate the contained class.
+          model_name = f.gsub(/#{dir}|\.rb/, '')
+          begin
+            (prefix + model_name).camelize.constantize
+          rescue Exception => e
+            # Errors at this point could be ignored, as there may be files that do not contain classes.
+            TaliaCore.logger.warn "Could not load class #{(prefix + model_name).camelize}: #{e.message}"
+          end
+        end
+      end
+
     end
   end
 end

@@ -9,30 +9,42 @@ module TaliaCore
     def setup
       @test_ntriples  = "<http://foodonga.com> <http://bongobongo.com> \"foo\" .\n"
       @test_ntriples << "<http://foodonga.com> <http://bongobongo.com> \"bar@en\" .\n"
-      @test_ntriples << "<http://foodonga.com> <http://bongobongo.com> <http:/bingobongo.com> ."
+      @test_ntriples << "<http://foodonga.com> <http://bongobongo.com> <http:/bingobongo.com> .\n"
+      @test_ntriples << "<http://foodonga.com> <#{N::RDF.type}> <#{N::SKOS.Collection}> . \n"
+      @test_ntriples << "<http://bardonga.com> <http://bongobongo.com> \"bar\" ."
 
-      @sources = ActiveSourceParts::Rdf::RdfReader.sources_from(@test_ntriples)
+      setup_once(:sources) {ActiveSourceParts::Rdf::RdfReader.sources_from(@test_ntriples)}
+      @source = @sources.detect {|el| el['uri'] == 'http://foodonga.com'}
     end
     
     def test_sources
-      assert_equal(1, @sources.size)
+      assert_equal(2, @sources.size)
     end
     
     def test_attributes
-      assert_kind_of(Hash, @sources.first)
+      assert_kind_of(Hash, @source)
     end
     
     def test_uri
-      assert_equal('http://foodonga.com', @sources.first['uri'])
+      assert_equal('http://foodonga.com', @source['uri'])
     end
     
     def test_predicate
-      assert_equal(['foo', 'bar', '<http:/bingobongo.com>'], @sources.first['http://bongobongo.com'])
+      assert_equal(['foo', 'bar', '<http:/bingobongo.com>'], @source['http://bongobongo.com'])
     end
     
     def test_i18n_value
-      assert_equal('en', @sources.first['http://bongobongo.com'].detect {|el| el == 'bar'}.lang)
+      assert_equal('en', @source['http://bongobongo.com'].detect {|el| el == 'bar'}.lang)
     end
     
+    def test_type
+      assert_equal('TaliaCore::Collection', @source['type'])
+    end
+
+    def test_rdf_type
+      # While we know that we will have only one value for rdf type, remember that 
+      # rdf type can actually be an array of values.
+       assert_not_nil(@source[N::RDF.type.to_s].detect {|el| el == "<#{N::SKOS.Collection.to_s}>"})
+    end
   end
 end

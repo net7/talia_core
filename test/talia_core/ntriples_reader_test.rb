@@ -2,21 +2,15 @@ require File.join(File.dirname(__FILE__), '..', 'test_helper')
 
 module TaliaCore
   # Test the RdfReader class.
-  class RdfReaderTest < Test::Unit::TestCase
+  class NtriplesReaderTest < Test::Unit::TestCase
 
     suppress_fixtures
     
     def setup
-      @test_ntriples  = "<http://foodonga.com> <http://bongobongo.com> \"foo\" .\n"
-      @test_ntriples << "<http://foodonga.com> <http://bongobongo.com> \"bar@en\" .\n"
-      @test_ntriples << "<http://foodonga.com> <http://bongobongo.com> <http:/bingobongo.com> .\n"
-      @test_ntriples << "<http://foodonga.com> <#{N::RDF.type}> <#{N::SKOS.Collection}> . \n"
-      @test_ntriples << "<http://bardonga.com> <http://bongobongo.com> \"bar\" ."
-
-      setup_once(:sources) {ActiveSourceParts::Rdf::RdfReader.sources_from(@test_ntriples)}
+      setup_once(:sources) {ActiveSourceParts::Rdf::NtriplesReader.sources_from_url(TestHelper.fixture_file('rdf_test.nt'))}
       @source = @sources.detect {|el| el['uri'] == 'http://foodonga.com'}
     end
-    
+
     def test_sources
       assert_equal(2, @sources.size)
     end
@@ -30,7 +24,7 @@ module TaliaCore
     end
     
     def test_predicate
-      assert_equal(['foo', 'bar', '<http:/bingobongo.com>'], @source['http://bongobongo.com'])
+      assert_equal(['foo', 'bar', '<http://bingobongo.com>'], @source['http://bongobongo.com'])
     end
     
     def test_i18n_value

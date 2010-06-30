@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:bongo="http://bongobongo.com/">
+  
+  <rdf:Description rdf:about="http://foodonga.com">
+    <bongo:bar xml:lang="en">bar</bongo:bar>
+    <bongo:bar>foo</bongo:bar>
+    <bongo:bar><rdf:Description rdf:about="http://bingobongo.com"/></bongo:bar>
+    <rdf:type><rdf:Description rdf:about="http://www.w3.org/2004/02/skos/core#Collection"/></rdf:type>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://bardonga.com">
+    <bongo:bar>bar</bongo:bar>
+  </rdf:Description>
+</rdf:RDF>

@@ -17,10 +17,10 @@ module TaliaCore
 
       setup_once(:rdf_ntriples_imported) do
         ENV['xml'] = TestHelper.fixture_file('rdf_test.nt')
-        ENV['importer'] = 'TaliaCore::ActiveSourceParts::Rdf::RdfReader'
+        ENV['importer'] = 'TaliaCore::ActiveSourceParts::Rdf::NtriplesReader'
         importer = TaliaUtil::ImportJobHelper.new
         importer.do_import
-        ActiveSource.find('http://rdf_test/from_file')
+        ActiveSource.find('http://foodonga.com')
       end
 
     end
@@ -37,12 +37,12 @@ module TaliaCore
       assert_property(@imported[N::RDF.relatit], SourceTypes::DummySource.new('http://localnode.org/as_create_attr_dummy_2'), SourceTypes::DummySource.new('http://localnode.org/as_create_attr_dummy_1'))
     end
 
-    def test_rdf_success
+    def test_ntriples_success
       assert(@rdf_ntriples_imported)
     end
 
-    def test_rdf_property
-      assert_property(@rdf_ntriples_imported['http://localnode.org/localthi'], 'value')
+    def test_ntriples_property
+      assert_property(@rdf_ntriples_imported['http://bongobongo.com'], 'foo', 'bar', N::URI.new('http://bingobongo.com'))
     end
 
   end

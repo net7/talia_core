@@ -1,5 +1,4 @@
 require 'rdf'
-require 'rdf/ntriples'
 
 module TaliaCore
   module ActiveSourceParts
@@ -33,30 +32,34 @@ module TaliaCore
         #   Due to the autoload functionality of rails we need to be sure any possible source type class file 
         #   is loaded when we actually use that method. This is what TaliaUtil::Util::load_all_models does.
         # * Works only with format=:ntriples for now.
-        def initialize(source, format=:ntriples)
+        def initialize(source)
           TaliaUtil::Util.load_all_models
           source = StringIO.new(source) if(source.is_a? String)
           @reader = RDF::Reader.for(format).new(source)
         end
-
         
         # See TaliaCore::ActiveSourceParts::Xml::GenericReader#sources
         def sources
           return @sources if(@sources)
           @sources = {}
-          @reader.each_statement do |statement|
-            source = (@sources[statement.subject.to_s] ||= {})
-            source['uri'] ||= statement.subject.to_s
-            source['type'] ||= find_source_type statement
-            source[statement.predicate.to_s] ||= []
-            object = if(statement.object.literal?)
-              PropertyString.parse(statement.object.value)
-            else
-              "<#{statement.object.to_s}>"
+          run_with_progress('RdfRead', 0) do |progress|
+            @reader.each_statement do |statement|
+              source = (@sources[statement.subject.to_s] ||= {})
+              source['uri'] ||= statement.subject.to_s
+              source['type'] ||= find_source_type statement
+              source[statement.predicate.to_s] ||= []
+              object = if(statement.object.literal?)
+                         parsed_string = PropertyString.parse(statement.object.value)
+                         parsed_string.lang = statement.object.language.to_s if(statement.object.language)
+                         parsed_string
+                       else
+                         "<#{statement.object.to_s}>"
+                       end
+              source[statement.predicate.to_s] << object
+              progress.inc
             end
-            source[statement.predicate.to_s] << object
           end
-           @sources.values
+          @sources.values
         end
 
         # Used to determine the source talia type. The type can be contained explicitly as object of a N::TALIA.type
@@ -77,6 +80,10 @@ module TaliaCore
           Class.subclasses_of(TaliaCore::ActiveSource).detect do |c|
             c.additional_rdf_types.include? rdf_type
           end.try :name
+        end
+
+        def format
+          raise NotImplementedError
         end
 
       end

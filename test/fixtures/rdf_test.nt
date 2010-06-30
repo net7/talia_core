@@ -1,3 +1,5 @@
-<http://rdf_test/from_file> <http://localnode.org/localthi> "value" .
-<http://rdf_test/from_file> <http://www.w3.org/1999/02/22-rdf-syntax-ns#relatit> <http://localnode.org/as_create_attr_dummy_1>
-<http://rdf_test/from_file> <http://www.w3.org/1999/02/22-rdf-syntax-ns#relatit> <http://localnode.org/as_create_attr_dummy_2>
+<http://foodonga.com> <http://bongobongo.com> "foo" .
+<http://foodonga.com> <http://bongobongo.com> "bar@en" .
+<http://foodonga.com> <http://bongobongo.com> <http://bingobongo.com> .
+<http://foodonga.com> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Collection> .
+<http://bardonga.com> <http://bongobongo.com> "bar" .

@@ -290,30 +290,39 @@ module TaliaCore
       #     JRuby only.
       def copy_or_move(original, target)
         if(@delete_original_file)
-          #FIXME: this doesn't work in linux
-          #   FileUtils.move(original, target)
-          # we have to use the system call as a workaround
-          from_file = File.expand_path(original)
-          to_file = File.expand_path(target)
-          system_success = system("mv '#{from_file}' '#{to_file}'")
-          raise(IOError, "move error '#{from_file}' '#{to_file}'") unless system_success
+          begin
+            FileUtils.move(original, target)
+          rescue Errno::EACCES
+            # Workaround for File.rename bug with JRuby (jira.codehaus.org/browse/JRUBY-3381),
+            # based on the code from Lenny Marks 03/Jun/10.
+            safe_copy original, target
+            FileUtils.rm original
+          end
         else
           # Delay can be enabled through enviroment
           if(delay_copies)
             DelayedCopier.cp(original, target)
-          elsif(fast_copies)
-            FileUtils.copy(original, target)
           else
-            # Call the copy as an external command. This is to work around the
-            # crashes that occurred using the builtin copy
-            from_file = File.expand_path(original)
-            to_file = File.expand_path(target)
-            system_success = system("cp '#{from_file}' '#{to_file}'")
-            raise(IOError, "copy error '#{from_file}' '#{to_file}'") unless system_success
+            safe_copy original, target
           end
         end
       end
-      
+
+      # Copies the file using some workarounds for jruby if necessary.
+      # See also #copy_or_move.
+      def safe_copy(original, target)
+        if(fast_copies)
+          FileUtils.copy(original, target)
+        else
+          # Call the copy as an external command. This is to work around the
+          # crashes that occurred using the builtin copy
+          from_file = File.expand_path(original)
+          to_file = File.expand_path(target)
+          system_success = system("cp '#{from_file}' '#{to_file}'")
+          raise(IOError, "copy error '#{from_file}' '#{to_file}'") unless system_success
+        end
+      end
+
       
       # Returns true if the 'delay_file_copies' option is set in the environment
       def delay_copies

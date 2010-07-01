@@ -1,16 +1,17 @@
 module TaliaCore
   module DataTypes
 
-    # Class to manage PDF data type
+    # FileRecord that contains a PDF document.
     class PdfData < FileRecord
      
-      # return the mime_type for a file
+      # The MIME type is always <tt>application/pdf</tt>
       def extract_mime_type(location)
         'application/pdf'
       end
 
-      # Create the PDF data from a PDF writer. This method needs a block
-      # which will be called with the writer object
+      # Create the PDF data using PDF::Writer. The writer will be passed
+      # to the block given to this method, and the resulting PDF will be
+      # saved as the record's file.
       def create_from_writer(writer_opts = {})
         activate_pdf
         writer = PDF::Writer.new(writer_opts) do |pdf|
@@ -24,14 +25,16 @@ module TaliaCore
 
       private
 
-      # Little helper method - no need to load the pdf classes unless needed,
-      # but if called every time round it will slow things down (in Rails it will).
+      # Little helper method to load the pdf writer only when needed. This will make sure
+      # the thing is loaded only once, otherwise it would be slow in Rails development
+      # (which uses #load for #require)
       def self.activate_pdf
         return if(@pdf_active)
         require 'pdf/writer'
         @pdf_active = true
       end
 
+      # See PdfData.activate_pdf
       def activate_pdf
         self.class.activate_pdf
       end

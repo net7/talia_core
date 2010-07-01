@@ -3,7 +3,10 @@ module TaliaCore
     
     # Data class that contains just a link to a remote data element (and no
     # locally stored data at all). The uri for the link is stored in the location
-    # field
+    # field.
+    #
+    # *Note*: It is not possible to store data in media links, so all data-related
+    # methods will raise an exception
     class MediaLink < DataRecord
       
       def all_bytes

@@ -44,13 +44,24 @@ module TaliaUtil
   #
   # [*trace*] Enable tracing output for errors. (By default, this takes the rake task's setting
   #           if possible)
+  #
+  # The import itself consists in calling #initialize and the do_import
   class ImportJobHelper
 
     include IoHelper
 
     attr_reader :importer, :credentials, :index_data, :xml_data, :reset, :callback, :base_url, :message_stream, :progressor, :duplicates, :trace
 
-    # The message_stream will be used for printing progress messages
+    # The message_stream will be used for printing progress messages.
+    #
+    # The procedure of the import is the following:
+    #
+    # * Set up all the attributes of this class from the respective environment variables (from the
+    #   rake task)
+    # * Initialize the data: If an index file is given, read the index file. Otherwise read the
+    #   file given by the 'xml' environment variable, or from STDIN if 'xml' isn't set. See init_data
+    # * Create the callback class, if given
+    # * Set up the progressor for the import, if any
     def initialize(message_stream = STDOUT, progressor = TaliaUtil::BarProgressor)
       @trace = (defined?(Rake) ? Rake.application.options.trace : false) || ENV['trace']
       @progressor = progressor
@@ -76,6 +87,10 @@ module TaliaUtil
       callback.progressor = progressor if(callback && callback.respond_to?(:'progressor='))
     end
 
+    # Reads the data for the coming import. If the 'index' parameter is found in the
+    # environment, this will be used as the file name for the index file, which will be
+    # read into the object. Otherwise, if the 'xml' environment variable is set, this will
+    # will be read and used as the XML data for the import
     def init_data
       if(ENV['index'].blank?)
         @xml_data = if(ENV['xml'].blank?)
@@ -92,6 +107,14 @@ module TaliaUtil
       end
     end
 
+    # Does the actual importing: 
+    #
+    # * If required, reset the data store
+    # * Run the "before_import" callback
+    # * In case there is plain xml data, TaliaCore::ActiveSource.create_from_xml
+    #   will handle all the import
+    # * If an index is given, the import will be done by import_from_index
+    # * Run the "after_import" callback
     def do_import
       if(reset)
         TaliaUtil::Util.full_reset
@@ -112,11 +135,25 @@ module TaliaUtil
       run_callback(:after_import)
     end
 
+    # Prints the message and, if the "trace" option is set,
+    # also the stack trace of the Exception e
     def print_error(e)
       puts e.message
       puts e.backtrace if(trace)
     end
 
+    # This is *only* used if an index file is given for the import. All "plain"
+    # imports go directly to #create_from_xml in the ActiveSource class
+    #
+    # * The index file is parsed as XML
+    # * If the root element is "sigla", the old hyper format is used
+    # * In case the hyper format is used, sigla (local names for URIs)
+    #   are expected as "siglum" elements. Otherwise, the import URIs are expected
+    #   in "url" tags.
+    # * For each import url, #sources_from_url is called on the selected importer,
+    #   and the attributes added to the import data
+    # * The result is passed to TaliaCore::ActiveSource.create_multi from
+    #   to create the sources
     def import_from_index(errors)
       doc = Hpricot.XML(index_data)
       hyper_format = (doc.root.name == 'sigla')

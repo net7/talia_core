@@ -38,47 +38,57 @@ module TaliaCore
     #   in JRuby
     # * If the delete_original flag is not set, the system will attempt to copy the
     #   files:
-    #   * If the "delay_file_copies" options is set in talia_core.yml, no copy
+    #   * If the "delay_file_copies" options is set in the _environment_, no copy
     #     operation will be done. Instead, the system will create a "delayed_copies.sh"
     #     script that can be executed from a UNIX shell to do the actual copying.
     #     This is extremely fast and stable, as no actual copying is done.
     #   * Otherwise Talia will attempt to copy the file by itself. If the "fast_copies"
-    #     flag is set in talia_core.yml, it will use the internal copy routine
+    #     flag is set in _environment_, it will use the internal copy routine
     #     which will work on any system. Otherwise, it will call the system's "cp"
     #     command, which can sometimes be more stable with jruby.
     #
     # Also see the DataLoader module to see how the creation of records automatically
     # selects the record type and loader, depending on the MIME type of the data.
+    #
+    # *Note*: The above behaviour means that for files that are treated through "copy"
+    # or "move", the original file must not be touched by external processes until
+    # the record is saved
     module FileStore
   
-      # the handle for the file
+      # The file handle of the current record
       @file_handle = nil
-      # position of the reading cursors
+      # Read cursor within the current record
       @position    = 0      
    
-      # Class for data paths
+      # Class used to represent data paths in file records. This type is used for
+      # strings that contain a path to a file, to distinguish them from "normal"
+      # string, which may contain plain data.
       class DataPath < String ; end
       
       module ClassMethods
       
-        # Does a #find_and_create_by_location_and_sourc
+        # Does a #find_and_create_by_location_and_source_id - meaning that if a record
+        # with given location already exists on the given source, the existing record
+        # will be returned. Otherwise a new record will be created.
+        #
+        # In any case, the given file will be attached using #file= 
+        #
+        # *Options*:
+        #
+        # [*file*] Filename for the file to be attached - will also be used to generate
+        #          the location
+        # [*source_id*] Id (or uri) of the source that the record should be attached to
         def find_or_create_and_assign_file(params)
-          data_record = self.find_or_create_by_location_and_source_id(extract_filename(params[:file]), params[:source_id])
+          data_record = self.find_or_create_by_location_and_source_id(params[:file].try(:original_filename), params[:source_id])
           data_record.file = params[:file]
           data_record.save # force attachment save and it also saves type attribute.
         end
       
       end
     
-      # This will create the data object from a given file. This will simply move the
-      # given file to the correct location upon save. This will avoid multiple
-      # read/write operations during import.
-      #
-      # The original file must not be touched by external processes until the
-      # record is saved.
-      #
-      # If the delete_original flag is set, the original file will be removed
-      # on save
+      # Creates a new record from an existing file on the file system.
+      # The file will be copied or moved when the new record is saved - see
+      # the module documentation to see how this works in detail.
       def create_from_file(location, file_path, delete_original = false)
         close_file
         self.location = location
@@ -86,13 +96,15 @@ module TaliaCore
         @delete_original_file = delete_original
       end
   
-      # Add data as string into file
-      def create_from_data(file_location, data, options = {})
+      # Creates a new record from the given data (binary array). See
+      # the module documentation for the details; the data will be cached
+      # and written to disk once the new record is saved.
+      def create_from_data(location, data, options = {})
         # close file if opened
         close_file
     
         # Set the location for the record
-        self.location = file_location
+        self.location = location
     
         if(data.respond_to?(:read))
           @file_data_to_write = data.read
@@ -102,7 +114,7 @@ module TaliaCore
     
       end
       
-      # returns the complete text
+      # Returns the contents of the file as a text string.
       def all_text
         if(!is_file_open?)
           open_file
@@ -114,6 +126,9 @@ module TaliaCore
       def file() nil; end
     
       # Assign the file data (<tt>StringIO</tt> or <tt>File</tt>).
+      #
+      # *Note*: At the moment this method is _different_ internally to 
+      # the create_* methods, and it should be avoided using them together.
       def file=(file_data)
         return nil if file_data.nil? || file_data.size == 0 
         self.assign_type file_data.content_type
@@ -127,13 +142,13 @@ module TaliaCore
         @save_attachment = true
       end
     
+      # Callback for writing the data from create_from_data or create_from_file. If there is
+      # a problem saving this file, only an internal assertion is thrown so that it won't crash
+      # production environments.
       def write_file_after_save 
         # check if there are data to write
         return unless(@file_data_to_write)
     
-        # check if file already exists
-#        raise(RuntimeError, "File already exists: #{file_path}") if(File.exists?(file_path))
-
         begin
           self.class.benchmark("\033[36m\033[1m\033[4mFileStore\033[0m Saving file for #{self.id}") do
             # create data directory path
@@ -153,7 +168,7 @@ module TaliaCore
 
       end
    
-      # Return true if the specified data file is open, false otherwise
+      # Return true if the data file is open
       def is_file_open?
         (@file_handle != nil)
       end
@@ -164,11 +179,10 @@ module TaliaCore
         self.type = MimeMapping.class_type_from(content_type).name
       end
       
-      
-      # private methods ==================================================================
       private
       
-      # This saves the cached data from the file creation
+      # This saves the cached data from create_from_data. Simply writes the
+      # data to disk.
       def save_cached_data
         # open file for writing
         @file_handle = File.open(file_path, 'w')
@@ -182,7 +196,7 @@ module TaliaCore
       end
       
       # This copies the data file with which this object was created to the
-      # actual storage lcoation
+      # actual storage lcoation. This is for records created with create_from_file
       def copy_data_file
         copy_or_move(@file_data_to_write, file_path)
       end
@@ -219,7 +233,7 @@ module TaliaCore
         end
       end
 
-      # Read all bytes from a file  
+      # Read all bytes from the file  
       def read_all_bytes
         # 1. Open file with option "r" (reading) and "b" (binary, useful for window system)
         open_file
@@ -238,7 +252,7 @@ module TaliaCore
         end
       end
 
-      # return the next_byte
+      # Gets the next byte of the file
       def next_byte(close)
         if !is_file_open?
           open_file
@@ -263,7 +277,9 @@ module TaliaCore
     
       end
 
-      # Copy or move the source file to the target. Working around all the
+      # Copy or move the source file to the target depending on the 
+      # <tt>delete_original</tt> setting in #create_from_file. 
+      # Working around all the
       # things that suck in JRuby. This will honour two environment settings:
       # 
       # * delay_file_copies - will not copy the files, but create a batch file
@@ -299,12 +315,12 @@ module TaliaCore
       end
       
       
-      # Returns true if the 'delayed write' is enabled in the environment
+      # Returns true if the 'delay_file_copies' option is set in the environment
       def delay_copies
         ENV['delay_file_copies'] == 'true' || ENV['delay_file_copies'] == 'yes'
       end
         
-      # Returns true if the 'fast copy' is enabled in the environment.
+      # Returns true if the 'fast_copies' option is enabled in the environment.
       # Otherwise the class will use a workaround that is less likely to 
       # crash the whole system using JRuby.
       def fast_copies
@@ -316,7 +332,7 @@ module TaliaCore
         File.size(file_path)
       end
 
-      # set the position of the reading cursor
+      # Sets the position of the reading cursor
       def set_position(position)
         if (position != nil and position =~ /\A\d+\Z/)
           if (position < size)
@@ -329,12 +345,14 @@ module TaliaCore
         end
       end
     
-      # Check if the attachment should be saved.
+      # Check if the attachment should be saved, that is if a files was attached
+      # using #file=
       def save_attachment?
         @save_attachment
       end
     
-      # Save the attachment, copying the file from the temp_path to the data_path.
+      # Save the attachment, copying the file from the temp_path to the data_path. This
+      # is if a new file was attached using #file=
       def save_attachment
         return unless save_attachment?
         save_file
@@ -342,12 +360,12 @@ module TaliaCore
         true
       end
 
-      # Destroy the attachment
+      # Delete the file connected to this record
       def destroy_attachment
         FileUtils.rm(full_filename) if File.exists?(full_filename)
       end
 
-      # Save the attachment on the data_path directory.
+      # Save the attachment on the data_path directory. See #save_attachment
       def save_file
         FileUtils.mkdir_p(File.dirname(full_filename))
         FileUtils.cp(temp_path, full_filename)

@@ -3,12 +3,12 @@ require 'fileutils'
 module TaliaCore
   module DataTypes
     
-    # Module for the handling of temporary files in data storage objects
+    # Module for the handling of temporary files in data storage objects.
     module TempFileHandling
       
       module ClassMethods
         
-        # Copies the given file path to a new tempfile, returning the closed tempfile.
+        # Copies the given file to a new tempfile, returning the _closed_ tempfile.
         def copy_to_temp_file(file, temp_base_name)
           create_tempfile_path
           returning Tempfile.new(temp_base_name, self.tempfile_path) do |tmp|
@@ -17,7 +17,7 @@ module TaliaCore
           end
         end
 
-        # Writes the given data to a new tempfile, returning the closed tempfile.
+        # Writes the given data to a new tempfile, returning the _closed_ tempfile.
         def write_to_temp_file(data, filename)
           create_tempfile_path
           returning Tempfile.new(filename, self.tempfile_path) do |tmp|

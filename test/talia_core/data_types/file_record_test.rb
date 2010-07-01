@@ -50,8 +50,8 @@ module TaliaCore
       end
     end
 
-    def test_extract_filename
-      assert_equal('1', DataTypes::FileRecord.extract_filename(file))
+    def test_extract_filename_replacement
+      assert_equal('1', file.try(:original_filename))
     end
     
     def test_file_should_always_return_nil

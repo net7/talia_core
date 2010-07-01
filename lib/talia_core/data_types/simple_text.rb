@@ -1,18 +1,19 @@
 require 'talia_core/data_types/file_store'
 
-# Class to manage data stored in a text file
+# File Record that contains a plain text file.
 module TaliaCore
   module DataTypes
   
     class SimpleText < FileRecord
       
-      # return the mime_type for a file
+      # The MIME type is always <tt>text/plain</tt>
       def extract_mime_type(location)
         'text/plain'
       end
 
-      # Get a line from a text file.
-      # At the end of file: close the file and return
+      # Read onle line from the text file. The file will
+      # be closed if the end of the file is hit, or
+      # if close_after_single_read is set to true
       def get_line(close_after_single_read=false)
         if !is_file_open?
           open_file

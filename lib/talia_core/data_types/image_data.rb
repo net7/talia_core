@@ -1,11 +1,13 @@
 module TaliaCore
   module DataTypes
     
-    # Class to manage image data type
+    # A FileRecord that contains an image.
     class ImageData < FileRecord
       
       # return the mime_type for a file
       def extract_mime_type(location)
+        # TODO: This may work automatically if all the MIME types
+        # are configured correctly (?)
         case File.extname(location).downcase
         when '.bmp'
           'image/bmp'

@@ -5,7 +5,12 @@ module TaliaUtil
   class Util
     class << self
 
-      # Get the list of files from the "files" option
+      # Rake task helper. Get the list of files the <tt>files</tt>
+      # environment variable (passed as <tt>file=[files]</tt>). Exits the
+      # runtime and prints an error message if the variable is not set.
+      #
+      # This returns a FileList object with all the files that match the
+      # pattern.
       def get_files
         puts "Files given: #{ENV['files']}"
         unless(ENV['files'])
@@ -17,12 +22,19 @@ module TaliaUtil
         FileList.new(ENV['files'])
       end
 
-      # Get the configured folder for the ontologies
+      # Gets the <tt>ontology_folder</tt> environment variable, as passed
+      # to the rake task with <tt>ontology_folder=[folder]</tt>
+      #
+      # Defaults to <tt>RAILS_ROOT/ontologies</tt> if the variable is not
+      # set.
       def ontology_folder
         ENV['ontology_folder'] || File.join(RAILS_ROOT, 'ontologies')
       end
 
-      # Set up the ontologies from the given folder
+      # Set up the ontologies from the ontology_folder. This clears
+      # the RDF context for the ontologies, if possible. Then it will
+      # load all ontologies in the ontology_folder into the store,
+      # and run the RdfUpdate::owl_to_rdfs update.
       def setup_ontologies
         # Clear the ontologies from RDF, if possible
         adapter = ActiveRDF::ConnectionPool.write_adapter
@@ -41,7 +53,13 @@ module TaliaUtil
         RdfUpdate::owl_to_rdfs
       end
 
-      # Init the talia core system
+      # Init the talia core system. Use to initialize the system for the 
+      # rake tasks. This will just exit if the system is already initialized,
+      # e.g. through Rails.
+      #
+      # See the rake:talia_core help task for options supported. Options
+      # include <tt>talia_root</tt>, <tt>environment</tt>, <tt>config</tt>,
+      # <tt>reset_db</tt> and <tt>reset_rdf</tt>
       def init_talia
         return if(TaliaCore::Initializer.initialized)
 
@@ -82,7 +100,8 @@ module TaliaUtil
         end
       end
 
-      # Get info from the Talia configuraion
+      # Rake helper. Prints the talia configuration to the 
+      # console.
       def talia_config
         puts "Talia configuration"
         puts ""
@@ -93,25 +112,32 @@ module TaliaUtil
         puts "Local Domain: #{N::LOCAL}"
       end
 
-      # Put the title for Talia
+      # Rake/Startup helper. Prints out the talia version/header to the the console.
       def title
         puts "\nTalia Digital Library system. Version: #{TaliaCore::Version::STRING}" 
         puts "http://www.muruca.org/\n\n"
       end
 
-      # Flush the database. This only flushes the main data tables!
+      # Flush the SQL database. This deletes all entries *only* from the main Talia
+      # tables in the db. Additional tables for user-defined models (e.g. translations)
+      # will _not_ be touched.
       def flush_db
         [ 'active_sources', 'data_records', 'semantic_properties', 'semantic_relations', 'workflows'].reverse.each { |f| ActiveRecord::Base.connection.execute "DELETE FROM #{f}" }
         # Also remove the "unsaved cache" for the wrappers (may be important during testing)
         TaliaCore::SemanticCollectionWrapper.instance_variable_set(:'@unsaved_source_cache', {})
       end
 
-      # Flush the RDF store
+      # Flush the RDF store. This clears the whole store, including triples that
+      # were added through other means than the Talia API.
       def flush_rdf
         ActiveRDF::ConnectionPool.write_adapter.clear
       end
 
-      # Remove the data directories
+      # Remove the data directories. Removes the data directory (configured
+      # as <tt>data_directory_location</tt> in talia_core.yml) and the iip directory
+      # (configured as <tt>iip_root_location</tt> in talia_core.yml). 
+      #
+      # This ignores non-existing directories without an error message.
       def clear_data
         data_dir = TaliaCore::CONFIG['data_directory_location']
         iip_dir = TaliaCore::CONFIG['iip_root_directory_location']
@@ -120,7 +146,9 @@ module TaliaUtil
       end
 
 
-      # Do a full reset of the data store
+      # Do a full reset of the data store. Equivalent to clearing
+      # the Talia SQL tables, the RDF store and the data directories.
+      # This will re-initialize the ontologies afterwards.
       def full_reset
         flush_db
         flush_rdf
@@ -128,11 +156,29 @@ module TaliaUtil
         setup_ontologies
       end
 
-      # Rewrite the RDF for the whole database. Will yield without parameters
-      # for progress-reporting blocks.
-      # FIXME: At the moment, this
-      # looses all RDF data that is not in the database.
-      def rewrite_rdf
+      # Rewrite the RDF for the whole database. Erases the RDF  store 
+      # completely and re-builds the graph from the data in the SQL
+      # tables. 
+      #
+      # *Warning:* This will *loose* all information contained in the
+      # RDF that is not duplicated. This includes all SWICKY notebooks!
+      #
+      # Unless the turn_off_safety flag is set, or the environment variable
+      # <tt>i_know_what_i_am_doing</tt> is set to "yes", this method will
+      # print an error message and raise an exception.
+      #
+      # For each triple written, this will yield to the block (if one is given)
+      # without parameters. For progress reporting, the overall number of
+      # triples that will be rewritten can be acquired with #rewrite_count
+      def rewrite_rdf(turn_off_safety=false)
+        unless((ENV['i_know_what_i_am_doing'].yes?) || turn_off_safety)
+          puts "WARNING: Rewriting the RDF will ERASE all data that does not come from the Talia API"
+          puts "This includes ALL SWICKY notebooks"
+          puts 
+          puts "To proceed run this task again, and give the following option:"
+          puts "i_know_what_i_am_doing=yes"
+          raise ArgumentError, "Can't proceed without confirmation."
+        end
         flush_rdf
         # We'll get all data from single query.
         fat_rels = TaliaCore::SemanticRelation.find(:all, :joins => fat_record_joins,
@@ -160,12 +206,14 @@ module TaliaUtil
         end
       end
 
-      # This gives the number of triples that would be rewritten on #rewrite_rdf
+      # The number of triples that would be rewritten with #rewrite_rdf
       def rewrite_count
         TaliaCore::SemanticRelation.count + TaliaCore::ActiveSource.count
       end
 
-      # Load the fixtures
+      # Load the database fixtures. This "manually" loads the database fixtures for
+      # the Talia tables for the core unit tests. The fixtures are those contained
+      # in the talia_core folder, _not_ the ones from the application's tests.
       def load_fixtures
         # fixtures = ENV['FIXTURES'] ? ENV['FIXTURES'].split(/,/) : Dir.glob(File.join(File.dirname(__FILE__), 'test', 'fixtures', '*.{yml,csv}'))  
         fixtures = [ 'active_sources', 'semantic_relations', 'semantic_properties' 'data_records']
@@ -175,21 +223,23 @@ module TaliaUtil
         end  
       end
 
-      # Do migrations
+      # Runs the migrations for the main Talia tables. This will use the migrations from 
+      # the "talia" generator, _not_ the ones from the Rails application.
       def do_migrations
         migration_path = File.join("generators", "talia", "templates", "migrations")
         ActiveRecord::Migrator.migrate(migration_path, ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
       end
 
-      # Check if the given flag is set on the command line
+      # Check if the given flag is set on the command line. This will assert that the flag
+      # is set, otherwise it's equivalent to String#yes? (from the core extensions) on 
+      # the variable
       def flag?(the_flag)
         assit_not_nil(the_flag)
-        ENV[the_flag] && (ENV[the_flag] == "yes" || ENV[the_flag] == "true")
+        ENV[the_flag].yes?
       end
 
-      # For selecting "fat" records on the semantic properties, including the
-      # objects. Used for rewriting the rdf. TODO: Review after merging
-      # with optimized branch
+      # SQL select portion selecting "fat" records from the semantic_relatations table. 
+      # This will select all data needed to create all triples. Used for rewriting the rdf. 
       def fat_record_select
         select = 'semantic_relations.id AS id, semantic_relations.created_at AS created_at, '
         select << 'semantic_relations.updated_at AS updated_at, '
@@ -204,8 +254,7 @@ module TaliaUtil
         select
       end
 
-      # Select semantic properties joined with all connected tables.
-      # TODO: Review after merging with optimized branch
+      # SQL join snippet for selecting "fat" records. See fat_record_select
       def fat_record_joins
         joins =  " LEFT JOIN active_sources AS obj_sources ON semantic_relations.object_id = obj_sources.id AND semantic_relations.object_type = 'TaliaCore::ActiveSource'"
         joins << " LEFT JOIN semantic_properties AS obj_props ON semantic_relations.object_id = obj_props.id AND semantic_relations.object_type = 'TaliaCore::SemanticProperty'"
@@ -213,7 +262,7 @@ module TaliaUtil
         joins
       end
 
-      # print the common options for the tasks
+      # Print the options for the rake tasks to the console.
       def print_options
         puts "\nGeneral options (not all options are valid for all tasks):"
         puts "files=<pattern>     - Files for the task (a pattern to match the files)"
@@ -228,7 +277,10 @@ module TaliaUtil
         puts ""
       end
 
-      # Force-loads all Talia related models.
+      # Force-loads all Talia related models. This will attempt to load all classes in
+      # RAILS_ROOT/app/models and in TALIA_CODE_ROOT/lib/talia_core/source_types.
+      #
+      # Use this to make sure the whole hierarchy of ActiveSource subclasses is in memory..
       def load_all_models
         return if @models_loaded
         load_models_from File.join(RAILS_ROOT, 'app', 'models', '**', '*.rb') if(defined? RAILS_ROOT)
@@ -239,6 +291,9 @@ module TaliaUtil
         @models_loaded = true
       end
 
+      # Helper to load all classes from a given directory. This will attempt to instanciate all 
+      # classes found in the dir. The name of the class to be instantiated will be taken from the
+      # file name, prepending the prefix (e.g. 'ModuleName::') if set. 
       def load_models_from(dir, prefix='')
         # Appends a file system directory separator to the directory if needed.
         dir = File.join(dir, '')

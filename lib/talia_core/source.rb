@@ -7,20 +7,23 @@ require 'rdf_resource'
 
 module TaliaCore
 
-  # This represents a Source in the Talia core system.
+  # Base class for most sources in the Talia system. The Source class has some
+  # additional features over the basic ActiveSource class.
   #
-  # Since data for the Source exists both in the database and in the RDF store, the 
-  # handling/saving of data is a bit peculiar at the moment (subject to change in the future):
+  # Most importantly, it contains the "smart" accessor in the same style as
+  # ActiveRDF:
   #
-  # * When a new Source is created, no data is saved
-  # * RDF properties *cannot* be written until the Source has been saved for the first time
-  # * Database properties are *only* written when the save method is called
-  # * RDF properties are written immediately when they are assigned
-  # * To ensure that the data is written, the save method should be called as 
-  #   necessary.
+  #  source.rdf::something
+  #  => SemanticCollection Wrapper
+  #  
+  #  # is the same as:
+  #  source[N::RDF.something]
+  #
+  # There are also 
   class Source < ActiveSource
     # FIXME: Remove methods for old admin panel
 
+    # FIXME: Remove workflow?
     has_one :workflow, :class_name => 'TaliaCore::Workflow::Base', :dependent => :destroy
 
     # The uri will be wrapped into an object
@@ -88,13 +91,16 @@ module TaliaCore
     #
     #   ActiveSource.find_or_instantiate_by_uri('http://talia.org/unexistent', 'Foo Bar')
     #     # => #<TaliaCore::ActiveSource id: nil, uri: "http://talia.org/Foo_Bar">
-    def self.find_or_instantiate_by_uri(uri, local_name)
+    #
+    # TODO: Delete this/old backend method?
+    def self.find_or_instantiate_by_uri(uri, local_name) # :nodoc: 
       result = find_by_uri(uri)
       result ||= self.new(N::LOCAL.to_s + local_name.to_permalink)
     end
 
     # Return an hash of direct predicates, grouped by namespace.
-    def grouped_direct_predicates
+    # TODO: Delete this/old backend method?
+    def grouped_direct_predicates # :nodoc:
       #TODO should it be memoized?
       direct_predicates.inject({}) do |result, predicate|
         predicates = self[predicate].collect { |p| SourceTransferObject.new(p.to_s) }
@@ -106,22 +112,25 @@ module TaliaCore
       end
     end
 
+    # TODO: Delete this/old backend method?
     def predicate_objects(namespace, name) #:nodoc:
       predicate(namespace, name).values.flatten.map(&:to_s)
     end
 
     # Check if the current source is related with the given rdf object (triple endpoint).
-    def associated?(namespace, name, stringified_predicate)
+    # TODO: Delete this/old backend method?
+    def associated?(namespace, name, stringified_predicate) # :nodoc:
       predicate_objects(namespace, name).include?(stringified_predicate)
     end
 
-    # Check if a predicate is changed.
-    def predicate_changed?(namespace, name, objects)
+    # Check if a predicate is changed. TODO: Delete this/old backend method?
+    def predicate_changed?(namespace, name, objects) # :nodoc:
       not predicate_objects(namespace, name).eql?(objects.map(&:to_s))
     end
 
-    attr_reader :predicates_attributes
-    def predicates_attributes=(predicates_attributes)
+    # TODO: Delete this/old backend method?
+    attr_reader :predicates_attributes # :nodoc:
+    def predicates_attributes=(predicates_attributes) # :nodoc:
       @predicates_attributes = predicates_attributes.collect do |attributes_hash|
         attributes_hash['object'] = instantiate_source_or_rdf_object(attributes_hash)
         attributes_hash
@@ -129,7 +138,8 @@ module TaliaCore
     end
 
     # Return an hash of new predicated attributes, grouped by namespace.
-    def grouped_predicates_attributes
+    # TODO: Delete this/old backend method?
+    def grouped_predicates_attributes # :nodoc:
       @grouped_predicates_attributes ||= predicates_attributes.inject({}) do |result, predicate|
         namespace, name = predicate['namespace'], predicate['name']
         predicate = SourceTransferObject.new(predicate['titleized'])
@@ -140,8 +150,9 @@ module TaliaCore
       end
     end
 
-      # Save, associate/disassociate given predicates attributes.
-      def save_predicates_attributes
+      # Save, associate/disassociate given predicates attributes. TODO: Delete this/
+      # old backend method?
+      def save_predicates_attributes # :nodoc:
         each_predicate do |namespace, name, objects|
           objects.each { |object| object.save if object.is_a?(Source) && object.new_record? }
           self.predicate_replace(namespace, name, objects.to_s) if predicate_changed?(namespace, name, objects)
@@ -182,11 +193,12 @@ module TaliaCore
         value.is_a?(Source) && (value.uri == uri)
       end
 
+      # See Source.normalize_uri
       def normalize_uri(uri, label = '')
         self.class.normalize_uri(uri, label)
       end
 
-      # Returns the collections this source is in
+      # Returns the Collection (or collections) this source is in.
       def collections
         Collection.find(:all, :find_through => [N::DCT.hasPart, self])
       end
@@ -207,7 +219,9 @@ module TaliaCore
       #
       #   http://springfield.org/Homer_Simpson
       #     # => Should instantiate a source with the given uri
-      def instantiate_source_or_rdf_object(attributes)
+      #
+      # TODO: Delete this/old backend method?
+      def instantiate_source_or_rdf_object(attributes) # :nodoc:
         name_or_uri = attributes['titleized']
         if /^\"[\w\s\d]+\"$/.match name_or_uri
           name_or_uri[1..-2]
@@ -221,7 +235,8 @@ module TaliaCore
       end
 
       # Iterate through grouped_predicates_attributes, yielding the given code.
-      def each_predicate(&block)
+      # TODO: Delete this/old backend method?
+      def each_predicate(&block) # :nodoc:
         grouped_predicates_attributes.each do |namespace, predicates|
           predicates.each do |predicate, objects|
             block.call(namespace, predicate, objects.flatten)
@@ -251,10 +266,10 @@ module TaliaCore
 
 
       # Missing methods: This just check if the given method corresponds to a
-      # registered namespace. If yes, this will return a "dummy" handler that
+      # registered namespace. If yes, this will return a DummyHandler that
       # allows access to properties.
       # 
-      # This will allow invocations as namespace::name
+      # This will allow invocations such as namespace::name
       def method_missing(method_name, *args)
         # TODO: Add permission checking for all updates to the model
         # TODO: Add permission checking for read access?

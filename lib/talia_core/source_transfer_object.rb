@@ -7,7 +7,9 @@ module TaliaCore #:nodoc:
   #
   # http://java.sun.com/blueprints/corej2eepatterns/Patterns/TransferObject.html
   # http://java.sun.com/blueprints/patterns/TransferObject.html
-  class SourceTransferObject
+  #
+  # TODO: Remove as part of old admin interface?
+  class SourceTransferObject # :nodoc:
     attr_reader :uri
     
     def initialize(name_or_uri) #:nodoc:

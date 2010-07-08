@@ -2,12 +2,17 @@ require 'open-uri'
 
 module TaliaUtil
   
-  # Import data files into the Talia store. This can be used to bootstrap
-  # simple installations
+  # Collection of IO methods than can be mixed into other classes
   module IoHelper
 
     # Generic "open" method for files and urls. This won't choke on file:// URLs and
     # will do some extra escaping on the URL. 
+    #
+    # *Usage*:
+    #
+    #  open_generic('someurl.foo') do |io|
+    #    ...
+    #  end
     #
     # See open_from_url for an explanation of the options
     def open_generic(url, options = {})
@@ -21,7 +26,7 @@ module TaliaUtil
       end
     end
 
-    # Will try to figure out the "base" (that is the parent directory or path)
+    # Will try to figure out the "base", which is the parent directory or path.
     # If the base is a directory, this will return the directory name, but if
     # it is an URL, this will return an URI object.
     def base_for(url)
@@ -46,6 +51,12 @@ module TaliaUtil
     # the documentation for open-uri for more information. Example for options:
     # 
     #   :http_basic_authentication => [login, password]
+    #
+    # *Example*:
+    #
+    #  open_from_url('http://foobar.com/', :http_basic_authentication => ['user', 'secret']) do |io|
+    #    ...
+    #  end
     def open_from_url(url, options = {})
       # Encode the URI (the inner decode will save already-encoded URI and should
       # do nothing to non-encoded URIs)
@@ -65,7 +76,7 @@ module TaliaUtil
       end
     end
     
-    # Get the "file url" for the given url, stripping a possible file:// from the front
+    # Get the "file url" for the given uri, stripping a possible file:// from the front
     def file_url(uri)
       uri.gsub(/\Afile:\/\//, '')
     end

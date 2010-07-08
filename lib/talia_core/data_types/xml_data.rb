@@ -2,6 +2,8 @@ require 'talia_core/data_types/file_store'
 require 'rexml/document'
 # require 'xml/xslt'
 
+# Little helper to load the "tidy" library, to clean up
+# messy XML/HTML, if possible. 
 begin
   # if tidy is not present, disable it
   require 'tidy'
@@ -27,11 +29,14 @@ end
 module TaliaCore
   module DataTypes
   
-    # Class to manage XML and HTML data type
+    # FileRecord class to store XML (or XHTML) files.
     class XmlData < FileRecord
       
-      # return the mime_type for a file
+      # MIME type should be one of 'text/html' or 'text/xml' 
+      # ('text/hnml' is supported for legacy reasons)
       def extract_mime_type(location)
+        # TODO: Could probably use the Mime classes to get the
+        # type, or move to the superclass
         case File.extname(location).downcase
         when '.htm', '.html','.xhtml'
           'text/html'
@@ -42,24 +47,29 @@ module TaliaCore
         end
       end
       
-      # return the mime subtype for this specified class
+      # The mime subtype for this specified class
       def mime_subtype
         mime_type.split(/\//)[1]
       end    
 
-      # return contect of the object as REXML::Elements
-      # * options: Options for getting context. Default nil.
-      # * options[:xsl_file]: xsl file path for transformation.
-      def get_content(options = nil)
+      # The content of this document. This returns REXML elements
+      # for the document content. For plain XML files, this will
+      # return the children of the doucment root. For XHTML documents,
+      # this will return the children of the "body" tag.
+      #
+      # *Options*:
+      # 
+      # * [*xsl_file*] If given, the document will be transformed using this
+      #                XSL file before the document is extracted
+      def get_content(options = {})
+        # TODO: Maybe port this to hpricot/nokogiri too
         text_to_parse = all_text
       
-        if (!options.nil?)
-          # if xsl_file option is specified, execute transformation
-          if (!options[:xsl_file].nil?)
-            text_to_parse = xslt_transform(file_path, options[:xsl_file])
-          end
+        # if xsl_file option is specified, execute transformation
+        if (options[:xsl_file])
+          text_to_parse = xslt_transform(file_path, options[:xsl_file])
         end
-      
+
         # create document object
         document = REXML::Document.new text_to_parse
       
@@ -78,7 +88,7 @@ module TaliaCore
         return content
       end
     
-      # Returns an xml string of the elements returned by get_content
+      # Same as #get_content, but returns a string instead of the REXML documents
       def get_content_string(options = nil)
         xml_str = ''
         get_content(options).each do |element|
@@ -87,16 +97,26 @@ module TaliaCore
         xml_str
       end
     
-      # Returns an xml string that is escaped for HTML inclusing
+      # Same as #get_content_string, but with the XML escape for inclusion in 
+      # HTML documents
       def get_escaped_content_string(options = nil)
         get_content_string(options).gsub(/</, "&lt;").gsub(/>/, "&gt;")
       end
     
-      # Add data as string into file
-      # * location: location
-      # * data: data to write
-      # * options: options
-      # * options[:tidy]: enable or disable tidy (convert html into xhtml). Default value is true
+      # See the FileStore module for details on how creation of data file objects works.
+      # This version differs from the superclass version in that it will (optionally)
+      # clean the HTML using the "tidy" tool. Also see http://tidy.rubyforge.org/
+      #
+      # Tidy will be used under the following circumstances:
+      # 
+      # * The "tidy" option is given and
+      # * The library itself is available and
+      # * The file appears to be a (X)HTML file
+      #
+      # *Options:*:
+      #
+      # [*tidy*] Use the "tidy" tool to clean up (X)HTML. Defaults to true if no options
+      #          are given.
       def create_from_data(location, data, options = {:tidy => true})
         # check tidy option
         if (((options[:tidy] == true) and (Tidy_enable == true)) and 
@@ -118,9 +138,14 @@ module TaliaCore
       end
     
       private
-      # adjusted/replaced items path
-      # * item: REXML::Element to parse
+      
+      # Helper that updates the paths in an XML element. Takes a REXML::Element, and updates
+      # the paths for "img" and "a" tags to point to the Talia "source_data" controller.
+      #
+      # This is a quick hack to allow the rendering of HTML that contains those elements and 
+      # needs to be fixed to show linked files that are stored in Talia.
       def wrapItem item
+        # TODO: Quite hacky. Uses hardcoded paths, maybe should rather be a helper.
         if item.class == REXML::Element
           # recursive execution
           item.each_child { |subItem| wrapItem subItem}
@@ -150,9 +175,12 @@ module TaliaCore
         end
       end
     
-      # execute xslt transformation
-      # * document: xml document. Can be file path as string or REXML::Document
-      # * xsl_file: xsl file for transformation. Can be file path as string or REXML::Document
+      # Perform an XSLT transformation
+      #
+      # *Options*:
+      #
+      # [*document*] Xml document. Can be file path as string or REXML::Document
+      # [*xsl_file*] Xsl file for transformation. Can be file path as string or REXML::Document
       def xslt_transform(document, xsl_file)
         xslt = XML::XSLT.new()
         # get xml document

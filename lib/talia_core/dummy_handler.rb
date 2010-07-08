@@ -9,7 +9,8 @@ module TaliaCore
   # The problem is that invocations like source.namespace::name are
   # evaluated to (source.namespace).name 
   # This means that source.namespace must return an object on which
-  # "name" can be called with the desired effect. This is the "dummy handler"
+  # "name" can be called with the desired effect. This  object 
+  # is the "dummy handler"
   class DummyHandler
     
     # Create the new handler

@@ -6,6 +6,9 @@ module TaliaUtil
   #
   # Since it calls the command line, it should be compatible both with JRuby
   # and plain Ruby.
+  #
+  # See TaliaCore::Intializer for the options that can be set for the
+  # image conversions
   class ImageConversions
 
     class << self
@@ -43,7 +46,8 @@ module TaliaUtil
         end
       end
 
-      # Create the thumbnail by running the configured creation command.
+      # Create the thumbnail by running the configured creation command. Options are
+      # taken from <tt>talia_core.yml</tt>
       def create_thumb(source, destination)
         thumbnail_size = "#{thumb_options['width']}x#{thumb_options['height']}"
         thumbnail_force = %w(true yes).include?(thumb_options['force']) ? "-background transparent -gravity center -extent #{thumbnail_size}" : ''
@@ -55,6 +59,7 @@ module TaliaUtil
       # command. This automatically creates the file in the correct location
       # (IIP root)
       def create_pyramid(source, destination)
+        # TODO: Options not configurable
         pyramid_command = "#{vips_command} im_vips2tiff \"#{source}\" \"#{destination}\":jpeg:85,tile:256x256,pyramid"
         execute_command(pyramid_command, destination)
       end

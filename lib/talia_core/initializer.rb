@@ -49,6 +49,46 @@ module TaliaCore
   #    # config file
   #    config['standalone_db'] = "true"
   #  end
+  #
+  # = Configuration options for <tt>talia_core.yml</tt>
+  #
+  # [*local_uri*] URL of the current installation. This should be set to
+  #               the URL where Talia is installed
+  # [*rdf_connection_file*] Name of the configuration file that contains the
+  #                         connection parameters for the RDF store. 
+  # [*rdf_connection*] Used to place the RDF options directly in the configuration
+  #                    file. the *rdf_connection_file* setting will take precedence,
+  #                    though.
+  # [*db_file*] File with the database configuration for ActiveRecord. When running
+  #             from within RAILS, Talia will *always* use the Rails configuration
+  # [*db_connection*] Used to place the DB options directly in the file. *db_file*
+  #                   will take precedence, if present
+  # [*standalone_db*] If set to true, Talia will be configured to use the ActiveRecord
+  #                   database connection without Rails. 
+  # [*ardf_log_level*] Used to indicate the log level for the ActiveRDF library (integer value)
+  # [*db_log*] Log file for the database/ActiveRecord. Does not take effect if
+  #            running from inside Rails
+  # [*data_directory_location*] Root directory for the FileRecord file storage
+  # [*namespaces*] Declares the namespaces that can be used within Talia 
+  #                (a number of "namespace": "url" pairs)
+  # [*iip_root_directory_location*] The directory that is used for the pyramidal files
+  #                                 that will be served by the IIP server
+  # [*iip_server_uri*] The URI to the IIP server. When using the default server, this will
+  #                    be the URL that calls the iipsrv.fcgi
+  # [*vips_command*] Path to the "vips" command, which is used to create the pyramidal images
+  # [*convert_command*] Path to the "convert" command from ImageMagick, which creates the thumbs
+  # [*thumb_options*] Options for thumbnail images. These can contain "height", "width" and the 
+  #                   "force" option. If the "force" option is set, the thumbnails will be the
+  #                   exact dimensions given (with a transparent background around the border).
+  #                   Otherwise the aspect ratio of the image will be preserved.
+  # [*environment*] The environment for the session, that is "development", "production" or "test". 
+  #                 If running from Rails, this will inherit Rails' setting
+  # [*standalone_log*] Log file to be used when in standalone mode (not using Rails)
+  # [*standalone_log_level*] Log level for the <tt>standalone_log</tt>
+  # [*assert*] If true, the <tt>assit</tt> assertions are enabled in the code. Defaults to true.
+  # [*auto_ontologies*] If set to a directory, Talia will automatically (re-)load the ontologies 
+  #                     from that directory on startup
+  # [*site_name*] Site name string. May (or may not) be used in the application.
   class Initializer
 
     # Is used to set the root directory manually. Must be written before

@@ -70,7 +70,7 @@ module TaliaUtil
       @importer = ENV['importer'] || 'TaliaCore::ActiveSourceParts::Xml::SourceReader'
       @credentials = { :http_basic_authentication => [ENV['user'], ENV['pass']] } unless(ENV['user'].blank?)
       assit(!(ENV['xml'] && ENV['index']), 'Not both xml and index parameters allowed')
-      @reset = ['yes', 'true'].include?(ENV['reset_store'].downcase) if(ENV['reset_store'])
+      @reset = ENV['reset_store'].yes?
 
       @base_url = ENV['base_url'].blank? ? '' : ENV['base_url']
       if(base_url && File.directory?(base_url))

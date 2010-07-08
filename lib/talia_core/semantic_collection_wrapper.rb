@@ -1,7 +1,23 @@
 module TaliaCore
 
-  # Wraps the Array/Collection returned from the ActiveRecord, simply 
-  # "hiding" the SemanticProperty objects behind strings.
+  # Class for the collection of elements returned by the "semantic accessor" methods
+  # of a source (e.g. source[N::RDF.somethink])
+  #
+  # Each wrapper contains the values for one predicate of one source
+  # (that is, for all triples of the form <thesource> <thepredicate> ?object). 
+  #
+  # The wrapper will lazy-load the data and only do a query to the database once
+  # the items are actually requested. If a database request is necessary, all data
+  # will be fetched in a single request.
+  #
+  # Modifications of the wrapper will happen in memory. Only when the wrapper is saved
+  # using #save_items! will the modifications be written to the data store. 
+  # #save_items! will be called by the "owning" source of this wrapper when the source
+  # is being saved.
+  #
+  # Some of the methods work on the _values_, and other on the _objects_ of the 
+  # collection. See SemanticCollectionItem#value and SemanticCollectionItem#object for
+  # more on that.
   class SemanticCollectionWrapper
 
     include Enumerable
@@ -17,9 +33,9 @@ module TaliaCore
       }
     end
 
-    # Initialize the list
+    # Initialize the collection with the given source and predicate. No database
+    # will take place during creation of the object
     def initialize(source, predicate)
-      # raise(ActiveRecord::RecordNotSaved, "No properties on unsaved record.") if(source.new_record?)
       @assoc_source = source
       @assoc_predicate = if(predicate.respond_to?(:uri))
         predicate.uri.to_s
@@ -29,49 +45,53 @@ module TaliaCore
       @force_type = self.class.special_types[@assoc_predicate]
     end
 
-    # Get the element '''value''' at the given index
+    # Get the element _value_ at the given index. See also
+    # SemanticCollectionItem#value
     def at(index)
       items.at(index).value if(items.at(index))
     end
     alias :[] :at
 
+    # The first _value_ in the collection
     def first
       item = items.first
       item ? item.value : nil
     end
 
+    # The last _value_ in the collection
     def last
       item = items.last
       item ? item.value : nil
     end
 
-    # Gets the value at the given index
+    # Gets the _object_ at the given index. See 
+    # SemanticCollectionItem#object
     def get_item_at(index)
       items.at(index).object if(items.at(index))
     end
 
-    # Iterates over each '''value''' of the items in the relation.
+    # Iterates over each _value_ of the items in the relation.
     def each
       items.each { |item| yield(item.value) }
     end
 
-    # Collect method for the semantic wrapper
+    # Collect method for the semantic wrapper, iterating
+    # over the _values_ of the collection
     def collect
       items.collect { |item| yield(item.value) }
     end
 
-    # Iterates of each '''target''' of the items in the relation. (This
-    # will pass in SemanticProperty objects instead of the value
+    # Iterates of each _object_ of the items in the relation. 
     def each_item
       items.each { |item| yield(item.object) }
     end
 
-    # Returns an array with all values in the collection
+    # Returns an array with all _values_ in the collection
     def values
       items.collect { |item| item.value }
     end
 
-    # Returns only the values of the given language.
+    # Returns only the _values_ of the given language.
     # (At the moment this is not aware of region codes or any
     # specialities, it just does a string matching)
     #
@@ -99,7 +119,7 @@ module TaliaCore
       unset
     end
     
-    # Size of the collection.
+    # Size of the collection
     def size
       return items.size if(loaded?)
       if(@items)
@@ -113,34 +133,37 @@ module TaliaCore
         end
       end
 
-      # Joins the elments into a string
+      # Joins the _values_ of the colle ction into a string
       def join(join_str = ', ')
         strs = items.collect { |item| item.value.to_s }
         strs.join(join_str)
       end
 
-      # Index of the given value
+      # Index of the given _value_
       def index(value)
         items.index(value)
       end
 
-      # Check if the collection includes the value
+      # Check if the collection includes the _value_ given
       def include?(value)
         items.include?(value)
       end
 
-      # Get the index of the given item
-
-      # Push to collection. Giving a string will create a property to be created,
-      # saved and associated.
+      # Push to collection. Equivalent to #add_with_order(value, nil)
       def <<(value)
-        raise(ArgumentError, "Blank value assigned") if(value.blank? && !value.is_a?(Enumerable))
         add_with_order(value, nil)
       end
       alias_method :concat, '<<'
 
-      # Adds the object and gives the relation the given order. 
+      # Adds a new element to the collection. If the value is a resource,
+      # a relation to the corresponding ActiveSource will be added. Otherwise,
+      # a relation with a SemanticProperty is added.
+      #
+      #
+      # The order, if not nil, can be used to have a fixed order of SemanticRelation
+      # records. This is mainly used by the Collection class
       def add_with_order(value, order)
+        raise(ArgumentError, "Blank value assigned") if(value.blank? && !value.is_a?(Enumerable))
         # We use order exclusively for "ordering" predicates
         assit_equal(TaliaCore::Collection.index_to_predicate(order), @assoc_predicate) if(order)
         raise(ArgumentError, "cannot add nil") unless(value != nil)
@@ -151,7 +174,8 @@ module TaliaCore
         end
       end
 
-      # Replace a value with a new one
+      # Replace a value with a new one. Equivalent to removing the old value
+      # and adding the new one
       def replace(old_value, new_value)
         idx = items.index(old_value)
         items[idx].destroy
@@ -159,7 +183,7 @@ module TaliaCore
       end
 
       # Remove the given value. With no parameters, the whole list will be
-      # cleared and the RDF will be updated immediately.
+      # cleared and the RDF will be updated immediately (!).
       def remove(*params)
         if(params.length > 0)
           params.each { |par| remove_relation(par) }
@@ -178,7 +202,10 @@ module TaliaCore
         end
       end
 
-      # This attempts to save the items to the database
+      # This attempts to save the items to the database. This will do nothing if
+      # the collection was never loaded to memory. It also tries to ignore data
+      # that is known to already exist in the data store and only write the records
+      # could actually have been modified.
       def save_items!
         return if(clean?) # If there are no items, nothing was modified
         @assoc_source.save! unless(@assoc_source.id)
@@ -187,7 +214,7 @@ module TaliaCore
           rel = item.plain_relation
           must_save = rel.new_record?
           if(rel.object_id.nil?)
-            rel.object.save! if(rel.object.new_record?)
+            rel.object.save! if(rel.object.exists?)
             rel.object_id = rel.object.id
             must_save = true
           end
@@ -216,17 +243,20 @@ module TaliaCore
       end
 
       # Injector for a fat relation. This must take place before flagging the
-      # source as "loaded"
+      # source as "loaded". This can used to load data into the object
+      # without having to go to the database
       def inject_fat_item(fat_rel)
         raise(RuntimeError, 'Trying to inject in loaded object.') if(loaded?)
         @items ||= []
         @items << SemanticCollectionItem.new(fat_rel, :fat)
       end
       
-      # Forces this relation to be empty. This initializes the relation
-      # as if no elements exist. This doesn't look anything up in the 
-      # databse. *Warning* Only call this if you need an empty wrapper
-      # that doesn't look up anything in the database
+      # Forces this relation to be empty. This initializes the relation,
+      # assuming that no data exists in the database. The collection will
+      # be empty, and the database will *not* be queried.
+      #
+      # *Warning* Only call this if you need an empty wrapper
+      # and you are sure that there are no corresponding values in the database
       def init_as_empty!
         raise(ArgumentError, "Already initialized!") if(loaded?)
         @items = []
@@ -235,8 +265,7 @@ module TaliaCore
 
       private
 
-      # Load the current relation. (Loading should be lazy, so that the database
-      # is not hit until needed.
+      # Load the current collection from the database.
       def load!
         # The "fat" relations contain all the data to build the related objects if
         # required
@@ -247,7 +276,9 @@ module TaliaCore
 
       # Inject a fat relation into the items
       
-      # Inititlizes the collection from the given collection of "fat" relations
+      # Initializes the collection from the given collection of "fat" relations. This
+      # can be used to "load" the collection from the outside, 
+      # without having to go to the database
       def init_from_fat_rels(fat_relations)
         # Check if there are records that have been added previously
         old_items = @items
@@ -262,7 +293,8 @@ module TaliaCore
         @items
       end
 
-      # Returns the items in the collection
+      # Returns the items in the collection. These are the SemanticCollectionItem
+      # objects
       def items
         load! unless(loaded?)
         @items
@@ -282,11 +314,11 @@ module TaliaCore
         items.delete_at(index)
       end
 
-      # Creates a record for a value and adds it. This will add the given value if it's 
+      # Creates a record for a value and adds it. This will add the given value if it is
       # a database record and otherwise create a property with the given value.
-      # The block can be given when you want to add the new SemanticCollectionItem
-      # to the colleciton in a specific way.
-      # are loaded.
+      #
+      # If a block is given, it will be called with the new element after the new element
+      # has been added to the collection
       def add_record_for(value, order = nil)
         assit_not_nil(value)
         if(@force_type)
@@ -309,9 +341,10 @@ module TaliaCore
         @items << item
       end
 
-      # Write a triple to the store. For normal operation it's recommended that
-      # the usual accessor methods are used. This method does less checking
-      # and does not accept array objects as value.
+      # Creates a new semantic relation with the given value and the subject
+      # and predicate taken from the collection. The value will be converted
+      # into an ActiveSource or SemanticProperty as appropriate and used as
+      # the object of the new SemanticRelation
       def create_predicate(value)
         # TODO: Semantic Properties should only be created inside, since assigning
         #       one to multiple relations and then deleting breaks integrity.
@@ -337,10 +370,24 @@ module TaliaCore
         to_add
       end
 
-
-
-      # This "checks" for the given source. If a source with the same URI has been
-      # added to any collection wrapper unsaved
+      # This will check if the ActiveSource given as the parameter
+      # is new and or in the unsaved_source_cache.
+      #
+      # * If source has already been saved, it will be the return 
+      #   value of the method
+      # * If source has the same uri as one of the elements in the
+      #   unsaved_source_cache, the cached version will be returned
+      # * If the source is new and _not_ in the cache, it will be 
+      #   added to the cache, and returned.
+      #
+      # The method is to be used in saving the wrapper: If new relations
+      # were added, which in turn point at newly created source, then
+      # those newly created sources will also be saved. In turn, those 
+      # newly created sources will also save _their_ SemanticCollectionWrappers.
+      #
+      # To avoid endless loops during that operation, there is a
+      # global cache of (potentially) unsaved sources. This can be used
+      # to quickly check that each and every new source is only saved once.
       def check_for_source(source)
         return source unless(source.new_record?)
         cached = unsaved_source_cache[source.uri.to_s]
@@ -351,11 +398,12 @@ module TaliaCore
         cached
       end
 
-      # Cache for sources that were added as unsaved elements
+      # Cache for new, "unsaved" sources. See the #check_for_source
       def self.unsaved_source_cache
         @unsaved_source_cache ||= {}
       end
 
+      # Helper accessor for SemanticCollectionWrapper#unsaved_source_cache
       def unsaved_source_cache
         SemanticCollectionWrapper.unsaved_source_cache
       end

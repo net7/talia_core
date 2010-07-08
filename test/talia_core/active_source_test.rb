@@ -1048,6 +1048,24 @@ module TaliaCore
       assert_property(new_thing[N::RDF.somethink], "Bongo")
     end
     
+    def test_new_source_doesnt_exist
+      new_src = ActiveSource.new(N::LOCAL.TestExistsOnRecordNeverSaved)
+      assert_not(new_src.exists?)
+    end
+    
+    def test_saved_source_exists
+      new_src = ActiveSource.new(N::LOCAL.TestsExistsOnRecord)
+      new_src.save!
+      assert(new_src.exists?)
+    end
+    
+    def test_duplicated_source_exists
+      new_src = ActiveSource.new(N::LOCAL.TestsExistsOnRecordDuplicate)
+      new_src_dup = ActiveSource.new(N::LOCAL.TestsExistsOnRecordDuplicate)
+      new_src.save!
+      assert_equal(new_src.id, new_src_dup.exists?)
+    end
+    
     private
     
     def make_data_source

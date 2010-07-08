@@ -18,22 +18,18 @@ module TaliaCore
     # new loaders for other file types.
     class FileRecord < DataRecord
       include FileStore
-      extend FileStore::ClassMethods
       
       include PathHelpers
       extend PathHelpers::ClassMethods
-      
-      include TempFileHandling
-      extend TempFileHandling::ClassMethods
       
       include DataLoader
       extend DataLoader::ClassMethods
       extend IipLoader
       extend TaliaUtil::IoHelper # Data IO for class methods
       
-      after_save :save_attachment, :write_file_after_save
+      after_save :write_file_after_save
       
-      before_destroy :destroy_attachment
+      before_destroy :destroy_file
       
       # Returns and, if necessary, creates the file for "delayed" copy operations
       

@@ -54,10 +54,6 @@ module TaliaCore
       assert_equal('1', file.try(:original_filename))
     end
     
-    def test_file_should_always_return_nil
-      assert_nil(DataTypes::FileRecord.new.file)
-    end
-    
     def test_full_filename
       data_record = DataTypes::FileRecord.new do |dr|
         dr.source = active_sources(:something)
@@ -109,26 +105,9 @@ module TaliaCore
       assert( File.exists?(File.join(data_path_test(@test_records[0]),@test_records[0].id.to_s)), "#{File.join(data_path_test(@test_records[0]), @test_records[0].id.to_s)} does not exist" )
     end
 
-    def test_should_find_or_create_and_assign_file
-      # FIXME: I use #file and #source_id instead of fixtures,
-      # due to unpredictable ids assignment.
-      # Because test process doesn't drop tables, but just empty and re-fill them.
-      params = {:file => file, :source_id => source_id}
-      assert(DataTypes::FileRecord.find_or_create_and_assign_file(params))
-    end
-
     # test file size
     def test_file_size
       assert_equal(180, @test_records[0].size)
-    end
-    
-        
-    def test_should_save_attachment
-      assert(!DataTypes::FileRecord.new.send(:save_attachment?))
-      data_record = DataTypes::FileRecord.new do |dr|
-        dr.file = file
-      end
-      assert(data_record.send(:save_attachment?))
     end
     
     private

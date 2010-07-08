@@ -64,27 +64,6 @@ module TaliaCore
       # strings that contain a path to a file, to distinguish them from "normal"
       # string, which may contain plain data.
       class DataPath < String ; end
-      
-      module ClassMethods
-      
-        # Does a #find_and_create_by_location_and_source_id - meaning that if a record
-        # with given location already exists on the given source, the existing record
-        # will be returned. Otherwise a new record will be created.
-        #
-        # In any case, the given file will be attached using #file= 
-        #
-        # *Options*:
-        #
-        # [*file*] Filename for the file to be attached - will also be used to generate
-        #          the location
-        # [*source_id*] Id (or uri) of the source that the record should be attached to
-        def find_or_create_and_assign_file(params)
-          data_record = self.find_or_create_by_location_and_source_id(params[:file].try(:original_filename), params[:source_id])
-          data_record.file = params[:file]
-          data_record.save # force attachment save and it also saves type attribute.
-        end
-      
-      end
     
       # Creates a new record from an existing file on the file system.
       # The file will be copied or moved when the new record is saved - see
@@ -120,26 +99,6 @@ module TaliaCore
           open_file
         end
         @file_handle.read(self.size)
-      end
-  
-      # This is a placeholder in case file is used in a form.
-      def file() nil; end
-    
-      # Assign the file data (<tt>StringIO</tt> or <tt>File</tt>).
-      #
-      # *Note*: At the moment this method is _different_ internally to 
-      # the create_* methods, and it should be avoided using them together.
-      def file=(file_data)
-        return nil if file_data.nil? || file_data.size == 0 
-        self.assign_type file_data.content_type
-        self.location = file_data.original_filename
-        if file_data.is_a?(StringIO)
-          file_data.rewind
-          self.temp_data = file_data.read
-        else
-          self.temp_path = file_data.path
-        end
-        @save_attachment = true
       end
     
       # Callback for writing the data from create_from_data or create_from_file. If there is
@@ -326,14 +285,14 @@ module TaliaCore
       
       # Returns true if the 'delay_file_copies' option is set in the environment
       def delay_copies
-        ENV['delay_file_copies'] == 'true' || ENV['delay_file_copies'] == 'yes'
+        ENV['delay_file_copies'].yes?
       end
         
       # Returns true if the 'fast_copies' option is enabled in the environment.
       # Otherwise the class will use a workaround that is less likely to 
       # crash the whole system using JRuby.
       def fast_copies
-        ENV['fast_copies'] == 'true' || ENV['fast_copies'] == 'yes'
+        ENV['fast_copies'].yes?
       end
       
       # Return the data size
@@ -353,32 +312,10 @@ module TaliaCore
           raise(IOError, 'Position not valid. It must be an integer')
         end
       end
-    
-      # Check if the attachment should be saved, that is if a files was attached
-      # using #file=
-      def save_attachment?
-        @save_attachment
-      end
-    
-      # Save the attachment, copying the file from the temp_path to the data_path. This
-      # is if a new file was attached using #file=
-      def save_attachment
-        return unless save_attachment?
-        save_file
-        @save_attachment = false
-        true
-      end
-
+      
       # Delete the file connected to this record
-      def destroy_attachment
+      def destroy_file
         FileUtils.rm(full_filename) if File.exists?(full_filename)
-      end
-
-      # Save the attachment on the data_path directory. See #save_attachment
-      def save_file
-        FileUtils.mkdir_p(File.dirname(full_filename))
-        FileUtils.cp(temp_path, full_filename)
-        FileUtils.chmod(0644, full_filename)
       end
 
     end

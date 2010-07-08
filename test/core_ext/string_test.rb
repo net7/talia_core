@@ -13,4 +13,15 @@ class StringTest < Test::Unit::TestCase
     assert_equal(N::URI.new('http://foo-foo.com'), 'http://foo-foo.com'.to_uri)
     assert_kind_of(N::URI, 'foo-foo.com'.to_uri)
   end
+  
+  def test_yes
+    assert(" YeS ".yes?)
+    assert("TRUE".yes?)
+  end
+  
+  def test_no
+    assert("No ".no?)
+    assert("false".no?)
+  end
+  
 end

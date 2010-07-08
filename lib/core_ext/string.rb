@@ -9,4 +9,19 @@ class String
     N::URI.new(self)
   end
   
+  # Returns true if the string is "yes" or "true", regardless
+  # of capitalization and leading/trailing spaces
+  def yes?
+    me = self.downcase.strip
+    me == 'yes' || me == 'true'
+  end
+  alias_method :true?, :yes?
+  
+  # Like #yes?, just checking for "no" or "false"
+  def no?
+    me = self.downcase.strip
+    me == 'no' || me == 'false'
+  end
+  alias_method :false?, :no?
+  
 end

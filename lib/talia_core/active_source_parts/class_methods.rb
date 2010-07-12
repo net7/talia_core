@@ -10,7 +10,7 @@ module TaliaCore
     # * Various utility method
     module ClassMethods
 
-      # Accessor for addtional rdf types that will automatically be added to each
+      # Accessor for additional rdf types that will automatically be added to each
       # object of that Source class
       def additional_rdf_types 
         @additional_rdf_types ||= []
@@ -160,7 +160,7 @@ module TaliaCore
       end
 
       # Like update, only that it will overwrite the given attributes instead
-      # of adding to them
+      # of adding to themƒ
       def rewrite(id, attributes)
         record = find(id)
         raise(ActiveRecord::RecordNotFound) unless(record)
@@ -227,13 +227,28 @@ module TaliaCore
         { :semantic_attributes => semantic_attributes, :db_attributes => db_attributes }
       end
       
+      def property_options_for(property)
+        property = defined_props[property.to_s] if(defined_props[property.to_s])
+        this_options = my_property_options[property.to_s]
+        parent_options = superclass.try_call.property_options_for(property)
+        if(this_options && parent_options)
+          parent_options.merge(this_options)
+        else
+          this_options || parent_options || {}
+        end
+      end
+      
       def defined_property?(prop_name)
-        prop_name = prop_name.to_s
-        (@defined_props && @defined_props.include?(prop_name)) || (superclass.respond_to?(:defined_property?) && superclass.defined_property?(prop_name))
+        defined_props.include?(prop_name.to_s) || superclass.try_call.defined_property?(prop_name.to_s)
       end
 
+      # All the options that should be destroy for :dependent => :destroy settings
       def props_to_destroy
-        @props_to_destroy ||= []
+        to_destroy = (superclass.try_call.props_to_destroy || [])
+        my_property_options.each do |prop, options|
+          to_destroy << prop if(options[:dependent].try_call.to_sym == :destroy)
+        end
+        to_destroy
       end
 
       private
@@ -310,8 +325,7 @@ module TaliaCore
       # by the user and this statement only declares that the system may autoassign to
       # that property
       def manual_property(prop_name)
-        @defined_props ||= []
-        @defined_props << prop_name.to_s
+        defined_props[prop_name.to_s] = :manual
       end
 
       # Defines a property (multi or single). This makes the property available as a 
@@ -320,16 +334,16 @@ module TaliaCore
         prop_name = prop_name.to_s
         options.to_options!
         options.assert_valid_keys(:force_relation, :dependent)
-        @defined_props ||= []
-        @props_to_destroy ||= []
-        return if(@defined_props.include?(prop_name))
+        property_options(property, options) # Save options for the current property
+        
+        return if(defined_props.include?(prop_name))
         raise(ArgumentError, "Cannot overwrite method #{prop_name}") if(self.instance_methods.include?(prop_name) || self.instance_methods.include?("#{prop_name}="))
         
         # define the accessor
         single_access ? define_singular_reader(prop_name, property) : define_multi_reader(prop_name, property)
 
         # define the writer
-        define_writer(single_access, prop_name, property, options)
+        define_writer(single_access, prop_name, property)
 
         # define the finder
         (class << self ; self; end).module_eval do
@@ -340,12 +354,8 @@ module TaliaCore
             find(:all, finder)
           end
         end
-
-        @defined_props << prop_name
-        @props_to_destroy << prop_name if(options[:dependent] && (options[:dependent].to_sym == :destroy))
-        true
+        defined_props[prop_name] = property
       end
-      
       
       # Helper to dynamically define the singular accessor
       def define_singular_reader(prop_name, property)
@@ -364,21 +374,36 @@ module TaliaCore
       end
       
       # Helper to dynamically define the singular or multi-value assignment accessor
-      def define_writer(singular_access, prop_name, property, options = {})
-        force_link = options[:force_relation] || false
-        destroy_dependent = (options[:dependent] && (options[:dependent].to_sym == :destroy))
+      def define_writer(singular_access, prop_name, property)
         define_method("#{prop_name}=") do |values|
           values = [ values ] unless(values.is_a?(Array)) 
           raise(ArgumentError, "Must assign a single value here") if(singular_access && (values.size > 1))
           prop = self[property]
-          destroy_elements(prop, values) if(destroy_dependent)
+          destroy_elements(prop, values) if(property_options_for(property)[:dependent].try_call.to_sym == :destroy)
           prop.remove
           values.each do |value|
             next if(value.blank?)
-            value = ActiveSource.find(value) if(force_link && !value.is_a?(ActiveSource))
+            value = ActiveSource.find(value) if(property_options_for(property)[:force_relation].true? && !value.is_a?(ActiveSource))
             prop << value
           end
         end
+      end
+      
+      # The hash containing the mapping between defined property names and the 
+      # RDF properties on which they are defined.
+      def defined_props
+        @defined_props ||= {}
+      end
+      
+      # Hash that contains all options that are defined for the properties
+      def my_property_options
+        @my_property_options ||= {}
+      end
+      
+      # Sets the options for the given property
+      def property_options(property, options)
+        my_property_options[property.to_s] ||= {}
+        my_property_options[property.to_s].merge!(options)
       end
       
       # This gets the URI string from the given value. This will just return

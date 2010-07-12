@@ -293,6 +293,10 @@ module TaliaCore
     def defined_property?(prop_name)
       self.class.defined_property?(prop_name)
     end
+    
+    def property_options_for(property)
+      self.class.property_options_for(property)
+    end
 
     # Writes the predicate directly to the database and the rdf store. The
     # Source does not need to be saved and no data is loaded from the database.
@@ -397,6 +401,7 @@ module TaliaCore
     # this will return the id of the record in the db (which will be a true value for Ruby).
     # It will return nil or false otherwise.
     def exists?
+      return self.id unless(new_record?)
       rec = ActiveSource.find(:first, :conditions => { :uri => self.uri.to_s })
       rec ? rec.id : rec
     end
@@ -406,7 +411,7 @@ module TaliaCore
     # Removes dependent properties
     def destroy_dependent_props
       self.class.props_to_destroy.each do |prop|
-        values = self.send(prop)
+        values = self[prop]
         values = [values] unless(values.is_a?(SemanticCollectionWrapper))
         values.each do |val|
           val.destroy if(val.is_a?(TaliaCore::ActiveSource))

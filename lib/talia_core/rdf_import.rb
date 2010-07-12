@@ -27,7 +27,7 @@ module TaliaCore
           import_file(file, rdf_syntax, context)
         end
 
-        adapter.save if(adapter.respond_to?(:save))
+        adapter.try_call.save
 
         puts "\n--> Importing rdf/rdfs file: complete!\n\n"
       end

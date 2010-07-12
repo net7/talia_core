@@ -9,6 +9,9 @@ module TaliaCore
     singular_property :forcy_single, N::RDFS.forcy_single, :force_relation => true
     multi_property :forcy, N::RDFS.forcy, :force_relation => true, :dependent => :destroy
     manual_property :blinko
+    
+    multi_property :optionated, N::RDFS.optionated, :force_relation => true
+    
     has_rdf_type N::TALIA.foo
     
     attr_accessor :blinko
@@ -16,6 +19,9 @@ module TaliaCore
   
   class DefinedAccessorSubTest < DefinedAccessorTest
     singular_property :title, N::RDFS.title
+    
+    property_options N::RDFS.optionated, :dependent => :destroy
+    multi_property :optionated2, N::RDFS.optionated2, :force_relation => true
   end
   
   class DefinedAccessorSubNaked < DefinedAccessorTest
@@ -945,6 +951,34 @@ module TaliaCore
     def test_to_uri
       src = ActiveSource.new('http://xsource/has_type_test')
       assert_equal(N::URI.new('http://xsource/has_type_test'), src.to_uri)
+    end
+    
+    def test_property_options_on_superclass
+      assert(DefinedAccessorTest.property_options_for(N::RDFS.optionated)[:force_relation])
+      assert_not(DefinedAccessorTest.property_options_for(N::RDFS.optionated2)[:force_relation])
+    end
+    
+    def test_property_options_on_subclass
+      assert(DefinedAccessorSubTest.property_options_for(N::RDFS.optionated)[:force_relation])
+      assert(DefinedAccessorSubTest.property_options_for(N::RDFS.optionated2)[:force_relation])
+    end
+    
+    def test_inherited_property_values_on_superclass
+      assert_equal({ :force_relation => true }, DefinedAccessorTest.property_options_for(N::RDFS.optionated))
+    end
+    
+    def test_inherited_property_values_on_subclass
+      assert_equal({ :force_relation => true, :dependent => :destroy }, DefinedAccessorSubTest.property_options_for(N::RDFS.optionated))
+    end
+    
+    def test_property_options_on_defined_super
+      assert(DefinedAccessorTest.property_options_for(:optionated)[:force_relation])
+      assert_not(DefinedAccessorTest.property_options_for(:optionated2)[:force_relation])
+    end
+    
+    def test_property_options_on_defined_sub
+      assert(DefinedAccessorSubTest.property_options_for(:optionated)[:force_relation])
+      assert(DefinedAccessorSubTest.property_options_for(:optionated2)[:force_relation])
     end
     
     def test_has_defined_property

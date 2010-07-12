@@ -34,43 +34,51 @@ module TaliaCore
       end
     end
 
-    class << self
-
-      # Retrieves the "fat relations" for the given source and predicate. This
-      # will join all the tables for the objects and will select all the
-      # data that is needed to not only construct the semantic relation
-      # itself, but also the "object" record for the relation.
-      def find_fat_relations(source, predicate)
-        joins = ActiveSource.sources_join
-        joins << ActiveSource.props_join
-        relations = SemanticRelation.find(:all, :conditions => {
-            :subject_id => source.id,
-            :predicate_uri => predicate
-          },
-          :joins => joins,
-          :select => fat_record_select
-        )
-        relations
+    # Return the "value" of the relation. This is usually the same as #object,
+    # except that string values are parsed as PropertyString objects and that
+    # in case the "special type" is set the related resources are made to
+    # be objects of that type (see above).
+    def value
+      semprop = object.is_a?(SemanticProperty)
+      if(special_object_type)
+        assit(object, "Must have object for #{predicate_uri}")
+        raise(ArgumentError, 'Must not have a property for a typed item') if(semprop)
+        special_object_type.new(object.uri.to_s)
+      elsif(semprop)
+        # Plain, return the object or the value for SemanticProperties
+        object.value ? PropertyString.parse(object.value) : object.value
+      else
+        object
       end
-
-      # The "select" clause for selecting "fat" records for find_fat_relations and other
-      # similar purposes
-      def fat_record_select
-        @select ||= begin
-          select = 'semantic_relations.id AS id, semantic_relations.created_at AS created_at, '
-          select << 'semantic_relations.updated_at AS updated_at, '
-          select << 'semantic_relations.rel_order AS rel_order,'
-          select << 'object_id, object_type, subject_id, predicate_uri, '
-          select << 'obj_props.created_at AS property_created_at, '
-          select << 'obj_props.updated_at AS property_updated_at, '
-          select << 'obj_props.value AS property_value, '
-          select << 'obj_sources.created_at AS object_created_at, '
-          select << 'obj_sources.updated_at AS object_updated_at, obj_sources.type AS  object_realtype, '
-          select << 'obj_sources.uri AS object_uri'
-          select
-        end
-      end
-
+    end
+    
+    # An item will be equal to it's #value
+    def ==(compare)
+      self.value == compare
+    end
+    
+    # This will return the "object type" for the current relation. This can
+    # be used to "force" a relation for some predicates.
+    #
+    # This will check if an entry exists for the current predicate has an
+    # entry in #special_types. If yes, the class will be returned.
+    #
+    # If object_type returns a class, the #value method will return objects
+    # of that class for all resources. 
+    #
+    # The default case is that this returns nil, which will cause #value
+    # to return the actual "object" value for relations to resources.
+    def special_object_type
+      self.class.special_types[predicate_uri.to_s]
+    end
+    
+    # Simple hash that checks if a type if property requires "special" handling
+    # This will cause the wrapper to accept ActiveSource relations and all
+    # sources will be casted to the given type
+    def self.special_types
+      @special_types ||= {
+        N::RDF.type.to_s => N::SourceClass
+      }
     end
 
     private

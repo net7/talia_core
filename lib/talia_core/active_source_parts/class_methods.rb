@@ -332,8 +332,6 @@ module TaliaCore
       # ActiveRecord-like accessor. See documentation on singular_property
       def define_property(single_access, prop_name, property, options = {}) # :nodoc:
         prop_name = prop_name.to_s
-        options.to_options!
-        options.assert_valid_keys(:force_relation, :dependent)
         property_options(property, options) # Save options for the current property
         
         return if(defined_props.include?(prop_name))
@@ -402,6 +400,8 @@ module TaliaCore
       
       # Sets the options for the given property
       def property_options(property, options)
+        options.to_options!
+        options.assert_valid_keys(:force_relation, :dependent)
         my_property_options[property.to_s] ||= {}
         my_property_options[property.to_s].merge!(options)
       end

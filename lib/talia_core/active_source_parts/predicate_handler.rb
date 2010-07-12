@@ -35,13 +35,9 @@ module TaliaCore
           raise(RangeError, "Too many sources for prefetching.") if(sources.size > limit)
           src_hash = {}
           sources.each { |src| src_hash[src.id] = src }
-          conditions = { :subject_id => src_hash.keys }
-          joins = ActiveSource.sources_join
-          joins << ActiveSource.props_join
-          relations = SemanticRelation.find(:all, :conditions => conditions,
-          :joins => joins,
-          :select => SemanticRelation.fat_record_select
-          )
+          
+          relations = SemanticRelation.find(:all, :conditions => { :subject_id => src_hash.keys }, :include => [:subject, :object])
+          
           relations.each do |rel|
             src_hash[rel.subject_id].inject_predicate(rel)
           end
@@ -124,9 +120,9 @@ module TaliaCore
       # Injects a 'fat relation' into the cache/wrappter. A "fat" relation is a 
       # SemanticRelation which contains additional fields (e.g. the subject uri, all
       # object information, etc.) - See also the SemanticCollectionWrapper documentation.
-      def inject_predicate(fat_relation)
-        wrapper = get_objects_on(fat_relation.predicate_uri)
-        wrapper.inject_fat_item(fat_relation)
+      def inject_predicate(relation)
+        wrapper = get_objects_on(relation.predicate_uri)
+        wrapper.inject_relation(relation)
       end
     end
   end

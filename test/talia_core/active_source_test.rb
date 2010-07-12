@@ -40,6 +40,7 @@ module TaliaCore
     def test_has_type
       src = ActiveSource.new('http://xsource/has_type_test')
       src.types << N::HYPER.testtype
+      
       assert(src.has_type?(N::HYPER.testtype))
     end
     

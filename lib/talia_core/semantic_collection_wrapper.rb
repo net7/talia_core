@@ -189,7 +189,7 @@ module TaliaCore
           params.each { |par| remove_relation(par) }
         else
           if(loaded?)
-            items.each { |item| item.relation.destroy }
+            items.each { |item| item.destroy }
           else
             SemanticRelation.destroy_all(
             :subject_id => @assoc_source.id,
@@ -210,19 +210,7 @@ module TaliaCore
         return if(clean?) # If there are no items, nothing was modified
         @assoc_source.save! unless(@assoc_source.id)
         @items.each do |item|
-          next if(item.fat_relation) # we skip the fat relations, they are never new and never saveable
-          rel = item.plain_relation
-          must_save = rel.new_record?
-          if(rel.object_id.nil?)
-            rel.object.save! if(rel.object.exists?)
-            rel.object_id = rel.object.id
-            must_save = true
-          end
-          unless(rel.subject_id != nil)
-            rel.subject_id = @assoc_source.id
-            must_save = true
-          end
-          rel.save! if(must_save)
+          item.save!
         end
         @items = nil unless(loaded?) # Otherwise we'll have trouble reload-and merging
       end
@@ -245,10 +233,10 @@ module TaliaCore
       # Injector for a fat relation. This must take place before flagging the
       # source as "loaded". This can used to load data into the object
       # without having to go to the database
-      def inject_fat_item(fat_rel)
+      def inject_relation(fat_rel)
         raise(RuntimeError, 'Trying to inject in loaded object.') if(loaded?)
         @items ||= []
-        @items << SemanticCollectionItem.new(fat_rel, :fat)
+        @items << fat_rel
       end
       
       # Forces this relation to be empty. This initializes the relation,
@@ -267,30 +255,13 @@ module TaliaCore
 
       # Load the current collection from the database.
       def load!
-        # The "fat" relations contain all the data to build the related objects if
-        # required
-        relations = SemanticRelation.find_fat_relations(@assoc_source, @assoc_predicate)
-
-        init_from_fat_rels(relations)
-      end
-
-      # Inject a fat relation into the items
-      
-      # Initializes the collection from the given collection of "fat" relations. This
-      # can be used to "load" the collection from the outside, 
-      # without having to go to the database
-      def init_from_fat_rels(fat_relations)
         # Check if there are records that have been added previously
-        old_items = @items
-        # Create the internal collection
-        @items = Array.new(fat_relations.size)
-        fat_relations.each_index do |idx|
-          rel = SemanticCollectionItem.new(fat_relations.at(idx), :fat)
-          @items[idx] = rel
-        end
-        @items = (@items | old_items) if(old_items)
+        relations = SemanticRelation.find(:all, 
+          :conditions => { :subject_id => @assoc_source.id, :predicate_uri => @assoc_predicate.to_s }, 
+          :include => [:subject, :object])
+        @items ||= []
         @loaded = true
-        @items
+        @items = (relations | @items)
       end
 
       # Returns the items in the collection. These are the SemanticCollectionItem
@@ -310,7 +281,7 @@ module TaliaCore
 
       # Removes a relation at the given index
       def remove_at(index)
-        items.at(index).relation.destroy
+        items.at(index).destroy
         items.delete_at(index)
       end
 
@@ -331,8 +302,7 @@ module TaliaCore
 
         rel = create_predicate(value)
         rel.rel_order = order if(order)
-        item = SemanticCollectionItem.new(rel, :plain)
-        block_given? ? yield(item) : insert_item(item)
+        block_given? ? yield(rel) : insert_item(rel)
       end
 
       # Insert a new item
@@ -353,7 +323,7 @@ module TaliaCore
         assit(!value.is_a?(SemanticProperty), "Should not pass in Semantic Properties here!")
         # We need to manually create the relation, to add the predicate_url
         to_add = SemanticRelation.new(
-        :subject_id => @assoc_source.id,
+        :subject => @assoc_source,
         :predicate_uri => @assoc_predicate
         ) # Create a new relation linked to this object
 

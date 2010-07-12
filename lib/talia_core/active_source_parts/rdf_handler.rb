@@ -114,7 +114,7 @@ module TaliaCore
           # Remove the existing data. TODO: Not using contexts
           my_rdf.remove(N::URI.new(wrap.instance_variable_get(:@assoc_predicate)))
           items = wrap.send(:items) # Get the items
-          items.each { |it| preds_to_write << it.relation }
+          items.each { |it| preds_to_write << it }
         end
         preds_to_write
       end
@@ -136,7 +136,7 @@ module TaliaCore
           next if(wrap.clean?)
           # Evil, we get the items directly to avoid a useless load
           items = wrap.instance_variable_get(:@items)
-          items.each { |it| preds_to_create << it.relation }
+          items.each { |it| preds_to_create << it }
         end
         preds_to_create
       end

@@ -315,8 +315,6 @@ module TaliaCore
           value = ActiveSource.new(value.to_s)
         end
 
-        value = check_for_source(value) if(value.is_a?(ActiveSource))
-
         rel = create_predicate(value)
         rel.rel_order = order if(order)
         block_given? ? yield(rel) : insert_item(rel)
@@ -348,7 +346,7 @@ module TaliaCore
           to_add.object = value
         elsif(value.respond_to?(:uri)) # This appears to refer to a Source. We only add if we can find that source
           to_add.object = TaliaCore::ActiveSource.find(value.uri)
-        elsif(@assoc_source.property_options_for(@assoc_predicate)[:force_relation].true?)
+        elsif(prop_options[:force_relation].true? ||  (prop_options[:type].is_a?(Class) && (prop_options[:type] >= TaliaCore::ActiveSource)))
           to_add.object = TaliaCore::ActiveSource.find(value)
         else
           prop = TaliaCore::SemanticProperty.new
@@ -358,45 +356,12 @@ module TaliaCore
         end
         to_add
       end
-
-      # This will check if the ActiveSource given as the parameter
-      # is new and or in the unsaved_source_cache.
-      #
-      # * If source has already been saved, it will be the return 
-      #   value of the method
-      # * If source has the same uri as one of the elements in the
-      #   unsaved_source_cache, the cached version will be returned
-      # * If the source is new and _not_ in the cache, it will be 
-      #   added to the cache, and returned.
-      #
-      # The method is to be used in saving the wrapper: If new relations
-      # were added, which in turn point at newly created source, then
-      # those newly created sources will also be saved. In turn, those 
-      # newly created sources will also save _their_ SemanticCollectionWrappers.
-      #
-      # To avoid endless loops during that operation, there is a
-      # global cache of (potentially) unsaved sources. This can be used
-      # to quickly check that each and every new source is only saved once.
-      def check_for_source(source)
-        return source unless(source.new_record?)
-        cached = unsaved_source_cache[source.uri.to_s]
-        if(cached.nil?)
-          unsaved_source_cache[source.uri.to_s] = source
-          cached = source
-        end
-        cached
+      
+      # The options that were defined on the "owning" source with
+      # singular_property, multi_property or property_options
+      def prop_options
+        @assoc_source.property_options_for(@assoc_predicate)
       end
-
-      # Cache for new, "unsaved" sources. See the #check_for_source
-      def self.unsaved_source_cache
-        @unsaved_source_cache ||= {}
-      end
-
-      # Helper accessor for SemanticCollectionWrapper#unsaved_source_cache
-      def unsaved_source_cache
-        SemanticCollectionWrapper.unsaved_source_cache
-      end
-
 
     end
 

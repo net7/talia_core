@@ -394,15 +394,6 @@ module TaliaCore
       reset! # Clear the property cache
       super
     end
-    
-    # If a record with the same _uri_ as the current one already exists in the database,
-    # this will return the id of the record in the db (which will be a true value for Ruby).
-    # It will return nil or false otherwise.
-    def exists?
-      return self.id unless(new_record?)
-      rec = ActiveSource.find(:first, :conditions => { :uri => self.uri.to_s })
-      rec ? rec.id : rec
-    end
 
     private
     

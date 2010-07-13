@@ -16,6 +16,7 @@ module TaliaCore
     belongs_to :object, :polymorphic => true
     before_destroy :discard_property
     before_destroy :destroy_dependent_object
+    before_save :check_for_object
 
     # Returns true if the Relation matches the given predicate URI (and value,
     # if given). A relation matches if the predicate of this relation is
@@ -94,6 +95,16 @@ module TaliaCore
     
     def destroy_dependent_object
       object.destroy if(object.is_a?(ActiveSource) && subject.property_options_for(predicate_uri)[:dependent] == :destroy)
+    end
+    
+    # Called on save, this will check if the "same" object already exists in the database.
+    # If yes, it will use the version from the database instead of the one currently attached,
+    # since a "new" source with an existing URI cannot be saved.
+    def check_for_object
+      if(self.object.new_record?)
+        existing = ActiveSource.find(:first, :conditions => { :uri => self.object.uri.to_s })
+        self.object = (existing || self.object)
+      end
     end
 
   end

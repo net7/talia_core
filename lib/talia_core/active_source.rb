@@ -114,9 +114,7 @@ module TaliaCore
       elsif(defined_property?(attribute))
         self.send("#{attribute}=", value)
       else
-        pred = get_attribute(attribute)
-        pred.remove
-        pred << value
+         get_attribute(attribute).replace(value)
       end
     end
 
@@ -470,16 +468,6 @@ module TaliaCore
     # through the polymorphic relation automatically could be a bit fishy...
     def remove_inverse_properties
       SemanticRelation.delete_all(["object_type = 'TaliaCore::ActiveSource' AND object_id = ?", self.id])
-    end
-    
-    # Destroy the elements that are not in the "keep" list
-    def destroy_elements(to_destroy, keep_list)
-      to_destroy.each do |element|
-        if(element.is_a?(ActiveSource))
-          exists = keep_list.find { |keep_el| (keep_el.to_uri == element.uri) }
-          element.destroy unless(exists)
-        end
-      end
     end
     
   end

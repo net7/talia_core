@@ -176,10 +176,27 @@ module TaliaCore
 
       # Replace a value with a new one. Equivalent to removing the old value
       # and adding the new one
-      def replace(old_value, new_value)
+      def replace_value(old_value, new_value)
         idx = items.index(old_value)
         items[idx].destroy
+        # Creates a new relation and adds it in the place of the old one
         add_record_for(new_value) { |new_item| items[idx] = new_item }
+      end
+      
+      # Replace the contents of the current wrapper with the values passed.
+      def replace(*new_values)
+        raise(ArgumentError, "Tried to replace with nothing") if(new_values.empty?)
+        remaining_items = []
+        items.each do |item|
+          if(new_values.include?(item.object))
+            remaining_items << item
+            new_values.delete(item.object)
+          else
+            item.destroy
+          end
+        end
+        @items = remaining_items
+        new_values.each { |add| add_with_order(add, nil) }
       end
 
       # Remove the given value. With no parameters, the whole list will be
@@ -331,6 +348,8 @@ module TaliaCore
           to_add.object = value
         elsif(value.respond_to?(:uri)) # This appears to refer to a Source. We only add if we can find that source
           to_add.object = TaliaCore::ActiveSource.find(value.uri)
+        elsif(@assoc_source.property_options_for(@assoc_predicate)[:force_relation].true?)
+          to_add.object = TaliaCore::ActiveSource.find(value)
         else
           prop = TaliaCore::SemanticProperty.new
           # Check if we need to add from a PropertyString

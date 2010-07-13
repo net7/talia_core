@@ -15,6 +15,7 @@ module TaliaCore
     belongs_to :subject, :class_name => 'TaliaCore::ActiveSource'
     belongs_to :object, :polymorphic => true
     before_destroy :discard_property
+    before_destroy :destroy_dependent_object
 
     # Returns true if the Relation matches the given predicate URI (and value,
     # if given). A relation matches if the predicate of this relation is
@@ -69,7 +70,7 @@ module TaliaCore
     # The default case is that this returns nil, which will cause #value
     # to return the actual "object" value for relations to resources.
     def special_object_type
-      self.class.special_types[predicate_uri.to_s]
+      self.class.special_types[predicate_uri]
     end
     
     # Simple hash that checks if a type if property requires "special" handling
@@ -89,6 +90,10 @@ module TaliaCore
       if(object.is_a?(SemanticProperty))
         SemanticProperty.delete(object.id)
       end
+    end
+    
+    def destroy_dependent_object
+      object.destroy if(object.is_a?(ActiveSource) && subject.property_options_for(predicate_uri)[:dependent] == :destroy)
     end
 
   end

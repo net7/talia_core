@@ -124,7 +124,7 @@ module TaliaCore
       def prepare_all_predicates_to_write
         # TODO: Could load with a single sql
         my_rdf.clear_rdf # TODO: Not using contexts here
-        SemanticRelation.find(:all, :conditions => { :subject_id => self.id })
+        SemanticRelation.find(:all, :conditions => { :subject_id => self.id }, :include => [ :object ])
       end
       
       # ATTENTION: This is a speed hack that avoids the usual checks based

@@ -537,6 +537,36 @@ module TaliaCore
       assert_equal(DefinedAccessorTest.find_by_siglum('foo'), [ src ])
     end
     
+    def test_wrapper_destroy_dependent_on_remove
+      src = DefinedAccessorTest.new('http://testvalue.org/test_wrapper_destroy_dependent_on_remove')
+      assert(src[N::RDFS.forcy].blank?)
+      src[N::RDFS.forcy] = active_sources(:deltest)
+      src.save!
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+      src[N::RDFS.forcy].remove
+      assert(!TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+    end
+    
+    def test_wrapper_destroy_rdf_dependent_on_remove
+      src = DefinedAccessorTest.new('test_wrapper_destroy_rdf_dependent_on_remove')
+      assert(src[N::RDFS.forcy].blank?)
+      src[N::RDFS.forcy] = active_sources(:deltest)
+      src.save!
+      src[N::RDFS.forcy].remove
+      assert_equal([], ActiveRDF::Query.new(N::URI).select(:a, :b).where(active_sources(:deltest), :a, :b).execute)
+      assert_equal([], ActiveRDF::Query.new(N::URI).select(:a, :b).where(:a, :b, active_sources(:deltest)).execute)
+    end
+    
+    def test_wrapper_not_destroy_nondependent_on_remove
+      src = DefinedAccessorTest.new('test_wrapper_not_destroy_nondependent_on_remove')
+      assert(src[N::RDFS.fuzzy].blank?)
+      src[N::RDFS.fuzzy] = active_sources(:deltest)
+      src.save!
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+      src[N::RDFS.fuzzy].remove
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+    end
+    
     def test_autosave_rdf
       src = ActiveSource.new('http://testautosaverdf/')
       assert(src.autosave_rdf?)
@@ -593,6 +623,37 @@ module TaliaCore
       src.save!
       assert_equal(2, src['http://activesourcetest/write_predicate'].size)
     end
+    
+    def test_replace_predicate
+       src = ActiveSource.new('http://activesourcetest/test_replace_predicate')
+       src[N::RDF.foo] = [ active_sources(:testy), active_sources(:deltest) ]
+       src.save!
+       assert_property(src[N::RDF.foo], active_sources(:testy), active_sources(:deltest))
+       src[N::RDF.foo].replace(active_sources(:testy_two))
+       assert_property(src[N::RDF.foo], active_sources(:testy_two))
+    end
+    
+    def test_replace_predicate_no_dependent_on_base_class
+      src = ActiveSource.new('http://activesourcetest/test_replace_predicate')
+       src[N::RDFS.forcy] = [ active_sources(:testy), active_sources(:deltest) ]
+       src.save!
+       assert_property(src[N::RDFS.forcy], active_sources(:testy), active_sources(:deltest))
+       src[N::RDFS.forcy].replace(active_sources(:testy_two), active_sources(:testy))
+       assert_property(src[N::RDFS.forcy], active_sources(:testy_two), active_sources(:testy))
+       assert(TaliaCore::ActiveSource.exists?(active_sources(:testy).id))
+       assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+    end
+    
+    def test_replace_predicate_with_dependent_destroy
+      src = DefinedAccessorTest.new('http://activesourcetest/test_replace_predicate')
+       src[N::RDFS.forcy] = [ active_sources(:testy), active_sources(:deltest) ]
+       src.save!
+       assert_property(src[N::RDFS.forcy], active_sources(:testy), active_sources(:deltest))
+       src[N::RDFS.forcy].replace(active_sources(:testy_two), active_sources(:testy))
+       assert_property(src[N::RDFS.forcy], active_sources(:testy_two), active_sources(:testy))
+       assert(TaliaCore::ActiveSource.exists?(active_sources(:testy).id))
+       assert(!TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+    end
 
     def test_double_add_new_source
       src = ActiveSource.new('http://activesourcetest/doubletest')
@@ -608,7 +669,7 @@ module TaliaCore
       src = ActiveSource.new('http://activesourcetest/doubleadd/test')
       src[N::HYPER.bar] << 'foo'
       src.save!
-      src2 =  ActiveSource.find(src.uri)
+      src2 = ActiveSource.find(src.uri)
       src2[N::HYPER.bar] << 'bar'
       src2.save!
       assert_property(ActiveSource.find(src.uri)[N::HYPER.bar], 'foo', 'bar')

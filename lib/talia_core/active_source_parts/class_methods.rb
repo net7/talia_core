@@ -1,6 +1,6 @@
 module TaliaCore
   module ActiveSourceParts
-    
+
     # Class methods for ActiveSource:
     #
     # * Property definitions for source classes (singular_property, multi_property, manual_property)
@@ -57,7 +57,7 @@ module TaliaCore
         the_source.add_additional_rdf_types if(the_source.new_record?)
         the_source
       end
-      
+
 
       # Retrieves a new source with the given type. This gets a propety hash
       # like #new, but it will correctly initialize a source of the type given
@@ -226,7 +226,7 @@ module TaliaCore
         end
         { :semantic_attributes => semantic_attributes, :db_attributes => db_attributes }
       end
-      
+
       def property_options_for(property)
         property = defined_props[property.to_s] if(defined_props[property.to_s])
         this_options = my_property_options[property.to_s]
@@ -237,7 +237,7 @@ module TaliaCore
           this_options || parent_options || {}
         end
       end
-      
+
       def defined_property?(prop_name)
         defined_props.include?(prop_name.to_s) || superclass.try_call.defined_property?(prop_name.to_s)
       end
@@ -246,13 +246,13 @@ module TaliaCore
       def props_to_destroy
         to_destroy = (superclass.try_call.props_to_destroy || [])
         my_property_options.each do |prop, options|
-          to_destroy << prop if(options[:dependent].try_call.to_sym == :destroy)
+          to_destroy << prop if(options[:dependent] == :destroy)
         end
         to_destroy
       end
 
       private
-      
+
       # Make URL for autofilling
       def auto_uri
         (N::LOCAL + self.name.tableize + "/#{rand Time.now.to_i}").to_s
@@ -269,7 +269,7 @@ module TaliaCore
         @additional_rdf_types ||= []
         types.each { |t| @additional_rdf_types << t.to_s }
       end
-      
+
       # Class helper to declare that this Source model is allowed to automatically
       # create uri values for new elements. In that case, the model will
       # automatically assign a URL to all new records to which no url value has
@@ -283,11 +283,11 @@ module TaliaCore
         @can_autofill = true
         @autofill_overwrites = options[:force]
       end
-      
+
       def autofill_uri?
         @can_autofill
       end
-      
+
       def autofill_overwrites?
         @autofill_overwrites
       end
@@ -314,8 +314,8 @@ module TaliaCore
       def singular_property(prop_name, property, options = {})
         define_property(true, prop_name, property, options)
       end
-      
-      
+
+
       # Defines a multi-value property in the same way as #singular_property
       def multi_property(prop_name, property, options = {})
         define_property(false, prop_name, property, options)
@@ -333,10 +333,10 @@ module TaliaCore
       def define_property(single_access, prop_name, property, options = {}) # :nodoc:
         prop_name = prop_name.to_s
         property_options(property, options) # Save options for the current property
-        
+
         return if(defined_props.include?(prop_name))
         raise(ArgumentError, "Cannot overwrite method #{prop_name}") if(self.instance_methods.include?(prop_name) || self.instance_methods.include?("#{prop_name}="))
-        
+
         # define the accessor
         single_access ? define_singular_reader(prop_name, property) : define_multi_reader(prop_name, property)
 
@@ -354,7 +354,7 @@ module TaliaCore
         end
         defined_props[prop_name] = property
       end
-      
+
       # Helper to dynamically define the singular accessor
       def define_singular_reader(prop_name, property)
         define_method(prop_name) do
@@ -363,56 +363,50 @@ module TaliaCore
           prop.size > 0 ? prop.first : nil
         end
       end
-      
+
       # Helper to dynamically define the multiple-value accessor
       def define_multi_reader(prop_name, property)
         define_method(prop_name) do
           self[property]
         end
       end
-      
+
       # Helper to dynamically define the singular or multi-value assignment accessor
       def define_writer(singular_access, prop_name, property)
         define_method("#{prop_name}=") do |values|
           values = [ values ] unless(values.is_a?(Array)) 
           raise(ArgumentError, "Must assign a single value here") if(singular_access && (values.size > 1))
-          prop = self[property]
-          destroy_elements(prop, values) if(property_options_for(property)[:dependent].try_call.to_sym == :destroy)
-          prop.remove
-          values.each do |value|
-            next if(value.blank?)
-            value = ActiveSource.find(value) if(property_options_for(property)[:force_relation].true? && !value.is_a?(ActiveSource))
-            prop << value
-          end
+          values.reject! { |v| v.blank? }
+          self[property].replace(values)
         end
       end
-      
+
       # The hash containing the mapping between defined property names and the 
       # RDF properties on which they are defined.
       def defined_props
         @defined_props ||= {}
       end
-      
+
       # Hash that contains all options that are defined for the properties
       def my_property_options
         @my_property_options ||= {}
       end
-      
+
       # Sets the options for the given property
       def property_options(property, options)
         options.to_options!
-        options.assert_valid_keys(:force_relation, :dependent)
+        options.assert_valid_keys(:force_relation, :dependent, :type)
         my_property_options[property.to_s] ||= {}
         my_property_options[property.to_s].merge!(options)
       end
-      
+
       # This gets the URI string from the given value. This will just return
       # the value if it's a string. It will return the result of value.uri, if
       # that method exists; otherwise it'll return nil
       #
       # If the id_aware flag is set this will return nil for any uri string that
       # appears to be a numeric id.
-       def uri_string_for(value, id_aware = true)
+      def uri_string_for(value, id_aware = true)
         result = if value.is_a? String
           return nil if((value  =~ /\A\d+(-.*)?\Z/) && id_aware) # This looks like a record id or record param, encoded as a string
           # if this is a local name, prepend the local namespace

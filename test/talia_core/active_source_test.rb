@@ -1016,31 +1016,31 @@ module TaliaCore
     end
     
     def test_property_options_on_superclass
-      assert(DefinedAccessorTest.property_options_for(N::RDFS.optionated)[:force_relation])
-      assert_not(DefinedAccessorTest.property_options_for(N::RDFS.optionated2)[:force_relation])
+      assert_equal(TaliaCore::ActiveSource, DefinedAccessorTest.property_options_for(N::RDFS.optionated)[:type])
+      assert_nil(DefinedAccessorTest.property_options_for(N::RDFS.optionated2)[:type])
     end
     
     def test_property_options_on_subclass
-      assert(DefinedAccessorSubTest.property_options_for(N::RDFS.optionated)[:force_relation])
-      assert(DefinedAccessorSubTest.property_options_for(N::RDFS.optionated2)[:force_relation])
+      assert_equal(TaliaCore::ActiveSource, DefinedAccessorSubTest.property_options_for(N::RDFS.optionated)[:type])
+      assert_equal(TaliaCore::ActiveSource, DefinedAccessorSubTest.property_options_for(N::RDFS.optionated2)[:type])
     end
     
     def test_inherited_property_values_on_superclass
-      assert_equal({ :force_relation => true }, DefinedAccessorTest.property_options_for(N::RDFS.optionated))
+      assert_equal({ :type => TaliaCore::ActiveSource }, DefinedAccessorTest.property_options_for(N::RDFS.optionated))
     end
     
     def test_inherited_property_values_on_subclass
-      assert_equal({ :force_relation => true, :dependent => :destroy }, DefinedAccessorSubTest.property_options_for(N::RDFS.optionated))
+      assert_equal({ :type => TaliaCore::ActiveSource, :dependent => :destroy }, DefinedAccessorSubTest.property_options_for(N::RDFS.optionated))
     end
     
     def test_property_options_on_defined_super
-      assert(DefinedAccessorTest.property_options_for(:optionated)[:force_relation])
-      assert_not(DefinedAccessorTest.property_options_for(:optionated2)[:force_relation])
+      assert_equal(TaliaCore::ActiveSource, DefinedAccessorTest.property_options_for(:optionated)[:type])
+      assert_nil(DefinedAccessorTest.property_options_for(:optionated2)[:type])
     end
     
     def test_property_options_on_defined_sub
-      assert(DefinedAccessorSubTest.property_options_for(:optionated)[:force_relation])
-      assert(DefinedAccessorSubTest.property_options_for(:optionated2)[:force_relation])
+      assert_equal(TaliaCore::ActiveSource, DefinedAccessorSubTest.property_options_for(:optionated)[:type])
+      assert_equal(TaliaCore::ActiveSource, DefinedAccessorSubTest.property_options_for(:optionated2)[:type])
     end
     
     def test_has_defined_property

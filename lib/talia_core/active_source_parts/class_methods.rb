@@ -396,6 +396,10 @@ module TaliaCore
       def property_options(property, options)
         options.to_options!
         options.assert_valid_keys(:force_relation, :dependent, :type)
+        if(force = options.delete(:force_relation).true?)
+          warn("Deprecation Warning: :force_relation is deprecated - use ':type => TaliaCore::ActiveSource' instead")
+          options[:type] ||= ActiveSource
+        end
         my_property_options[property.to_s] ||= {}
         my_property_options[property.to_s].merge!(options)
       end

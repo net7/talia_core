@@ -72,7 +72,7 @@ module TaliaCore
       #
       # Modified wrappers are saved when the ActiveSource itself is saved (through
       # save_wrappers, which is automatically called)
-      def get_objects_on(predicate)
+      def get_wrapper_on(predicate)
         @type_cache ||= {}
         active_wrapper = @type_cache[predicate.to_s]
 
@@ -87,6 +87,25 @@ module TaliaCore
         end
         
         active_wrapper
+      end
+      
+      # Returns the values for the given predicate. This will work like #get_wrapper_on
+      # _except_ if the predicate is declared as a :singular_property with ActiveSouce.property_options
+      # (or singular_property, or multi_property). In that case, it will 
+      # return only a single value. However, if the predicate is declare singular and
+      # there already is more than one value, it will return the wrapper (and fail an assit).
+      # In general, a property that was defined singular and contains more than one value 
+      # indicates a problem with the application.
+      def get_objects_on(predicate)
+        singular = property_options_for(predicate)[:singular_property].true?
+        wrapper = get_wrapper_on(predicate) 
+
+        if(singular && wrapper.size <= 1) 
+          wrapper.first
+        else
+          assit(!singular, 'Was expecting a single value (property is defined as singular). Got more than one.')
+          wrapper
+        end
       end
 
       # Goes through the existing SemanticCollectionWrappers in the cache, and
@@ -121,8 +140,8 @@ module TaliaCore
       # SemanticRelation which contains additional fields (e.g. the subject uri, all
       # object information, etc.) - See also the SemanticCollectionWrapper documentation.
       def inject_predicate(relation)
-        wrapper = get_objects_on(relation.predicate_uri)
-        wrapper.inject_relation(relation)
+        wrapper = get_wrapper_on(relation.predicate_uri)
+        wrapper.insert_item(relation)
       end
     end
   end

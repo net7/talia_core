@@ -54,9 +54,17 @@ module TaliaCore
       end
     end
     
-    # An item will be equal to it's #value
+    # An item will be equal to its #value - this is a little hack that lets Enumerable#find and
+    # such methods work easily on collections of SemanticRelation.
+    #
+    # If compare is a SemanticRelation, this will be true if both relations have the same predicate
+    # value.
     def ==(compare)
-      self.value == compare
+      if(compare.is_a?(SemanticRelation))
+        (self.predicate_uri == compare.predicate_uri) && (self.value == compare.value)
+      else
+        self.value == compare
+      end
     end
     
     # This will return the "object type" for the current relation. This can
@@ -101,7 +109,7 @@ module TaliaCore
     # If yes, it will use the version from the database instead of the one currently attached,
     # since a "new" source with an existing URI cannot be saved.
     def check_for_object
-      if(self.object.new_record?)
+      if(self.object.new_record? && self.object.is_a?(ActiveSource))
         existing = ActiveSource.find(:first, :conditions => { :uri => self.object.uri.to_s })
         self.object = (existing || self.object)
       end

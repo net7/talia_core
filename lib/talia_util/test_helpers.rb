@@ -21,8 +21,9 @@ module TaliaUtil
     def assert_property(property, *values)
       assert_kind_of(TaliaCore::SemanticCollectionWrapper, property) # Just to be sure
       assert_equal(values.size, property.size, "Expected #{values.size} values instead of #{property.size}.")
+      value_str = values.inject("Expected:\n") { |str, value| str << "#{value.inspect}  (#{value.class.name})\n"  }
       property.each do |value|
-        assert(values.detect { |val| val.respond_to?(:uri) ? (val.uri.to_s == value.uri.to_s) : (value == val) }, "Found unexpected value #{value}. Value is a #{value.class}\nExpected:\n#{values.join("\n")}")
+        assert(values.detect { |val| val.respond_to?(:uri) ? (value.respond_to?(:uri) && (val.uri.to_s == value.uri.to_s)) : (value == val) }, "Found unexpected value #{value.inspect} (#{value.class.name})\n#{value_str}")
       end
     end
     

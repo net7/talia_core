@@ -292,6 +292,24 @@ module TaliaCore
         @autofill_overwrites
       end
 
+      
+      def singular_property(prop_name, property, options = {})
+        define_property(prop_name, property, options.merge(:singular_property => true))
+      end
+
+
+      # Defines a multi-value property in the same way as #singular_property
+      def multi_property(prop_name, property, options = {})
+        define_property(prop_name, property, options.merge(:singular_property => false))
+      end
+
+      # Defines a "manual" property. This means that getters and setters are provided
+      # by the user and this statement only declares that the system may autoassign to
+      # that property
+      def manual_property(prop_name)
+        defined_props[prop_name.to_s] = :manual
+      end
+
       # Helper to define a "singular accessor" for something (e.g. siglum, catalog)
       # This accessor will provide an "accessor" method that returns the
       # single property value directly and an assignment method that replaces
@@ -303,34 +321,9 @@ module TaliaCore
       # the new value is immediately reflected on the object. However, the
       # change will only be made permanent on #save! - and saving will also clear
       # the cache
-      #
-      # The options recognized at this time are 
-      #  [*:force_relation*] Forces the the values to be relations. This means that
-      #                      each and every value passed to the generated accessors
-      #                      will be interpreted as a URL. *Issue/Note*: The 
-      #                      values will not be forced of you assign using << on the
-      #                      multi accessors.
+      #      
       #  [*:dependent*] You may pass :dependend => :destroy as for ActiveRecord relations
-      def singular_property(prop_name, property, options = {})
-        define_property(true, prop_name, property, options)
-      end
-
-
-      # Defines a multi-value property in the same way as #singular_property
-      def multi_property(prop_name, property, options = {})
-        define_property(false, prop_name, property, options)
-      end
-
-      # Defines a "manual" property. This means that getters and setters are provided
-      # by the user and this statement only declares that the system may autoassign to
-      # that property
-      def manual_property(prop_name)
-        defined_props[prop_name.to_s] = :manual
-      end
-
-      # Defines a property (multi or single). This makes the property available as a 
-      # ActiveRecord-like accessor. See documentation on singular_property
-      def define_property(single_access, prop_name, property, options = {}) # :nodoc:
+      def define_property(prop_name, property, options = {})
         prop_name = prop_name.to_s
         property_options(property, options) # Save options for the current property
 
@@ -338,10 +331,12 @@ module TaliaCore
         raise(ArgumentError, "Cannot overwrite method #{prop_name}") if(self.instance_methods.include?(prop_name) || self.instance_methods.include?("#{prop_name}="))
 
         # define the accessor
-        single_access ? define_singular_reader(prop_name, property) : define_multi_reader(prop_name, property)
+        define_method(prop_name) do
+          self[property]
+        end
 
         # define the writer
-        define_writer(single_access, prop_name, property)
+        define_writer(prop_name, property)
 
         # define the finder
         (class << self ; self; end).module_eval do
@@ -355,29 +350,10 @@ module TaliaCore
         defined_props[prop_name] = property
       end
 
-      # Helper to dynamically define the singular accessor
-      def define_singular_reader(prop_name, property)
-        define_method(prop_name) do
-          prop = self[property]
-          assit_block { |err| (prop.size > 1) ? err << "Must have at most 1 value for singular property #{prop_name} on #{self.uri}. Values #{self[property]}" : true }
-          prop.size > 0 ? prop.first : nil
-        end
-      end
-
-      # Helper to dynamically define the multiple-value accessor
-      def define_multi_reader(prop_name, property)
-        define_method(prop_name) do
-          self[property]
-        end
-      end
-
       # Helper to dynamically define the singular or multi-value assignment accessor
-      def define_writer(singular_access, prop_name, property)
+      def define_writer(prop_name, property)
         define_method("#{prop_name}=") do |values|
-          values = [ values ] unless(values.is_a?(Array)) 
-          raise(ArgumentError, "Must assign a single value here") if(singular_access && (values.size > 1))
-          values.reject! { |v| v.blank? }
-          self[property].replace(values)
+          self[property] = values
         end
       end
 
@@ -392,10 +368,26 @@ module TaliaCore
         @my_property_options ||= {}
       end
 
-      # Sets the options for the given property
+      # Sets the options for handling semantic relations/properties with the predicate
+      # #property. The options are:
+      #
+      #  [*force_relation*] Forces the the values to be relations. This means that
+      #                      each and every value passed to the generated accessors
+      #                      will be interpreted as a URL. *DEPRECATED*, use
+      #                      `:type => TaliaCore::ActiveSource` instead
+      #  [*type*] Declare that the values of this property should be of the given
+      #            type, which should be a Ruby runtime class or a symbol corresponding
+      #            to an ActiveRecord field type. If this is an ActiveSource subclass,
+      #            this will force all values that are passed to this property
+      #            to be interpreted as the URI of an ActiveSource (if the value is not
+      #            an ActiveSource already)
+      #  [*singular_property*] 
+      #            be used to force each value passed to the accessors, #new and
+      #            #update* will be interpreted as the uri of a source of the given type,
+      #
       def property_options(property, options)
         options.to_options!
-        options.assert_valid_keys(:force_relation, :dependent, :type)
+        options.assert_valid_keys(:force_relation, :dependent, :type, :singular_property)
         if(force = options.delete(:force_relation).true?)
           warn("Deprecation Warning: :force_relation is deprecated - use ':type => TaliaCore::ActiveSource' instead")
           options[:type] ||= ActiveSource

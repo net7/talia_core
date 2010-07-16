@@ -114,7 +114,7 @@ module TaliaCore
       elsif(defined_property?(attribute))
         self.send("#{attribute}=", value)
       else
-         get_attribute(attribute).replace(value)
+         get_wrapper_on(attribute).replace(value)
       end
     end
 
@@ -213,7 +213,7 @@ module TaliaCore
         else
           attr_wrap = self[attr]
           attr_wrap.remove if(overwrite)
-          value.to_a.each { |val |self[attr] << target_for(val) }
+          value.to_a.each { |val| self[attr] << target_for(val) }
         end
       end
     end

@@ -7,9 +7,6 @@ module TaliaCore
     
     validates_presence_of :value
     
-    # For compatibility with the ActiveSource API
-    def exists? ; !new_record? ; end
-    
   end
   
 end

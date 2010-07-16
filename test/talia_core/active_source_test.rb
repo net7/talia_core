@@ -7,7 +7,7 @@ module TaliaCore
     singular_property :siglum, N::RDFS.siglum, :dependent => :destroy
     multi_property :authors, N::RDFS.author
     singular_property :forcy_single, N::RDFS.forcy_single, :type => TaliaCore::ActiveSource
-    multi_property :forcy, N::RDFS.forcy, :force_relation => true, :dependent => :destroy
+    multi_property :forcy, N::RDFS.forcy, :type => TaliaCore::Source, :dependent => :destroy
     manual_property :blinko
     
     multi_property :optionated, N::RDFS.optionated, :force_relation => true
@@ -460,6 +460,16 @@ module TaliaCore
       assert_equal(active_sources(:find_through_test), result[0])
     end
     
+    def test_singular_accessor_on_brackets
+      src = DefinedAccessorTest.new('http://testvalue.org/singular_acc_test')
+      assert_equal(nil, src[N::RDFS.siglum])
+      src[N::RDFS.siglum] = 'foo'
+      src.save!
+      assert_equal('foo', src[N::RDFS.siglum])
+      src.siglum = 'bar'
+      assert_equal('bar', src[N::RDFS.siglum])
+    end
+    
     def test_singular_accessor
       src = DefinedAccessorTest.new('http://testvalue.org/singular_acc_test')
       assert_equal(nil, src.siglum)
@@ -635,24 +645,36 @@ module TaliaCore
     
     def test_replace_predicate_no_dependent_on_base_class
       src = ActiveSource.new('http://activesourcetest/test_replace_predicate')
-       src[N::RDFS.forcy] = [ active_sources(:testy), active_sources(:deltest) ]
-       src.save!
-       assert_property(src[N::RDFS.forcy], active_sources(:testy), active_sources(:deltest))
-       src[N::RDFS.forcy].replace(active_sources(:testy_two), active_sources(:testy))
-       assert_property(src[N::RDFS.forcy], active_sources(:testy_two), active_sources(:testy))
-       assert(TaliaCore::ActiveSource.exists?(active_sources(:testy).id))
-       assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+      src[N::RDFS.forcy] = [ active_sources(:testy), active_sources(:deltest) ]
+      src.save!
+      assert_property(src[N::RDFS.forcy], active_sources(:testy), active_sources(:deltest))
+      src[N::RDFS.forcy].replace(active_sources(:testy_two), active_sources(:testy))
+      assert_property(src[N::RDFS.forcy], active_sources(:testy_two), active_sources(:testy))
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:testy).id), "Source shouldn't be destroyed")
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id), "Source shouldn't be destroyed")
+    end
+
+    def test_replace_predicate_with_dependent_destroy
+      src = DefinedAccessorTest.new('http://activesourcetest/test_replace_predicate_with_dependent_destroy')
+      src[N::RDFS.forcy] = [ active_sources(:testy), active_sources(:deltest) ]
+      src.save!
+      assert_property(src[N::RDFS.forcy], active_sources(:testy), active_sources(:deltest))
+      src[N::RDFS.forcy].replace(active_sources(:testy_two).uri.to_s, active_sources(:testy))
+      assert_property(src[N::RDFS.forcy], active_sources(:testy_two), active_sources(:testy))
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:testy).id), "Remaining source should still exist")
+      assert(!TaliaCore::ActiveSource.exists?(active_sources(:deltest).id), "Removed source should be deleted")
     end
     
-    def test_replace_predicate_with_dependent_destroy
-      src = DefinedAccessorTest.new('http://activesourcetest/test_replace_predicate')
-       src[N::RDFS.forcy] = [ active_sources(:testy), active_sources(:deltest) ]
-       src.save!
-       assert_property(src[N::RDFS.forcy], active_sources(:testy), active_sources(:deltest))
-       src[N::RDFS.forcy].replace(active_sources(:testy_two), active_sources(:testy))
-       assert_property(src[N::RDFS.forcy], active_sources(:testy_two), active_sources(:testy))
-       assert(TaliaCore::ActiveSource.exists?(active_sources(:testy).id))
-       assert(!TaliaCore::ActiveSource.exists?(active_sources(:deltest).id))
+    def test_replace_with_string_for_source
+      src = DefinedAccessorTest.new('http://activesourcetest/test_replace_with_string_for_source')
+      src[N::RDFS.forcy] = [ active_sources(:deltest) ]
+      src.save!
+      assert_property(src[N::RDFS.forcy], active_sources(:deltest))
+      src[N::RDFS.forcy].replace(active_sources(:deltest).uri.to_s)
+      src.save!
+      src.reload
+      assert_property(src[N::RDFS.forcy], active_sources(:deltest))
+      assert(TaliaCore::ActiveSource.exists?(active_sources(:deltest).id), "Source shouldn't have been destroyed")
     end
 
     def test_double_add_new_source
@@ -814,10 +836,24 @@ module TaliaCore
     end
     
     def test_create_with_attributes
-      src = ActiveSource.new(:uri => 'http://as_test/create_with_attributes', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"])
+      src = ActiveSource.new(:uri => 'http://as_test/create_with_attributes', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_2>"])
       assert_equal('http://as_test/create_with_attributes', src.uri)
       assert_equal('value', src[N::LOCAL.localthi].first)
-      assert_property(src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
+      assert_property(src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_2)
+    end
+    
+    def test_create_with_duplicate_attributes
+      src = ActiveSource.new(:uri => 'http://as_test/create_with_attributes', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"])
+      assert_property(src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1)
+    end
+    
+    def test_create_with_attributes_and_forcing
+      src = DefinedAccessorTest.new(:uri => 'test_create_with_attributes_and_forcing', 'forcy_single' => active_sources(:deltest).uri.to_s)
+      assert_kind_of(ActiveSource, src.forcy_single)
+      assert_equal(active_sources(:deltest).uri, src.forcy_single.uri)
+      src.save!
+      src.reload
+      assert_kind_of(ActiveSource, src.forcy_single)
     end
     
     def test_create_with_attributes_plain_uri
@@ -826,15 +862,15 @@ module TaliaCore
     end
     
     def test_create_source
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_with_type', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::DefinedAccessorTest')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_with_type', ':localthi' => 'value', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_2>"], 'type' => 'TaliaCore::DefinedAccessorTest')
       assert_kind_of(DefinedAccessorTest, src)
       assert_equal('value', src[N::LOCAL.localthi].first)
-      assert_property(src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
+      assert_property(src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_2)
       assert_property(src.types, N::TALIA.foo, src.rdf_selftype)
     end
     
     def test_create_for_existing
-      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_existing', ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_1>"], 'type' => 'TaliaCore::DefinedAccessorTest')
+      src = ActiveSource.create_source(:uri => 'http://as_test/create_forth_and_existing', ':localthi' => 'valueFOOOO', 'rdf:relatit' => ["<:as_create_attr_dummy_1>", "<:as_create_attr_dummy_2>"], 'type' => 'TaliaCore::DefinedAccessorTest')
       src.save!
       assert_equal('valueFOOOO', src[N::LOCAL.localthi].first)
       xml = src.to_xml
@@ -844,7 +880,7 @@ module TaliaCore
       # Now test as above
       assert_equal(src.uri.to_s, new_src.uri.to_s)
       assert_equal('valorz', new_src[N::LOCAL.localthi].first)
-      assert_property(new_src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_1)
+      assert_property(new_src[N::RDF.relatit], N::LOCAL.as_create_attr_dummy_1, N::LOCAL.as_create_attr_dummy_2)
       assert_property(new_src.types, N::TALIA.foo, new_src.rdf_selftype)
     end
     
@@ -1026,11 +1062,11 @@ module TaliaCore
     end
     
     def test_inherited_property_values_on_superclass
-      assert_equal({ :type => TaliaCore::ActiveSource }, DefinedAccessorTest.property_options_for(N::RDFS.optionated))
+      assert_equal({ :type => TaliaCore::ActiveSource, :singular_property => false }, DefinedAccessorTest.property_options_for(N::RDFS.optionated))
     end
     
     def test_inherited_property_values_on_subclass
-      assert_equal({ :type => TaliaCore::ActiveSource, :dependent => :destroy }, DefinedAccessorSubTest.property_options_for(N::RDFS.optionated))
+      assert_equal({ :type => TaliaCore::ActiveSource, :dependent => :destroy, :singular_property => false}, DefinedAccessorSubTest.property_options_for(N::RDFS.optionated))
     end
     
     def test_property_options_on_defined_super

@@ -40,9 +40,9 @@ module TaliaCore
       item_3 = ActiveSource.new('http://testvalue.org/item_3')
       
       # add items to Collection
-      collection[(RDF::_000001).uri].add_with_order(item_1, 1)
-      collection[(RDF::_000002).uri].add_with_order(item_2, 2)
-      collection[(RDF::_000003).uri].add_with_order(item_3, 3)
+      collection[(RDF::_000001).uri].add_record(item_1, 1)
+      collection[(RDF::_000002).uri].add_record(item_2, 2)
+      collection[(RDF::_000003).uri].add_record(item_3, 3)
       collection.save!
       
       # check if all items are inserted

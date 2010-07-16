@@ -156,7 +156,7 @@ module TaliaCore
       objects.each_index do |index|
         if(obj = objects.at(index)) # Check if there's a value to handle
           # Create a new relation with an order
-          self[index_to_predicate(index)].add_with_order(obj, index)
+          self[index_to_predicate(index)].add_record(obj, index)
           self[N::DCT.hasPart] << obj
         end
       end

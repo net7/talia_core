@@ -148,31 +148,31 @@ module TaliaCore
       def include?(value)
         items.include?(value)
       end
-
-      # Push to collection. Equivalent to #add_with_order(value, nil)
-      def <<(value)
-        add_with_order(value, nil)
-      end
-      alias_method :concat, '<<'
-
-      # Adds a new element to the collection. If the value is a resource,
-      # a relation to the corresponding ActiveSource will be added. Otherwise,
-      # a relation with a SemanticProperty is added.
+      
+      # Creates a record for a value and adds it. This will add the given value if it is
+      # a database record and otherwise create a property with the given value.
       #
+      # If a block is given, it will be called with the new element after the new element
+      # has been added to the collection. If value is a collection, the block will be
+      # called for each element of the collection.
       #
       # The order, if not nil, can be used to have a fixed order of SemanticRelation
       # records. This is mainly used by the Collection class
-      def add_with_order(value, order)
+      def add_record(value, order = nil)
         raise(ArgumentError, "Blank value assigned") if(value.blank? && !value.is_a?(Enumerable))
         # We use order exclusively for "ordering" predicates
         assit_equal(TaliaCore::Collection.index_to_predicate(order), @assoc_predicate) if(order)
-        raise(ArgumentError, "cannot add nil") unless(value != nil)
-        if(value.kind_of?(Array))
-          value.each { |v| add_record_for(v, order) }
-        else
-          add_record_for(value, order)
+
+        value = [ value ] unless(value.kind_of?(Array))
+
+        value.each do |val|
+          rel = create_predicate(val)
+          rel.rel_order = order if(order)
+          block_given? ? yield(rel) : insert_item(rel)
         end
       end
+      alias_method '<<', :add_record
+      alias_method :concat, :add_record
 
       # Replace a value with a new one. Equivalent to removing the old value
       # and adding the new one
@@ -180,23 +180,26 @@ module TaliaCore
         idx = items.index(old_value)
         items[idx].destroy
         # Creates a new relation and adds it in the place of the old one
-        add_record_for(new_value) { |new_item| items[idx] = new_item }
+        add_record(new_value) { |new_item| items[idx] = new_item }
       end
       
-      # Replace the contents of the current wrapper with the values passed.
+      # Replace the contents of the current wrapper with the values passed. 
+      # Blank values are ignored by this method. If non new values are passed 
+      # (or all values are blank), this will simply 
       def replace(*new_values)
-        raise(ArgumentError, "Tried to replace with nothing") if(new_values.empty?)
-        remaining_items = []
+        new_values.flatten! if(new_values.first.is_a?(Array)) # Flatten if used as #replace([a, b, c])
+        new_values.reject! { |v| v.blank? }
+        new_values.collect! { |v| create_predicate(v) }
+        remaining_items = []      
         items.each do |item|
-          if(new_values.include?(item.object))
+          if(new_values.include?(item))
             remaining_items << item
-            new_values.delete(item.object)
+            new_values.delete(item)
           else
             item.destroy
           end
         end
-        @items = remaining_items
-        new_values.each { |add| add_with_order(add, nil) }
+        @items = remaining_items + new_values
       end
 
       # Remove the given value. With no parameters, the whole list will be
@@ -246,15 +249,6 @@ module TaliaCore
       def empty?
         self.size == 0
       end
-
-      # Injector for a fat relation. This must take place before flagging the
-      # source as "loaded". This can used to load data into the object
-      # without having to go to the database
-      def inject_relation(fat_rel)
-        raise(RuntimeError, 'Trying to inject in loaded object.') if(loaded?)
-        @items ||= []
-        @items << fat_rel
-      end
       
       # Forces this relation to be empty. This initializes the relation,
       # assuming that no data exists in the database. The collection will
@@ -266,6 +260,14 @@ module TaliaCore
         raise(ArgumentError, "Already initialized!") if(loaded?)
         @items = []
         @loaded = true
+      end
+
+      # Insert a new relation directly. To be used with care!
+      def insert_item(item) # :nodoc:
+        raise(ArgumentError, "Can only insert a SemanticRelation") unless(item.is_a?(SemanticRelation))
+        raise(ArgumentError, "New relation does not match the predicate of the wrapper") if(item.predicate_uri != @assoc_predicate.to_s)
+        @items ||= []
+        @items << item
       end
 
       private
@@ -302,30 +304,6 @@ module TaliaCore
         items.delete_at(index)
       end
 
-      # Creates a record for a value and adds it. This will add the given value if it is
-      # a database record and otherwise create a property with the given value.
-      #
-      # If a block is given, it will be called with the new element after the new element
-      # has been added to the collection
-      def add_record_for(value, order = nil)
-        assit_not_nil(value)
-        if(@force_type)
-          # If we have a type, we must transform the value
-          value = value.respond_to?(:uri) ? value.uri : value
-          value = ActiveSource.new(value.to_s)
-        end
-
-        rel = create_predicate(value)
-        rel.rel_order = order if(order)
-        block_given? ? yield(rel) : insert_item(rel)
-      end
-
-      # Insert a new item
-      def insert_item(item)
-        @items ||= []
-        @items << item
-      end
-
       # Creates a new semantic relation with the given value and the subject
       # and predicate taken from the collection. The value will be converted
       # into an ActiveSource or SemanticProperty as appropriate and used as
@@ -339,22 +317,30 @@ module TaliaCore
         # We need to manually create the relation, to add the predicate_url
         to_add = SemanticRelation.new(
         :subject => @assoc_source,
-        :predicate_uri => @assoc_predicate
-        ) # Create a new relation linked to this object
-
-        if(value.is_a?(TaliaCore::ActiveSource) || value.is_a?(TaliaCore::SemanticProperty))
-          to_add.object = value
+        :predicate_uri => @assoc_predicate, 
+        :object => create_object_value(value)
+        ) 
+      end
+      
+      # Creates the "object value" which, for the given value, will be used as
+      # the object for the SemanticRelation.
+      def create_object_value(value)
+        if(@force_type)
+          # If we have the "force_type" option, we assume that every value
+          # we get is a Resource/ActiveSource
+          uri = value.respond_to?(:uri) ? value.uri : value
+          ActiveSource.new(uri.to_s)
+        elsif(value.is_a?(TaliaCore::ActiveSource) || value.is_a?(TaliaCore::SemanticProperty))
+          value
         elsif(value.respond_to?(:uri)) # This appears to refer to a Source. We only add if we can find that source
-          to_add.object = TaliaCore::ActiveSource.find(value.uri)
-        elsif(prop_options[:type].is_a?(Class) && (prop_options[:type] >= TaliaCore::ActiveSource))
-          to_add.object = TaliaCore::ActiveSource.find(value)
+          TaliaCore::ActiveSource.find(value.uri)
+        elsif(prop_options[:type].is_a?(Class) && (prop_options[:type] <= TaliaCore::ActiveSource))
+          TaliaCore::ActiveSource.find(value)
         else
-          prop = TaliaCore::SemanticProperty.new
           # Check if we need to add from a PropertyString
-          prop.value = value.is_a?(PropertyString) ? value.to_rdf : value
-          to_add.object = prop
+          propvalue = value.is_a?(PropertyString) ? value.to_rdf : value
+          TaliaCore::SemanticProperty.new(:value => propvalue)
         end
-        to_add
       end
       
       # The options that were defined on the "owning" source with

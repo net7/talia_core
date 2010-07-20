@@ -72,6 +72,90 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <p>
+The &quot;hevy lifting&quot; for FileRecords, handling the actual creation
+and manipulation of the files.
+</p>
+<p>
+A record can be created with <a
+href="FileStore.html#M000145">create_from_file</a> (passing a filename) or
+with <a href="FileStore.html#M000146">create_from_data</a>, passing a byte
+array.
+</p>
+<p>
+While a &quot;location&quot; can be passed to the record (which will be
+save in the database), the actual file name will be determined by the
+system. Also see the <a href="PathHelpers.html">PathHelpers</a> for info
+</p>
+<p>
+The base directory for file storage can be configured in the talia_core.yml
+file as &quot;data_directory_location&quot;. Otherwise, RAILS_ROOT/data.
+Inside, each record will be stored at &quot;&lt;data class of the
+record&gt;/&lt;last three numbers of the id&gt;/&lt;record id&gt;&quot;
+</p>
+<p>
+So, for example, a &quot;<a href="XmlData.html">XmlData</a>&quot; record
+with the id &quot;123456&quot; would be stored as &quot;DATA_ROOT/<a
+href="XmlData.html">XmlData</a>/456/123456&quot;
+</p>
+<h1>Creating new records</h1>
+<p>
+When creating a new record using <a
+href="FileStore.html#M000146">create_from_data</a>, the data will be cached
+inside the object and only be saved when the record itself is saved. In
+this case, the file data is simply written to file during the save
+operation.
+</p>
+<p>
+When the record is created using <a
+href="FileStore.html#M000145">create_from_file</a>, the behaviour depens on
+the parameters passed and the system settings.
+</p>
+<ul>
+<li>In case the delete_original flag is set, the system will try to move the
+file to the new location. If both are on the same file system, this will be
+quicker than a copy operation.
+
+</li>
+<li>Currently, the move operation uses the &quot;mv&quot; command. This is does
+not work on windows, but is a workaround to stability problems with the
+file handling in JRuby
+
+</li>
+<li>If the delete_original flag is not set, the system will attempt to copy the
+files:
+
+<ul>
+<li>If the &quot;delay_file_copies&quot; options is set in the
+<em>environment</em>, no copy operation will be done. Instead, the system
+will create a &quot;delayed_copies.sh&quot; script that can be executed
+from a UNIX shell to do the actual copying. This is extremely fast and
+stable, as no actual copying is done.
+
+</li>
+<li>Otherwise Talia will attempt to copy the file by itself. If the
+&quot;fast_copies&quot; flag is set in <em>environment</em>, it will use
+the internal copy routine which will work on any system. Otherwise, it will
+call the system&#8216;s &quot;cp&quot; command, which can sometimes be more
+stable with jruby.
+
+</li>
+</ul>
+</li>
+</ul>
+<p>
+Also see the <a href="DataLoader.html">DataLoader</a> module to see how the
+creation of records automatically selects the record type and loader,
+depending on the MIME type of the data.
+</p>
+<p>
+<b>Note</b>: The above behaviour means that for files that are treated
+through &quot;copy&quot; or &quot;move&quot;, the original file must not be
+touched by external processes until the record is saved
+</p>
+
+    </div>
 
 
    </div>
@@ -80,14 +164,12 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000187">all_text</a>&nbsp;&nbsp;
-      <a href="#M000192">assign_type</a>&nbsp;&nbsp;
-      <a href="#M000186">create_from_data</a>&nbsp;&nbsp;
-      <a href="#M000185">create_from_file</a>&nbsp;&nbsp;
-      <a href="#M000188">file</a>&nbsp;&nbsp;
-      <a href="#M000189">file=</a>&nbsp;&nbsp;
-      <a href="#M000191">is_file_open?</a>&nbsp;&nbsp;
-      <a href="#M000190">write_file_after_save</a>&nbsp;&nbsp;
+      <a href="#M000147">all_text</a>&nbsp;&nbsp;
+      <a href="#M000150">assign_type</a>&nbsp;&nbsp;
+      <a href="#M000146">create_from_data</a>&nbsp;&nbsp;
+      <a href="#M000145">create_from_file</a>&nbsp;&nbsp;
+      <a href="#M000149">is_file_open?</a>&nbsp;&nbsp;
+      <a href="#M000148">write_file_after_save</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -101,8 +183,7 @@
     <div id="class-list">
       <h3 class="section-bar">Classes and Modules</h3>
 
-      Module <a href="FileStore/ClassMethods.html" class="link">TaliaCore::DataTypes::FileStore::ClassMethods</a><br />
-Class <a href="FileStore/DataPath.html" class="link">TaliaCore::DataTypes::FileStore::DataPath</a><br />
+      Class <a href="FileStore/DataPath.html" class="link">TaliaCore::DataTypes::FileStore::DataPath</a><br />
 
     </div>
 
@@ -116,40 +197,40 @@ Class <a href="FileStore/DataPath.html" class="link">TaliaCore::DataTypes::FileS
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000187" class="method-detail">
-        <a name="M000187"></a>
+      <div id="method-M000147" class="method-detail">
+        <a name="M000147"></a>
 
         <div class="method-heading">
-          <a href="#M000187" class="method-signature">
+          <a href="#M000147" class="method-signature">
           <span class="method-name">all_text</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-returns the complete text
+Returns the contents of the file as a text string.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000187-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000187-source">
+            onclick="toggleCode('M000147-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000147-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 59</span>
-59:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_text</span>
-60:         <span class="ruby-keyword kw">if</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">is_file_open?</span>)
-61:           <span class="ruby-identifier">open_file</span>
-62:         <span class="ruby-keyword kw">end</span>
-63:         <span class="ruby-ivar">@file_handle</span>.<span class="ruby-identifier">read</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">size</span>)
-64:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 97</span>
+ 97:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_text</span>
+ 98:         <span class="ruby-keyword kw">if</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">is_file_open?</span>)
+ 99:           <span class="ruby-identifier">open_file</span>
+100:         <span class="ruby-keyword kw">end</span>
+101:         <span class="ruby-ivar">@file_handle</span>.<span class="ruby-identifier">read</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">size</span>)
+102:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000192" class="method-detail">
-        <a name="M000192"></a>
+      <div id="method-M000150" class="method-detail">
+        <a name="M000150"></a>
 
         <div class="method-heading">
-          <a href="#M000192" class="method-signature">
+          <a href="#M000150" class="method-signature">
           <span class="method-name">assign_type</span><span class="method-args">(content_type)</span>
           </a>
         </div>
@@ -159,223 +240,158 @@ returns the complete text
 Assign the STI subclass, perfoming a mime-type lookup.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000192-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000192-source">
+            onclick="toggleCode('M000150-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000150-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 116</span>
-116:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assign_type</span>(<span class="ruby-identifier">content_type</span>)
-117:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">type</span> = <span class="ruby-constant">MimeMapping</span>.<span class="ruby-identifier">class_type_from</span>(<span class="ruby-identifier">content_type</span>).<span class="ruby-identifier">name</span>
-118:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 137</span>
+137:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assign_type</span>(<span class="ruby-identifier">content_type</span>)
+138:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">type</span> = <span class="ruby-constant">MimeMapping</span>.<span class="ruby-identifier">class_type_from</span>(<span class="ruby-identifier">content_type</span>).<span class="ruby-identifier">name</span>
+139:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000186" class="method-detail">
-        <a name="M000186"></a>
+      <div id="method-M000146" class="method-detail">
+        <a name="M000146"></a>
 
         <div class="method-heading">
-          <a href="#M000186" class="method-signature">
-          <span class="method-name">create_from_data</span><span class="method-args">(file_location, data, options = {})</span>
+          <a href="#M000146" class="method-signature">
+          <span class="method-name">create_from_data</span><span class="method-args">(location, data, options = {})</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Add data as string into <a href="FileStore.html#M000188">file</a>
+Creates a new record from the given data (binary array). See the module
+documentation for the details; the data will be cached and written to disk
+once the new record is saved.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000186-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000186-source">
+            onclick="toggleCode('M000146-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000146-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 43</span>
-43:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_data</span>(<span class="ruby-identifier">file_location</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span> = {})
-44:         <span class="ruby-comment cmt"># close file if opened</span>
-45:         <span class="ruby-identifier">close_file</span>
-46:     
-47:         <span class="ruby-comment cmt"># Set the location for the record</span>
-48:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">file_location</span>
-49:     
-50:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">data</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:read</span>))
-51:           <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-identifier">data</span>.<span class="ruby-identifier">read</span>
-52:         <span class="ruby-keyword kw">else</span>
-53:           <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-identifier">data</span>
-54:         <span class="ruby-keyword kw">end</span>
-55:     
-56:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 81</span>
+81:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_data</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span> = {})
+82:         <span class="ruby-comment cmt"># close file if opened</span>
+83:         <span class="ruby-identifier">close_file</span>
+84:     
+85:         <span class="ruby-comment cmt"># Set the location for the record</span>
+86:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">location</span>
+87:     
+88:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">data</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:read</span>))
+89:           <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-identifier">data</span>.<span class="ruby-identifier">read</span>
+90:         <span class="ruby-keyword kw">else</span>
+91:           <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-identifier">data</span>
+92:         <span class="ruby-keyword kw">end</span>
+93:     
+94:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000185" class="method-detail">
-        <a name="M000185"></a>
+      <div id="method-M000145" class="method-detail">
+        <a name="M000145"></a>
 
         <div class="method-heading">
-          <a href="#M000185" class="method-signature">
+          <a href="#M000145" class="method-signature">
           <span class="method-name">create_from_file</span><span class="method-args">(location, file_path, delete_original = false)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-This will create the data object from a given <a
-href="FileStore.html#M000188">file</a>. This will simply move the given <a
-href="FileStore.html#M000188">file</a> to the correct location upon save.
-This will avoid multiple read/write operations during import.
-</p>
-<p>
-The original <a href="FileStore.html#M000188">file</a> must not be touched
-by external processes until the record is saved.
-</p>
-<p>
-If the delete_original flag is set, the original <a
-href="FileStore.html#M000188">file</a> will be removed on save
+Creates a new record from an existing file on the file system. The file
+will be copied or moved when the new record is saved - see the module
+documentation to see how this works in detail.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000185-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000185-source">
+            onclick="toggleCode('M000145-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000145-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 35</span>
-35:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_file</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">file_path</span>, <span class="ruby-identifier">delete_original</span> = <span class="ruby-keyword kw">false</span>)
-36:         <span class="ruby-identifier">close_file</span>
-37:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">location</span>
-38:         <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-constant">DataPath</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">file_path</span>)
-39:         <span class="ruby-ivar">@delete_original_file</span> = <span class="ruby-identifier">delete_original</span>
-40:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 71</span>
+71:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_file</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">file_path</span>, <span class="ruby-identifier">delete_original</span> = <span class="ruby-keyword kw">false</span>)
+72:         <span class="ruby-identifier">close_file</span>
+73:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">location</span>
+74:         <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-constant">DataPath</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">file_path</span>)
+75:         <span class="ruby-ivar">@delete_original_file</span> = <span class="ruby-identifier">delete_original</span>
+76:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000188" class="method-detail">
-        <a name="M000188"></a>
+      <div id="method-M000149" class="method-detail">
+        <a name="M000149"></a>
 
         <div class="method-heading">
-          <a href="#M000188" class="method-signature">
-          <span class="method-name">file</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-This is a placeholder in case <a href="FileStore.html#M000188">file</a> is
-used in a form.
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000188-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000188-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 67</span>
-67:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file</span>() <span class="ruby-keyword kw">nil</span>; <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000189" class="method-detail">
-        <a name="M000189"></a>
-
-        <div class="method-heading">
-          <a href="#M000189" class="method-signature">
-          <span class="method-name">file=</span><span class="method-args">(file_data)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-Assign the <a href="FileStore.html#M000188">file</a> data
-(<tt>StringIO</tt> or <tt>File</tt>).
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000189-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000189-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 70</span>
-70:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file=</span>(<span class="ruby-identifier">file_data</span>)
-71:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file_data</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">file_data</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> 
-72:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">assign_type</span> <span class="ruby-identifier">file_data</span>.<span class="ruby-identifier">content_type</span>
-73:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">file_data</span>.<span class="ruby-identifier">original_filename</span>
-74:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file_data</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">StringIO</span>)
-75:           <span class="ruby-identifier">file_data</span>.<span class="ruby-identifier">rewind</span>
-76:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">temp_data</span> = <span class="ruby-identifier">file_data</span>.<span class="ruby-identifier">read</span>
-77:         <span class="ruby-keyword kw">else</span>
-78:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">temp_path</span> = <span class="ruby-identifier">file_data</span>.<span class="ruby-identifier">path</span>
-79:         <span class="ruby-keyword kw">end</span>
-80:         <span class="ruby-ivar">@save_attachment</span> = <span class="ruby-keyword kw">true</span>
-81:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000191" class="method-detail">
-        <a name="M000191"></a>
-
-        <div class="method-heading">
-          <a href="#M000191" class="method-signature">
+          <a href="#M000149" class="method-signature">
           <span class="method-name">is_file_open?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Return true if the specified data <a href="FileStore.html#M000188">file</a>
-is open, false otherwise
+Return true if the data file is open
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000191-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000191-source">
+            onclick="toggleCode('M000149-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000149-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 110</span>
-110:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_file_open?</span>
-111:         (<span class="ruby-ivar">@file_handle</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)
-112:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 131</span>
+131:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_file_open?</span>
+132:         (<span class="ruby-ivar">@file_handle</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)
+133:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000190" class="method-detail">
-        <a name="M000190"></a>
+      <div id="method-M000148" class="method-detail">
+        <a name="M000148"></a>
 
         <div class="method-heading">
-          <a href="#M000190" class="method-signature">
+          <a href="#M000148" class="method-signature">
           <span class="method-name">write_file_after_save</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Callback for writing the data from <a
+href="FileStore.html#M000146">create_from_data</a> or <a
+href="FileStore.html#M000145">create_from_file</a>. If there is a problem
+saving this file, only an internal assertion is thrown so that it
+won&#8216;t crash production environments.
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000190-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000190-source">
+            onclick="toggleCode('M000148-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000148-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 83</span>
- 83:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_file_after_save</span> 
- 84:         <span class="ruby-comment cmt"># check if there are data to write</span>
- 85:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@file_data_to_write</span>)
- 86:     
- 87:         <span class="ruby-comment cmt"># check if file already exists</span>
- 88: <span class="ruby-comment cmt">#        raise(RuntimeError, &quot;File already exists: #{file_path}&quot;) if(File.exists?(file_path))</span>
- 89: 
- 90:         <span class="ruby-keyword kw">begin</span>
- 91:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">benchmark</span>(<span class="ruby-node">&quot;\033[36m\033[1m\033[4mFileStore\033[0m Saving file for #{self.id}&quot;</span>) <span class="ruby-keyword kw">do</span>
- 92:             <span class="ruby-comment cmt"># create data directory path</span>
- 93:             <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">data_directory</span>)
- 94:     
- 95:             <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">DataPath</span>))
- 96:               <span class="ruby-identifier">copy_data_file</span>
- 97:             <span class="ruby-keyword kw">else</span>
- 98:               <span class="ruby-identifier">save_cached_data</span>
- 99:             <span class="ruby-keyword kw">end</span>
-100:           
-101:             <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-keyword kw">nil</span>
-102:           <span class="ruby-keyword kw">end</span>
-103:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-104:           <span class="ruby-identifier">assit_fail</span>(<span class="ruby-node">&quot;Exception on writing file #{self.location}: #{e}&quot;</span>)
-105:         <span class="ruby-keyword kw">end</span>
-106: 
-107:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_store.rb, line 107</span>
+107:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_file_after_save</span> 
+108:         <span class="ruby-comment cmt"># check if there are data to write</span>
+109:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@file_data_to_write</span>)
+110:     
+111:         <span class="ruby-keyword kw">begin</span>
+112:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">benchmark</span>(<span class="ruby-node">&quot;\033[36m\033[1m\033[4mFileStore\033[0m Saving file for #{self.id}&quot;</span>) <span class="ruby-keyword kw">do</span>
+113:             <span class="ruby-comment cmt"># create data directory path</span>
+114:             <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">data_directory</span>)
+115:     
+116:             <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">DataPath</span>))
+117:               <span class="ruby-identifier">copy_data_file</span>
+118:             <span class="ruby-keyword kw">else</span>
+119:               <span class="ruby-identifier">save_cached_data</span>
+120:             <span class="ruby-keyword kw">end</span>
+121:           
+122:             <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-keyword kw">nil</span>
+123:           <span class="ruby-keyword kw">end</span>
+124:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+125:           <span class="ruby-identifier">assit_fail</span>(<span class="ruby-node">&quot;Exception on writing file #{self.location}: #{e}&quot;</span>)
+126:         <span class="ruby-keyword kw">end</span>
+127: 
+128:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

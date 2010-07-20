@@ -86,13 +86,13 @@ Contains the helpers to obtain path information for data storage
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000206">data_directory</a>&nbsp;&nbsp;
-      <a href="#M000207">data_path</a>&nbsp;&nbsp;
-      <a href="#M000209">extract_filename</a>&nbsp;&nbsp;
-      <a href="#M000203">file_path</a>&nbsp;&nbsp;
-      <a href="#M000208">full_filename</a>&nbsp;&nbsp;
-      <a href="#M000204">static_path</a>&nbsp;&nbsp;
-      <a href="#M000205">tempfile_path</a>&nbsp;&nbsp;
+      <a href="#M000163">data_directory</a>&nbsp;&nbsp;
+      <a href="#M000164">data_path</a>&nbsp;&nbsp;
+      <a href="#M000166">extract_filename</a>&nbsp;&nbsp;
+      <a href="#M000160">file_path</a>&nbsp;&nbsp;
+      <a href="#M000165">full_filename</a>&nbsp;&nbsp;
+      <a href="#M000161">static_path</a>&nbsp;&nbsp;
+      <a href="#M000162">tempfile_path</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -120,148 +120,154 @@ Contains the helpers to obtain path information for data storage
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000206" class="method-detail">
-        <a name="M000206"></a>
+      <div id="method-M000163" class="method-detail">
+        <a name="M000163"></a>
 
         <div class="method-heading">
-          <a href="#M000206" class="method-signature">
+          <a href="#M000163" class="method-signature">
           <span class="method-name">data_directory</span><span class="method-args">(relative = false)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Return the data directory for a specific data file
+Return the <em>directory</em> in which the file for the current record is
+stored. If the relative flag is set, it will only return the relative path
+inside the main data directory.
+</p>
+<p>
+The paths will look something like: <tt>&#8230;/<a
+href="XmlData.html">XmlData</a>/031/</tt>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000206-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000206-source">
+            onclick="toggleCode('M000163-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000163-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 48</span>
-48:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data_directory</span>(<span class="ruby-identifier">relative</span> = <span class="ruby-keyword kw">false</span>)
-49:         <span class="ruby-identifier">class_name</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/(.*::)/</span>, <span class="ruby-value str">''</span>)
-50:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">relative</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">false</span>
-51:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">CONFIG</span>[<span class="ruby-value str">&quot;data_directory_location&quot;</span>], <span class="ruby-identifier">class_name</span>, (<span class="ruby-value str">&quot;00&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">-3</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
-52:         <span class="ruby-keyword kw">else</span>
-53:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">class_name</span>, (<span class="ruby-value str">&quot;00&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">-3</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
-54:         <span class="ruby-keyword kw">end</span>
-55:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 56</span>
+56:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data_directory</span>(<span class="ruby-identifier">relative</span> = <span class="ruby-keyword kw">false</span>)
+57:         <span class="ruby-identifier">class_name</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/(.*::)/</span>, <span class="ruby-value str">''</span>)
+58:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">relative</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">false</span>
+59:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">CONFIG</span>[<span class="ruby-value str">&quot;data_directory_location&quot;</span>], <span class="ruby-identifier">class_name</span>, (<span class="ruby-value str">&quot;00&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">-3</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
+60:         <span class="ruby-keyword kw">else</span>
+61:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">class_name</span>, (<span class="ruby-value str">&quot;00&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">-3</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
+62:         <span class="ruby-keyword kw">end</span>
+63:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000207" class="method-detail">
-        <a name="M000207"></a>
+      <div id="method-M000164" class="method-detail">
+        <a name="M000164"></a>
 
         <div class="method-heading">
-          <a href="#M000207" class="method-signature">
+          <a href="#M000164" class="method-signature">
           <span class="method-name">data_path</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Path used to store data files. This is a wrapper for the <a
-href="PathHelpers.html#M000207">data_path</a> class method.
+See <a
+href="PathHelpers/ClassMethods.html#M000168">ClassMethods.data_path</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000207-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000207-source">
+            onclick="toggleCode('M000164-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000164-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 59</span>
-59:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data_path</span>
-60:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">data_path</span>
-61:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 66</span>
+66:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data_path</span>
+67:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">data_path</span>
+68:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000209" class="method-detail">
-        <a name="M000209"></a>
+      <div id="method-M000166" class="method-detail">
+        <a name="M000166"></a>
 
         <div class="method-heading">
-          <a href="#M000209" class="method-signature">
+          <a href="#M000166" class="method-signature">
           <span class="method-name">extract_filename</span><span class="method-args">(file_data)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Extract the filename. This is a wrapper for the <a
-href="PathHelpers.html#M000209">extract_filename</a> class method.
+See ClassMethods.extract_filename
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000209-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000209-source">
+            onclick="toggleCode('M000166-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000166-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 70</span>
-70:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_filename</span>(<span class="ruby-identifier">file_data</span>)
-71:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">extract_filename</span>(<span class="ruby-identifier">file_data</span>)
-72:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 76</span>
+76:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_filename</span>(<span class="ruby-identifier">file_data</span>)
+77:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">extract_filename</span>(<span class="ruby-identifier">file_data</span>)
+78:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000203" class="method-detail">
-        <a name="M000203"></a>
+      <div id="method-M000160" class="method-detail">
+        <a name="M000160"></a>
 
         <div class="method-heading">
-          <a href="#M000203" class="method-signature">
+          <a href="#M000160" class="method-signature">
           <span class="method-name">file_path</span><span class="method-args">(relative = false)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Return the full file path related to the data directory
+Return the full file path for this record. If the relative flag is set,
+this will only return the relative path inside the data directory
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000203-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000203-source">
+            onclick="toggleCode('M000160-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000160-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 28</span>
-28:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file_path</span>(<span class="ruby-identifier">relative</span> = <span class="ruby-keyword kw">false</span>)
-29:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">data_directory</span>(<span class="ruby-identifier">relative</span>), <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)
-30:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 24</span>
+24:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file_path</span>(<span class="ruby-identifier">relative</span> = <span class="ruby-keyword kw">false</span>)
+25:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">data_directory</span>(<span class="ruby-identifier">relative</span>), <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)
+26:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000208" class="method-detail">
-        <a name="M000208"></a>
+      <div id="method-M000165" class="method-detail">
+        <a name="M000165"></a>
 
         <div class="method-heading">
-          <a href="#M000208" class="method-signature">
+          <a href="#M000165" class="method-signature">
           <span class="method-name">full_filename</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Return the full path of the current attachment.
+Cached version of <a href="PathHelpers.html#M000160">file_path</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000208-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000208-source">
+            onclick="toggleCode('M000165-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000165-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 64</span>
-64:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">full_filename</span>
-65:         <span class="ruby-ivar">@full_filename</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">file_path</span> <span class="ruby-comment cmt">#File.join(data_path, class_name, location)</span>
-66:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 71</span>
+71:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">full_filename</span>
+72:         <span class="ruby-ivar">@full_filename</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">file_path</span> <span class="ruby-comment cmt">#File.join(data_path, class_name, location)</span>
+73:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000204" class="method-detail">
-        <a name="M000204"></a>
+      <div id="method-M000161" class="method-detail">
+        <a name="M000161"></a>
 
         <div class="method-heading">
-          <a href="#M000204" class="method-signature">
+          <a href="#M000161" class="method-signature">
           <span class="method-name">static_path</span><span class="method-args">()</span>
           </a>
         </div>
@@ -269,46 +275,54 @@ Return the full path of the current attachment.
         <div class="method-description">
           <p>
 Gets the path that will be used for serving the image as a static resource.
-Nil if the prefix isn&#8216;t set
+</p>
+<p>
+This will return nil unless the <tt>static_data_prefix</tt> option is set
+in the configuration. This option defines a URL prefix for static files.
+</p>
+<p>
+If the prefix is set, this method will return a URL that can be used access
+the current file as a static asset. To use this, the data directory has to
+be available on a web server at the <tt>static_data_prefix</tt>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000204-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000204-source">
+            onclick="toggleCode('M000161-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000161-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 34</span>
-34:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">static_path</span>
-35:         <span class="ruby-identifier">prefix</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">CONFIG</span>[<span class="ruby-value str">'static_data_prefix'</span>]
-36:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">prefix</span>)
-37:         <span class="ruby-identifier">prefix</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">LOCAL</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">prefix</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">prefix</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/:\/\//</span>)
-38:         <span class="ruby-node">&quot;#{prefix}/#{class_name}/#{(&quot;00&quot; + self.id.to_s)[-3..-1]}/#{self.id}&quot;</span>
-39:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 39</span>
+39:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">static_path</span>
+40:         <span class="ruby-identifier">prefix</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">CONFIG</span>[<span class="ruby-value str">'static_data_prefix'</span>]
+41:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">prefix</span>)
+42:         <span class="ruby-identifier">prefix</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">LOCAL</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">prefix</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">prefix</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/:\/\//</span>)
+43:         <span class="ruby-node">&quot;#{prefix}/#{class_name}/#{(&quot;00&quot; + self.id.to_s)[-3..-1]}/#{self.id}&quot;</span>
+44:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000205" class="method-detail">
-        <a name="M000205"></a>
+      <div id="method-M000162" class="method-detail">
+        <a name="M000162"></a>
 
         <div class="method-heading">
-          <a href="#M000205" class="method-signature">
+          <a href="#M000162" class="method-signature">
           <span class="method-name">tempfile_path</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Path used to store temporary files. This is a wrapper for the <a
-href="PathHelpers.html#M000205">tempfile_path</a> class method.
+See <a
+href="PathHelpers/ClassMethods.html#M000167">ClassMethods.tempfile_path</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000205-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000205-source">
+            onclick="toggleCode('M000162-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000162-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 43</span>
-43:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tempfile_path</span>
-44:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">tempfile_path</span>
-45:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/path_helpers.rb, line 47</span>
+47:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tempfile_path</span>
+48:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">tempfile_path</span>
+49:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

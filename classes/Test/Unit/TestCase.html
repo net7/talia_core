@@ -65,7 +65,9 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
+                <a href="../../Object.html">
                 Object
+               </a>
             </td>
         </tr>
         </table>
@@ -92,9 +94,9 @@ Add some stuff to the basic test case
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000491">obj_cache</a>&nbsp;&nbsp;
-      <a href="#M000492">suppress_fixtures</a>&nbsp;&nbsp;
-      <a href="#M000493">suppress_fixtures?</a>&nbsp;&nbsp;
+      <a href="#M000474">obj_cache</a>&nbsp;&nbsp;
+      <a href="#M000475">suppress_fixtures</a>&nbsp;&nbsp;
+      <a href="#M000476">suppress_fixtures?</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -123,11 +125,11 @@ Add some stuff to the basic test case
     <div id="methods">
       <h3 class="section-bar">Protected Class methods</h3>
 
-      <div id="method-M000491" class="method-detail">
-        <a name="M000491"></a>
+      <div id="method-M000474" class="method-detail">
+        <a name="M000474"></a>
 
         <div class="method-heading">
-          <a href="#M000491" class="method-signature">
+          <a href="#M000474" class="method-signature">
           <span class="method-name">obj_cache</span><span class="method-args">()</span>
           </a>
         </div>
@@ -137,23 +139,23 @@ Add some stuff to the basic test case
 Helper variable in the class for setup_once
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000491-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000491-source">
+            onclick="toggleCode('M000474-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000474-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_util/test_helpers.rb, line 126</span>
-126:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">obj_cache</span>
-127:     <span class="ruby-ivar">@obj_cache</span> <span class="ruby-operator">||=</span> {}
-128:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_util/test_helpers.rb, line 127</span>
+127:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">obj_cache</span>
+128:     <span class="ruby-ivar">@obj_cache</span> <span class="ruby-operator">||=</span> {}
+129:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000492" class="method-detail">
-        <a name="M000492"></a>
+      <div id="method-M000475" class="method-detail">
+        <a name="M000475"></a>
 
         <div class="method-heading">
-          <a href="#M000492" class="method-signature">
+          <a href="#M000475" class="method-signature">
           <span class="method-name">suppress_fixtures</span><span class="method-args">()</span>
           </a>
         </div>
@@ -163,36 +165,40 @@ Helper variable in the class for setup_once
 Lets the class suppress the fixtures for the tests
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000492-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000492-source">
+            onclick="toggleCode('M000475-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000475-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_util/test_helpers.rb, line 131</span>
-131:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suppress_fixtures</span>
-132:     <span class="ruby-ivar">@suppress_fixtures</span> = <span class="ruby-keyword kw">true</span>
-133:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_util/test_helpers.rb, line 132</span>
+132:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suppress_fixtures</span>
+133:     <span class="ruby-comment cmt"># Activates the suppress mechanism for older versions of rails</span>
+134:     <span class="ruby-ivar">@suppress_fixtures</span> = <span class="ruby-keyword kw">true</span>
+135:     <span class="ruby-comment cmt"># This overwrites the setup/teardown callbacks for Rails 2.3.*</span>
+136:     <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">:setup_fixtures</span>) { }
+137:     <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">:teardown_fixtures</span>) { }
+138:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000493" class="method-detail">
-        <a name="M000493"></a>
+      <div id="method-M000476" class="method-detail">
+        <a name="M000476"></a>
 
         <div class="method-heading">
-          <a href="#M000493" class="method-signature">
+          <a href="#M000476" class="method-signature">
           <span class="method-name">suppress_fixtures?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000493-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000493-source">
+            onclick="toggleCode('M000476-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000476-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_util/test_helpers.rb, line 135</span>
-135:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suppress_fixtures?</span>
-136:     <span class="ruby-ivar">@suppress_fixtures</span>
-137:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_util/test_helpers.rb, line 140</span>
+140:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suppress_fixtures?</span>
+141:     <span class="ruby-ivar">@suppress_fixtures</span>
+142:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

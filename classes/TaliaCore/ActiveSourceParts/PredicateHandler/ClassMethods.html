@@ -74,8 +74,8 @@
 
     <div id="description">
       <p>
-This file contains the handling of the &quot;predicate wrapper&quot; lists
-that represent the properties/objects a class has for a given predicate
+Predicate-related class methods. See the <a
+href="../PredicateHandler.html">PredicateHandler</a> module for more
 </p>
 
     </div>
@@ -87,7 +87,7 @@ that represent the properties/objects a class has for a given predicate
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000142">prefetch_relations_for</a>&nbsp;&nbsp;
+      <a href="#M000082">prefetch_relations_for</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -109,11 +109,11 @@ that represent the properties/objects a class has for a given predicate
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000142" class="method-detail">
-        <a name="M000142"></a>
+      <div id="method-M000082" class="method-detail">
+        <a name="M000082"></a>
 
         <div class="method-heading">
-          <a href="#M000142" class="method-signature">
+          <a href="#M000082" class="method-signature">
           <span class="method-name">prefetch_relations_for</span><span class="method-args">(sources, limit = 1024)</span>
           </a>
         </div>
@@ -128,33 +128,38 @@ For safety reasons, there is a limit on the number of sources that is
 accepted. (For a web application, if you go over the default, you&#8216;re
 probably doing it wrong).
 </p>
+<p>
+When prefetching, all the relations/properties for the given sources are
+loaded in a single request, and the data is injected in the internal cache
+of the sources.
+</p>
+<p>
+A source with prefetched relations will not cause database queries if you
+access its properties.
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000142-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000142-source">
+            onclick="toggleCode('M000082-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000082-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 15</span>
-15:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prefetch_relations_for</span>(<span class="ruby-identifier">sources</span>, <span class="ruby-identifier">limit</span> = <span class="ruby-value">1024</span>)
-16:           <span class="ruby-identifier">sources</span> = [ <span class="ruby-identifier">sources</span> ] <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">sources</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ActiveSource</span>))
-17:           <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RangeError</span>, <span class="ruby-value str">&quot;Too many sources for prefetching.&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">sources</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">limit</span>)
-18:           <span class="ruby-identifier">src_hash</span> = {}
-19:           <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">src</span><span class="ruby-operator">|</span> <span class="ruby-identifier">src_hash</span>[<span class="ruby-identifier">src</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">src</span> }
-20:           <span class="ruby-identifier">conditions</span> = { <span class="ruby-identifier">:subject_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">src_hash</span>.<span class="ruby-identifier">keys</span> }
-21:           <span class="ruby-identifier">joins</span> = <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">sources_join</span>
-22:           <span class="ruby-identifier">joins</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">props_join</span>
-23:           <span class="ruby-identifier">relations</span> = <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">conditions</span>,
-24:           <span class="ruby-identifier">:joins</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">joins</span>,
-25:           <span class="ruby-identifier">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">fat_record_select</span>
-26:           )
-27:           <span class="ruby-identifier">relations</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rel</span><span class="ruby-operator">|</span>
-28:             <span class="ruby-identifier">src_hash</span>[<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">subject_id</span>].<span class="ruby-identifier">inject_predicate</span>(<span class="ruby-identifier">rel</span>)
-29:           <span class="ruby-keyword kw">end</span>
-30: 
-31:           <span class="ruby-comment cmt"># Set all as loaded</span>
-32:           <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">src</span><span class="ruby-operator">|</span>
-33:             <span class="ruby-identifier">src</span>.<span class="ruby-identifier">each_cached_wrapper</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">wrap</span><span class="ruby-operator">|</span> <span class="ruby-identifier">wrap</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value str">'@loaded'</span><span class="ruby-value str">'@loaded'</span>, <span class="ruby-keyword kw">true</span>) }
-34:             <span class="ruby-identifier">src</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value str">'@prefetched'</span><span class="ruby-value str">'@prefetched'</span>, <span class="ruby-keyword kw">true</span>)
-35:           <span class="ruby-keyword kw">end</span>
-36:         <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/predicate_handler.rb, line 33</span>
+33:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prefetch_relations_for</span>(<span class="ruby-identifier">sources</span>, <span class="ruby-identifier">limit</span> = <span class="ruby-value">1024</span>)
+34:           <span class="ruby-identifier">sources</span> = [ <span class="ruby-identifier">sources</span> ] <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">sources</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ActiveSource</span>))
+35:           <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RangeError</span>, <span class="ruby-value str">&quot;Too many sources for prefetching.&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">sources</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">limit</span>)
+36:           <span class="ruby-identifier">src_hash</span> = {}
+37:           <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">src</span><span class="ruby-operator">|</span> <span class="ruby-identifier">src_hash</span>[<span class="ruby-identifier">src</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">src</span> }
+38:           
+39:           <span class="ruby-identifier">relations</span> = <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:subject_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">src_hash</span>.<span class="ruby-identifier">keys</span> }, <span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-identifier">:subject</span>, <span class="ruby-identifier">:object</span>])
+40:           
+41:           <span class="ruby-identifier">relations</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rel</span><span class="ruby-operator">|</span>
+42:             <span class="ruby-identifier">src_hash</span>[<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">subject_id</span>].<span class="ruby-identifier">inject_predicate</span>(<span class="ruby-identifier">rel</span>)
+43:           <span class="ruby-keyword kw">end</span>
+44: 
+45:           <span class="ruby-comment cmt"># Set all as loaded</span>
+46:           <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">src</span><span class="ruby-operator">|</span>
+47:             <span class="ruby-identifier">src</span>.<span class="ruby-identifier">each_cached_wrapper</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">wrap</span><span class="ruby-operator">|</span> <span class="ruby-identifier">wrap</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value str">'@loaded'</span><span class="ruby-value str">'@loaded'</span>, <span class="ruby-keyword kw">true</span>) }
+48:             <span class="ruby-identifier">src</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value str">'@prefetched'</span><span class="ruby-value str">'@prefetched'</span>, <span class="ruby-keyword kw">true</span>)
+49:           <span class="ruby-keyword kw">end</span>
+50:         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

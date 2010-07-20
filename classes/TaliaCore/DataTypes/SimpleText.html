@@ -88,8 +88,8 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000263">extract_mime_type</a>&nbsp;&nbsp;
-      <a href="#M000264">get_line</a>&nbsp;&nbsp;
+      <a href="#M000209">extract_mime_type</a>&nbsp;&nbsp;
+      <a href="#M000210">get_line</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -111,22 +111,22 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000263" class="method-detail">
-        <a name="M000263"></a>
+      <div id="method-M000209" class="method-detail">
+        <a name="M000209"></a>
 
         <div class="method-heading">
-          <a href="#M000263" class="method-signature">
+          <a href="#M000209" class="method-signature">
           <span class="method-name">extract_mime_type</span><span class="method-args">(location)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-return the mime_type for a file
+The MIME type is always <tt>text/plain</tt>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000263-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000263-source">
+            onclick="toggleCode('M000209-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000209-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/simple_text.rb, line 10</span>
 10:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_mime_type</span>(<span class="ruby-identifier">location</span>)
@@ -137,41 +137,42 @@ return the mime_type for a file
         </div>
       </div>
 
-      <div id="method-M000264" class="method-detail">
-        <a name="M000264"></a>
+      <div id="method-M000210" class="method-detail">
+        <a name="M000210"></a>
 
         <div class="method-heading">
-          <a href="#M000264" class="method-signature">
+          <a href="#M000210" class="method-signature">
           <span class="method-name">get_line</span><span class="method-args">(close_after_single_read=false)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Get a line from a text file. At the end of file: close the file and return
+Read onle line from the text file. The file will be closed if the end of
+the file is hit, or if close_after_single_read is set to true
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000264-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000264-source">
+            onclick="toggleCode('M000210-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000210-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/simple_text.rb, line 16</span>
-16:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_line</span>(<span class="ruby-identifier">close_after_single_read</span>=<span class="ruby-keyword kw">false</span>)
-17:         <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">is_file_open?</span>
-18:           <span class="ruby-identifier">open_file</span>
-19:         <span class="ruby-keyword kw">end</span>
-20:       
-21:         <span class="ruby-comment cmt"># get a new line and return nil is EOF</span>
-22:         <span class="ruby-identifier">line</span> = <span class="ruby-ivar">@file_handle</span>.<span class="ruby-identifier">gets</span>
-23:       
-24:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">line</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">close_after_single_read</span>
-25:           <span class="ruby-identifier">close_file</span>
-26:         <span class="ruby-keyword kw">end</span>
-27:       
-28:         <span class="ruby-comment cmt"># update the position of reading cursors</span>
-29:         <span class="ruby-ivar">@position</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span>
-30:       
-31:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">line</span>
-32:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/simple_text.rb, line 17</span>
+17:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_line</span>(<span class="ruby-identifier">close_after_single_read</span>=<span class="ruby-keyword kw">false</span>)
+18:         <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">is_file_open?</span>
+19:           <span class="ruby-identifier">open_file</span>
+20:         <span class="ruby-keyword kw">end</span>
+21:       
+22:         <span class="ruby-comment cmt"># get a new line and return nil is EOF</span>
+23:         <span class="ruby-identifier">line</span> = <span class="ruby-ivar">@file_handle</span>.<span class="ruby-identifier">gets</span>
+24:       
+25:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">line</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">close_after_single_read</span>
+26:           <span class="ruby-identifier">close_file</span>
+27:         <span class="ruby-keyword kw">end</span>
+28:       
+29:         <span class="ruby-comment cmt"># update the position of reading cursors</span>
+30:         <span class="ruby-ivar">@position</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span>
+31:       
+32:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">line</span>
+33:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

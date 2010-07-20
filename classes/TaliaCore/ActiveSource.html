@@ -97,12 +97,12 @@ they should <em>usually</em> be in sync:
 </p>
 <ul>
 <li>Write operations are usually lazy, the <a
-href="ActiveSource.html#M000298">data</a> should only be saved once save!
+href="ActiveSource.html#M000260">data</a> should only be saved once save!
 is called. However, ActiveRecord may still decide that the objects need to
 be saved if they are involved in other operations.
 
 </li>
-<li>Operations that clear a <a href="ActiveSource.html#M000286">predicate</a>
+<li>Operations that clear a <a href="ActiveSource.html#M000246">predicate</a>
 are <b>immediate</b>. That also means that using singular property setter,
 if used will immediately erase the old value. If the record is not saved,
 the property will be left empty (and not revert to the original value!)
@@ -119,34 +119,37 @@ the property will be left empty (and not revert to the original value!)
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000276">[]</a>&nbsp;&nbsp;
-      <a href="#M000278">[]=</a>&nbsp;&nbsp;
-      <a href="#M000296">add_additional_rdf_types</a>&nbsp;&nbsp;
-      <a href="#M000284">add_semantic_attributes</a>&nbsp;&nbsp;
-      <a href="#M000297">attach_files</a>&nbsp;&nbsp;
-      <a href="#M000298">data</a>&nbsp;&nbsp;
-      <a href="#M000292">db_attr?</a>&nbsp;&nbsp;
-      <a href="#M000290">direct_predicates</a>&nbsp;&nbsp;
-      <a href="#M000277">get_attribute</a>&nbsp;&nbsp;
-      <a href="#M000285">inverse</a>&nbsp;&nbsp;
-      <a href="#M000291">inverse_predicates</a>&nbsp;&nbsp;
-      <a href="#M000286">predicate</a>&nbsp;&nbsp;
-      <a href="#M000289">predicate_replace</a>&nbsp;&nbsp;
-      <a href="#M000287">predicate_set</a>&nbsp;&nbsp;
-      <a href="#M000288">predicate_set_uniq</a>&nbsp;&nbsp;
-      <a href="#M000299">rdf_selftype</a>&nbsp;&nbsp;
-      <a href="#M000282">rewrite_attributes</a>&nbsp;&nbsp;
-      <a href="#M000283">rewrite_attributes!</a>&nbsp;&nbsp;
-      <a href="#M000272">short_uri</a>&nbsp;&nbsp;
-      <a href="#M000295">to_rdf</a>&nbsp;&nbsp;
-      <a href="#M000274">to_s</a>&nbsp;&nbsp;
-      <a href="#M000275">to_uri</a>&nbsp;&nbsp;
-      <a href="#M000294">to_xml</a>&nbsp;&nbsp;
-      <a href="#M000280">update_attributes</a>&nbsp;&nbsp;
-      <a href="#M000281">update_attributes!</a>&nbsp;&nbsp;
-      <a href="#M000279">update_source</a>&nbsp;&nbsp;
-      <a href="#M000273">value_for</a>&nbsp;&nbsp;
-      <a href="#M000293">write_predicate_direct</a>&nbsp;&nbsp;
+      <a href="#M000236">[]</a>&nbsp;&nbsp;
+      <a href="#M000238">[]=</a>&nbsp;&nbsp;
+      <a href="#M000258">add_additional_rdf_types</a>&nbsp;&nbsp;
+      <a href="#M000244">add_semantic_attributes</a>&nbsp;&nbsp;
+      <a href="#M000259">attach_files</a>&nbsp;&nbsp;
+      <a href="#M000260">data</a>&nbsp;&nbsp;
+      <a href="#M000252">db_attr?</a>&nbsp;&nbsp;
+      <a href="#M000253">defined_property?</a>&nbsp;&nbsp;
+      <a href="#M000250">direct_predicates</a>&nbsp;&nbsp;
+      <a href="#M000237">get_attribute</a>&nbsp;&nbsp;
+      <a href="#M000245">inverse</a>&nbsp;&nbsp;
+      <a href="#M000251">inverse_predicates</a>&nbsp;&nbsp;
+      <a href="#M000246">predicate</a>&nbsp;&nbsp;
+      <a href="#M000249">predicate_replace</a>&nbsp;&nbsp;
+      <a href="#M000247">predicate_set</a>&nbsp;&nbsp;
+      <a href="#M000248">predicate_set_uniq</a>&nbsp;&nbsp;
+      <a href="#M000254">property_options_for</a>&nbsp;&nbsp;
+      <a href="#M000261">rdf_selftype</a>&nbsp;&nbsp;
+      <a href="#M000262">reload</a>&nbsp;&nbsp;
+      <a href="#M000242">rewrite_attributes</a>&nbsp;&nbsp;
+      <a href="#M000243">rewrite_attributes!</a>&nbsp;&nbsp;
+      <a href="#M000232">short_uri</a>&nbsp;&nbsp;
+      <a href="#M000257">to_rdf</a>&nbsp;&nbsp;
+      <a href="#M000234">to_s</a>&nbsp;&nbsp;
+      <a href="#M000235">to_uri</a>&nbsp;&nbsp;
+      <a href="#M000256">to_xml</a>&nbsp;&nbsp;
+      <a href="#M000240">update_attributes</a>&nbsp;&nbsp;
+      <a href="#M000241">update_attributes!</a>&nbsp;&nbsp;
+      <a href="#M000239">update_source</a>&nbsp;&nbsp;
+      <a href="#M000233">value_for</a>&nbsp;&nbsp;
+      <a href="#M000255">write_predicate_direct</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -158,9 +161,9 @@ the property will be left empty (and not revert to the original value!)
       <h3 class="section-bar">Included Modules</h3>
 
       <div id="includes-list">
-        <span class="include-name">RDFS::ResourceLike</span>
+        <span class="include-name">ActiveRDF::ResourceLike</span>
         <span class="include-name"><a href="ActiveSourceParts/PredicateHandler.html">ActiveSourceParts::PredicateHandler</a></span>
-        <span class="include-name"><a href="ActiveSourceParts/Rdf.html">ActiveSourceParts::Rdf</a></span>
+        <span class="include-name"><a href="ActiveSourceParts/RdfHandler.html">ActiveSourceParts::RdfHandler</a></span>
       </div>
     </div>
 
@@ -202,11 +205,11 @@ Make aliases for the original updating methods
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000276" class="method-detail">
-        <a name="M000276"></a>
+      <div id="method-M000236" class="method-detail">
+        <a name="M000236"></a>
 
         <div class="method-heading">
-          <a href="#M000276" class="method-signature">
+          <a href="#M000236" class="method-signature">
           <span class="method-name">[]</span><span class="method-args">(attribute)</span>
           </a>
         </div>
@@ -215,34 +218,36 @@ Make aliases for the original updating methods
           <p>
 Works in the normal way for database attributes. If the value is not an
 attribute, it tries to find objects related to this source with the value
-as a <a href="ActiveSource.html#M000286">predicate</a> URL and returns a
+as a <a href="ActiveSource.html#M000246">predicate</a> URL and returns a
 collection of those.
 </p>
 <p>
 The assignment operator remains as it is for the ActiveRecord.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000276-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000276-source">
+            onclick="toggleCode('M000236-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000236-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 97</span>
- 97:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">attribute</span>)
- 98:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>))
- 99:         <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">attribute</span>)
-100:       <span class="ruby-keyword kw">else</span>
-101:         <span class="ruby-identifier">get_objects_on</span>(<span class="ruby-identifier">attribute</span>)
-102:       <span class="ruby-keyword kw">end</span>
-103:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 99</span>
+ 99:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">attribute</span>)
+100:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>))
+101:         <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">attribute</span>)
+102:       <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">defined_property?</span>(<span class="ruby-identifier">attribute</span>))
+103:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">attribute</span>)
+104:       <span class="ruby-keyword kw">else</span>
+105:         <span class="ruby-identifier">get_objects_on</span>(<span class="ruby-identifier">attribute</span>)
+106:       <span class="ruby-keyword kw">end</span>
+107:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000278" class="method-detail">
-        <a name="M000278"></a>
+      <div id="method-M000238" class="method-detail">
+        <a name="M000238"></a>
 
         <div class="method-heading">
-          <a href="#M000278" class="method-signature">
+          <a href="#M000238" class="method-signature">
           <span class="method-name">[]=</span><span class="method-args">(attribute, value)</span>
           </a>
         </div>
@@ -252,29 +257,29 @@ The assignment operator remains as it is for the ActiveRecord.
 Assignment to an attribute. This will overwrite all current triples.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000278-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000278-source">
+            onclick="toggleCode('M000238-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000238-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 107</span>
-107:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">attribute</span>, <span class="ruby-identifier">value</span>)
-108:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>))
-109:         <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">attribute</span>, <span class="ruby-identifier">value</span>)
-110:       <span class="ruby-keyword kw">else</span>
-111:         <span class="ruby-identifier">pred</span> = <span class="ruby-identifier">get_attribute</span>(<span class="ruby-identifier">attribute</span>)
-112:         <span class="ruby-identifier">pred</span>.<span class="ruby-identifier">remove</span>
-113:         <span class="ruby-identifier">pred</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span>
-114:       <span class="ruby-keyword kw">end</span>
-115:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 111</span>
+111:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">attribute</span>, <span class="ruby-identifier">value</span>)
+112:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>))
+113:         <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">attribute</span>, <span class="ruby-identifier">value</span>)
+114:       <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">defined_property?</span>(<span class="ruby-identifier">attribute</span>))
+115:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{attribute}=&quot;</span>, <span class="ruby-identifier">value</span>)
+116:       <span class="ruby-keyword kw">else</span>
+117:          <span class="ruby-identifier">get_wrapper_on</span>(<span class="ruby-identifier">attribute</span>).<span class="ruby-identifier">replace</span>(<span class="ruby-identifier">value</span>)
+118:       <span class="ruby-keyword kw">end</span>
+119:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000296" class="method-detail">
-        <a name="M000296"></a>
+      <div id="method-M000258" class="method-detail">
+        <a name="M000258"></a>
 
         <div class="method-heading">
-          <a href="#M000296" class="method-signature">
+          <a href="#M000258" class="method-signature">
           <span class="method-name">add_additional_rdf_types</span><span class="method-args">()</span>
           </a>
         </div>
@@ -289,31 +294,31 @@ called during construction.
 This will check the existing types to avoid duplication
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000296-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000296-source">
+            onclick="toggleCode('M000258-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000258-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 326</span>
-326:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_additional_rdf_types</span>
-327:       <span class="ruby-comment cmt"># return if(self.class.additional_rdf_types.empty?)</span>
-328:       <span class="ruby-identifier">type_hash</span> = {}
-329:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">types</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">type</span><span class="ruby-operator">|</span> <span class="ruby-identifier">type_hash</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:uri</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>] = <span class="ruby-keyword kw">true</span> }
-330:       <span class="ruby-comment cmt"># Add the &quot;class&quot; default type type (unless this is the source for the self type itself).0</span>
-331:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">types</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rdf_selftype</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">type_hash</span>[<span class="ruby-identifier">rdf_selftype</span>.<span class="ruby-identifier">to_s</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">rdf_selftype</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>))
-332:       <span class="ruby-comment cmt"># Add the user-configured types</span>
-333:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">additional_rdf_types</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">type</span><span class="ruby-operator">|</span>
-334:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">types</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">type</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">type_hash</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:uri</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>])
-335:       <span class="ruby-keyword kw">end</span>
-336:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 341</span>
+341:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_additional_rdf_types</span>
+342:       <span class="ruby-comment cmt"># return if(self.class.additional_rdf_types.empty?)</span>
+343:       <span class="ruby-identifier">type_hash</span> = {}
+344:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">types</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">type</span><span class="ruby-operator">|</span> <span class="ruby-identifier">type_hash</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:uri</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>] = <span class="ruby-keyword kw">true</span> }
+345:       <span class="ruby-comment cmt"># Add the &quot;class&quot; default type type (unless this is the source for the self type itself).0</span>
+346:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">types</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rdf_selftype</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">type_hash</span>[<span class="ruby-identifier">rdf_selftype</span>.<span class="ruby-identifier">to_s</span>] <span class="ruby-operator">||</span> (<span class="ruby-identifier">rdf_selftype</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>))
+347:       <span class="ruby-comment cmt"># Add the user-configured types</span>
+348:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">additional_rdf_types</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">type</span><span class="ruby-operator">|</span>
+349:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">types</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">type</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">type_hash</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:uri</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>])
+350:       <span class="ruby-keyword kw">end</span>
+351:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000284" class="method-detail">
-        <a name="M000284"></a>
+      <div id="method-M000244" class="method-detail">
+        <a name="M000244"></a>
 
         <div class="method-heading">
-          <a href="#M000284" class="method-signature">
+          <a href="#M000244" class="method-signature">
           <span class="method-name">add_semantic_attributes</span><span class="method-args">(overwrite, attributes)</span>
           </a>
         </div>
@@ -330,28 +335,31 @@ replaced with the values from the hash. Otherwise the attribute values will
 be added to the existing ones
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000284-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000284-source">
+            onclick="toggleCode('M000244-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000244-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 205</span>
-205:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_semantic_attributes</span>(<span class="ruby-identifier">overwrite</span>, <span class="ruby-identifier">attributes</span>)
-206:       <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">attr</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
-207:         <span class="ruby-identifier">value</span> = [ <span class="ruby-identifier">value</span> ] <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>))
-208:         <span class="ruby-identifier">attr_wrap</span> = <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">attr</span>]
-209:         <span class="ruby-identifier">attr_wrap</span>.<span class="ruby-identifier">remove</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">overwrite</span>)
-210:         <span class="ruby-identifier">value</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">val</span> <span class="ruby-operator">|</span><span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">attr</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">target_for</span>(<span class="ruby-identifier">val</span>) }
-211:       <span class="ruby-keyword kw">end</span>
-212:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 209</span>
+209:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_semantic_attributes</span>(<span class="ruby-identifier">overwrite</span>, <span class="ruby-identifier">attributes</span>)
+210:       <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">attr</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+211:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">defined_property?</span>(<span class="ruby-identifier">attr</span>))
+212:           <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">attr</span>] = <span class="ruby-identifier">value</span>
+213:         <span class="ruby-keyword kw">else</span>
+214:           <span class="ruby-identifier">attr_wrap</span> = <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">attr</span>]
+215:           <span class="ruby-identifier">attr_wrap</span>.<span class="ruby-identifier">remove</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">overwrite</span>)
+216:           <span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">val</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">attr</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">target_for</span>(<span class="ruby-identifier">val</span>) }
+217:         <span class="ruby-keyword kw">end</span>
+218:       <span class="ruby-keyword kw">end</span>
+219:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000297" class="method-detail">
-        <a name="M000297"></a>
+      <div id="method-M000259" class="method-detail">
+        <a name="M000259"></a>
 
         <div class="method-heading">
-          <a href="#M000297" class="method-signature">
+          <a href="#M000259" class="method-signature">
           <span class="method-name">attach_files</span><span class="method-args">(files)</span>
           </a>
         </div>
@@ -373,30 +381,31 @@ also provide a single hash for :files (instead of an array) if you have
 just one file. Files will be saved immediately.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000297-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000297-source">
+            onclick="toggleCode('M000259-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000259-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 348</span>
-348:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">attach_files</span>(<span class="ruby-identifier">files</span>)
-349:       <span class="ruby-identifier">files</span> = [ <span class="ruby-identifier">files</span> ] <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">files</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>))
-350:       <span class="ruby-identifier">files</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
-351:         <span class="ruby-identifier">filename</span> = <span class="ruby-identifier">file</span>[<span class="ruby-identifier">:url</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">file</span>[<span class="ruby-value str">'url'</span>]
-352:         <span class="ruby-identifier">assit</span>(<span class="ruby-identifier">filename</span>)
-353:         <span class="ruby-identifier">options</span> = <span class="ruby-identifier">file</span>[<span class="ruby-identifier">:options</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">file</span>[<span class="ruby-value str">'options'</span>] <span class="ruby-operator">||</span> {}
-354:         <span class="ruby-identifier">records</span> = <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">FileRecord</span>.<span class="ruby-identifier">create_from_url</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">options</span>)
-355:         <span class="ruby-identifier">records</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rec</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data_records</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rec</span> }
-356:       <span class="ruby-keyword kw">end</span>
-357:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 363</span>
+363:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">attach_files</span>(<span class="ruby-identifier">files</span>)
+364:       <span class="ruby-identifier">files</span> = [ <span class="ruby-identifier">files</span> ] <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">files</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>))
+365:       <span class="ruby-identifier">files</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
+366:         <span class="ruby-identifier">file</span>.<span class="ruby-identifier">to_options!</span>
+367:         <span class="ruby-identifier">filename</span> = <span class="ruby-identifier">file</span>[<span class="ruby-identifier">:url</span>]
+368:         <span class="ruby-identifier">assit</span>(<span class="ruby-identifier">filename</span>)
+369:         <span class="ruby-identifier">options</span> = <span class="ruby-identifier">file</span>[<span class="ruby-identifier">:options</span>] <span class="ruby-operator">||</span> {}
+370:         <span class="ruby-identifier">records</span> = <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">FileRecord</span>.<span class="ruby-identifier">create_from_url</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">options</span>)
+371:         <span class="ruby-identifier">records</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rec</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data_records</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rec</span> }
+372:       <span class="ruby-keyword kw">end</span>
+373:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000298" class="method-detail">
-        <a name="M000298"></a>
+      <div id="method-M000260" class="method-detail">
+        <a name="M000260"></a>
 
         <div class="method-heading">
-          <a href="#M000298" class="method-signature">
+          <a href="#M000260" class="method-signature">
           <span class="method-name">data</span><span class="method-args">(type = nil, location= nil)</span>
           </a>
         </div>
@@ -404,34 +413,34 @@ just one file. Files will be saved immediately.
         <div class="method-description">
           <p>
 This will return a list of DataRecord objects. Without parameters, this
-returns all <a href="ActiveSource.html#M000298">data</a> elements on the
+returns all <a href="ActiveSource.html#M000260">data</a> elements on the
 source. If a type is given, it will return only the elements of the given
 type. If both type and location are given, it will retrieve only the
-specified <a href="ActiveSource.html#M000298">data</a> element
+specified <a href="ActiveSource.html#M000260">data</a> element
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000298-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000298-source">
+            onclick="toggleCode('M000260-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000260-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 363</span>
-363:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data</span>(<span class="ruby-identifier">type</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">location</span>= <span class="ruby-keyword kw">nil</span>)
-364:       <span class="ruby-identifier">find_type</span> = <span class="ruby-identifier">location</span> <span class="ruby-value">? </span><span class="ruby-operator">:</span><span class="ruby-identifier">first</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:all</span> <span class="ruby-comment cmt"># Find just one element if a location is given</span>
-365:       <span class="ruby-identifier">type</span> = <span class="ruby-identifier">type</span>.<span class="ruby-identifier">name</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Class</span>))
-366:       <span class="ruby-identifier">options</span> = {}
-367:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>] = [ <span class="ruby-value str">&quot;type = ?&quot;</span>, <span class="ruby-identifier">type</span> ] <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">type</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">location</span>)
-368:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>] = [ <span class="ruby-value str">&quot;type = ? AND location = ?&quot;</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">location</span> ] <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">type</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">location</span>)
-369:       <span class="ruby-identifier">data_records</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">find_type</span>, <span class="ruby-identifier">options</span>)
-370:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 379</span>
+379:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data</span>(<span class="ruby-identifier">type</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">location</span>= <span class="ruby-keyword kw">nil</span>)
+380:       <span class="ruby-identifier">find_type</span> = <span class="ruby-identifier">location</span> <span class="ruby-value">? </span><span class="ruby-operator">:</span><span class="ruby-identifier">first</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:all</span> <span class="ruby-comment cmt"># Find just one element if a location is given</span>
+381:       <span class="ruby-identifier">type</span> = <span class="ruby-identifier">type</span>.<span class="ruby-identifier">name</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Class</span>))
+382:       <span class="ruby-identifier">options</span> = {}
+383:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>] = [ <span class="ruby-value str">&quot;type = ?&quot;</span>, <span class="ruby-identifier">type</span> ] <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">type</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">location</span>)
+384:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:conditions</span>] = [ <span class="ruby-value str">&quot;type = ? AND location = ?&quot;</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">location</span> ] <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">type</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">location</span>)
+385:       <span class="ruby-identifier">data_records</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">find_type</span>, <span class="ruby-identifier">options</span>)
+386:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000292" class="method-detail">
-        <a name="M000292"></a>
+      <div id="method-M000252" class="method-detail">
+        <a name="M000252"></a>
 
         <div class="method-heading">
-          <a href="#M000292" class="method-signature">
+          <a href="#M000252" class="method-signature">
           <span class="method-name">db_attr?</span><span class="method-args">(attribute)</span>
           </a>
         </div>
@@ -441,23 +450,46 @@ specified <a href="ActiveSource.html#M000298">data</a> element
 True if the given attribute is a database attribute
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000292-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000292-source">
+            onclick="toggleCode('M000252-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000252-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 280</span>
-280:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>)
-281:       <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>)
-282:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 287</span>
+287:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>)
+288:       <span class="ruby-constant">ActiveSource</span>.<span class="ruby-identifier">db_attr?</span>(<span class="ruby-identifier">attribute</span>)
+289:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000290" class="method-detail">
-        <a name="M000290"></a>
+      <div id="method-M000253" class="method-detail">
+        <a name="M000253"></a>
 
         <div class="method-heading">
-          <a href="#M000290" class="method-signature">
+          <a href="#M000253" class="method-signature">
+          <span class="method-name">defined_property?</span><span class="method-args">(prop_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000253-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000253-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 291</span>
+291:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">defined_property?</span>(<span class="ruby-identifier">prop_name</span>)
+292:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">defined_property?</span>(<span class="ruby-identifier">prop_name</span>)
+293:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000250" class="method-detail">
+        <a name="M000250"></a>
+
+        <div class="method-heading">
+          <a href="#M000250" class="method-signature">
           <span class="method-name">direct_predicates</span><span class="method-args">()</span>
           </a>
         </div>
@@ -467,22 +499,22 @@ True if the given attribute is a database attribute
 Gets the direct predicates (using the database)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000290-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000290-source">
+            onclick="toggleCode('M000250-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000250-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 266</span>
-266:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_predicates</span>
-267:       <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>, <span class="ruby-value str">&quot;Cannot do this on unsaved record.&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">new_record?</span>)
-268:       <span class="ruby-identifier">rels</span> = <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">find_by_sql</span>(<span class="ruby-node">&quot;SELECT DISTINCT predicate_uri FROM semantic_relations WHERE subject_id = #{self.id}&quot;</span>)
-269:       <span class="ruby-identifier">rels</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rel</span><span class="ruby-operator">|</span> <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Predicate</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">predicate_uri</span>) }
-270:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 273</span>
+273:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_predicates</span>
+274:       <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>, <span class="ruby-value str">&quot;Cannot do this on unsaved record.&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">new_record?</span>)
+275:       <span class="ruby-identifier">rels</span> = <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">find_by_sql</span>(<span class="ruby-node">&quot;SELECT DISTINCT predicate_uri FROM semantic_relations WHERE subject_id = #{self.id}&quot;</span>)
+276:       <span class="ruby-identifier">rels</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rel</span><span class="ruby-operator">|</span> <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Predicate</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">predicate_uri</span>) }
+277:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000277" class="method-detail">
-        <a name="M000277"></a>
+      <div id="method-M000237" class="method-detail">
+        <a name="M000237"></a>
 
         <div class="method-heading">
           <span class="method-name">get_attribute</span><span class="method-args">(attribute)</span>
@@ -495,11 +527,11 @@ Alias for #[]
         </div>
       </div>
 
-      <div id="method-M000285" class="method-detail">
-        <a name="M000285"></a>
+      <div id="method-M000245" class="method-detail">
+        <a name="M000245"></a>
 
         <div class="method-heading">
-          <a href="#M000285" class="method-signature">
+          <a href="#M000245" class="method-signature">
           <span class="method-name">inverse</span><span class="method-args">()</span>
           </a>
         </div>
@@ -507,77 +539,77 @@ Alias for #[]
         <div class="method-description">
           <p>
 Returns a special object which collects the &quot;<a
-href="ActiveSource.html#M000285">inverse</a>&quot; properties of the <a
+href="ActiveSource.html#M000245">inverse</a>&quot; properties of the <a
 href="Source.html">Source</a> - these are all RDF properties which have the
 current <a href="Source.html">Source</a> as the object.
 </p>
 <p>
 The returned object supports the [] operator, which allows to fetch the
-&quot;<a href="ActiveSource.html#M000285">inverse</a>&quot; (the RDF
-subjects) for the given <a href="ActiveSource.html#M000286">predicate</a>.
+&quot;<a href="ActiveSource.html#M000245">inverse</a>&quot; (the RDF
+subjects) for the given <a href="ActiveSource.html#M000246">predicate</a>.
 </p>
 <p>
 Example: <tt>person.inverse[N::FOO::creator]</tt> would return a list of
 all the elements of which the current person is the creator.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000285-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000285-source">
+            onclick="toggleCode('M000245-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000245-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 223</span>
-223:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse</span>
-224:       <span class="ruby-identifier">inverseobj</span> = <span class="ruby-constant">Object</span>.<span class="ruby-identifier">new</span>
-225:       <span class="ruby-identifier">inverseobj</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">:@assoc_source</span>, <span class="ruby-keyword kw">self</span>)
-226:       
-227:       <span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">inverseobj</span>     
-228:         
-229:         <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">property</span>)
-230:           <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">subjects</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value str">'semantic_relations.predicate_uri'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">property</span>.<span class="ruby-identifier">to_s</span> } )
-231:         <span class="ruby-keyword kw">end</span>
-232:         
-233:         <span class="ruby-identifier">private</span> <span class="ruby-identifier">:type</span>
-234:       <span class="ruby-keyword kw">end</span>
-235:       
-236:       <span class="ruby-identifier">inverseobj</span>
-237:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 230</span>
+230:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse</span>
+231:       <span class="ruby-identifier">inverseobj</span> = <span class="ruby-constant">Object</span>.<span class="ruby-identifier">new</span>
+232:       <span class="ruby-identifier">inverseobj</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">:@assoc_source</span>, <span class="ruby-keyword kw">self</span>)
+233:       
+234:       <span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">inverseobj</span>     
+235:         
+236:         <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">property</span>)
+237:           <span class="ruby-ivar">@assoc_source</span>.<span class="ruby-identifier">subjects</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value str">'semantic_relations.predicate_uri'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">property</span>.<span class="ruby-identifier">to_s</span> } )
+238:         <span class="ruby-keyword kw">end</span>
+239:         
+240:         <span class="ruby-identifier">private</span> <span class="ruby-identifier">:type</span>
+241:       <span class="ruby-keyword kw">end</span>
+242:       
+243:       <span class="ruby-identifier">inverseobj</span>
+244:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000291" class="method-detail">
-        <a name="M000291"></a>
+      <div id="method-M000251" class="method-detail">
+        <a name="M000251"></a>
 
         <div class="method-heading">
-          <a href="#M000291" class="method-signature">
+          <a href="#M000251" class="method-signature">
           <span class="method-name">inverse_predicates</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Gets the <a href="ActiveSource.html#M000285">inverse</a> predicates
+Gets the <a href="ActiveSource.html#M000245">inverse</a> predicates
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000291-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000291-source">
+            onclick="toggleCode('M000251-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000251-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 273</span>
-273:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse_predicates</span>
-274:       <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>, <span class="ruby-value str">&quot;Cannot do this on unsaved record.&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">new_record?</span>)
-275:       <span class="ruby-identifier">rels</span> = <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">find_by_sql</span>(<span class="ruby-node">&quot;SELECT DISTINCT predicate_uri FROM semantic_relations WHERE object_id = #{self.id}&quot;</span>)
-276:       <span class="ruby-identifier">rels</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rel</span><span class="ruby-operator">|</span> <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Predicate</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">predicate_uri</span>) }
-277:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 280</span>
+280:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse_predicates</span>
+281:       <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>, <span class="ruby-value str">&quot;Cannot do this on unsaved record.&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">new_record?</span>)
+282:       <span class="ruby-identifier">rels</span> = <span class="ruby-constant">SemanticRelation</span>.<span class="ruby-identifier">find_by_sql</span>(<span class="ruby-node">&quot;SELECT DISTINCT predicate_uri FROM semantic_relations WHERE object_id = #{self.id}&quot;</span>)
+283:       <span class="ruby-identifier">rels</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rel</span><span class="ruby-operator">|</span> <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Predicate</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rel</span>.<span class="ruby-identifier">predicate_uri</span>) }
+284:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000286" class="method-detail">
-        <a name="M000286"></a>
+      <div id="method-M000246" class="method-detail">
+        <a name="M000246"></a>
 
         <div class="method-heading">
-          <a href="#M000286" class="method-signature">
+          <a href="#M000246" class="method-signature">
           <span class="method-name">predicate</span><span class="method-args">(namespace, name)</span>
           </a>
         </div>
@@ -589,52 +621,52 @@ like the [] method: I will return an array-like object on predicates can be
 manipulated.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000286-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000286-source">
+            onclick="toggleCode('M000246-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000246-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 242</span>
-242:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">predicate</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>)
-243:       <span class="ruby-identifier">get_objects_on</span>(<span class="ruby-identifier">get_namespace</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>))
-244:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 249</span>
+249:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">predicate</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>)
+250:       <span class="ruby-identifier">get_objects_on</span>(<span class="ruby-identifier">get_namespace</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>))
+251:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000289" class="method-detail">
-        <a name="M000289"></a>
+      <div id="method-M000249" class="method-detail">
+        <a name="M000249"></a>
 
         <div class="method-heading">
-          <a href="#M000289" class="method-signature">
+          <a href="#M000249" class="method-signature">
           <span class="method-name">predicate_replace</span><span class="method-args">(namespace, name, value)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Replaces the given <a href="ActiveSource.html#M000286">predicate</a> with
+Replaces the given <a href="ActiveSource.html#M000246">predicate</a> with
 the value. Good for one-value predicates
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000289-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000289-source">
+            onclick="toggleCode('M000249-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000249-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 259</span>
-259:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">predicate_replace</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
-260:       <span class="ruby-identifier">pred</span> = <span class="ruby-identifier">predicate</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>)
-261:       <span class="ruby-identifier">pred</span>.<span class="ruby-identifier">remove</span>
-262:       <span class="ruby-identifier">pred</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span>
-263:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 266</span>
+266:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">predicate_replace</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
+267:       <span class="ruby-identifier">pred</span> = <span class="ruby-identifier">predicate</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>)
+268:       <span class="ruby-identifier">pred</span>.<span class="ruby-identifier">remove</span>
+269:       <span class="ruby-identifier">pred</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span>
+270:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000287" class="method-detail">
-        <a name="M000287"></a>
+      <div id="method-M000247" class="method-detail">
+        <a name="M000247"></a>
 
         <div class="method-heading">
-          <a href="#M000287" class="method-signature">
+          <a href="#M000247" class="method-signature">
           <span class="method-name">predicate_set</span><span class="method-args">(namespace, name, value)</span>
           </a>
         </div>
@@ -645,23 +677,23 @@ Setter method for predicates by namespace/name combination. This will *add
 a precdicate triple, not replace one!*
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000287-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000287-source">
+            onclick="toggleCode('M000247-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000247-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 248</span>
-248:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">predicate_set</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
-249:       <span class="ruby-identifier">predicate</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span>
-250:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 255</span>
+255:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">predicate_set</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
+256:       <span class="ruby-identifier">predicate</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span>
+257:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000288" class="method-detail">
-        <a name="M000288"></a>
+      <div id="method-M000248" class="method-detail">
+        <a name="M000248"></a>
 
         <div class="method-heading">
-          <a href="#M000288" class="method-signature">
+          <a href="#M000248" class="method-signature">
           <span class="method-name">predicate_set_uniq</span><span class="method-args">(namespace, name, value)</span>
           </a>
         </div>
@@ -672,24 +704,47 @@ Setter method that will only add the value if it doesn&#8216;t exist
 already
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000288-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000288-source">
+            onclick="toggleCode('M000248-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000248-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 253</span>
-253:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">predicate_set_uniq</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
-254:       <span class="ruby-identifier">pred</span> = <span class="ruby-identifier">predicate</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>)
-255:       <span class="ruby-identifier">pred</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">pred</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>))
-256:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 260</span>
+260:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">predicate_set_uniq</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
+261:       <span class="ruby-identifier">pred</span> = <span class="ruby-identifier">predicate</span>(<span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">name</span>)
+262:       <span class="ruby-identifier">pred</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">pred</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>))
+263:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000299" class="method-detail">
-        <a name="M000299"></a>
+      <div id="method-M000254" class="method-detail">
+        <a name="M000254"></a>
 
         <div class="method-heading">
-          <a href="#M000299" class="method-signature">
+          <a href="#M000254" class="method-signature">
+          <span class="method-name">property_options_for</span><span class="method-args">(property)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000254-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000254-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 295</span>
+295:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">property_options_for</span>(<span class="ruby-identifier">property</span>)
+296:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">property_options_for</span>(<span class="ruby-identifier">property</span>)
+297:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000261" class="method-detail">
+        <a name="M000261"></a>
+
+        <div class="method-heading">
+          <a href="#M000261" class="method-signature">
           <span class="method-name">rdf_selftype</span><span class="method-args">()</span>
           </a>
         </div>
@@ -699,79 +754,103 @@ already
 The RDF type that is used for objects of the current class
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000299-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000299-source">
+            onclick="toggleCode('M000261-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000261-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 373</span>
-373:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rdf_selftype</span>
-374:       (<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">demodulize</span>)
-375:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 389</span>
+389:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rdf_selftype</span>
+390:       (<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">demodulize</span>)
+391:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000282" class="method-detail">
-        <a name="M000282"></a>
+      <div id="method-M000262" class="method-detail">
+        <a name="M000262"></a>
 
         <div class="method-heading">
-          <a href="#M000282" class="method-signature">
+          <a href="#M000262" class="method-signature">
+          <span class="method-name">reload</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000262-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000262-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 393</span>
+393:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reload</span>
+394:       <span class="ruby-identifier">reset!</span> <span class="ruby-comment cmt"># Clear the property cache</span>
+395:       <span class="ruby-keyword kw">super</span>
+396:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000242" class="method-detail">
+        <a name="M000242"></a>
+
+        <div class="method-heading">
+          <a href="#M000242" class="method-signature">
           <span class="method-name">rewrite_attributes</span><span class="method-args">(attributes) {|self if(block_given?)| ...}</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Works like <a href="ActiveSource.html#M000280">update_attributes</a>, but
+Works like <a href="ActiveSource.html#M000240">update_attributes</a>, but
 will replace the semantic attributes rather than adding to them.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000282-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000282-source">
+            onclick="toggleCode('M000242-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000242-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 187</span>
-187:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rewrite_attributes</span>(<span class="ruby-identifier">attributes</span>)
-188:       <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">block_given?</span>)
-189:       <span class="ruby-identifier">update_attributes_orig</span>(<span class="ruby-identifier">process_attributes</span>(<span class="ruby-keyword kw">true</span>, <span class="ruby-identifier">attributes</span>)) 
-190:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 191</span>
+191:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rewrite_attributes</span>(<span class="ruby-identifier">attributes</span>)
+192:       <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">block_given?</span>)
+193:       <span class="ruby-identifier">update_attributes_orig</span>(<span class="ruby-identifier">process_attributes</span>(<span class="ruby-keyword kw">true</span>, <span class="ruby-identifier">attributes</span>)) 
+194:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000283" class="method-detail">
-        <a name="M000283"></a>
+      <div id="method-M000243" class="method-detail">
+        <a name="M000243"></a>
 
         <div class="method-heading">
-          <a href="#M000283" class="method-signature">
+          <a href="#M000243" class="method-signature">
           <span class="method-name">rewrite_attributes!</span><span class="method-args">(attributes) {|self if(block_given?)| ...}</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Like <a href="ActiveSource.html#M000282">rewrite_attributes</a>, but
+Like <a href="ActiveSource.html#M000242">rewrite_attributes</a>, but
 calling save!
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000283-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000283-source">
+            onclick="toggleCode('M000243-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000243-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 193</span>
-193:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rewrite_attributes!</span>(<span class="ruby-identifier">attributes</span>)
-194:       <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">block_given?</span>)
-195:       <span class="ruby-identifier">update_attributes_orig!</span>(<span class="ruby-identifier">process_attributes</span>(<span class="ruby-keyword kw">true</span>, <span class="ruby-identifier">attributes</span>))
-196:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 197</span>
+197:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rewrite_attributes!</span>(<span class="ruby-identifier">attributes</span>)
+198:       <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">block_given?</span>)
+199:       <span class="ruby-identifier">update_attributes_orig!</span>(<span class="ruby-identifier">process_attributes</span>(<span class="ruby-keyword kw">true</span>, <span class="ruby-identifier">attributes</span>))
+200:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000272" class="method-detail">
-        <a name="M000272"></a>
+      <div id="method-M000232" class="method-detail">
+        <a name="M000232"></a>
 
         <div class="method-heading">
-          <a href="#M000272" class="method-signature">
+          <a href="#M000232" class="method-signature">
           <span class="method-name">short_uri</span><span class="method-args">()</span>
           </a>
         </div>
@@ -781,23 +860,23 @@ calling save!
 Uri in short notation
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000272-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000272-source">
+            onclick="toggleCode('M000232-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000232-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 72</span>
-72:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">short_uri</span>
-73:       <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>).<span class="ruby-identifier">to_name_s</span>
-74:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 74</span>
+74:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">short_uri</span>
+75:       <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>).<span class="ruby-identifier">to_name_s</span>
+76:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000295" class="method-detail">
-        <a name="M000295"></a>
+      <div id="method-M000257" class="method-detail">
+        <a name="M000257"></a>
 
         <div class="method-heading">
-          <a href="#M000295" class="method-signature">
+          <a href="#M000257" class="method-signature">
           <span class="method-name">to_rdf</span><span class="method-args">()</span>
           </a>
         </div>
@@ -808,24 +887,24 @@ Creates an RDF/XML resprentation of the source. The object is saved if this
 is a new record.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000295-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000295-source">
+            onclick="toggleCode('M000257-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000257-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 316</span>
-316:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_rdf</span>
-317:       <span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">new_record?</span>)
-318:       <span class="ruby-constant">ActiveSourceParts</span><span class="ruby-operator">::</span><span class="ruby-constant">Xml</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfBuilder</span>.<span class="ruby-identifier">build_source</span>(<span class="ruby-keyword kw">self</span>) 
-319:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 331</span>
+331:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_rdf</span>
+332:       <span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">new_record?</span>)
+333:       <span class="ruby-constant">ActiveSourceParts</span><span class="ruby-operator">::</span><span class="ruby-constant">Xml</span><span class="ruby-operator">::</span><span class="ruby-constant">RdfBuilder</span>.<span class="ruby-identifier">build_source</span>(<span class="ruby-keyword kw">self</span>) 
+334:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000274" class="method-detail">
-        <a name="M000274"></a>
+      <div id="method-M000234" class="method-detail">
+        <a name="M000234"></a>
 
         <div class="method-heading">
-          <a href="#M000274" class="method-signature">
+          <a href="#M000234" class="method-signature">
           <span class="method-name">to_s</span><span class="method-args">()</span>
           </a>
         </div>
@@ -833,27 +912,27 @@ is a new record.
         <div class="method-description">
           <p>
 To string: Just return the URI. Use <a
-href="ActiveSource.html#M000294">to_xml</a> if you need something more
+href="ActiveSource.html#M000256">to_xml</a> if you need something more
 involved.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000274-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000274-source">
+            onclick="toggleCode('M000234-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000234-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 83</span>
-83:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
-84:       <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">:uri</span>]
-85:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 85</span>
+85:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
+86:       <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">:uri</span>]
+87:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000275" class="method-detail">
-        <a name="M000275"></a>
+      <div id="method-M000235" class="method-detail">
+        <a name="M000235"></a>
 
         <div class="method-heading">
-          <a href="#M000275" class="method-signature">
+          <a href="#M000235" class="method-signature">
           <span class="method-name">to_uri</span><span class="method-args">()</span>
           </a>
         </div>
@@ -863,23 +942,23 @@ involved.
 Create a new uri object
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000275-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000275-source">
+            onclick="toggleCode('M000235-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000235-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 88</span>
-88:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_uri</span>
-89:       <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">:uri</span>].<span class="ruby-identifier">to_uri</span>
-90:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 90</span>
+90:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_uri</span>
+91:       <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">:uri</span>].<span class="ruby-identifier">to_uri</span>
+92:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000294" class="method-detail">
-        <a name="M000294"></a>
+      <div id="method-M000256" class="method-detail">
+        <a name="M000256"></a>
 
         <div class="method-heading">
-          <a href="#M000294" class="method-signature">
+          <a href="#M000256" class="method-signature">
           <span class="method-name">to_xml</span><span class="method-args">()</span>
           </a>
         </div>
@@ -890,24 +969,24 @@ XML Representation of the source. The object is saved if this is a new
 record.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000294-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000294-source">
+            onclick="toggleCode('M000256-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000256-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 309</span>
-309:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_xml</span>
-310:       <span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">new_record?</span>)
-311:       <span class="ruby-constant">ActiveSourceParts</span><span class="ruby-operator">::</span><span class="ruby-constant">Xml</span><span class="ruby-operator">::</span><span class="ruby-constant">SourceBuilder</span>.<span class="ruby-identifier">build_source</span>(<span class="ruby-keyword kw">self</span>)
-312:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 324</span>
+324:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_xml</span>
+325:       <span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">new_record?</span>)
+326:       <span class="ruby-constant">ActiveSourceParts</span><span class="ruby-operator">::</span><span class="ruby-constant">Xml</span><span class="ruby-operator">::</span><span class="ruby-constant">SourceBuilder</span>.<span class="ruby-identifier">build_source</span>(<span class="ruby-keyword kw">self</span>)
+327:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000280" class="method-detail">
-        <a name="M000280"></a>
+      <div id="method-M000240" class="method-detail">
+        <a name="M000240"></a>
 
         <div class="method-heading">
-          <a href="#M000280" class="method-signature">
+          <a href="#M000240" class="method-signature">
           <span class="method-name">update_attributes</span><span class="method-args">(attributes) {|self if(block_given?)| ...}</span>
           </a>
         </div>
@@ -925,52 +1004,52 @@ store.
 After the update, the source will be saved.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000280-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000280-source">
+            onclick="toggleCode('M000240-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000240-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 174</span>
-174:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">attributes</span>)
-175:       <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">block_given?</span>)
-176:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">process_attributes</span>(<span class="ruby-keyword kw">false</span>, <span class="ruby-identifier">attributes</span>))
-177:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 178</span>
+178:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">attributes</span>)
+179:       <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">block_given?</span>)
+180:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">process_attributes</span>(<span class="ruby-keyword kw">false</span>, <span class="ruby-identifier">attributes</span>))
+181:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000281" class="method-detail">
-        <a name="M000281"></a>
+      <div id="method-M000241" class="method-detail">
+        <a name="M000241"></a>
 
         <div class="method-heading">
-          <a href="#M000281" class="method-signature">
+          <a href="#M000241" class="method-signature">
           <span class="method-name">update_attributes!</span><span class="method-args">(attributes) {|self if(block_given?)| ...}</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-As <a href="ActiveSource.html#M000280">update_attributes</a>, but uses
+As <a href="ActiveSource.html#M000240">update_attributes</a>, but uses
 save! to save the source
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000281-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000281-source">
+            onclick="toggleCode('M000241-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000241-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 180</span>
-180:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_attributes!</span>(<span class="ruby-identifier">attributes</span>)
-181:       <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">block_given?</span>)
-182:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">process_attributes</span>(<span class="ruby-keyword kw">false</span>, <span class="ruby-identifier">attributes</span>))
-183:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 184</span>
+184:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_attributes!</span>(<span class="ruby-identifier">attributes</span>)
+185:       <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">block_given?</span>)
+186:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">process_attributes</span>(<span class="ruby-keyword kw">false</span>, <span class="ruby-identifier">attributes</span>))
+187:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000279" class="method-detail">
-        <a name="M000279"></a>
+      <div id="method-M000239" class="method-detail">
+        <a name="M000239"></a>
 
         <div class="method-heading">
-          <a href="#M000279" class="method-signature">
+          <a href="#M000239" class="method-signature">
           <span class="method-name">update_source</span><span class="method-args">(properties, mode)</span>
           </a>
         </div>
@@ -986,59 +1065,59 @@ As opposed to the *_attributes method, this will also handle file elements.
 The default mode is :skip (do nothing)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000279-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000279-source">
+            onclick="toggleCode('M000239-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000239-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 128</span>
-128:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_source</span>(<span class="ruby-identifier">properties</span>, <span class="ruby-identifier">mode</span>)
-129:       <span class="ruby-identifier">properties</span>.<span class="ruby-identifier">to_options!</span>
-130:       <span class="ruby-identifier">mode</span> = <span class="ruby-identifier">:update</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SourceTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">DummySource</span>)) <span class="ruby-comment cmt"># Dummy sources are always updated</span>
-131:       <span class="ruby-identifier">mode</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">:skip</span>
-132:       <span class="ruby-identifier">mode</span> = <span class="ruby-identifier">mode</span>.<span class="ruby-identifier">to_sym</span>
-133:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:skip</span>) <span class="ruby-comment cmt"># If we're told to ignore updates</span>
-134:       
-135:       <span class="ruby-comment cmt"># Deal with already existing sources</span>
-136:       <span class="ruby-identifier">files</span> = <span class="ruby-identifier">properties</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:files</span>)
-137:       
-138:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:overwrite</span>)
-139:         <span class="ruby-comment cmt"># If we are to overwrite, delete all relations and update normally</span>
-140:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">semantic_relations</span>.<span class="ruby-identifier">destroy_all</span>
-141:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data_records</span>.<span class="ruby-identifier">destroy_all</span>
-142:         <span class="ruby-identifier">mode</span> = <span class="ruby-identifier">:update</span>
-143:       <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:update</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">files</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data_records</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
-144:         <span class="ruby-comment cmt"># On updating we should only remove the files if there are new ones</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 132</span>
+132:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_source</span>(<span class="ruby-identifier">properties</span>, <span class="ruby-identifier">mode</span>)
+133:       <span class="ruby-identifier">properties</span>.<span class="ruby-identifier">to_options!</span>
+134:       <span class="ruby-identifier">mode</span> = <span class="ruby-identifier">:update</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SourceTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">DummySource</span>)) <span class="ruby-comment cmt"># Dummy sources are always updated</span>
+135:       <span class="ruby-identifier">mode</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">:skip</span>
+136:       <span class="ruby-identifier">mode</span> = <span class="ruby-identifier">mode</span>.<span class="ruby-identifier">to_sym</span>
+137:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:skip</span>) <span class="ruby-comment cmt"># If we're told to ignore updates</span>
+138:       
+139:       <span class="ruby-comment cmt"># Deal with already existing sources</span>
+140:       <span class="ruby-identifier">files</span> = <span class="ruby-identifier">properties</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:files</span>)
+141:       
+142:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:overwrite</span>)
+143:         <span class="ruby-comment cmt"># If we are to overwrite, delete all relations and update normally</span>
+144:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">semantic_relations</span>.<span class="ruby-identifier">destroy_all</span>
 145:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data_records</span>.<span class="ruby-identifier">destroy_all</span>
-146:       <span class="ruby-keyword kw">end</span>
-147:       
-148:       <span class="ruby-comment cmt"># Add any files</span>
-149:       <span class="ruby-identifier">attach_files</span>(<span class="ruby-identifier">files</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">files</span>)
-150:       
-151:       <span class="ruby-comment cmt"># Rewrite the type, if neccessary</span>
-152:       <span class="ruby-identifier">type</span> = <span class="ruby-identifier">properties</span>[<span class="ruby-identifier">:type</span>]
-153:       <span class="ruby-identifier">switch_type</span> = <span class="ruby-identifier">type</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">type</span>)
-154:       <span class="ruby-comment cmt"># Warn to the log if we have a problematic type change</span>
-155:       <span class="ruby-constant">TaliaCore</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-node">&quot;WARNING: Type change from #{self.type} to #{type}&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">switch_type</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SourceTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">DummySource</span>))
-156:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">type</span> = <span class="ruby-identifier">type</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">switch_type</span>)
-157:       
-158:       <span class="ruby-comment cmt"># Now we should either be adding or updating</span>
-159:       <span class="ruby-identifier">assit</span>(<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:update</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:add</span>)
-160:       <span class="ruby-identifier">update</span> = (<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:update</span>)
+146:         <span class="ruby-identifier">mode</span> = <span class="ruby-identifier">:update</span>
+147:       <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:update</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">files</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data_records</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
+148:         <span class="ruby-comment cmt"># On updating we should only remove the files if there are new ones</span>
+149:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data_records</span>.<span class="ruby-identifier">destroy_all</span>
+150:       <span class="ruby-keyword kw">end</span>
+151:       
+152:       <span class="ruby-comment cmt"># Add any files</span>
+153:       <span class="ruby-identifier">attach_files</span>(<span class="ruby-identifier">files</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">files</span>)
+154:       
+155:       <span class="ruby-comment cmt"># Rewrite the type, if neccessary</span>
+156:       <span class="ruby-identifier">type</span> = <span class="ruby-identifier">properties</span>[<span class="ruby-identifier">:type</span>]
+157:       <span class="ruby-identifier">switch_type</span> = <span class="ruby-identifier">type</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">type</span>)
+158:       <span class="ruby-comment cmt"># Warn to the log if we have a problematic type change</span>
+159:       <span class="ruby-constant">TaliaCore</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-node">&quot;WARNING: Type change from #{self.type} to #{type}&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">switch_type</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SourceTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">DummySource</span>))
+160:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">type</span> = <span class="ruby-identifier">type</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">switch_type</span>)
 161:       
-162:       <span class="ruby-comment cmt"># Overwrite with or add the imported attributes</span>
-163:       <span class="ruby-identifier">update</span> <span class="ruby-value">? </span><span class="ruby-identifier">rewrite_attributes</span>(<span class="ruby-identifier">properties</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">properties</span>)
-164:       
-165:       <span class="ruby-keyword kw">self</span>
-166:     <span class="ruby-keyword kw">end</span>
+162:       <span class="ruby-comment cmt"># Now we should either be adding or updating</span>
+163:       <span class="ruby-identifier">assit</span>(<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:update</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:add</span>)
+164:       <span class="ruby-identifier">update</span> = (<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:update</span>)
+165:       
+166:       <span class="ruby-comment cmt"># Overwrite with or add the imported attributes</span>
+167:       <span class="ruby-identifier">update</span> <span class="ruby-value">? </span><span class="ruby-identifier">rewrite_attributes</span>(<span class="ruby-identifier">properties</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">properties</span>)
+168:       
+169:       <span class="ruby-keyword kw">self</span>
+170:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000273" class="method-detail">
-        <a name="M000273"></a>
+      <div id="method-M000233" class="method-detail">
+        <a name="M000233"></a>
 
         <div class="method-heading">
-          <a href="#M000273" class="method-signature">
+          <a href="#M000233" class="method-signature">
           <span class="method-name">value_for</span><span class="method-args">(thing)</span>
           </a>
         </div>
@@ -1048,58 +1127,58 @@ The default mode is :skip (do nothing)
 Helper
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000273-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000273-source">
+            onclick="toggleCode('M000233-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000233-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 77</span>
-77:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">thing</span>)
-78:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">thing</span>)
-79:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 79</span>
+79:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">thing</span>)
+80:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">thing</span>)
+81:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000293" class="method-detail">
-        <a name="M000293"></a>
+      <div id="method-M000255" class="method-detail">
+        <a name="M000255"></a>
 
         <div class="method-heading">
-          <a href="#M000293" class="method-signature">
+          <a href="#M000255" class="method-signature">
           <span class="method-name">write_predicate_direct</span><span class="method-args">(predicate, value)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Writes the <a href="ActiveSource.html#M000286">predicate</a> directly to
+Writes the <a href="ActiveSource.html#M000246">predicate</a> directly to
 the database and the rdf store. The <a href="Source.html">Source</a> does
-not need to be saved and no <a href="ActiveSource.html#M000298">data</a> is
+not need to be saved and no <a href="ActiveSource.html#M000260">data</a> is
 loaded from the database. This is faster than adding the <a
-href="ActiveSource.html#M000298">data</a> normally and doing a full save,
+href="ActiveSource.html#M000260">data</a> normally and doing a full save,
 at least if only one or two predicates are written.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000293-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000293-source">
+            onclick="toggleCode('M000255-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000255-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 288</span>
-288:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_predicate_direct</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span>)
-289:       <span class="ruby-identifier">autosave</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">autosave_rdf?</span>
-290:       <span class="ruby-identifier">value</span>.<span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ActiveSource</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">new_record?</span>)
-291:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">autosave_rdf</span> = <span class="ruby-keyword kw">false</span>
-292:       <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">predicate</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span>
-293:       <span class="ruby-identifier">uri_res</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">predicate</span>)
-294:       <span class="ruby-comment cmt"># Now add the RDF data by hand</span>
-295:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>))
-296:         <span class="ruby-identifier">value</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
-297:           <span class="ruby-identifier">my_rdf</span>.<span class="ruby-identifier">direct_write_predicate</span>(<span class="ruby-identifier">uri_res</span>, <span class="ruby-identifier">v</span>)
-298:         <span class="ruby-keyword kw">end</span>
-299:       <span class="ruby-keyword kw">else</span>
-300:         <span class="ruby-identifier">my_rdf</span>.<span class="ruby-identifier">direct_write_predicate</span>(<span class="ruby-identifier">uri_res</span>, <span class="ruby-identifier">value</span>)
-301:       <span class="ruby-keyword kw">end</span>
-302:       <span class="ruby-identifier">save!</span> <span class="ruby-comment cmt"># Save without RDF save</span>
-303:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">autosave_rdf</span> = <span class="ruby-identifier">autosave</span>
-304:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source.rb, line 303</span>
+303:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_predicate_direct</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span>)
+304:       <span class="ruby-identifier">autosave</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">autosave_rdf?</span>
+305:       <span class="ruby-identifier">value</span>.<span class="ruby-identifier">save!</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ActiveSource</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">new_record?</span>)
+306:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">autosave_rdf</span> = <span class="ruby-keyword kw">false</span>
+307:       <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">predicate</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span>
+308:       <span class="ruby-identifier">uri_res</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">predicate</span>)
+309:       <span class="ruby-comment cmt"># Now add the RDF data by hand</span>
+310:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>))
+311:         <span class="ruby-identifier">value</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+312:           <span class="ruby-identifier">my_rdf</span>.<span class="ruby-identifier">direct_write_predicate</span>(<span class="ruby-identifier">uri_res</span>, <span class="ruby-identifier">v</span>)
+313:         <span class="ruby-keyword kw">end</span>
+314:       <span class="ruby-keyword kw">else</span>
+315:         <span class="ruby-identifier">my_rdf</span>.<span class="ruby-identifier">direct_write_predicate</span>(<span class="ruby-identifier">uri_res</span>, <span class="ruby-identifier">value</span>)
+316:       <span class="ruby-keyword kw">end</span>
+317:       <span class="ruby-identifier">save!</span> <span class="ruby-comment cmt"># Save without RDF save</span>
+318:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">autosave_rdf</span> = <span class="ruby-identifier">autosave</span>
+319:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

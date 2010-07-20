@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: TaliaCore::ActiveSourceParts::Xml::GenericReaderImportStatements</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">TaliaCore::ActiveSourceParts::Xml::GenericReaderImportStatements</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../../files/lib/talia_core/active_source_parts/xml/generic_reader_import_statements_rb.html">
+                lib/talia_core/active_source_parts/xml/generic_reader_import_statements.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+These are the statements that are use to add handler for elements or which
+are used to otherwise read data for the element
+</p>
+<h1>What is an element handler?</h1>
+<p>
+The methods in the <a
+href="GenericReaderImportStatements/Handlers.html">Handlers</a> submodule
+create element handlers. <a
+href="GenericReaderImportStatements/Handlers.html">Handlers</a> are the
+starting point for the import operation and are the only statements at the
+top level of the import description.
+</p>
+<p>
+Each handler will match a specific XML tag in the &quot;current&quot; XML
+content. At the beginning of the import the &quot;current&quot; content
+will be either the root element or all of its child elements (depending on
+wether the can_use_root flag is set).
+</p>
+<p>
+The handlers will automatically attempt to match the element(s) at the
+starting level:
+</p>
+<pre>
+ class SampleReader &lt; GenericReader
+
+    can_use_root CAN_BE_TRUE_OR_FALSE
+
+    element :foo do
+      # Code for foo tags
+    end
+
+    element :bar
+      # Code for bar tags
+    end
+
+    element :foobar
+      # Code for foobar tags
+    end
+
+ end
+</pre>
+<p>
+With this importer, there would be three handlers, for &quot;foo&quot;,
+&quot;bar&quot; and &quot;foobar&quot; tags. If you had the following XML
+</p>
+<pre>
+ &lt;foobar&gt;
+   &lt;foo&gt;Hello&lt;/foo&gt;
+   &lt;bar&gt;World&lt;/bar&gt;
+ &lt;/foobar&gt;
+</pre>
+<p>
+When reader above is run on the sample XML, the follwoing will happen:
+</p>
+<ul>
+<li>In case can_use_root has been set to true, the importer will start at the
+root element. In this case, the &quot;Code for foobar tags&quot; will be
+executed
+
+</li>
+<li>In case can_use_root has not been set, or set to false, the importer will
+work on the elements <em>inside</em> the root tag. This means that it will
+first check the &quot;foo&quot; tag and call the &quot;Code for foo
+tags&quot; and then check the the &quot;bar&quot; tag and call the
+&quot;Code for bar tags&quot;.
+
+</li>
+</ul>
+<p>
+Obviously an XML can also contain the same element multiple times, in which
+case the handler will be called multiple time.
+</p>
+<h1>What happens inside a handler?</h1>
+<p>
+When a handler is called, the &quot;current&quot; XML will be set to the
+inner part of the current document. That is, in case of the
+&quot;foobar&quot; handler the &quot;current&quot; XML would consist of the
+&quot;foo&quot; and &quot;bar&quot; tags (and their) content. For the
+&quot;foo&quot; and &quot;bar&quot; handler, the &quot;current&quot; XML
+would be just the text nodes inside it.
+</p>
+<p>
+The handler handler also has a &quot;current&quot; source that is being
+imported. In case of a handler that was declared with .element, a new,
+empty source is created whenever the handler is called. If the handler was
+declared with .plain_element, the handler &quot;inherits&quot; the current
+source that was active when it was called.
+</p>
+<p>
+Inside the handler, the <a
+href="GenericReaderAddStatements.html">GenericReaderAddStatements</a> are
+used in order to add data and properties to the current source.
+</p>
+<p>
+All handlers are executed as instance methods of the current reader.
+</p>
+<h1>How are handlers called?</h1>
+<p>
+The handlers that are declared in the importer are matched against the
+&quot;starting&quot; tags in the XML and called automatically. Inside the
+handler methods like <a
+href="GenericReaderImportStatements.html#M000118">add_source</a> can be
+used to call a handler on sub-elements. Example for the reader given above
+(with can_use_root set):
+</p>
+<pre>
+ element :foobar do
+   # At this point a new empty source has been created
+   # and is set as the &quot;current&quot; source. The &quot;current&quot; XML
+   # is the foo and bar tags
+   add_source :foo # Takes the &quot;foo&quot; tag and calls the handler
+   add_source :bar # Takes the &quot;bar&quot; tag and calls the handler
+   # Alternatively: add_source :from_all_sources -&gt; do both automatically
+ end
+</pre>
+<p>
+If the &quot;foo&quot; hanlder was defined as a .plain_element
+</p>
+<pre>
+ plain_element :foo { }
+</pre>
+<p>
+then the &quot;foo&quot; handler would inherit the source from the
+&quot;foobar&quot; handler through wich it was called.
+</p>
+<h1>Accessing data within in the handlers</h1>
+<p>
+While the handlers allow you to navigate through the XML structure, you
+will also have to read the data in order to construct the sources.
+</p>
+<p>
+The from_* methods allow to read data from the current XML:
+</p>
+<pre>
+ element :foobar do
+   the_thing = from_element :foo
+ end
+</pre>
+<p>
+In this case, inside the handler for the &quot;foobar&quot; tag, you
+attempt to read the text from the :foo element. With the XML given above,
+the result of this would be the string &quot;Hello&quot;
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000119">add_part</a>&nbsp;&nbsp;
+      <a href="#M000118">add_source</a>&nbsp;&nbsp;
+      <a href="#M000116">all_elements</a>&nbsp;&nbsp;
+      <a href="#M000114">from_attribute</a>&nbsp;&nbsp;
+      <a href="#M000115">from_element</a>&nbsp;&nbsp;
+      <a href="#M000117">nested</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Module <a href="GenericReaderImportStatements/Handlers.html" class="link">TaliaCore::ActiveSourceParts::Xml::GenericReaderImportStatements::Handlers</a><br />
+
+    </div>
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000119" class="method-detail">
+        <a name="M000119"></a>
+
+        <div class="method-heading">
+          <a href="#M000119" class="method-signature">
+          <span class="method-name">add_part</span><span class="method-args">(sub_element = nil, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Imports another source like <a
+href="GenericReaderImportStatements.html#M000118">add_source</a> and also
+assigns the new source as a part of the current one.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000119-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000119-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/xml/generic_reader_import_statements.rb, line 223</span>
+223:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_part</span>(<span class="ruby-identifier">sub_element</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+224:           <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RuntimeError</span>, <span class="ruby-value str">&quot;Cannot add child before having an uri to refer to.&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@current</span>.<span class="ruby-identifier">attributes</span>[<span class="ruby-value str">'uri'</span>])
+225:           <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span>.<span class="ruby-identifier">search</span>(<span class="ruby-node">&quot;/#{sub_element}&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sub_elem</span><span class="ruby-operator">|</span>
+226:             <span class="ruby-identifier">attribs</span> = <span class="ruby-identifier">call_handler</span>(<span class="ruby-identifier">sub_elem</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+227:             <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">attribs</span>)
+228:               <span class="ruby-identifier">attribs</span>[<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">part_of</span>.<span class="ruby-identifier">to_s</span>] <span class="ruby-operator">||=</span> []
+229:               <span class="ruby-identifier">attribs</span>[<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">part_of</span>.<span class="ruby-identifier">to_s</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&lt;#{@current.attributes['uri']}&gt;&quot;</span>
+230:               <span class="ruby-identifier">add_source_with_check</span>(<span class="ruby-identifier">attribs</span>)
+231:             <span class="ruby-keyword kw">end</span>
+232:           <span class="ruby-keyword kw">end</span>
+233:         <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000118" class="method-detail">
+        <a name="M000118"></a>
+
+        <div class="method-heading">
+          <a href="#M000118" class="method-signature">
+          <span class="method-name">add_source</span><span class="method-args">(sub_element = nil, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Adds a source from the given sub-element. You may either pass a block with
+the code to import or the name of an already registered element. If the
+special value :from_all_sources is given, it will read from all
+sub-elements for which there are registered handlers.
+</p>
+<p>
+If the method is used with a block, it will call the block as a handler for
+the <em>current</em> element.l
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000118-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000118-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/xml/generic_reader_import_statements.rb, line 207</span>
+207:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_source</span>(<span class="ruby-identifier">sub_element</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+208:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">sub_element</span>)
+209:             <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">sub_element</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:from_all_sources</span>)
+210:               <span class="ruby-identifier">read_children_of</span>(<span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span>)
+211:             <span class="ruby-keyword kw">else</span>
+212:               <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span>.<span class="ruby-identifier">search</span>(<span class="ruby-node">&quot;/#{sub_element}&quot;</span>).<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">sub_elem</span><span class="ruby-operator">|</span> <span class="ruby-identifier">read_source</span>(<span class="ruby-identifier">sub_elem</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) }
+213:             <span class="ruby-keyword kw">end</span>
+214:           <span class="ruby-keyword kw">else</span>
+215:             <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;When adding elements on the fly, you must use a block&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">block</span>)
+216:             <span class="ruby-identifier">attribs</span> = <span class="ruby-identifier">call_handler</span>(<span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+217:             <span class="ruby-identifier">add_source_with_check</span>(<span class="ruby-identifier">attribs</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">attribs</span>)
+218:           <span class="ruby-keyword kw">end</span>
+219:         <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000116" class="method-detail">
+        <a name="M000116"></a>
+
+        <div class="method-heading">
+          <a href="#M000116" class="method-signature">
+          <span class="method-name">all_elements</span><span class="method-args">(elem)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This works like <a
+href="GenericReaderImportStatements.html#M000115">from_element</a>, except
+that it will return an array with the values of <b>all</b> &quot;elem&quot;
+tags inside the current XML.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000116-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000116-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/xml/generic_reader_import_statements.rb, line 176</span>
+176:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_elements</span>(<span class="ruby-identifier">elem</span>)
+177:           <span class="ruby-identifier">result</span> = []
+178:           <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span>.<span class="ruby-identifier">search</span>(<span class="ruby-node">&quot;/#{elem}&quot;</span>).<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">el</span><span class="ruby-operator">|</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">el</span>.<span class="ruby-identifier">inner_text</span>.<span class="ruby-identifier">strip</span> }
+179:           <span class="ruby-identifier">result</span>
+180:         <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000114" class="method-detail">
+        <a name="M000114"></a>
+
+        <div class="method-heading">
+          <a href="#M000114" class="method-signature">
+          <span class="method-name">from_attribute</span><span class="method-args">(attrib)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets the data for an attribute of the current XML element. E.g. if you have
+XML for
+</p>
+<pre>
+ &lt;foobar name=&quot;myself&quot;&gt;
+   &lt;foo&gt;Hello World&lt;/foo&gt;
+ &lt;/foobar&gt;
+</pre>
+<p>
+And this handler
+</p>
+<pre>
+ element :foobar do
+   my_attr = from_attribute :name
+ end
+</pre>
+<p>
+then the my_attr variable will be set to &quot;myself&quot;
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000114-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000114-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/xml/generic_reader_import_statements.rb, line 156</span>
+156:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_attribute</span>(<span class="ruby-identifier">attrib</span>) 
+157:           <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span>[<span class="ruby-identifier">attrib</span>]
+158:         <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000115" class="method-detail">
+        <a name="M000115"></a>
+
+        <div class="method-heading">
+          <a href="#M000115" class="method-signature">
+          <span class="method-name">from_element</span><span class="method-args">(elem)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets data from the XML tag &quot;elem&quot; inside the currently active XML
+</p>
+<p>
+&lt;foobar&gt;&lt;foo&gt;Hello World&lt;/foo&gt;&lt;/foobar&gt;
+</p>
+<p>
+Inside the &quot;foobar&quot; handler `<a
+href="GenericReaderImportStatements.html#M000115">from_element</a> :foo`
+would return &quot;Hello World&quot; with the XML given above.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000115-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000115-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/xml/generic_reader_import_statements.rb, line 166</span>
+166:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_element</span>(<span class="ruby-identifier">elem</span>)
+167:           <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span>.<span class="ruby-identifier">inner_text</span>.<span class="ruby-identifier">strip</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">elem</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:self</span>)
+168:           <span class="ruby-identifier">elements</span> = <span class="ruby-identifier">all_elements</span>(<span class="ruby-identifier">elem</span>)
+169:           <span class="ruby-identifier">elements</span> = <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">uniq</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">elements</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>) <span class="ruby-comment cmt"># Try to ignore dupes</span>
+170:           <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;More than one element of #{elem} in #{@current.element.inspect}&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">elements</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>)
+171:           <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">first</span>
+172:         <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000117" class="method-detail">
+        <a name="M000117"></a>
+
+        <div class="method-heading">
+          <a href="#M000117" class="method-signature">
+          <span class="method-name">nested</span><span class="method-args">(sub_element, handler_method = nil) {|: self.send(handler_method)| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Adds a <a href="GenericReaderImportStatements.html#M000117">nested</a>
+element. This will not change the currently importing source, but it will
+set the currently active XML to the <a
+href="GenericReaderImportStatements.html#M000117">nested</a> element. If a
+block is given, it will execute for each of the <a
+href="GenericReaderImportStatements.html#M000117">nested</a> elements that
+are found. Otherwise, a method name must be given, and that method will be
+executed instead of the block
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000117-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000117-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/active_source_parts/xml/generic_reader_import_statements.rb, line 187</span>
+187:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nested</span>(<span class="ruby-identifier">sub_element</span>, <span class="ruby-identifier">handler_method</span> = <span class="ruby-keyword kw">nil</span>)
+188:           <span class="ruby-identifier">original_element</span> = <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span>
+189:           <span class="ruby-keyword kw">begin</span>
+190:             <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span>.<span class="ruby-identifier">search</span>(<span class="ruby-node">&quot;#{sub_element}&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sub_elem</span><span class="ruby-operator">|</span>
+191:               <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span> = <span class="ruby-identifier">sub_elem</span>
+192:               <span class="ruby-identifier">assit</span>(<span class="ruby-identifier">block_given?</span> <span class="ruby-operator">^</span> (<span class="ruby-identifier">handler_method</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)), <span class="ruby-value str">'Must have either a handler (x)or a block.'</span>)
+193:               <span class="ruby-identifier">block_given?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">yield</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">handler_method</span>)
+194:             <span class="ruby-keyword kw">end</span>
+195:           <span class="ruby-keyword kw">ensure</span>
+196:             <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">element</span> = <span class="ruby-identifier">original_element</span>
+197:           <span class="ruby-keyword kw">end</span>
+198:         <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

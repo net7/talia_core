@@ -65,7 +65,9 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
+                <a href="../Object.html">
                 Object
+               </a>
             </td>
         </tr>
         </table>
@@ -81,7 +83,7 @@
     <div id="description">
       <p>
 Import RDF data directly into the triple store. This is called to <a
-href="RdfImport.html#M000343">import</a> onotologies and other RDF data.
+href="RdfImport.html#M000296">import</a> onotologies and other RDF data.
 </p>
 
     </div>
@@ -93,9 +95,9 @@ href="RdfImport.html#M000343">import</a> onotologies and other RDF data.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000345">clear_file_contexts</a>&nbsp;&nbsp;
-      <a href="#M000343">import</a>&nbsp;&nbsp;
-      <a href="#M000344">import_file</a>&nbsp;&nbsp;
+      <a href="#M000298">clear_file_contexts</a>&nbsp;&nbsp;
+      <a href="#M000296">import</a>&nbsp;&nbsp;
+      <a href="#M000297">import_file</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -117,11 +119,11 @@ href="RdfImport.html#M000343">import</a> onotologies and other RDF data.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000345" class="method-detail">
-        <a name="M000345"></a>
+      <div id="method-M000298" class="method-detail">
+        <a name="M000298"></a>
 
         <div class="method-heading">
-          <a href="#M000345" class="method-signature">
+          <a href="#M000298" class="method-signature">
           <span class="method-name">clear_file_contexts</span><span class="method-args">()</span>
           </a>
         </div>
@@ -131,28 +133,28 @@ href="RdfImport.html#M000343">import</a> onotologies and other RDF data.
 Clear the currently registered ontologies
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000345-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000345-source">
+            onclick="toggleCode('M000298-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000298-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_import.rb, line 54</span>
 54:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear_file_contexts</span>
 55:         <span class="ruby-comment cmt"># Remove all registered contexts</span>
-56:         <span class="ruby-identifier">to_clear</span> = <span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>).<span class="ruby-identifier">select</span>(<span class="ruby-identifier">:context</span>).<span class="ruby-identifier">distinct</span>.<span class="ruby-identifier">where</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">rdf_context_space</span>, <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">rdf_file_context</span>, <span class="ruby-identifier">:context</span>).<span class="ruby-identifier">execute</span>
+56:         <span class="ruby-identifier">to_clear</span> = <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>).<span class="ruby-identifier">select</span>(<span class="ruby-identifier">:context</span>).<span class="ruby-identifier">distinct</span>.<span class="ruby-identifier">where</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">rdf_context_space</span>, <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">rdf_file_context</span>, <span class="ruby-identifier">:context</span>).<span class="ruby-identifier">execute</span>
 57:         <span class="ruby-identifier">to_clear</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">context</span><span class="ruby-operator">|</span>
 58:           <span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">clear</span>(<span class="ruby-identifier">context</span>) 
 59:         <span class="ruby-keyword kw">end</span>
-60:         <span class="ruby-constant">FederationManager</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">rdf_context_space</span>, <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">rdf_file_context</span>, <span class="ruby-keyword kw">nil</span>)
+60:         <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">FederationManager</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">rdf_context_space</span>, <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">TALIA</span>.<span class="ruby-identifier">rdf_file_context</span>, <span class="ruby-keyword kw">nil</span>)
 61:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000343" class="method-detail">
-        <a name="M000343"></a>
+      <div id="method-M000296" class="method-detail">
+        <a name="M000296"></a>
 
         <div class="method-heading">
-          <a href="#M000343" class="method-signature">
+          <a href="#M000296" class="method-signature">
           <span class="method-name">import</span><span class="method-args">(rdf_syntax, files, context=nil)</span>
           </a>
         </div>
@@ -163,14 +165,14 @@ Import the given files. The rdf_syntax may be nil. If &quot;auto&quot; is
 given, it will use a default value for each imported file
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000343-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000343-source">
+            onclick="toggleCode('M000296-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000296-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_import.rb, line 14</span>
 14:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">import</span>(<span class="ruby-identifier">rdf_syntax</span>, <span class="ruby-identifier">files</span>, <span class="ruby-identifier">context</span>=<span class="ruby-keyword kw">nil</span>)
 15:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Importing #{files.size} files into the triple store.&quot;</span>
 16:         
-17:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Cannot use context, adapter doesn't support it.&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">context</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">supports_context?</span>)
+17:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Cannot use context, adapter doesn't support it.&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">context</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">contexts?</span>)
 18:         
 19:         <span class="ruby-comment cmt"># check if the connection to te triplestore is ok...otherwise exit the script</span>
 20:         <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">adapter</span>
@@ -183,7 +185,7 @@ given, it will use a default value for each imported file
 27:           <span class="ruby-identifier">import_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">rdf_syntax</span>, <span class="ruby-identifier">context</span>)
 28:         <span class="ruby-keyword kw">end</span>
 29: 
-30:         <span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">save</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:save</span>))
+30:         <span class="ruby-identifier">adapter</span>.<span class="ruby-identifier">try_call</span>.<span class="ruby-identifier">save</span>
 31: 
 32:         <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;\n--&gt; Importing rdf/rdfs file: complete!\n\n&quot;</span>
 33:       <span class="ruby-keyword kw">end</span>
@@ -192,19 +194,19 @@ given, it will use a default value for each imported file
         </div>
       </div>
 
-      <div id="method-M000344" class="method-detail">
-        <a name="M000344"></a>
+      <div id="method-M000297" class="method-detail">
+        <a name="M000297"></a>
 
         <div class="method-heading">
-          <a href="#M000344" class="method-signature">
+          <a href="#M000297" class="method-signature">
           <span class="method-name">import_file</span><span class="method-args">(file, syntax, context)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000344-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000344-source">
+            onclick="toggleCode('M000297-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000297-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_import.rb, line 35</span>
 35:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">import_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">syntax</span>, <span class="ruby-identifier">context</span>)

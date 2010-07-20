@@ -82,8 +82,87 @@
 
     <div id="description">
       <p>
-Class to manage IIP Image data type. FIXME: Check if this correctly
-destroys existing files.
+Class to manage IIP Image data type. This differs from the
+&quot;normal&quot; file record in various ways:
+</p>
+<ul>
+<li>The record itself only contains a thumbnail version of the image as data
+(get_thumbnail will return the file data for the thumbnail)
+
+</li>
+<li>The location of the record contains the path to the image on the IIP
+server. This is also returned by <a
+href="IipData.html#M000192">iip_server_path</a>
+
+</li>
+<li>The records should be created using the <a
+href="IipLoader.html">IipLoader</a> - see <a
+href="DataLoader.html">DataLoader</a> to find out how to configure Talia to
+do that
+
+</li>
+</ul>
+<h1>What is IIP?</h1>
+<p>
+IIP is a protocol to use &quot;pyramidal images&quot; - which are images
+which contain a tiled version of the original image in various resolutions.
+It is used to serve high-resolution images in a way that a client can
+request only the portion of the image that is currently needed.
+</p>
+<h1>How does IIP work with Talia?</h1>
+<p>
+To use IIP, an IIP server is needed. The IIP client will connect to the
+server and request an image from using HTTP requests.
+</p>
+<p>
+The IIP server is a separate piece of sofware, which is not part of Talia.
+The one commonly used is <a
+href="http://iipimage.sourceforge.net">iipimage.sourceforge.net</a>/ which
+runs as a fastcgi module in Apache (or another web server).
+</p>
+<p>
+For talia this means:
+</p>
+<ul>
+<li>The pyramidal images have to be put in a place where the IIP server can
+access them - they do <b>not</b> go in the normal data directory.
+
+</li>
+<li>The location of the directory for the pyramidal images can be configured as
+<tt>iip_root_directory_location</tt> in the <tt>talia_core.yml</tt> file.
+
+</li>
+<li>The <tt>location</tt> field of each <a href="IipData.html">IipData</a>
+record contains the <em>relative</em> path for accessing the file on the
+IIP server.
+
+</li>
+<li>The URI of the server itself can be set in <tt>talia_core.yml</tt> as
+<tt><a href="IipData.html#M000189">iip_server_uri</a></tt>
+
+</li>
+</ul>
+<h1>How can the IIP images be shown in Talia?</h1>
+<p>
+There are several clients or &quot;viewers&quot; for IIP images available,
+and one is also included in the &quot;muruca_widgets&quot; gem that can be
+installed in addition to talia.
+</p>
+<p>
+Generally you&#8216;ll have to include the client in your view templates,
+and use the <a href="IipData.html#M000189">iip_server_uri</a> and <a
+href="IipData.html#M000192">iip_server_path</a> to point it to the image on
+the server.
+</p>
+<p>
+Obviously you&#8216;ll also need a running IIP server.
+</p>
+<h1>What are the requirements for IIP?</h1>
+<p>
+Apart from the IIP server itself, you&#8216;ll need some software to
+actually create the pyramidal images - see the <a
+href="../../TaliaUtil/ImageConversions.html">TaliaUtil::ImageConversions</a>
+class for details.
 </p>
 
     </div>
@@ -95,17 +174,17 @@ destroys existing files.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000246">create_from_existing</a>&nbsp;&nbsp;
-      <a href="#M000252">create_pyramid</a>&nbsp;&nbsp;
-      <a href="#M000249">direct_write!</a>&nbsp;&nbsp;
-      <a href="#M000254">get_iip_root_file_path</a>&nbsp;&nbsp;
-      <a href="#M000253">iip_root_directory</a>&nbsp;&nbsp;
-      <a href="#M000247">iip_server_path</a>&nbsp;&nbsp;
-      <a href="#M000244">iip_server_uri</a>&nbsp;&nbsp;
-      <a href="#M000251">prepare_for_pyramid</a>&nbsp;&nbsp;
-      <a href="#M000250">prepare_original_file</a>&nbsp;&nbsp;
-      <a href="#M000245">set_mime_type</a>&nbsp;&nbsp;
-      <a href="#M000248">write_file_after_save</a>&nbsp;&nbsp;
+      <a href="#M000191">create_from_existing</a>&nbsp;&nbsp;
+      <a href="#M000197">create_pyramid</a>&nbsp;&nbsp;
+      <a href="#M000194">direct_write!</a>&nbsp;&nbsp;
+      <a href="#M000199">get_iip_root_file_path</a>&nbsp;&nbsp;
+      <a href="#M000198">iip_root_directory</a>&nbsp;&nbsp;
+      <a href="#M000192">iip_server_path</a>&nbsp;&nbsp;
+      <a href="#M000189">iip_server_uri</a>&nbsp;&nbsp;
+      <a href="#M000196">prepare_for_pyramid</a>&nbsp;&nbsp;
+      <a href="#M000195">prepare_original_file</a>&nbsp;&nbsp;
+      <a href="#M000190">set_mime_type</a>&nbsp;&nbsp;
+      <a href="#M000193">write_file_after_save</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -140,27 +219,30 @@ destroys existing files.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000244" class="method-detail">
-        <a name="M000244"></a>
+      <div id="method-M000189" class="method-detail">
+        <a name="M000189"></a>
 
         <div class="method-heading">
-          <a href="#M000244" class="method-signature">
+          <a href="#M000189" class="method-signature">
           <span class="method-name">iip_server_uri</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns the IIP server configured for the application
+Returns the IIP server configured for the application. This is usually the
+value configured as the <tt><a
+href="IipData.html#M000189">iip_server_uri</a></tt> in the
+<tt>talia_core.yml</tt>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000244-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000244-source">
+            onclick="toggleCode('M000189-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000189-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 8</span>
- 8:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">iip_server_uri</span>
- 9:         <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">CONFIG</span>[<span class="ruby-value str">'iip_server_uri'</span>] <span class="ruby-operator">||=</span> <span class="ruby-value str">'http://localhost/fcgi-bin/iipsrv.fcgi'</span>
-10:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 63</span>
+63:       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">iip_server_uri</span>
+64:         <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">CONFIG</span>[<span class="ruby-value str">'iip_server_uri'</span>] <span class="ruby-operator">||=</span> <span class="ruby-value str">'http://localhost/fcgi-bin/iipsrv.fcgi'</span>
+65:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -168,39 +250,41 @@ Returns the IIP server configured for the application
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000246" class="method-detail">
-        <a name="M000246"></a>
+      <div id="method-M000191" class="method-detail">
+        <a name="M000191"></a>
 
         <div class="method-heading">
-          <a href="#M000246" class="method-signature">
+          <a href="#M000191" class="method-signature">
           <span class="method-name">create_from_existing</span><span class="method-args">(thumb, pyramid, delete_originals = false)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Create from existing thumb and pyramid images
+Create a new record from an existing thumb and pyramidal image. This is
+used to make a record from pre-existing &quot;prepared&quot; images and
+does not do any image conversion.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000246-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000246-source">
+            onclick="toggleCode('M000191-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000191-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 20</span>
-20:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_existing</span>(<span class="ruby-identifier">thumb</span>, <span class="ruby-identifier">pyramid</span>, <span class="ruby-identifier">delete_originals</span> = <span class="ruby-keyword kw">false</span>)
-21:         <span class="ruby-ivar">@file_data_to_write</span> = [<span class="ruby-identifier">thumb</span>, <span class="ruby-identifier">pyramid</span>]
-22:         <span class="ruby-ivar">@delete_original_file</span> = <span class="ruby-identifier">delete_originals</span>
-23:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span> = <span class="ruby-value str">''</span>
-24:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 77</span>
+77:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_existing</span>(<span class="ruby-identifier">thumb</span>, <span class="ruby-identifier">pyramid</span>, <span class="ruby-identifier">delete_originals</span> = <span class="ruby-keyword kw">false</span>)
+78:         <span class="ruby-ivar">@file_data_to_write</span> = [<span class="ruby-identifier">thumb</span>, <span class="ruby-identifier">pyramid</span>]
+79:         <span class="ruby-ivar">@delete_original_file</span> = <span class="ruby-identifier">delete_originals</span>
+80:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span> = <span class="ruby-value str">''</span>
+81:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000252" class="method-detail">
-        <a name="M000252"></a>
+      <div id="method-M000197" class="method-detail">
+        <a name="M000197"></a>
 
         <div class="method-heading">
-          <a href="#M000252" class="method-signature">
+          <a href="#M000197" class="method-signature">
           <span class="method-name">create_pyramid</span><span class="method-args">(source)</span>
           </a>
         </div>
@@ -208,182 +292,201 @@ Create from existing thumb and pyramid images
         <div class="method-description">
           <p>
 Creates the pyramid image for IIP by running the configured system command.
-This automatically creates the file in the correct location (IIP root)
+This automatically creates the file in the correct location (IIP root). The
+conversion is done using the <a
+href="../../TaliaUtil/ImageConversions.html">TaliaUtil::ImageConversions</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000252-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000252-source">
+            onclick="toggleCode('M000197-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000197-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 120</span>
-120:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_pyramid</span>(<span class="ruby-identifier">source</span>)
-121:         <span class="ruby-comment cmt"># check if file already exists</span>
-122:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">IOError</span>, <span class="ruby-node">&quot;File already exists: #{get_iip_root_file_path}&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">get_iip_root_file_path</span>))
-123:        
-124:         <span class="ruby-identifier">prepare_for_pyramid</span>
-125: 
-126:         <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageConversions</span><span class="ruby-operator">::</span><span class="ruby-identifier">create_pyramid</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">get_iip_root_file_path</span>)
-127:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 196</span>
+196:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_pyramid</span>(<span class="ruby-identifier">source</span>)
+197:         <span class="ruby-comment cmt"># check if file already exists</span>
+198:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">IOError</span>, <span class="ruby-node">&quot;File already exists: #{get_iip_root_file_path}&quot;</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">get_iip_root_file_path</span>))
+199:        
+200:         <span class="ruby-identifier">prepare_for_pyramid</span>
+201: 
+202:         <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageConversions</span><span class="ruby-operator">::</span><span class="ruby-identifier">create_pyramid</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">get_iip_root_file_path</span>)
+203:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000249" class="method-detail">
-        <a name="M000249"></a>
+      <div id="method-M000194" class="method-detail">
+        <a name="M000194"></a>
 
         <div class="method-heading">
-          <a href="#M000249" class="method-signature">
+          <a href="#M000194" class="method-signature">
           <span class="method-name">direct_write!</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Checks if we have file paths given to directly copy thum and image file.
-Will always return true if such paths were given.
+Checks if there if the thumb and pyramidal file already exist and can
+simply be moved to the correct location.
+</p>
+<p>
+If yes, the method will move or copy the files to the correct locations,
+and return true Otherwise, the method will do nothing and return false.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000249-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000249-source">
+            onclick="toggleCode('M000194-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000194-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 67</span>
-67:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_write!</span>
-68:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>))
-69:         
-70:         <span class="ruby-identifier">thumb</span>, <span class="ruby-identifier">pyramid</span> = <span class="ruby-ivar">@file_data_to_write</span>
-71:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">benchmark</span>(<span class="ruby-node">&quot;\033[36mIipData\033[0m Direct write for #{self.id}&quot;</span>, <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">INFO</span>) <span class="ruby-keyword kw">do</span>
-72:           <span class="ruby-identifier">prepare_for_pyramid</span>
-73:         
-74:           <span class="ruby-identifier">copy_or_move</span>(<span class="ruby-identifier">pyramid</span>, <span class="ruby-identifier">get_iip_root_file_path</span>)
-75:         
-76:         <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># end benchmark</span>
-77:           
-78:         <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-constant">DataPath</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">thumb</span>)
-79:         
-80:         <span class="ruby-keyword kw">true</span>
-81:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 138</span>
+138:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_write!</span>
+139:         <span class="ruby-comment cmt"># If we have an array of data files, we can assume that these are </span>
+140:         <span class="ruby-comment cmt"># pre-prepared thumb and pyramid images</span>
+141:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>))
+142:         
+143:         <span class="ruby-identifier">thumb</span>, <span class="ruby-identifier">pyramid</span> = <span class="ruby-ivar">@file_data_to_write</span>
+144:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">benchmark</span>(<span class="ruby-node">&quot;\033[36mIipData\033[0m Direct write for #{self.id}&quot;</span>, <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">INFO</span>) <span class="ruby-keyword kw">do</span>
+145:           <span class="ruby-identifier">prepare_for_pyramid</span> <span class="ruby-comment cmt"># Setup the record for the new image</span>
+146:           <span class="ruby-comment cmt"># Copy or move the pyramid file to the correct location</span>
+147:           <span class="ruby-identifier">copy_or_move</span>(<span class="ruby-identifier">pyramid</span>, <span class="ruby-identifier">get_iip_root_file_path</span>)
+148:         
+149:         <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># end benchmark</span>
+150:         
+151:         <span class="ruby-comment cmt"># Set the thumb file as the data file for the current FileRecord (which</span>
+152:         <span class="ruby-comment cmt"># is automatically handled by the superclass)</span>
+153:         <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-constant">DataPath</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">thumb</span>)
+154:         
+155:         <span class="ruby-keyword kw">true</span>
+156:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000254" class="method-detail">
-        <a name="M000254"></a>
+      <div id="method-M000199" class="method-detail">
+        <a name="M000199"></a>
 
         <div class="method-heading">
-          <a href="#M000254" class="method-signature">
+          <a href="#M000199" class="method-signature">
           <span class="method-name">get_iip_root_file_path</span><span class="method-args">(relative = false)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Return the full file path related to the data directory
+Return the full file path for the IIP image. See <a
+href="IipData.html#M000198">iip_root_directory</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000254-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000254-source">
+            onclick="toggleCode('M000199-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000199-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 139</span>
-139:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_iip_root_file_path</span>(<span class="ruby-identifier">relative</span> = <span class="ruby-keyword kw">false</span>)
-140:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">iip_root_directory</span>(<span class="ruby-identifier">relative</span>), <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'.tif'</span>)
-141:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 220</span>
+220:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_iip_root_file_path</span>(<span class="ruby-identifier">relative</span> = <span class="ruby-keyword kw">false</span>)
+221:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">iip_root_directory</span>(<span class="ruby-identifier">relative</span>), <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'.tif'</span>)
+222:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000253" class="method-detail">
-        <a name="M000253"></a>
+      <div id="method-M000198" class="method-detail">
+        <a name="M000198"></a>
 
         <div class="method-heading">
-          <a href="#M000253" class="method-signature">
+          <a href="#M000198" class="method-signature">
           <span class="method-name">iip_root_directory</span><span class="method-args">(relative = false)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Return the iip root directory for a specific iip image file
+Return the iip root directory for a specific iip image file. This is the
+directory where the pyramid file will be stored on disk.
+</p>
+<p>
+If the <tt>relative</tt> flag is set, it will return a relative path.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000253-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000253-source">
+            onclick="toggleCode('M000198-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000198-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 130</span>
-130:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">iip_root_directory</span>(<span class="ruby-identifier">relative</span> = <span class="ruby-keyword kw">false</span>)
-131:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">relative</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">false</span>
-132:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">CONFIG</span>[<span class="ruby-value str">&quot;iip_root_directory_location&quot;</span>], (<span class="ruby-value str">&quot;00&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">-3</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
-133:         <span class="ruby-keyword kw">else</span>
-134:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>((<span class="ruby-value str">&quot;00&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">-3</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
-135:         <span class="ruby-keyword kw">end</span>
-136:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 209</span>
+209:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">iip_root_directory</span>(<span class="ruby-identifier">relative</span> = <span class="ruby-keyword kw">false</span>)
+210:         <span class="ruby-comment cmt"># TODO: The relative paths are (also?) used for web access, is it o.k. to</span>
+211:         <span class="ruby-comment cmt"># use File.join ?</span>
+212:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">relative</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">false</span>
+213:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">CONFIG</span>[<span class="ruby-value str">&quot;iip_root_directory_location&quot;</span>], (<span class="ruby-value str">&quot;00&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">-3</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
+214:         <span class="ruby-keyword kw">else</span>
+215:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>((<span class="ruby-value str">&quot;00&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">-3</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
+216:         <span class="ruby-keyword kw">end</span>
+217:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000247" class="method-detail">
-        <a name="M000247"></a>
+      <div id="method-M000192" class="method-detail">
+        <a name="M000192"></a>
 
         <div class="method-heading">
-          <a href="#M000247" class="method-signature">
+          <a href="#M000192" class="method-signature">
           <span class="method-name">iip_server_path</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-return IIP Server Path
+The relative path to the image on the IIP server
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000247-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000247-source">
+            onclick="toggleCode('M000192-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000192-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 27</span>
-27:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">iip_server_path</span>
-28:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span>
-29:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 84</span>
+84:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">iip_server_path</span>
+85:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span>
+86:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000251" class="method-detail">
-        <a name="M000251"></a>
+      <div id="method-M000196" class="method-detail">
+        <a name="M000196"></a>
 
         <div class="method-heading">
-          <a href="#M000251" class="method-signature">
+          <a href="#M000196" class="method-signature">
           <span class="method-name">prepare_for_pyramid</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Prepare for copying or creating the pyramid image
+Prepare for copying or creating the pyramid image. Sets the
+<tt>location</tt> of the record and creates the directory to store the IIP
+images
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000251-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000251-source">
+            onclick="toggleCode('M000196-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000196-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 109</span>
-109:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prepare_for_pyramid</span>
-110:         <span class="ruby-comment cmt"># set location</span>
-111:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">get_iip_root_file_path</span>(<span class="ruby-keyword kw">true</span>)
-112:         
-113:         <span class="ruby-comment cmt"># create data directory path</span>
-114:         <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">iip_root_directory</span>)
-115:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 185</span>
+185:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prepare_for_pyramid</span>
+186:         <span class="ruby-comment cmt"># set location</span>
+187:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">get_iip_root_file_path</span>(<span class="ruby-keyword kw">true</span>)
+188:         
+189:         <span class="ruby-comment cmt"># create data directory path</span>
+190:         <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">iip_root_directory</span>)
+191:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000250" class="method-detail">
-        <a name="M000250"></a>
+      <div id="method-M000195" class="method-detail">
+        <a name="M000195"></a>
 
         <div class="method-heading">
-          <a href="#M000250" class="method-signature">
+          <a href="#M000195" class="method-signature">
           <span class="method-name">prepare_original_file</span><span class="method-args">()</span>
           </a>
         </div>
@@ -391,7 +494,7 @@ Prepare for copying or creating the pyramid image
         <div class="method-description">
           <p>
 This prepares the original file that needs to be converted. This will see
-if the data to be written is binary data or a file path. If this is binary
+if the data to be written is binary data or a file path. If it is binary
 data, it will create a temporary file on the disk.
 </p>
 <p>
@@ -400,105 +503,126 @@ file system path) and a flag indicating if the file is a temporary file or
 not.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000250-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000250-source">
+            onclick="toggleCode('M000195-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000195-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 90</span>
- 90:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prepare_original_file</span>
- 91:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">DataPath</span>))
- 92:           [<span class="ruby-ivar">@file_data_to_write</span>, <span class="ruby-keyword kw">false</span>]
- 93:         <span class="ruby-keyword kw">else</span>
- 94:           <span class="ruby-identifier">temp_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">tmpdir</span>, <span class="ruby-node">&quot;original_#{random_tempfile_filename}&quot;</span>)
- 95:           <span class="ruby-comment cmt"># write the original file</span>
- 96:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">temp_file</span>, <span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">original_file</span><span class="ruby-operator">|</span>
- 97:             <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:read</span>))
- 98:               <span class="ruby-identifier">original_file</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">read</span>
- 99:             <span class="ruby-keyword kw">else</span>
-100:               <span class="ruby-identifier">original_file</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@file_data_to_write</span>
-101:             <span class="ruby-keyword kw">end</span>
-102:           <span class="ruby-keyword kw">end</span>
-103:           
-104:           [<span class="ruby-identifier">temp_file</span>, <span class="ruby-keyword kw">true</span>]
-105:         <span class="ruby-keyword kw">end</span>
-106:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 165</span>
+165:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prepare_original_file</span>
+166:         <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">DataPath</span>))
+167:           [<span class="ruby-ivar">@file_data_to_write</span>, <span class="ruby-keyword kw">false</span>]
+168:         <span class="ruby-keyword kw">else</span>
+169:           <span class="ruby-identifier">temp_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">tmpdir</span>, <span class="ruby-node">&quot;original_#{random_tempfile_filename}&quot;</span>)
+170:           <span class="ruby-comment cmt"># write the original file</span>
+171:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">temp_file</span>, <span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">original_file</span><span class="ruby-operator">|</span>
+172:             <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:read</span>))
+173:               <span class="ruby-identifier">original_file</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@file_data_to_write</span>.<span class="ruby-identifier">read</span>
+174:             <span class="ruby-keyword kw">else</span>
+175:               <span class="ruby-identifier">original_file</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@file_data_to_write</span>
+176:             <span class="ruby-keyword kw">end</span>
+177:           <span class="ruby-keyword kw">end</span>
+178:           
+179:           [<span class="ruby-identifier">temp_file</span>, <span class="ruby-keyword kw">true</span>]
+180:         <span class="ruby-keyword kw">end</span>
+181:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000245" class="method-detail">
-        <a name="M000245"></a>
+      <div id="method-M000190" class="method-detail">
+        <a name="M000190"></a>
 
         <div class="method-heading">
-          <a href="#M000245" class="method-signature">
+          <a href="#M000190" class="method-signature">
           <span class="method-name">set_mime_type</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-This is the mime type for the thumbnail - always tiff
+This is the mime type for the thumbnail. Always gif.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000245-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000245-source">
+            onclick="toggleCode('M000190-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000190-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 13</span>
-13:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_mime_type</span>
-14:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">mime</span> = <span class="ruby-value str">'image/gif'</span>
-15:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 68</span>
+68:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_mime_type</span>
+69:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">mime</span> = <span class="ruby-value str">'image/gif'</span>
+70:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000248" class="method-detail">
-        <a name="M000248"></a>
+      <div id="method-M000193" class="method-detail">
+        <a name="M000193"></a>
 
         <div class="method-heading">
-          <a href="#M000248" class="method-signature">
+          <a href="#M000193" class="method-signature">
           <span class="method-name">write_file_after_save</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Callback to write the data when the record is saved, which is more involved
+than the same method on the superclass.
+</p>
+<ul>
+<li>If the thumb and pyramid file are already available, they are used directly
+with direct_write!
+
+</li>
+<li>Otherwise it will take the original file and pass it through the <a
+href="../../TaliaUtil/ImageConversions.html">TaliaUtil::ImageConversions</a>
+to create the thumbnail and pyramidal image.
+
+</li>
+<li>Any temporary files created in the process are cleaned up afterwards
+
+</li>
+</ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000248-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000248-source">
+            onclick="toggleCode('M000193-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000193-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 31</span>
-31:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_file_after_save</span>
-32:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@file_data_to_write</span>)
-33:         
-34:         <span class="ruby-comment cmt"># Check if we have the images already given, in this case we prepare</span>
-35:         <span class="ruby-comment cmt"># them and call the super method</span>
-36:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">super</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">direct_write!</span>)
-37:         
-38:         <span class="ruby-comment cmt"># create name for orginal temp file and destination temp file</span>
-39:         <span class="ruby-identifier">original_file_path</span>, <span class="ruby-identifier">orig_is_temp</span> = <span class="ruby-identifier">prepare_original_file</span>
-40:         <span class="ruby-identifier">will_delete_source</span> = <span class="ruby-identifier">orig_is_temp</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@delete_original_file</span>
-41:         <span class="ruby-identifier">destination_thumbnail_file_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">tmpdir</span>, <span class="ruby-node">&quot;thumbnail_#{random_tempfile_filename}.gif&quot;</span>)
-42:         
-43:         <span class="ruby-keyword kw">begin</span> <span class="ruby-comment cmt"># Begin the file creation operation</span>
-44:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">benchmark</span>(<span class="ruby-node">&quot;\033[36mIipData\033[0m Making thumb and pyramid for #{self.id}&quot;</span>, <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">INFO</span>) <span class="ruby-keyword kw">do</span>
-45:           
-46:             <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageConversions</span><span class="ruby-operator">::</span><span class="ruby-identifier">create_thumb</span>(<span class="ruby-identifier">original_file_path</span>, <span class="ruby-identifier">destination_thumbnail_file_path</span>)
-47:             <span class="ruby-identifier">create_pyramid</span>(<span class="ruby-identifier">original_file_path</span>)
-48:         
-49:             <span class="ruby-comment cmt"># Run the super implementation for the thumbnail</span>
-50:             <span class="ruby-comment cmt"># We will simply tell the system that we have to move the newly create</span>
-51:             <span class="ruby-comment cmt"># thumb file</span>
-52:             <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-constant">DataPath</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">destination_thumbnail_file_path</span>)
-53:             <span class="ruby-ivar">@delete_original_file</span> = <span class="ruby-keyword kw">true</span>
-54:           
-55:           <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># end benchmarking</span>
-56:           <span class="ruby-keyword kw">super</span>
-57:           
-58:         <span class="ruby-keyword kw">ensure</span>
-59:           <span class="ruby-comment cmt"># delete teƒmp files</span>
-60:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">delete</span> <span class="ruby-identifier">original_file_path</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">original_file_path</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">will_delete_source</span>)
-61:         <span class="ruby-keyword kw">end</span>
-62:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_data.rb, line 96</span>
+ 96:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_file_after_save</span>
+ 97:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@file_data_to_write</span>)
+ 98:         
+ 99:         <span class="ruby-comment cmt"># Check if we have the converted images already. In this case we write</span>
+100:         <span class="ruby-comment cmt"># them to the appropriate directories directly and call the super method</span>
+101:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">super</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">direct_write!</span>)
+102:         
+103:         <span class="ruby-comment cmt"># &quot;Prepare&quot; the original file for conversion, indicate if a temp file is being used</span>
+104:         <span class="ruby-identifier">original_file_path</span>, <span class="ruby-identifier">orig_is_temp</span> = <span class="ruby-identifier">prepare_original_file</span>
+105:         <span class="ruby-comment cmt"># Check if we need to delete the original/temp file</span>
+106:         <span class="ruby-identifier">will_delete_source</span> = <span class="ruby-identifier">orig_is_temp</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@delete_original_file</span>
+107:         <span class="ruby-comment cmt"># Path to the temporary thumbnail file</span>
+108:         <span class="ruby-identifier">destination_thumbnail_file_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">tmpdir</span>, <span class="ruby-node">&quot;thumbnail_#{random_tempfile_filename}.gif&quot;</span>)
+109:         
+110:         <span class="ruby-keyword kw">begin</span>
+111:           <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">benchmark</span>(<span class="ruby-node">&quot;\033[36mIipData\033[0m Making thumb and pyramid for #{self.id}&quot;</span>, <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">INFO</span>) <span class="ruby-keyword kw">do</span>
+112:           
+113:             <span class="ruby-comment cmt"># Create the thumbnail at the temporary location</span>
+114:             <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageConversions</span><span class="ruby-operator">::</span><span class="ruby-identifier">create_thumb</span>(<span class="ruby-identifier">original_file_path</span>, <span class="ruby-identifier">destination_thumbnail_file_path</span>)
+115:             <span class="ruby-comment cmt"># Create the pyramidal image from the original</span>
+116:             <span class="ruby-identifier">create_pyramid</span>(<span class="ruby-identifier">original_file_path</span>)
+117:         
+118:             <span class="ruby-comment cmt"># Run the super implementation for the thumbnail, by using the temporary thumb file as the &quot;data&quot;</span>
+119:             <span class="ruby-ivar">@file_data_to_write</span> = <span class="ruby-constant">DataPath</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">destination_thumbnail_file_path</span>)
+120:             <span class="ruby-comment cmt"># The temp thumb file needs to be deleted by the superclass</span>
+121:             <span class="ruby-ivar">@delete_original_file</span> = <span class="ruby-keyword kw">true</span>
+122:           
+123:           <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># end benchmarking</span>
+124:           <span class="ruby-keyword kw">super</span>
+125:           
+126:         <span class="ruby-keyword kw">ensure</span>
+127:           <span class="ruby-comment cmt"># Delete the temporary &quot;original&quot; file, if necessary</span>
+128:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">delete</span> <span class="ruby-identifier">original_file_path</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">original_file_path</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">will_delete_source</span>)
+129:         <span class="ruby-keyword kw">end</span>
+130:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

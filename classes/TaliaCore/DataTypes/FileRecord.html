@@ -82,7 +82,28 @@
 
     <div id="description">
       <p>
-Base class for all data records that use a plain file for data storage
+Base class for all data records that use a plain file for data storage.
+This implements the <a href="DataRecord.html">DataRecord</a> API so that
+all byte methods work on a file in the File system.
+</p>
+<p>
+Most of the operations are defined in the <a
+href="FileStore.html">FileStore</a> module, see there on how to create and
+work with file records.
+</p>
+<p>
+See the <a href="DataLoader.html">DataLoader</a> and <a
+href="MimeMapping.html">MimeMapping</a> modules to see new file records are
+created automatically, depending on the MIME type.
+</p>
+<p>
+The data paths are set automatically by the class, see <a
+href="PathHelpers.html">PathHelpers</a>
+</p>
+<p>
+There is also an <a href="IipLoader.html">IipLoader</a> module, that
+contains the loader mechanism for creating Iip images - you can also use
+that as an example to create new loaders for other file types.
 </p>
 
     </div>
@@ -94,12 +115,12 @@ Base class for all data records that use a plain file for data storage
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000238">all_bytes</a>&nbsp;&nbsp;
-      <a href="#M000239">get_byte</a>&nbsp;&nbsp;
-      <a href="#M000240">position</a>&nbsp;&nbsp;
-      <a href="#M000241">reset</a>&nbsp;&nbsp;
-      <a href="#M000242">seek</a>&nbsp;&nbsp;
-      <a href="#M000243">size</a>&nbsp;&nbsp;
+      <a href="#M000183">all_bytes</a>&nbsp;&nbsp;
+      <a href="#M000184">get_byte</a>&nbsp;&nbsp;
+      <a href="#M000185">position</a>&nbsp;&nbsp;
+      <a href="#M000186">reset</a>&nbsp;&nbsp;
+      <a href="#M000187">seek</a>&nbsp;&nbsp;
+      <a href="#M000188">size</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -113,7 +134,6 @@ Base class for all data records that use a plain file for data storage
       <div id="includes-list">
         <span class="include-name"><a href="FileStore.html">FileStore</a></span>
         <span class="include-name"><a href="PathHelpers.html">PathHelpers</a></span>
-        <span class="include-name"><a href="TempFileHandling.html">TempFileHandling</a></span>
         <span class="include-name"><a href="DataLoader.html">DataLoader</a></span>
       </div>
     </div>
@@ -131,160 +151,161 @@ Base class for all data records that use a plain file for data storage
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000238" class="method-detail">
-        <a name="M000238"></a>
+      <div id="method-M000183" class="method-detail">
+        <a name="M000183"></a>
 
         <div class="method-heading">
-          <a href="#M000238" class="method-signature">
+          <a href="#M000183" class="method-signature">
           <span class="method-name">all_bytes</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-returns all bytes in the object as an array
+Return all bytes from the file as a byte array.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000238-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000238-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 27</span>
-27:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_bytes</span>
-28:         <span class="ruby-identifier">read_all_bytes</span>
-29:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000239" class="method-detail">
-        <a name="M000239"></a>
-
-        <div class="method-heading">
-          <a href="#M000239" class="method-signature">
-          <span class="method-name">get_byte</span><span class="method-args">(close_after_single_read=false)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-returns the next byte from the object, or nil at EOS
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000239-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000239-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 32</span>
-32:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_byte</span>(<span class="ruby-identifier">close_after_single_read</span>=<span class="ruby-keyword kw">false</span>)
-33:         <span class="ruby-identifier">next_byte</span>(<span class="ruby-identifier">close_after_single_read</span>)
-34:       <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000240" class="method-detail">
-        <a name="M000240"></a>
-
-        <div class="method-heading">
-          <a href="#M000240" class="method-signature">
-          <span class="method-name">position</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-returns the current <a href="FileRecord.html#M000240">position</a> of the
-read cursor (binary access)
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000240-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000240-source">
+            onclick="toggleCode('M000183-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000183-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 37</span>
-37:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">position</span>
-38:         <span class="ruby-keyword kw">return</span> (<span class="ruby-ivar">@position</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>) <span class="ruby-operator">?</span> <span class="ruby-ivar">@position</span> <span class="ruby-operator">:</span> <span class="ruby-value">0</span>
+37:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_bytes</span>
+38:         <span class="ruby-identifier">read_all_bytes</span>
 39:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000241" class="method-detail">
-        <a name="M000241"></a>
+      <div id="method-M000184" class="method-detail">
+        <a name="M000184"></a>
 
         <div class="method-heading">
-          <a href="#M000241" class="method-signature">
+          <a href="#M000184" class="method-signature">
+          <span class="method-name">get_byte</span><span class="method-args">(close_after_single_read=false)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the next byte from the file (at the <a
+href="FileRecord.html#M000185">position</a> of the read cursor), or EOS if
+the end of the file has been reached.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000184-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000184-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 43</span>
+43:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_byte</span>(<span class="ruby-identifier">close_after_single_read</span>=<span class="ruby-keyword kw">false</span>)
+44:         <span class="ruby-identifier">next_byte</span>(<span class="ruby-identifier">close_after_single_read</span>)
+45:       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000185" class="method-detail">
+        <a name="M000185"></a>
+
+        <div class="method-heading">
+          <a href="#M000185" class="method-signature">
+          <span class="method-name">position</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the current <a href="FileRecord.html#M000185">position</a> of the
+read cursor
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000185-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000185-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 48</span>
+48:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">position</span>
+49:         <span class="ruby-keyword kw">return</span> (<span class="ruby-ivar">@position</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>) <span class="ruby-operator">?</span> <span class="ruby-ivar">@position</span> <span class="ruby-operator">:</span> <span class="ruby-value">0</span>
+50:       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000186" class="method-detail">
+        <a name="M000186"></a>
+
+        <div class="method-heading">
+          <a href="#M000186" class="method-signature">
           <span class="method-name">reset</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="FileRecord.html#M000241">reset</a> the cursor to the initial state
+Reset the cursor to the beginning of the file
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000241-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000241-source">
+            onclick="toggleCode('M000186-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000186-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 42</span>
-42:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>
-43:         <span class="ruby-identifier">set_position</span>(<span class="ruby-value">0</span>)
-44:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 53</span>
+53:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>
+54:         <span class="ruby-identifier">set_position</span>(<span class="ruby-value">0</span>)
+55:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000242" class="method-detail">
-        <a name="M000242"></a>
+      <div id="method-M000187" class="method-detail">
+        <a name="M000187"></a>
 
         <div class="method-heading">
-          <a href="#M000242" class="method-signature">
+          <a href="#M000187" class="method-signature">
           <span class="method-name">seek</span><span class="method-args">(new_position)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-set the new <a href="FileRecord.html#M000240">position</a> of the reding
-cursors
+Set a new <a href="FileRecord.html#M000185">position</a> for the read
+cursor
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000242-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000242-source">
+            onclick="toggleCode('M000187-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000187-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 47</span>
-47:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seek</span>(<span class="ruby-identifier">new_position</span>)
-48:         <span class="ruby-identifier">set_position</span>(<span class="ruby-identifier">new_position</span>)
-49:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 58</span>
+58:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seek</span>(<span class="ruby-identifier">new_position</span>)
+59:         <span class="ruby-identifier">set_position</span>(<span class="ruby-identifier">new_position</span>)
+60:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000243" class="method-detail">
-        <a name="M000243"></a>
+      <div id="method-M000188" class="method-detail">
+        <a name="M000188"></a>
 
         <div class="method-heading">
-          <a href="#M000243" class="method-signature">
+          <a href="#M000188" class="method-signature">
           <span class="method-name">size</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-returns the <a href="FileRecord.html#M000243">size</a> of the object in
-bytes
+Returns the file <a href="FileRecord.html#M000188">size</a> in bytes
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000243-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000243-source">
+            onclick="toggleCode('M000188-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000188-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 52</span>
-52:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>
-53:         <span class="ruby-identifier">data_size</span>
-54:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/file_record.rb, line 63</span>
+63:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>
+64:         <span class="ruby-identifier">data_size</span>
+65:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

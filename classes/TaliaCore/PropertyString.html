@@ -86,7 +86,7 @@ Handling of RDF string values. These values can contain both locale
 (language) and type information. (E.g. &quot;Some value^^string@en&quot;)
 </p>
 <p>
-This class will <a href="PropertyString.html#M000338">parse</a> the value
+This class will <a href="PropertyString.html#M000291">parse</a> the value
 string an make all elements available as separate accessors.
 </p>
 
@@ -99,11 +99,11 @@ string an make all elements available as separate accessors.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000342">inspect</a>&nbsp;&nbsp;
-      <a href="#M000339">new</a>&nbsp;&nbsp;
-      <a href="#M000338">parse</a>&nbsp;&nbsp;
-      <a href="#M000340">parse</a>&nbsp;&nbsp;
-      <a href="#M000341">to_rdf</a>&nbsp;&nbsp;
+      <a href="#M000295">inspect</a>&nbsp;&nbsp;
+      <a href="#M000292">new</a>&nbsp;&nbsp;
+      <a href="#M000291">parse</a>&nbsp;&nbsp;
+      <a href="#M000293">parse</a>&nbsp;&nbsp;
+      <a href="#M000294">to_rdf</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -143,23 +143,23 @@ string an make all elements available as separate accessors.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000339" class="method-detail">
-        <a name="M000339"></a>
+      <div id="method-M000292" class="method-detail">
+        <a name="M000292"></a>
 
         <div class="method-heading">
-          <a href="#M000339" class="method-signature">
+          <a href="#M000292" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(property_string = '', language = nil, type = nil)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Create a <a href="PropertyString.html#M000339">new</a> object from the
+Create a <a href="PropertyString.html#M000292">new</a> object from the
 given values. No parsing is done here.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000339-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000339-source">
+            onclick="toggleCode('M000292-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000292-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/property_string.rb, line 18</span>
 18:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">property_string</span> = <span class="ruby-value str">''</span>, <span class="ruby-identifier">language</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">type</span> = <span class="ruby-keyword kw">nil</span>)
@@ -172,23 +172,23 @@ given values. No parsing is done here.
         </div>
       </div>
 
-      <div id="method-M000338" class="method-detail">
-        <a name="M000338"></a>
+      <div id="method-M000291" class="method-detail">
+        <a name="M000291"></a>
 
         <div class="method-heading">
-          <a href="#M000338" class="method-signature">
+          <a href="#M000291" class="method-signature">
           <span class="method-name">parse</span><span class="method-args">(property_string)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Create a <a href="PropertyString.html#M000339">new</a> object by parsing
+Create a <a href="PropertyString.html#M000292">new</a> object by parsing
 the given property string
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000338-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000338-source">
+            onclick="toggleCode('M000291-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000291-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/property_string.rb, line 13</span>
 13:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">property_string</span>)
@@ -201,11 +201,11 @@ the given property string
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000342" class="method-detail">
-        <a name="M000342"></a>
+      <div id="method-M000295" class="method-detail">
+        <a name="M000295"></a>
 
         <div class="method-heading">
-          <a href="#M000342" class="method-signature">
+          <a href="#M000295" class="method-signature">
           <span class="method-name">inspect</span><span class="method-args">()</span>
           </a>
         </div>
@@ -215,8 +215,8 @@ the given property string
 Inspect shows the real content
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000342-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000342-source">
+            onclick="toggleCode('M000295-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000295-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/property_string.rb, line 44</span>
 44:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>
@@ -227,11 +227,11 @@ Inspect shows the real content
         </div>
       </div>
 
-      <div id="method-M000340" class="method-detail">
-        <a name="M000340"></a>
+      <div id="method-M000293" class="method-detail">
+        <a name="M000293"></a>
 
         <div class="method-heading">
-          <a href="#M000340" class="method-signature">
+          <a href="#M000293" class="method-signature">
           <span class="method-name">parse</span><span class="method-args">(property_string)</span>
           </a>
         </div>
@@ -242,8 +242,8 @@ Parses the given string into a <a
 href="PropertyString.html">PropertyString</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000340-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000340-source">
+            onclick="toggleCode('M000293-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000293-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/property_string.rb, line 25</span>
 25:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">property_string</span>)
@@ -259,11 +259,11 @@ href="PropertyString.html">PropertyString</a>
         </div>
       </div>
 
-      <div id="method-M000341" class="method-detail">
-        <a name="M000341"></a>
+      <div id="method-M000294" class="method-detail">
+        <a name="M000294"></a>
 
         <div class="method-heading">
-          <a href="#M000341" class="method-signature">
+          <a href="#M000294" class="method-signature">
           <span class="method-name">to_rdf</span><span class="method-args">()</span>
           </a>
         </div>
@@ -274,8 +274,8 @@ Gives the &quot;internal representation&quot; - this should be equivalent
 to the string from which the object was created
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000341-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000341-source">
+            onclick="toggleCode('M000294-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000294-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/property_string.rb, line 36</span>
 36:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_rdf</span>

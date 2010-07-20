@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: TaliaCore::Collection</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">TaliaCore::Collection</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/talia_core/collection_rb.html">
+                lib/talia_core/collection.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="Source.html">
+                Source
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Represents a collection of sources. In addition to being a container for
+sources, the <a href="Collection.html">Collection</a> class will also
+provide an ordering of the contained sources.
+</p>
+<p>
+In a nutshell, this behaves like an array of sources that preserves the
+order when saved.
+</p>
+<p>
+The ordering will always assign a &#8217;&#8217;unique&#8217;&#8217;
+integer value to each contained source that defines its position in the
+order of <a href="Collection.html#M000266">elements</a>. The collection
+will keep an internal array where each object&#8216;s index maps directly
+to its position in the collection; the array and ordering are saved to the
+data store when the collection itself is saved.
+</p>
+<p>
+The collection class is relatively lightweight and will behave mostly like
+the underlying array - most operations are simply passed through to the
+array and nothing is saved before the collection itself is saved.
+</p>
+<p>
+Operations that are passed to the underlying array are: +, &lt;&lt;, ==,
+[]=, at, clear, collect, delete_at, delete, each, each_index, empty?,
+include?, index, join, last, length and size.
+</p>
+<p>
+This also means that all checks on added objects will only be performed
+when the collection is saved, and not much checking is done when the array
+is modified.
+</p>
+<p>
+In the RDF, the collection is represented as a seqContainer, using a
+predicate of &quot;<a
+href="http://www.w3.org/1999/02/22-rdf-syntax-ns#_[index">www.w3.org/1999/02/22-rdf-syntax-ns#_[index</a>
+of element x]&quot; to connect an element x with the collection.
+</p>
+<p>
+<b>Note</b>: This class replaces the previous OrderedSource class
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000264">[]</a>&nbsp;&nbsp;
+      <a href="#M000265">[]=</a>&nbsp;&nbsp;
+      <a href="#M000266">elements</a>&nbsp;&nbsp;
+      <a href="#M000267">index_to_predicate</a>&nbsp;&nbsp;
+      <a href="#M000269">index_to_predicate</a>&nbsp;&nbsp;
+      <a href="#M000263">new</a>&nbsp;&nbsp;
+      <a href="#M000268">predicate_to_index</a>&nbsp;&nbsp;
+      <a href="#M000270">predicate_to_index</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name">Enumerable</span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000269" class="method-detail">
+        <a name="M000269"></a>
+
+        <div class="method-heading">
+          <a href="#M000269" class="method-signature">
+          <span class="method-name">index_to_predicate</span><span class="method-args">(index)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the predicate that will be used for the collection element with the
+given index. The result will be:
+</p>
+<pre>
+  http://www.w3.org/1999/02/22-rdf-syntax-ns#_&lt;index&gt;
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000269-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000269-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/collection.rb, line 109</span>
+109:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">index_to_predicate</span>(<span class="ruby-identifier">index</span>)
+110:       <span class="ruby-value str">'http://www.w3.org/1999/02/22-rdf-syntax-ns#_'</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-value str">&quot;%06d&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">index</span>.<span class="ruby-identifier">to_i</span>) 
+111:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000263" class="method-detail">
+        <a name="M000263"></a>
+
+        <div class="method-heading">
+          <a href="#M000263" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(*params)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a <a href="Collection.html#M000263">new</a> <a
+href="Collection.html">Collection</a>. Takes the same parameters as
+ActiveSource.new
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000263-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000263-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/collection.rb, line 48</span>
+48:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">params</span>)
+49:       <span class="ruby-identifier">collection</span> = <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">params</span>)
+50:       <span class="ruby-identifier">collection</span>.<span class="ruby-identifier">autosave_rdf</span> = <span class="ruby-keyword kw">false</span> <span class="ruby-comment cmt"># Will do this by ourselves</span>
+51:       <span class="ruby-identifier">collection</span>
+52:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000270" class="method-detail">
+        <a name="M000270"></a>
+
+        <div class="method-heading">
+          <a href="#M000270" class="method-signature">
+          <span class="method-name">predicate_to_index</span><span class="method-args">(predicate)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Takes a predicate of the form produced by <a
+href="Collection.html#M000267">index_to_predicate</a> and returns the
+numeric index of the element
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000270-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000270-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/collection.rb, line 115</span>
+115:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">predicate_to_index</span>(<span class="ruby-identifier">predicate</span>)
+116:       <span class="ruby-identifier">predicate</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-value str">'http://www.w3.org/1999/02/22-rdf-syntax-ns#_'</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">to_i</span>
+117:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000264" class="method-detail">
+        <a name="M000264"></a>
+
+        <div class="method-heading">
+          <a href="#M000264" class="method-signature">
+          <span class="method-name">[]</span><span class="method-args">(index_or_predicate)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This accessor can be used for both collection items and predicates. If a
+number is passed in, the object will behave like an Array and the source at
+the given index is returned. Otherwise the parameter is treated like a
+predicate and it behaves like <a
+href="ActiveSource.html">ActiveSource</a>#[].
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000264-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000264-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/collection.rb, line 69</span>
+69:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">index_or_predicate</span>)
+70:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">index_or_predicate</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Fixnum</span>))
+71:         <span class="ruby-identifier">ordered_objects</span>[<span class="ruby-identifier">index_or_predicate</span>]
+72:       <span class="ruby-keyword kw">else</span>
+73:         <span class="ruby-keyword kw">super</span>
+74:       <span class="ruby-keyword kw">end</span>
+75:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000265" class="method-detail">
+        <a name="M000265"></a>
+
+        <div class="method-heading">
+          <a href="#M000265" class="method-signature">
+          <span class="method-name">[]=</span><span class="method-args">(index_or_predicate, value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Writer that behaves in the same way as []
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000265-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000265-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/collection.rb, line 78</span>
+78:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">index_or_predicate</span>, <span class="ruby-identifier">value</span>)
+79:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">index_or_predicate</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Fixnum</span>))
+80:         <span class="ruby-identifier">ordered_objects</span>[<span class="ruby-identifier">index_or_predicate</span>] = <span class="ruby-identifier">value</span>
+81:       <span class="ruby-keyword kw">else</span>
+82:         <span class="ruby-keyword kw">super</span>
+83:       <span class="ruby-keyword kw">end</span>
+84:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000266" class="method-detail">
+        <a name="M000266"></a>
+
+        <div class="method-heading">
+          <a href="#M000266" class="method-signature">
+          <span class="method-name">elements</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns all contained sources in an ordered array.
+</p>
+<p>
+The contained sources will appear in the sequential order in which they are
+contained in the collection, but there is no direct relation between the
+index in the collection and the index returned through this method.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000266-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000266-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/collection.rb, line 91</span>
+91:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">elements</span>
+92:       <span class="ruby-comment cmt"># execute query</span>
+93:       <span class="ruby-identifier">ordered_objects</span>.<span class="ruby-identifier">compact</span>
+94:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000267" class="method-detail">
+        <a name="M000267"></a>
+
+        <div class="method-heading">
+          <a href="#M000267" class="method-signature">
+          <span class="method-name">index_to_predicate</span><span class="method-args">(index)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+See <a href="Collection.html#M000267">Collection.index_to_predicate</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000267-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000267-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/talia_core/collection.rb, line 97</span>
+97:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index_to_predicate</span>(<span class="ruby-identifier">index</span>)
+98:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">index_to_predicate</span>(<span class="ruby-identifier">index</span>)
+99:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000268" class="method-detail">
+        <a name="M000268"></a>
+
+        <div class="method-heading">
+          <a href="#M000268" class="method-signature">
+          <span class="method-name">predicate_to_index</span><span class="method-args">(predicate)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+See <a href="Collection.html#M000268">Collection.predicate_to_index</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000268-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000268-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/collection.rb, line 102</span>
+102:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">predicate_to_index</span>(<span class="ruby-identifier">predicate</span>)
+103:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">predicate_to_index</span>(<span class="ruby-identifier">predicate</span>)
+104:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

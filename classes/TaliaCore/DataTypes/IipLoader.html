@@ -74,8 +74,46 @@
 
     <div id="description">
       <p>
-Special module that contains the <a href="DataLoader.html">DataLoader</a>
-methods to create IIP image data
+Loader module for <a href="IipData.html">IipData</a> records. IIP records
+should always be created by using the <a
+href="IipLoader.html#M000151">create_iip</a> method in this module as a
+loader. Check the <a href="DataLoader.html">DataLoader</a> documentation to
+find out how to configure loaders for different MIME types.
+</p>
+<h1>How does this work?</h1>
+<p>
+The loader will take the original image, and create two new DataRecords
+which contain three different versions of the image:
+</p>
+<ul>
+<li>An <a href="ImageData.html">ImageData</a> record will contain the original
+version of the image. This will contain the original file if the original
+is a jpeg or png image. Otherwise it will be converted to png.
+
+</li>
+<li>An <a href="IipData.html">IipData</a> record which contains a thumbnail of
+the original image and create the pyramidal version of it in the IIP
+server&#8216;s directory. The location of the <a
+href="IipData.html">IipData</a> will contain the path to the pyramidal
+image on the server
+
+</li>
+</ul>
+<h1>Using existing images</h1>
+<p>
+Creating the pyramid images can be a time-consuming process and it may be
+useful to separate this from the actual import process (if, for example you
+want to re-import the same data set several times). The Talia distribution
+contains a <tt>prepare_images</tt> script that will take the original files
+from a given directory and create the converted files in another location,
+using the subdirectories <tt>thumbs</tt>, <tt>pyramids</tt> and
+<tt>originals</tt> respectively.
+</p>
+<p>
+If a directory with &quot;prepared files&quot; exists, the
+<tt>prepared_images</tt> option in the <em>environment</em> to the path to
+the directory. When the loader see that environment variable, it will
+automatically load the prepared images from that directory.
 </p>
 
     </div>
@@ -87,15 +125,15 @@ methods to create IIP image data
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000196">convert_original?</a>&nbsp;&nbsp;
-      <a href="#M000197">create_from_files</a>&nbsp;&nbsp;
-      <a href="#M000198">create_from_stream</a>&nbsp;&nbsp;
-      <a href="#M000194">create_iip</a>&nbsp;&nbsp;
-      <a href="#M000200">open_original_image</a>&nbsp;&nbsp;
-      <a href="#M000202">open_original_image_file</a>&nbsp;&nbsp;
-      <a href="#M000201">open_original_image_stream</a>&nbsp;&nbsp;
-      <a href="#M000195">orig_location</a>&nbsp;&nbsp;
-      <a href="#M000199">prepare_image_from_existing!</a>&nbsp;&nbsp;
+      <a href="#M000153">convert_original?</a>&nbsp;&nbsp;
+      <a href="#M000154">create_from_files</a>&nbsp;&nbsp;
+      <a href="#M000155">create_from_stream</a>&nbsp;&nbsp;
+      <a href="#M000151">create_iip</a>&nbsp;&nbsp;
+      <a href="#M000157">open_original_image</a>&nbsp;&nbsp;
+      <a href="#M000159">open_original_image_file</a>&nbsp;&nbsp;
+      <a href="#M000158">open_original_image_stream</a>&nbsp;&nbsp;
+      <a href="#M000152">orig_location</a>&nbsp;&nbsp;
+      <a href="#M000156">prepare_image_from_existing!</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -117,91 +155,94 @@ methods to create IIP image data
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000196" class="method-detail">
-        <a name="M000196"></a>
+      <div id="method-M000153" class="method-detail">
+        <a name="M000153"></a>
 
         <div class="method-heading">
-          <a href="#M000196" class="method-signature">
+          <a href="#M000153" class="method-signature">
           <span class="method-name">convert_original?</span><span class="method-args">(mime_type)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Indicates if the given mime type requires a conversion for the original
-image
+Indicates if an original image with the given mime type should be converted
+to png for the &quot;original image&quot; record
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000196-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000196-source">
+            onclick="toggleCode('M000153-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000153-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 45</span>
-45:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">convert_original?</span>(<span class="ruby-identifier">mime_type</span>)
-46:         <span class="ruby-operator">!</span>([<span class="ruby-identifier">:jpeg</span>, <span class="ruby-identifier">:png</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">to_sym</span>))
-47:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 79</span>
+79:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">convert_original?</span>(<span class="ruby-identifier">mime_type</span>)
+80:         <span class="ruby-operator">!</span>([<span class="ruby-identifier">:jpeg</span>, <span class="ruby-identifier">:png</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">to_sym</span>))
+81:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000197" class="method-detail">
-        <a name="M000197"></a>
+      <div id="method-M000154" class="method-detail">
+        <a name="M000154"></a>
 
         <div class="method-heading">
-          <a href="#M000197" class="method-signature">
+          <a href="#M000154" class="method-signature">
           <span class="method-name">create_from_files</span><span class="method-args">(location, file, records)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Create the elements from a file
+Pass in the empty data records (for original and iip), and fill each one by
+calling create_from_file with the given file
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000197-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000197-source">
+            onclick="toggleCode('M000154-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000154-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 50</span>
-50:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_files</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">records</span>)
-51:         <span class="ruby-identifier">records</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rec</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rec</span>.<span class="ruby-identifier">create_from_file</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">file</span>) }
-52:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 86</span>
+86:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_files</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">records</span>)
+87:         <span class="ruby-identifier">records</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rec</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rec</span>.<span class="ruby-identifier">create_from_file</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">file</span>) }
+88:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000198" class="method-detail">
-        <a name="M000198"></a>
+      <div id="method-M000155" class="method-detail">
+        <a name="M000155"></a>
 
         <div class="method-heading">
-          <a href="#M000198" class="method-signature">
+          <a href="#M000155" class="method-signature">
           <span class="method-name">create_from_stream</span><span class="method-args">(location, io, records)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Create the elements from a stream
+Pass in the empty data records (for original and iip), and fill them by
+reading the data from the io stream and calling create_from_data on each
+record
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000198-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000198-source">
+            onclick="toggleCode('M000155-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000155-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 55</span>
-55:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_stream</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">io</span>, <span class="ruby-identifier">records</span>)
-56:         <span class="ruby-identifier">data</span> = <span class="ruby-identifier">io</span>.<span class="ruby-identifier">read</span>
-57:         <span class="ruby-identifier">records</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rec</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rec</span>.<span class="ruby-identifier">create_from_data</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">data</span>)}
-58:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 93</span>
+93:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_stream</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">io</span>, <span class="ruby-identifier">records</span>)
+94:         <span class="ruby-identifier">data</span> = <span class="ruby-identifier">io</span>.<span class="ruby-identifier">read</span>
+95:         <span class="ruby-identifier">records</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">rec</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rec</span>.<span class="ruby-identifier">create_from_data</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">data</span>)}
+96:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000194" class="method-detail">
-        <a name="M000194"></a>
+      <div id="method-M000151" class="method-detail">
+        <a name="M000151"></a>
 
         <div class="method-heading">
-          <a href="#M000194" class="method-signature">
+          <a href="#M000151" class="method-signature">
           <span class="method-name">create_iip</span><span class="method-args">(mime_type, location, source, is_file)</span>
           </a>
         </div>
@@ -210,47 +251,49 @@ Create the elements from a stream
           <p>
 Loads an image for the given file. This is a tad more complex than loading
 the data into a data record: It will create both an IIP data object and an
-Image data object.
+Image data object. If the original is an IO stream, a temp file will be
+created for the conversions. See above for more.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000194-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000194-source">
+            onclick="toggleCode('M000151-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000151-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 13</span>
-13:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_iip</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">source</span>, <span class="ruby-identifier">is_file</span>)
-14:         <span class="ruby-identifier">iip_record</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">IipData</span>.<span class="ruby-identifier">new</span>
-15:         <span class="ruby-identifier">image_record</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageData</span>.<span class="ruby-identifier">new</span>
-16:         <span class="ruby-identifier">records</span> = [<span class="ruby-identifier">iip_record</span>, <span class="ruby-identifier">image_record</span>]
-17:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">records</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">prepare_image_from_existing!</span>(<span class="ruby-identifier">iip_record</span>, <span class="ruby-identifier">image_record</span>, <span class="ruby-identifier">source</span>, <span class="ruby-identifier">location</span>))
-18: 
-19:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">convert_original?</span>(<span class="ruby-identifier">mime_type</span>))
-20:           <span class="ruby-comment cmt"># We have an image that needs to be converted</span>
-21:           <span class="ruby-identifier">open_original_image</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">is_file</span>, <span class="ruby-identifier">mime_type</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
-22:             <span class="ruby-identifier">create_from_stream</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">io</span>, <span class="ruby-identifier">records</span>)
-23:             <span class="ruby-identifier">image_record</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">orig_location</span>(<span class="ruby-identifier">location</span>)
-24:           <span class="ruby-keyword kw">end</span>
-25:         <span class="ruby-keyword kw">else</span>
-26:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
-27:             <span class="ruby-identifier">create_from_files</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">source</span>, <span class="ruby-identifier">records</span>) 
-28:           <span class="ruby-keyword kw">else</span> 
-29:             <span class="ruby-identifier">create_from_stream</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">source</span>, <span class="ruby-identifier">records</span>)
-30:           <span class="ruby-keyword kw">end</span>
-31:         <span class="ruby-keyword kw">end</span>
-32:         <span class="ruby-comment cmt"># IipRecord is always a (multi-leve) tiff</span>
-33:         <span class="ruby-identifier">iip_record</span>.<span class="ruby-identifier">mime</span> = <span class="ruby-value str">'image/tiff'</span>
-34: 
-35:         <span class="ruby-identifier">records</span>
-36:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 45</span>
+45:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_iip</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">source</span>, <span class="ruby-identifier">is_file</span>)
+46:         <span class="ruby-comment cmt"># Create the new records</span>
+47:         <span class="ruby-identifier">iip_record</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">IipData</span>.<span class="ruby-identifier">new</span>
+48:         <span class="ruby-identifier">image_record</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageData</span>.<span class="ruby-identifier">new</span>
+49:         <span class="ruby-identifier">records</span> = [<span class="ruby-identifier">iip_record</span>, <span class="ruby-identifier">image_record</span>]
+50:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">records</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">prepare_image_from_existing!</span>(<span class="ruby-identifier">iip_record</span>, <span class="ruby-identifier">image_record</span>, <span class="ruby-identifier">source</span>, <span class="ruby-identifier">location</span>))
+51: 
+52:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">convert_original?</span>(<span class="ruby-identifier">mime_type</span>))
+53:           <span class="ruby-comment cmt"># We have an image that needs to be converted</span>
+54:           <span class="ruby-identifier">open_original_image</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">is_file</span>, <span class="ruby-identifier">mime_type</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
+55:             <span class="ruby-identifier">create_from_stream</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">io</span>, <span class="ruby-identifier">records</span>)
+56:             <span class="ruby-identifier">image_record</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">orig_location</span>(<span class="ruby-identifier">location</span>)
+57:           <span class="ruby-keyword kw">end</span>
+58:         <span class="ruby-keyword kw">else</span>
+59:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
+60:             <span class="ruby-identifier">create_from_files</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">source</span>, <span class="ruby-identifier">records</span>) 
+61:           <span class="ruby-keyword kw">else</span> 
+62:             <span class="ruby-identifier">create_from_stream</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">source</span>, <span class="ruby-identifier">records</span>)
+63:           <span class="ruby-keyword kw">end</span>
+64:         <span class="ruby-keyword kw">end</span>
+65:         <span class="ruby-comment cmt"># IipRecord is always a (multi-leve) tiff</span>
+66:         <span class="ruby-identifier">iip_record</span>.<span class="ruby-identifier">mime</span> = <span class="ruby-value str">'image/tiff'</span>
+67: 
+68:         <span class="ruby-identifier">records</span>
+69:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000200" class="method-detail">
-        <a name="M000200"></a>
+      <div id="method-M000157" class="method-detail">
+        <a name="M000157"></a>
 
         <div class="method-heading">
-          <a href="#M000200" class="method-signature">
+          <a href="#M000157" class="method-signature">
           <span class="method-name">open_original_image</span><span class="method-args">(thing, is_file, current_type, &amp;block)</span>
           </a>
         </div>
@@ -260,27 +303,27 @@ Image data object.
 Little helper to decide how to open the original image
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000200-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000200-source">
+            onclick="toggleCode('M000157-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000157-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 89</span>
-89:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_original_image</span>(<span class="ruby-identifier">thing</span>, <span class="ruby-identifier">is_file</span>, <span class="ruby-identifier">current_type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-90:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
-91:             <span class="ruby-identifier">open_original_image_file</span>(<span class="ruby-identifier">thing</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) 
-92:           <span class="ruby-keyword kw">else</span>
-93:             <span class="ruby-identifier">open_original_image_stream</span>(<span class="ruby-identifier">thing</span>, <span class="ruby-identifier">current_type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-94:           <span class="ruby-keyword kw">end</span>
-95:         <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 133</span>
+133:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_original_image</span>(<span class="ruby-identifier">thing</span>, <span class="ruby-identifier">is_file</span>, <span class="ruby-identifier">current_type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+134:         <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
+135:           <span class="ruby-identifier">open_original_image_file</span>(<span class="ruby-identifier">thing</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) 
+136:         <span class="ruby-keyword kw">else</span>
+137:           <span class="ruby-identifier">open_original_image_stream</span>(<span class="ruby-identifier">thing</span>, <span class="ruby-identifier">current_type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+138:         <span class="ruby-keyword kw">end</span>
+139:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000202" class="method-detail">
-        <a name="M000202"></a>
+      <div id="method-M000159" class="method-detail">
+        <a name="M000159"></a>
 
         <div class="method-heading">
-          <a href="#M000202" class="method-signature">
+          <a href="#M000159" class="method-signature">
           <span class="method-name">open_original_image_file</span><span class="method-args">(filename) {|io| ...}</span>
           </a>
         </div>
@@ -291,134 +334,144 @@ Opens the &quot;original&quot; image for the given file. This will convert
 the image to PNG image and the yield the io object for the PNG.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000202-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000202-source">
+            onclick="toggleCode('M000159-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000159-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 114</span>
-114:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_original_image_file</span>(<span class="ruby-identifier">filename</span>)
-115:           <span class="ruby-identifier">converted_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">tmpdir</span>, <span class="ruby-node">&quot;talia_convert_#{rand 10E16}.png&quot;</span>)
-116:           <span class="ruby-keyword kw">begin</span>
-117:             <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageConversions</span>.<span class="ruby-identifier">to_png</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">converted_file</span>)
-118:             <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">converted_file</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
-119:               <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">io</span>)
-120:             <span class="ruby-keyword kw">end</span>
-121:           <span class="ruby-keyword kw">ensure</span>
-122:             <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm</span>(<span class="ruby-identifier">converted_file</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">converted_file</span>))
-123:           <span class="ruby-keyword kw">end</span>
-124:         <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 160</span>
+160:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_original_image_file</span>(<span class="ruby-identifier">filename</span>)
+161:         <span class="ruby-identifier">converted_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">tmpdir</span>, <span class="ruby-node">&quot;talia_convert_#{rand 10E16}.png&quot;</span>)
+162:         <span class="ruby-keyword kw">begin</span>
+163:           <span class="ruby-constant">TaliaUtil</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageConversions</span>.<span class="ruby-identifier">to_png</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">converted_file</span>)
+164:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">converted_file</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
+165:             <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">io</span>)
+166:           <span class="ruby-keyword kw">end</span>
+167:         <span class="ruby-keyword kw">ensure</span>
+168:           <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm</span>(<span class="ruby-identifier">converted_file</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">converted_file</span>))
+169:         <span class="ruby-keyword kw">end</span>
+170:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000201" class="method-detail">
-        <a name="M000201"></a>
+      <div id="method-M000158" class="method-detail">
+        <a name="M000158"></a>
 
         <div class="method-heading">
-          <a href="#M000201" class="method-signature">
+          <a href="#M000158" class="method-signature">
           <span class="method-name">open_original_image_stream</span><span class="method-args">(io, type, &amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Same as <a href="IipLoader.html#M000202">open_original_image_file</a>, but
-getting the data from a stream.
+Same as <a href="IipLoader.html#M000159">open_original_image_file</a>, but
+getting the data from a stream. This writes the data to a temp file and
+calls open_original_file on it The temporary file is deleted after the
+operation
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000201-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000201-source">
+            onclick="toggleCode('M000158-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000158-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 98</span>
- 98:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_original_image_stream</span>(<span class="ruby-identifier">io</span>, <span class="ruby-identifier">type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
- 99:           <span class="ruby-comment cmt"># First load this from the web to a temp file</span>
-100:           <span class="ruby-identifier">tempfile</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">tmpdir</span>, <span class="ruby-node">&quot;talia_down_#{rand 10E16}.#{type.to_sym}&quot;</span>)
-101:           <span class="ruby-keyword kw">begin</span>
-102:             <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">tempfile</span>, <span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fio</span><span class="ruby-operator">|</span>
-103:               <span class="ruby-identifier">fio</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">io</span>.<span class="ruby-identifier">read</span> <span class="ruby-comment cmt"># Download the file</span>
-104:             <span class="ruby-keyword kw">end</span>
-105:             <span class="ruby-identifier">assit</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">tempfile</span>))
-106:             <span class="ruby-identifier">open_original_image_file</span>(<span class="ruby-identifier">tempfile</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-107:           <span class="ruby-keyword kw">ensure</span>
-108:             <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm</span>(<span class="ruby-identifier">tempfile</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">tempfile</span>))
-109:           <span class="ruby-keyword kw">end</span>
-110:         <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 144</span>
+144:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_original_image_stream</span>(<span class="ruby-identifier">io</span>, <span class="ruby-identifier">type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+145:         <span class="ruby-comment cmt"># First load this from the web to a temp file</span>
+146:         <span class="ruby-identifier">tempfile</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">tmpdir</span>, <span class="ruby-node">&quot;talia_down_#{rand 10E16}.#{type.to_sym}&quot;</span>)
+147:         <span class="ruby-keyword kw">begin</span>
+148:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">tempfile</span>, <span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fio</span><span class="ruby-operator">|</span>
+149:             <span class="ruby-identifier">fio</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">io</span>.<span class="ruby-identifier">read</span> <span class="ruby-comment cmt"># Download the file</span>
+150:           <span class="ruby-keyword kw">end</span>
+151:           <span class="ruby-identifier">assit</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">tempfile</span>))
+152:           <span class="ruby-identifier">open_original_image_file</span>(<span class="ruby-identifier">tempfile</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+153:         <span class="ruby-keyword kw">ensure</span>
+154:           <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm</span>(<span class="ruby-identifier">tempfile</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">tempfile</span>))
+155:         <span class="ruby-keyword kw">end</span>
+156:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000195" class="method-detail">
-        <a name="M000195"></a>
+      <div id="method-M000152" class="method-detail">
+        <a name="M000152"></a>
 
         <div class="method-heading">
-          <a href="#M000195" class="method-signature">
+          <a href="#M000152" class="method-signature">
           <span class="method-name">orig_location</span><span class="method-args">(location)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Rewrite the file location for original image files (to .png)
+Rewrite the <tt>location</tt> field (filename) for &quot;original
+image&quot; data record, changing the extension to .png
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000195-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000195-source">
+            onclick="toggleCode('M000152-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000152-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 39</span>
-39:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">orig_location</span>(<span class="ruby-identifier">location</span>)
-40:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">location</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>)) <span class="ruby-operator">+</span> <span class="ruby-value str">'.png'</span>
-41:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 73</span>
+73:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">orig_location</span>(<span class="ruby-identifier">location</span>)
+74:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">location</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>)) <span class="ruby-operator">+</span> <span class="ruby-value str">'.png'</span>
+75:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000199" class="method-detail">
-        <a name="M000199"></a>
+      <div id="method-M000156" class="method-detail">
+        <a name="M000156"></a>
 
         <div class="method-heading">
-          <a href="#M000199" class="method-signature">
+          <a href="#M000156" class="method-signature">
           <span class="method-name">prepare_image_from_existing!</span><span class="method-args">(iip_record, image_record, url, location)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Attempts to create an <a href="IipData.html">IipData</a> object with
-pre-prepared images if possible Returns true if (and only if) the object
-has been created with existing data. Always fals if the data_record is not
-an <a href="IipData.html">IipData</a> object or the :prepared_images option
-is not set.
+Attempts to create the records from pre-prepared images, if possible.
+Returns true if (and only if) the object has been created with existing
+data. Always false if the data_record is not an <a
+href="IipData.html">IipData</a> object or the <tt>prepared_images</tt>
+option is not set.
+</p>
+<p>
+If this method returns true, the images have been successfully prepared
+from pre-prepared images.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000199-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000199-source">
+            onclick="toggleCode('M000156-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000156-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 64</span>
-64:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prepare_image_from_existing!</span>(<span class="ruby-identifier">iip_record</span>, <span class="ruby-identifier">image_record</span>, <span class="ruby-identifier">url</span>, <span class="ruby-identifier">location</span>)
-65:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">iip_record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">IipData</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">image_record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageData</span>))
-66:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span>((<span class="ruby-identifier">prep</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'prepared_images'</span>]) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">prep</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'no'</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">prep</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'false'</span>)
-67: 
-68:         <span class="ruby-identifier">file_ext</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">url</span>)
-69:         <span class="ruby-identifier">file_base</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">file_ext</span>)
-70: 
-71:         <span class="ruby-identifier">thumb_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'prepared_images'</span>], <span class="ruby-value str">'thumbs'</span>, <span class="ruby-node">&quot;#{file_base}.gif&quot;</span>)
-72:         <span class="ruby-identifier">pyramid_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'prepared_images'</span>], <span class="ruby-value str">'pyramids'</span>, <span class="ruby-node">&quot;#{file_base}.tif&quot;</span>)
-73:         <span class="ruby-identifier">orig_file_pattern</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'prepared_images'</span>], <span class="ruby-value str">'originals'</span>, <span class="ruby-node">&quot;#{file_base}.*&quot;</span>)
-74:         <span class="ruby-comment cmt"># We need to fix the pattern, also the Dir[] doesn't like unescaped brackets</span>
-75:         <span class="ruby-identifier">orig_file_pattern</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\[/</span>, <span class="ruby-value str">'\\['</span>)
-76:           <span class="ruby-identifier">orig_file_pattern</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\]/</span>, <span class="ruby-value str">'\\]'</span>)
-77:           <span class="ruby-identifier">orig_file_l</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">orig_file_pattern</span>]
-78:           <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">'Original find not found for '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">url</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">orig_file_l</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
-79:           <span class="ruby-identifier">orig_file</span> = <span class="ruby-identifier">orig_file_l</span>.<span class="ruby-identifier">first</span>
-80:           <span class="ruby-identifier">assit_block</span> { <span class="ruby-node">%w(.jpg .jpeg .png)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">orig_file</span>).<span class="ruby-identifier">downcase</span>) }
-81: 
-82:           <span class="ruby-identifier">iip_record</span>.<span class="ruby-identifier">create_from_existing</span>(<span class="ruby-identifier">thumb_file</span>, <span class="ruby-identifier">pyramid_file</span>)
-83:           <span class="ruby-identifier">image_record</span>.<span class="ruby-identifier">create_from_file</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">orig_file</span>)
-84: 
-85:           <span class="ruby-keyword kw">true</span>
-86:         <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/iip_loader.rb, line 105</span>
+105:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prepare_image_from_existing!</span>(<span class="ruby-identifier">iip_record</span>, <span class="ruby-identifier">image_record</span>, <span class="ruby-identifier">url</span>, <span class="ruby-identifier">location</span>)
+106:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">iip_record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">IipData</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">image_record</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageData</span>))
+107:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span>((<span class="ruby-identifier">prep</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'prepared_images'</span>]) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">prep</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'no'</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">prep</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'false'</span>)
+108: 
+109:         <span class="ruby-identifier">file_ext</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">url</span>)
+110:         <span class="ruby-identifier">file_base</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">url</span>, <span class="ruby-identifier">file_ext</span>)
+111: 
+112:         <span class="ruby-comment cmt"># Get the file paths for each prepared image: thumb, pyramid and original</span>
+113:         <span class="ruby-identifier">thumb_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'prepared_images'</span>], <span class="ruby-value str">'thumbs'</span>, <span class="ruby-node">&quot;#{file_base}.gif&quot;</span>)
+114:         <span class="ruby-identifier">pyramid_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'prepared_images'</span>], <span class="ruby-value str">'pyramids'</span>, <span class="ruby-node">&quot;#{file_base}.tif&quot;</span>)
+115:         <span class="ruby-comment cmt"># Use a pattern for the original file, since we don't know the extensions</span>
+116:         <span class="ruby-identifier">orig_file_pattern</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'prepared_images'</span>], <span class="ruby-value str">'originals'</span>, <span class="ruby-node">&quot;#{file_base}.*&quot;</span>)
+117:         <span class="ruby-comment cmt"># We need to fix the pattern</span>
+118:         <span class="ruby-identifier">orig_file_pattern</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\[/</span>, <span class="ruby-value str">'\\['</span>) <span class="ruby-comment cmt"># Escape brackets, Dir[] doesn't like them</span>
+119:         <span class="ruby-identifier">orig_file_pattern</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\]/</span>, <span class="ruby-value str">'\\]'</span>)
+120:         <span class="ruby-identifier">orig_file_l</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">orig_file_pattern</span>]
+121:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">'Original find not found for '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">url</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">orig_file_l</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
+122:         <span class="ruby-identifier">orig_file</span> = <span class="ruby-identifier">orig_file_l</span>.<span class="ruby-identifier">first</span> <span class="ruby-comment cmt"># Original is the first file matching the pattern</span>
+123:         <span class="ruby-identifier">assit_block</span> { <span class="ruby-node">%w(.jpg .jpeg .png)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">orig_file</span>).<span class="ruby-identifier">downcase</span>) }
+124: 
+125:         <span class="ruby-comment cmt"># Now create the existing records from the files</span>
+126:         <span class="ruby-identifier">iip_record</span>.<span class="ruby-identifier">create_from_existing</span>(<span class="ruby-identifier">thumb_file</span>, <span class="ruby-identifier">pyramid_file</span>)
+127:         <span class="ruby-identifier">image_record</span>.<span class="ruby-identifier">create_from_file</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">orig_file</span>)
+128: 
+129:         <span class="ruby-keyword kw">true</span>
+130:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

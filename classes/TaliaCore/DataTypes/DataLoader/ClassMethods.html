@@ -72,6 +72,90 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <p>
+The <a href="ClassMethods.html#M000144">create_from_url</a> method will
+create a new <a href="../FileRecord.html">FileRecord</a> from a data source
+(file or web URL). The exact mechansim for creating the record will depend
+on the MIME type of the data.
+</p>
+<h1>How the MIME type is determined</h1>
+<ul>
+<li>If the :mime_type options is provided, the system will <em>always</em> use
+that MIME type for the new record
+
+</li>
+<li>If the :location option is provided, the system will <em>always</em>
+attempt to determine the MIME type from the &quot;file extension&quot; of
+the location, unless the :mime_type option is set
+
+</li>
+<li>If the uri is a file, the system will use the file extension to determine
+the MIME type automatically
+
+</li>
+<li>If the uri is a web URL, the system will first check if the server provided
+a MIME type in the response. If not, it will use the &quot;file
+extension&quot; of the uri to determine the MIME type as above
+
+</li>
+</ul>
+<h1>If the loader is a <a href="../FileRecord.html">FileRecord</a> class (no loader method)</h1>
+<p>
+If no loader method is specified, the loader will simply create a new <a
+href="../FileRecord.html">FileRecord</a> object of the type specified in
+the loader. It will then use create_from_file (for files) or
+create_from_data (for a web uri) to load the data into the new record.
+</p>
+<p>
+Example:
+</p>
+<pre>
+ # Set a loader for png (usually done in the initializer,
+ # this one is equal to the default)
+ TaliaCore::DataTypes::MimeMapping.add_mapping(:png, DataTypes::ImageData)
+
+ # Call the loader
+ FileRecord.create_from_url('test.png')
+ # This will result in the following:
+ # DataTypes::ImageData.new.create_from_file('test.png', 'test.png')
+</pre>
+<h1>If the loader is a method</h1>
+<p>
+In case a loader method is specified, the system will simply call that
+method on the <em>class</em> provided by the loader. The loader method must
+take the following paramters: mime_type, location, source, is_file:
+</p>
+<ul>
+<li><em>mime_type</em> is the MIME type for the object being imported
+
+</li>
+<li><em>location</em> is the location string for the current record. This is
+either the location passed in as an option, or the base name of the uri
+
+</li>
+<li><em>source</em> is either the io object from which to read the data, or a
+file name
+
+</li>
+<li><em>is_file</em> is set to true in case the <em>source</em> is a file name
+
+</li>
+</ul>
+<p>
+Example:
+</p>
+<pre>
+ # Set the handler for tiff files, usually done in the initializer
+ TaliaCore::DataTypes::MimeMapping.add_mapping(:tiff, :image_data, :create_iip)
+
+ # Call the loader
+ FileRecord.create_from_url('test.tiff')
+ # This will result in the following:
+ # DataTypes::ImageData.create_iip(Mime::Type.lookup(:tiff), 'test.tif', 'test.tif', true)
+</pre>
+
+    </div>
 
 
    </div>
@@ -80,7 +164,7 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000184">create_from_url</a>&nbsp;&nbsp;
+      <a href="#M000144">create_from_url</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -102,92 +186,100 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000184" class="method-detail">
-        <a name="M000184"></a>
+      <div id="method-M000144" class="method-detail">
+        <a name="M000144"></a>
 
         <div class="method-heading">
-          <a href="#M000184" class="method-signature">
+          <a href="#M000144" class="method-signature">
           <span class="method-name">create_from_url</span><span class="method-args">(uri, options = {})</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Load the data from the given URL. If the mime_type option is given, the
-handler will always use the parameter for the MIME type (which can be a
-Mime::Type object or a string like &#8216;text/html&#8217;, or a mime type
-symbol).
+Load data from the given url and create <a
+href="../FileRecord.html">FileRecord</a> objects, as appropriate.
 </p>
 <p>
-*Attention:* This method will return an <b>Array</b> of data objects. This
-is for those cases, where a single data file will be processed into
-multiple objects (e.g. IIP data).
+The way the <a href="../FileRecord.html">FileRecord</a> is created is
+determined by the MIME type for the data. Talia has a &quot;loader&quot;
+for each MIME type - see the <a href="../MimeMapping.html">MimeMapping</a>
+class to see the default loaders and to find out how to configure them.
 </p>
 <p>
-If the mime type is not given, the method will attempt to automatically
-determine the type, using the file extension or the response code.
+Each &quot;loader&quot; contains the <a
+href="../FileRecord.html">FileRecord</a> class that is used for new
+records, and (optionally) the name of a loader method which creates the new
+records. If no loader method is provided, a default mechanism is used.
 </p>
 <p>
-The :http_credentials option may be used to pass login information for http
-like this:
+<b>Options</b>
 </p>
-<pre>
-  http_credentials = { :http_basic_authentication =&gt; [login, password] }
-</pre>
-<p>
-See the openuri documentation for more.
-</p>
-<p>
-You may pass the :location parameter to identify the &quot;location&quot;
-value for the new data record. In general, this is not neccessary. If the
-location is given, the system will <b>always</b> attempt to determine the
-mime type through the location parameter, unless an explicit mime type is
-given.
-</p>
+<dl>
+<dt><b>mime_type</b></dt><dd>Specify the MIME type to use for the import. The parameter can either be a
+MIME::TYPE object, a string like &#8216;text/html&#8217; or a MIME type
+symbol like :jpeg
+
+</dd>
+<dt><b>http_credentials</b></dt><dd>Credentials for http authentication, if the uri requires that. These are
+the same options that openuri accepts, so see the documentation for that
+library for more information. <em>Example</em>: :http_credentials =&gt; {
+:http_basic_authentication =&gt; [login, password] }
+
+</dd>
+<dt><b>location</b></dt><dd>The location (e.g. filename) for the new <a
+href="../FileRecord.html">FileRecord</a>. If a location is given, it will
+<em>always</em> be used to determine the MIME type, unless a MIME type is
+passed explicitly as an option
+
+</dd>
+</dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000184-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000184-source">
+            onclick="toggleCode('M000144-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000144-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_loader.rb, line 28</span>
-28:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_url</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">options</span> = {})
-29:           <span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_options!</span>
-30:           <span class="ruby-identifier">options</span>.<span class="ruby-identifier">assert_valid_keys</span>(<span class="ruby-identifier">:mime_type</span>, <span class="ruby-identifier">:location</span>, <span class="ruby-identifier">:http_credentials</span>)
-31:           
-32:           <span class="ruby-identifier">mime_type</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:mime_type</span>] 
-33:           <span class="ruby-identifier">location</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:location</span>]
-34:           <span class="ruby-comment cmt"># If a Mime type is given, use that.</span>
-35:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mime_type</span>)
-36:             <span class="ruby-identifier">mime_type</span> = <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">mime_type</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>))
-37:           <span class="ruby-keyword kw">end</span>
-38: 
-39:           <span class="ruby-identifier">data_records</span> = []
-40: 
-41:           <span class="ruby-comment cmt"># Remove file:// from URIs to allow standard file URIs</span>
-42:           <span class="ruby-identifier">uri</span> = <span class="ruby-identifier">file_url</span>(<span class="ruby-identifier">uri</span>)
-43:           
-44:           <span class="ruby-comment cmt"># We have diffent code paths for local and remote files. This is mainly because</span>
-45:           <span class="ruby-comment cmt"># the system will try to not open local files at all and just copy them around -</span>
-46:           <span class="ruby-comment cmt"># which will greatly speed up the operation.</span>
-47:           <span class="ruby-identifier">is_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">uri</span>)
-48: 
-49:           <span class="ruby-identifier">location</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">uri</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
-50:           <span class="ruby-comment cmt"># If we have a &quot;standard&quot; uri, we cut off at the last slash (the</span>
-51:           <span class="ruby-comment cmt"># File.basename would use the system file separator)</span>
-52:           <span class="ruby-identifier">location</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">uri</span>[(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)<span class="ruby-operator">..</span><span class="ruby-value">-1</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">uri</span>
-53:           
-54:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
-55:             <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">mime_by_location</span>(<span class="ruby-identifier">location</span>)
-56:             <span class="ruby-identifier">open_and_create</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-keyword kw">true</span>)
-57:           <span class="ruby-keyword kw">else</span>
-58:             <span class="ruby-identifier">open_from_url</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:http_credentials</span>]) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
-59:               <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">io</span>.<span class="ruby-identifier">content_type</span>)
-60:               <span class="ruby-comment cmt"># Just in case we didn't get any content type</span>
-61:               <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">mime_by_location</span>(<span class="ruby-identifier">location</span>)
-62:               <span class="ruby-identifier">open_and_create</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">io</span>, <span class="ruby-keyword kw">false</span>)
-63:             <span class="ruby-keyword kw">end</span>
-64:           <span class="ruby-keyword kw">end</span>
-65: 
-66:         <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_loader.rb, line 93</span>
+ 93:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_url</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">options</span> = {})
+ 94:           <span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_options!</span>
+ 95:           <span class="ruby-identifier">options</span>.<span class="ruby-identifier">assert_valid_keys</span>(<span class="ruby-identifier">:mime_type</span>, <span class="ruby-identifier">:location</span>, <span class="ruby-identifier">:http_credentials</span>)
+ 96:           
+ 97:           <span class="ruby-identifier">mime_type</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:mime_type</span>] 
+ 98:           <span class="ruby-identifier">location</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:location</span>]
+ 99:           <span class="ruby-comment cmt"># If a Mime type is given, use that.</span>
+100:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mime_type</span>)
+101:             <span class="ruby-identifier">mime_type</span> = <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">mime_type</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>))
+102:           <span class="ruby-keyword kw">end</span>
+103: 
+104:           <span class="ruby-identifier">data_records</span> = []
+105: 
+106:           <span class="ruby-comment cmt"># Remove file:// from URIs to allow standard file URIs</span>
+107:           <span class="ruby-identifier">uri</span> = <span class="ruby-identifier">file_url</span>(<span class="ruby-identifier">uri</span>)
+108:           
+109:           <span class="ruby-comment cmt"># We have diffent code paths for local and remote files. This is mainly because</span>
+110:           <span class="ruby-comment cmt"># the system will try to not open local files at all and just copy them around -</span>
+111:           <span class="ruby-comment cmt"># which will greatly speed up the operation.</span>
+112:           <span class="ruby-identifier">is_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">uri</span>)
+113: 
+114:           <span class="ruby-identifier">location</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">uri</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
+115:           <span class="ruby-comment cmt"># If we have a &quot;standard&quot; uri, we cut off at the last slash (the</span>
+116:           <span class="ruby-comment cmt"># File.basename would use the system file separator)</span>
+117:           <span class="ruby-identifier">location</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">uri</span>[(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)<span class="ruby-operator">..</span><span class="ruby-value">-1</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">uri</span>
+118:           
+119:           <span class="ruby-identifier">assit</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">location</span>.<span class="ruby-identifier">blank?</span>)
+120:           
+121:           <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">is_file</span>)
+122:             <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">mime_by_location</span>(<span class="ruby-identifier">location</span>)
+123:             <span class="ruby-identifier">open_and_create</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-keyword kw">true</span>)
+124:           <span class="ruby-keyword kw">else</span>
+125:             <span class="ruby-identifier">open_from_url</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:http_credentials</span>]) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">io</span><span class="ruby-operator">|</span>
+126:               <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">io</span>.<span class="ruby-identifier">content_type</span>)
+127:               <span class="ruby-comment cmt"># Just in case we didn't get any content type</span>
+128:               <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">mime_by_location</span>(<span class="ruby-identifier">location</span>)
+129:               <span class="ruby-identifier">open_and_create</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">location</span>, <span class="ruby-identifier">io</span>, <span class="ruby-keyword kw">false</span>)
+130:             <span class="ruby-keyword kw">end</span>
+131:           <span class="ruby-keyword kw">end</span>
+132: 
+133:         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

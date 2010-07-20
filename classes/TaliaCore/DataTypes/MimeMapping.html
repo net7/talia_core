@@ -65,7 +65,9 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
+                <a href="../../Object.html">
                 Object
+               </a>
             </td>
         </tr>
         </table>
@@ -80,16 +82,54 @@
 
     <div id="description">
       <p>
-Mapping from Mime types to data classes and importing methods. Currently
-uses a fixed default mapping. If the mime type is not known, it will use a
-fallback default handler.
+Mapping from Mime types to data classes and importing methods for <a
+href="DataRecord.html">DataRecord</a>.
 </p>
 <p>
-The mapping can be configured in Rails&#8217; initializer files. Example:
+See the <a href="DataLoader.html">DataTypes::DataLoader</a> module to see
+how the import works. In a nutshell, each MIME type can be connected either
+to a <a href="FileRecord.html">DataTypes::FileRecord</a> type that will be
+used for new data records, or the MIME type can be connected to a handler
+method that will do the creation.
+</p>
+<h1>Default Mappings</h1>
+<p>
+See the source code of the <a
+href="MimeMapping.html#M000206">mapping_hash</a> method for the detailed
+default mapping. It goes something like this:
+</p>
+<ul>
+<li>All image types (:jpeg, :tiff, :png, :gif, &#8230;) use <a
+href="ImageData.html">DataTypes::ImageData</a>
+
+</li>
+<li>HTML, XML and all &quot;transcription&quot; types (:html, :xml, :tei,
+&#8230;) use <a href="XmlData.html">DataTypes::XmlData</a>
+
+</li>
+<li>:text uses <a href="SimpleText.html">DataTypes::SimpleText</a>
+
+</li>
+<li>:pdf uses <a href="PdfData.html">DataTypes::PdfData</a>
+
+</li>
+<li>The default (for unknow types) is to use <a
+href="FileRecord.html">DataTypes::FileRecord</a>
+
+</li>
+</ul>
+<h1>Configure the MIME mappings for Talia</h1>
+<p>
+The mapping can be configured in Rails&#8217; initializer files (e.g.
+config/initializers/talia.rb):
 </p>
 <pre>
-  TaliaCore::DataTypes::MimeMapping(:tiff, :image_data, :create_iip)
+  TaliaCore::DataTypes::MimeMapping.add_mapping(:tiff, :image_data, :create_iip)
 </pre>
+<p>
+Add a mapping for each MIME type that you need, or where you want to change
+the default mapping
+</p>
 
     </div>
 
@@ -100,9 +140,10 @@ The mapping can be configured in Rails&#8217; initializer files. Example:
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000260">add_mapping</a>&nbsp;&nbsp;
-      <a href="#M000258">class_type_from</a>&nbsp;&nbsp;
-      <a href="#M000259">loader_type_from</a>&nbsp;&nbsp;
+      <a href="#M000205">add_mapping</a>&nbsp;&nbsp;
+      <a href="#M000203">class_type_from</a>&nbsp;&nbsp;
+      <a href="#M000204">loader_type_from</a>&nbsp;&nbsp;
+      <a href="#M000206">mapping_hash</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -124,11 +165,11 @@ The mapping can be configured in Rails&#8217; initializer files. Example:
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000260" class="method-detail">
-        <a name="M000260"></a>
+      <div id="method-M000205" class="method-detail">
+        <a name="M000205"></a>
 
         <div class="method-heading">
-          <a href="#M000260" class="method-signature">
+          <a href="#M000205" class="method-signature">
           <span class="method-name">add_mapping</span><span class="method-args">(mime_type, data_class, handler = nil)</span>
           </a>
         </div>
@@ -137,102 +178,141 @@ The mapping can be configured in Rails&#8217; initializer files. Example:
           <p>
 Set a new mapping for the given MIME type. If only a class is given, this
 will use the class to create new data records from. If a symbol is given
-for the class name, this will take the corresponding class from <a
+for data_class, this will take the corresponding class from <a
 href="../DataTypes.html">TaliaCore::DataTypes</a>.
 </p>
-<p>
-The loader method can be a symbol, if given it must correspond to a
-<b>class</b> method that can be called on type_class and which accepts
-exactly 4 parameters, which will be passed in during record creation
-</p>
-<ul>
-<li>Mime type of the record
-
-</li>
-<li>&#8216;location&#8217; field of the record
-
-</li>
-<li>The record source - this is a descriptive string with either the url or the
-file name from which the data should be fetched
-
-</li>
-<li>The is_file flag. This will be true if the source is the name of a regular
-file. Otherwise, the source field should be interpreted as a URL.
-
-</li>
-</ul>
-<h2>Example handler method</h2>
+<h1>Examples</h1>
 <pre>
-  def data_loader(mime_type, location, source, is_file)
+ # Uses DataTypes::ImageData#create_iip to create new records
+ TaliaCore::DataTypes::MimeMapping.add_mapping(:tiff, :image_data, :create_iip)
+
+ # Use the DataTypes::ImageData class for new data records, and create records
+ # in the default way (using create_with_file or similar)
+ TaliaCore::DataTypes::MimeMapping.add_mapping(:png, DataTypes::ImageData)
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000260-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000260-source">
+            onclick="toggleCode('M000205-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000205-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/mime_mapping.rb, line 43</span>
-43:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_mapping</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">data_class</span>, <span class="ruby-identifier">handler</span> = <span class="ruby-keyword kw">nil</span>)
-44:           <span class="ruby-identifier">mapping</span> = {}
-45:           <span class="ruby-keyword kw">if</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">data_class</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Class</span>))
-46:             <span class="ruby-identifier">data_class</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">data_class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">camelize</span>)
-47:           <span class="ruby-keyword kw">end</span>
-48:           
-49:           <span class="ruby-identifier">raise</span>(<span class="ruby-node">&quot;Error: #{data_class} is not a valid data class.&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">data_class</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Class</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">data_class</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-constant">DataRecord</span>))
-50:           
-51:           <span class="ruby-identifier">mapping</span>[<span class="ruby-identifier">:type</span>] = <span class="ruby-identifier">data_class</span>
-52:           <span class="ruby-identifier">mapping</span>[<span class="ruby-identifier">:loader</span>] = <span class="ruby-identifier">handler</span>.<span class="ruby-identifier">to_sym</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">handler</span>)
-53:           <span class="ruby-identifier">mapping_hash</span>[<span class="ruby-identifier">symbol_for</span>(<span class="ruby-identifier">mime_type</span>)] = <span class="ruby-identifier">mapping</span>
-54:           <span class="ruby-keyword kw">true</span>
-55:         <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/mime_mapping.rb, line 64</span>
+64:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_mapping</span>(<span class="ruby-identifier">mime_type</span>, <span class="ruby-identifier">data_class</span>, <span class="ruby-identifier">handler</span> = <span class="ruby-keyword kw">nil</span>)
+65:           <span class="ruby-identifier">mapping</span> = {}
+66:           <span class="ruby-keyword kw">if</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">data_class</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Class</span>))
+67:             <span class="ruby-identifier">data_class</span> = <span class="ruby-constant">TaliaCore</span><span class="ruby-operator">::</span><span class="ruby-constant">DataTypes</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">data_class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">camelize</span>)
+68:           <span class="ruby-keyword kw">end</span>
+69:           
+70:           <span class="ruby-identifier">raise</span>(<span class="ruby-node">&quot;Error: #{data_class} is not a valid data class.&quot;</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">data_class</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Class</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">data_class</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-constant">DataRecord</span>))
+71:           
+72:           <span class="ruby-identifier">mapping</span>[<span class="ruby-identifier">:type</span>] = <span class="ruby-identifier">data_class</span>
+73:           <span class="ruby-identifier">mapping</span>[<span class="ruby-identifier">:loader</span>] = <span class="ruby-identifier">handler</span>.<span class="ruby-identifier">to_sym</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">handler</span>)
+74:           <span class="ruby-identifier">mapping_hash</span>[<span class="ruby-identifier">symbol_for</span>(<span class="ruby-identifier">mime_type</span>)] = <span class="ruby-identifier">mapping</span>
+75:           <span class="ruby-keyword kw">true</span>
+76:         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000258" class="method-detail">
-        <a name="M000258"></a>
+      <div id="method-M000203" class="method-detail">
+        <a name="M000203"></a>
 
         <div class="method-heading">
-          <a href="#M000258" class="method-signature">
+          <a href="#M000203" class="method-signature">
           <span class="method-name">class_type_from</span><span class="method-args">(mime_type)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Gets the data class for the given mime type
+Gets the data class for the given mime type. For loaders configured through
+<a href="MimeMapping.html#M000205">add_mapping</a>, this will always return
+the class corresponding to data_class. (Otherwise it will return the
+data_class configured in the default mapping)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000258-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000258-source">
+            onclick="toggleCode('M000203-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000203-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/mime_mapping.rb, line 15</span>
-15:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_type_from</span>(<span class="ruby-identifier">mime_type</span>)
-16:           <span class="ruby-identifier">mapping_for</span>(<span class="ruby-identifier">mime_type</span>)[<span class="ruby-identifier">:type</span>]
-17:         <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/mime_mapping.rb, line 39</span>
+39:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_type_from</span>(<span class="ruby-identifier">mime_type</span>)
+40:           <span class="ruby-identifier">mapping_for</span>(<span class="ruby-identifier">mime_type</span>)[<span class="ruby-identifier">:type</span>]
+41:         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000259" class="method-detail">
-        <a name="M000259"></a>
+      <div id="method-M000204" class="method-detail">
+        <a name="M000204"></a>
 
         <div class="method-heading">
-          <a href="#M000259" class="method-signature">
+          <a href="#M000204" class="method-signature">
           <span class="method-name">loader_type_from</span><span class="method-args">(mime_type)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Return the &quot;loader type&quot; for the given MIME type. This will
+return the handler (as a symbol, see <a
+href="MimeMapping.html#M000205">add_mapping</a>) if set. If no handler is
+set, it will return the data_class (as <a
+href="MimeMapping.html#M000203">class_type_from</a>).
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000259-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000259-source">
+            onclick="toggleCode('M000204-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000204-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/mime_mapping.rb, line 19</span>
-19:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loader_type_from</span>(<span class="ruby-identifier">mime_type</span>)
-20:           <span class="ruby-identifier">map</span> = <span class="ruby-identifier">mapping_for</span>(<span class="ruby-identifier">mime_type</span>)
-21:           <span class="ruby-identifier">map</span>[<span class="ruby-identifier">:loader</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">map</span>[<span class="ruby-identifier">:type</span>]
-22:         <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/mime_mapping.rb, line 46</span>
+46:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loader_type_from</span>(<span class="ruby-identifier">mime_type</span>)
+47:           <span class="ruby-identifier">map</span> = <span class="ruby-identifier">mapping_for</span>(<span class="ruby-identifier">mime_type</span>)
+48:           <span class="ruby-identifier">map</span>[<span class="ruby-identifier">:loader</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">map</span>[<span class="ruby-identifier">:type</span>]
+49:         <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000206" class="method-detail">
+        <a name="M000206"></a>
+
+        <div class="method-heading">
+          <a href="#M000206" class="method-signature">
+          <span class="method-name">mapping_hash</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the current mapping. This will be automatically initialized with
+the default mappings.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000206-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000206-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/mime_mapping.rb, line 80</span>
+ 80:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mapping_hash</span>
+ 81:           <span class="ruby-ivar">@mapping</span> <span class="ruby-operator">||=</span> {
+ 82:             <span class="ruby-identifier">:xml</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlData</span> },
+ 83:             <span class="ruby-identifier">:html</span> =<span class="ruby-operator">&gt;</span>{ <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlData</span> },
+ 84:             <span class="ruby-identifier">:tei</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlData</span> },
+ 85:             <span class="ruby-identifier">:tei_p5</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlData</span> },
+ 86:             <span class="ruby-identifier">:tei_p4</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlData</span> }, 
+ 87:             <span class="ruby-identifier">:gml</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlData</span> },
+ 88:             <span class="ruby-identifier">:wittei</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlData</span> },
+ 89:             <span class="ruby-identifier">:hnml</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">XmlData</span> },
+ 90:             <span class="ruby-identifier">:jpeg</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageData</span> },
+ 91:             <span class="ruby-identifier">:tiff</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageData</span> },
+ 92:             <span class="ruby-identifier">:png</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageData</span> },
+ 93:             <span class="ruby-identifier">:gif</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageData</span> },
+ 94:             <span class="ruby-identifier">:bmp</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">ImageData</span> },
+ 95:             <span class="ruby-identifier">:pdf</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">PdfData</span> },
+ 96:             <span class="ruby-identifier">:text</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DataTypes</span><span class="ruby-operator">::</span><span class="ruby-constant">SimpleText</span> },            
+ 97:             <span class="ruby-comment cmt"># Default fallback handler</span>
+ 98:             <span class="ruby-identifier">:default</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">FileRecord</span> }
+ 99:           }
+100:         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

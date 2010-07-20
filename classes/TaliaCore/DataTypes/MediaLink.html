@@ -84,7 +84,11 @@
       <p>
 Data class that contains just a link to a remote data element (and no
 locally stored data at all). The uri for the link is stored in the location
-field
+field.
+</p>
+<p>
+<b>Note</b>: It is not possible to store data in media links, so all
+data-related methods will raise an exception
 </p>
 
     </div>
@@ -96,8 +100,8 @@ field
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000256">all_bytes</a>&nbsp;&nbsp;
-      <a href="#M000257">get_byte</a>&nbsp;&nbsp;
+      <a href="#M000201">all_bytes</a>&nbsp;&nbsp;
+      <a href="#M000202">get_byte</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -119,47 +123,47 @@ field
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000256" class="method-detail">
-        <a name="M000256"></a>
+      <div id="method-M000201" class="method-detail">
+        <a name="M000201"></a>
 
         <div class="method-heading">
-          <a href="#M000256" class="method-signature">
+          <a href="#M000201" class="method-signature">
           <span class="method-name">all_bytes</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000256-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000256-source">
+            onclick="toggleCode('M000201-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000201-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/media_link.rb, line 9</span>
- 9:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_bytes</span>
-10:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RuntimeError</span>, <span class="ruby-value str">&quot;Media Links have no data&quot;</span>)
-11:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/media_link.rb, line 12</span>
+12:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_bytes</span>
+13:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RuntimeError</span>, <span class="ruby-value str">&quot;Media Links have no data&quot;</span>)
+14:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000257" class="method-detail">
-        <a name="M000257"></a>
+      <div id="method-M000202" class="method-detail">
+        <a name="M000202"></a>
 
         <div class="method-heading">
-          <a href="#M000257" class="method-signature">
+          <a href="#M000202" class="method-signature">
           <span class="method-name">get_byte</span><span class="method-args">(close_after_single_read=false)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000257-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000257-source">
+            onclick="toggleCode('M000202-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000202-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/media_link.rb, line 13</span>
-13:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_byte</span>(<span class="ruby-identifier">close_after_single_read</span>=<span class="ruby-keyword kw">false</span>)
-14:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RuntimeRror</span>, <span class="ruby-value str">&quot;Media Links have no data&quot;</span>)
-15:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/media_link.rb, line 16</span>
+16:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_byte</span>(<span class="ruby-identifier">close_after_single_read</span>=<span class="ruby-keyword kw">false</span>)
+17:         <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RuntimeRror</span>, <span class="ruby-value str">&quot;Media Links have no data&quot;</span>)
+18:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

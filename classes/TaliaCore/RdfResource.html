@@ -65,7 +65,9 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
+                <a href="../Object.html">
                 Object
+               </a>
             </td>
         </tr>
         </table>
@@ -97,19 +99,19 @@ avoids some of the pitfalls of the original class.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000352">[]</a>&nbsp;&nbsp;
-      <a href="#M000350">clear_rdf</a>&nbsp;&nbsp;
-      <a href="#M000346">default_types</a>&nbsp;&nbsp;
-      <a href="#M000355">direct_predicates</a>&nbsp;&nbsp;
-      <a href="#M000349">direct_write_predicate</a>&nbsp;&nbsp;
-      <a href="#M000353">inverse</a>&nbsp;&nbsp;
-      <a href="#M000356">inverse_predicates</a>&nbsp;&nbsp;
-      <a href="#M000348">new</a>&nbsp;&nbsp;
-      <a href="#M000347">object_class</a>&nbsp;&nbsp;
-      <a href="#M000351">remove</a>&nbsp;&nbsp;
-      <a href="#M000357">save</a>&nbsp;&nbsp;
-      <a href="#M000358">types</a>&nbsp;&nbsp;
-      <a href="#M000354">uri</a>&nbsp;&nbsp;
+      <a href="#M000305">[]</a>&nbsp;&nbsp;
+      <a href="#M000303">clear_rdf</a>&nbsp;&nbsp;
+      <a href="#M000299">default_types</a>&nbsp;&nbsp;
+      <a href="#M000308">direct_predicates</a>&nbsp;&nbsp;
+      <a href="#M000302">direct_write_predicate</a>&nbsp;&nbsp;
+      <a href="#M000306">inverse</a>&nbsp;&nbsp;
+      <a href="#M000309">inverse_predicates</a>&nbsp;&nbsp;
+      <a href="#M000301">new</a>&nbsp;&nbsp;
+      <a href="#M000300">object_class</a>&nbsp;&nbsp;
+      <a href="#M000304">remove</a>&nbsp;&nbsp;
+      <a href="#M000310">save</a>&nbsp;&nbsp;
+      <a href="#M000311">types</a>&nbsp;&nbsp;
+      <a href="#M000307">uri</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -121,7 +123,7 @@ avoids some of the pitfalls of the original class.
       <h3 class="section-bar">Included Modules</h3>
 
       <div id="includes-list">
-        <span class="include-name">RDFS::ResourceLike</span>
+        <span class="include-name">ActiveRDF::ResourceLike</span>
       </div>
     </div>
 
@@ -155,23 +157,23 @@ href="RdfResource.html">RdfResource</a>
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000346" class="method-detail">
-        <a name="M000346"></a>
+      <div id="method-M000299" class="method-detail">
+        <a name="M000299"></a>
 
         <div class="method-heading">
-          <a href="#M000346" class="method-signature">
+          <a href="#M000299" class="method-signature">
           <span class="method-name">default_types</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-A list of &quot;default&quot; <a href="RdfResource.html#M000358">types</a>
+A list of &quot;default&quot; <a href="RdfResource.html#M000311">types</a>
 that will be added to all resources
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000346-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000346-source">
+            onclick="toggleCode('M000299-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000299-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 15</span>
 15:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_types</span>
@@ -184,28 +186,29 @@ that will be added to all resources
         </div>
       </div>
 
-      <div id="method-M000348" class="method-detail">
-        <a name="M000348"></a>
+      <div id="method-M000301" class="method-detail">
+        <a name="M000301"></a>
 
         <div class="method-heading">
-          <a href="#M000348" class="method-signature">
+          <a href="#M000301" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(uri)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Initialize a <a href="RdfResource.html#M000348">new</a> resource with the
+Initialize a <a href="RdfResource.html#M000301">new</a> resource with the
 given URI
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000348-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000348-source">
+            onclick="toggleCode('M000301-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000301-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 31</span>
 31:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">uri</span>)
-32:       <span class="ruby-ivar">@uri</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">uri</span>)
-33:     <span class="ruby-keyword kw">end</span>
+32:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;No blank URI allowed here&quot;</span> <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">blank?</span>)
+33:       <span class="ruby-ivar">@uri</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">uri</span>)
+34:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -213,11 +216,11 @@ given URI
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000352" class="method-detail">
-        <a name="M000352"></a>
+      <div id="method-M000305" class="method-detail">
+        <a name="M000305"></a>
 
         <div class="method-heading">
-          <a href="#M000352" class="method-signature">
+          <a href="#M000305" class="method-signature">
           <span class="method-name">[]</span><span class="method-args">(predicate)</span>
           </a>
         </div>
@@ -225,30 +228,30 @@ given URI
         <div class="method-description">
           <p>
 Returns the value(s) of the given predicates as a PropertyList filled with
-the defined <a href="RdfResource.html#M000347">object_class</a> objects.
+the defined <a href="RdfResource.html#M000300">object_class</a> objects.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000352-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000352-source">
+            onclick="toggleCode('M000305-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000305-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 53</span>
-53:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">predicate</span>)
-54:       <span class="ruby-identifier">predicate</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">predicate</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">predicate</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>))
-55:       
-56:       <span class="ruby-identifier">property_list</span> = <span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">object_class</span>).<span class="ruby-identifier">distinct</span>(<span class="ruby-identifier">:o</span>).<span class="ruby-identifier">where</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">:o</span>).<span class="ruby-identifier">execute</span>
-57:       
-58:       <span class="ruby-constant">PropertyList</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">property_list</span>, <span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">source_exists?</span>)
-59:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 54</span>
+54:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">predicate</span>)
+55:       <span class="ruby-identifier">predicate</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">predicate</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">predicate</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>))
+56:       
+57:       <span class="ruby-identifier">property_list</span> = <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">object_class</span>).<span class="ruby-identifier">distinct</span>(<span class="ruby-identifier">:o</span>).<span class="ruby-identifier">where</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">:o</span>).<span class="ruby-identifier">execute</span>
+58:       
+59:       <span class="ruby-constant">PropertyList</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">property_list</span>, <span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">source_exists?</span>)
+60:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000350" class="method-detail">
-        <a name="M000350"></a>
+      <div id="method-M000303" class="method-detail">
+        <a name="M000303"></a>
 
         <div class="method-heading">
-          <a href="#M000350" class="method-signature">
+          <a href="#M000303" class="method-signature">
           <span class="method-name">clear_rdf</span><span class="method-args">()</span>
           </a>
         </div>
@@ -258,23 +261,23 @@ the defined <a href="RdfResource.html#M000347">object_class</a> objects.
 Clears all rdf for this resource. FIXME: Not context-aware.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000350-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000350-source">
+            onclick="toggleCode('M000303-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000303-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 41</span>
-41:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear_rdf</span>
-42:       <span class="ruby-constant">FederationManager</span>.<span class="ruby-identifier">delete_all</span>(<span class="ruby-keyword kw">self</span>)
-43:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 42</span>
+42:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear_rdf</span>
+43:       <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">FederationManager</span>.<span class="ruby-identifier">delete_all</span>(<span class="ruby-keyword kw">self</span>)
+44:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000355" class="method-detail">
-        <a name="M000355"></a>
+      <div id="method-M000308" class="method-detail">
+        <a name="M000308"></a>
 
         <div class="method-heading">
-          <a href="#M000355" class="method-signature">
+          <a href="#M000308" class="method-signature">
           <span class="method-name">direct_predicates</span><span class="method-args">()</span>
           </a>
         </div>
@@ -284,23 +287,23 @@ Clears all rdf for this resource. FIXME: Not context-aware.
 Returns the predicates that are directly defined for this resource
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000355-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000355-source">
+            onclick="toggleCode('M000308-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000308-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 95</span>
-95:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_predicates</span>
-96:       <span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Predicate</span>).<span class="ruby-identifier">distinct</span>(<span class="ruby-identifier">:p</span>).<span class="ruby-identifier">where</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:p</span>, <span class="ruby-identifier">:o</span>).<span class="ruby-identifier">execute</span>
-97:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 96</span>
+96:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_predicates</span>
+97:       <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Predicate</span>).<span class="ruby-identifier">distinct</span>(<span class="ruby-identifier">:p</span>).<span class="ruby-identifier">where</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:p</span>, <span class="ruby-identifier">:o</span>).<span class="ruby-identifier">execute</span>
+98:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000349" class="method-detail">
-        <a name="M000349"></a>
+      <div id="method-M000302" class="method-detail">
+        <a name="M000302"></a>
 
         <div class="method-heading">
-          <a href="#M000349" class="method-signature">
+          <a href="#M000302" class="method-signature">
           <span class="method-name">direct_write_predicate</span><span class="method-args">(predicate, value)</span>
           </a>
         </div>
@@ -310,23 +313,23 @@ Returns the predicates that are directly defined for this resource
 Direct writing of a predicate, with having to fetch a list first
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000349-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000349-source">
+            onclick="toggleCode('M000302-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000302-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 36</span>
-36:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_write_predicate</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span>)
-37:       <span class="ruby-constant">FederationManager</span>.<span class="ruby-identifier">add</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span>)
-38:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 37</span>
+37:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">direct_write_predicate</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span>)
+38:       <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">FederationManager</span>.<span class="ruby-identifier">add</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span>)
+39:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000353" class="method-detail">
-        <a name="M000353"></a>
+      <div id="method-M000306" class="method-detail">
+        <a name="M000306"></a>
 
         <div class="method-heading">
-          <a href="#M000353" class="method-signature">
+          <a href="#M000306" class="method-signature">
           <span class="method-name">inverse</span><span class="method-args">()</span>
           </a>
         </div>
@@ -334,7 +337,7 @@ Direct writing of a predicate, with having to fetch a list first
         <div class="method-description">
           <p>
 Returns an on-the-fly object that can be used to query for &quot;<a
-href="RdfResource.html#M000353">inverse</a>&quot; properties of this
+href="RdfResource.html#M000306">inverse</a>&quot; properties of this
 resource (meaning triples that have the current resource as an object.)
 </p>
 <p>
@@ -346,77 +349,77 @@ Example: <tt>resource.inverse[N::DNCS::title]</tt>
 </p>
 <p>
 The [] method will return a list of objects that are instances of <a
-href="RdfResource.html#M000347">object_class</a>
+href="RdfResource.html#M000300">object_class</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000353-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000353-source">
+            onclick="toggleCode('M000306-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000306-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 71</span>
-71:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse</span>
-72:       <span class="ruby-identifier">inverseobj</span> = <span class="ruby-constant">Object</span>.<span class="ruby-identifier">new</span>
-73:       <span class="ruby-identifier">inverseobj</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">:@obj_uri</span>, <span class="ruby-keyword kw">self</span>)
-74:       <span class="ruby-identifier">inverseobj</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">:@obj_class</span>, <span class="ruby-identifier">object_class</span>)
-75:       
-76:       <span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span><span class="ruby-identifier">inverseobj</span>     
-77:         
-78:         <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">property</span>)
-79:           <span class="ruby-identifier">property</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">property</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">property</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>))
-80:           <span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@obj_class</span>).<span class="ruby-identifier">distinct</span>(<span class="ruby-identifier">:s</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">:s</span>, <span class="ruby-identifier">property</span>, <span class="ruby-ivar">@obj_uri</span>).<span class="ruby-identifier">execute</span>
-81:         <span class="ruby-keyword kw">end</span>
-82:         <span class="ruby-identifier">private</span>(<span class="ruby-identifier">:type</span>)
-83:       <span class="ruby-keyword kw">end</span>
-84:       
-85:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">inverseobj</span>
-86:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 72</span>
+72:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse</span>
+73:       <span class="ruby-identifier">inverseobj</span> = <span class="ruby-constant">Object</span>.<span class="ruby-identifier">new</span>
+74:       <span class="ruby-identifier">inverseobj</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">:@obj_uri</span>, <span class="ruby-keyword kw">self</span>)
+75:       <span class="ruby-identifier">inverseobj</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">:@obj_class</span>, <span class="ruby-identifier">object_class</span>)
+76:       
+77:       <span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span><span class="ruby-identifier">inverseobj</span>     
+78:         
+79:         <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">property</span>)
+80:           <span class="ruby-identifier">property</span> = <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">property</span>) <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">property</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>))
+81:           <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@obj_class</span>).<span class="ruby-identifier">distinct</span>(<span class="ruby-identifier">:s</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">:s</span>, <span class="ruby-identifier">property</span>, <span class="ruby-ivar">@obj_uri</span>).<span class="ruby-identifier">execute</span>
+82:         <span class="ruby-keyword kw">end</span>
+83:         <span class="ruby-identifier">private</span>(<span class="ruby-identifier">:type</span>)
+84:       <span class="ruby-keyword kw">end</span>
+85:       
+86:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">inverseobj</span>
+87:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000356" class="method-detail">
-        <a name="M000356"></a>
+      <div id="method-M000309" class="method-detail">
+        <a name="M000309"></a>
 
         <div class="method-heading">
-          <a href="#M000356" class="method-signature">
+          <a href="#M000309" class="method-signature">
           <span class="method-name">inverse_predicates</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns the &quot;<a href="RdfResource.html#M000353">inverse</a>&quot;
+Returns the &quot;<a href="RdfResource.html#M000306">inverse</a>&quot;
 predicates for the resource. these are the predicates for which this
 resource exists as an object
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000356-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000356-source">
+            onclick="toggleCode('M000309-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000309-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 101</span>
-101:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse_predicates</span>
-102:       <span class="ruby-identifier">qry</span> = <span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">distinct</span>.<span class="ruby-identifier">select</span>(<span class="ruby-identifier">:p</span>)
-103:       <span class="ruby-identifier">qry</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">:s</span>, <span class="ruby-identifier">:p</span>, <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>))
-104:       <span class="ruby-identifier">qry</span>.<span class="ruby-identifier">execute</span>.<span class="ruby-identifier">collect</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span> <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Predicate</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">res</span>.<span class="ruby-identifier">uri</span>) }
-105:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 102</span>
+102:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inverse_predicates</span>
+103:       <span class="ruby-identifier">qry</span> = <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">distinct</span>.<span class="ruby-identifier">select</span>(<span class="ruby-identifier">:p</span>)
+104:       <span class="ruby-identifier">qry</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">:s</span>, <span class="ruby-identifier">:p</span>, <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>))
+105:       <span class="ruby-identifier">qry</span>.<span class="ruby-identifier">execute</span>.<span class="ruby-identifier">collect</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span> <span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">Predicate</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">res</span>.<span class="ruby-identifier">uri</span>) }
+106:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000347" class="method-detail">
-        <a name="M000347"></a>
+      <div id="method-M000300" class="method-detail">
+        <a name="M000300"></a>
 
         <div class="method-heading">
-          <a href="#M000347" class="method-signature">
+          <a href="#M000300" class="method-signature">
           <span class="method-name">object_class</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000347-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000347-source">
+            onclick="toggleCode('M000300-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000300-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 26</span>
 26:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">object_class</span>
@@ -427,11 +430,11 @@ resource exists as an object
         </div>
       </div>
 
-      <div id="method-M000351" class="method-detail">
-        <a name="M000351"></a>
+      <div id="method-M000304" class="method-detail">
+        <a name="M000304"></a>
 
         <div class="method-heading">
-          <a href="#M000351" class="method-signature">
+          <a href="#M000304" class="method-signature">
           <span class="method-name">remove</span><span class="method-args">(predicate, value = nil)</span>
           </a>
         </div>
@@ -442,23 +445,23 @@ Removes the given predicate (restrict to the triple with the given value if
 a value is given).
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000351-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000351-source">
+            onclick="toggleCode('M000304-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000304-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 47</span>
-47:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span> = <span class="ruby-keyword kw">nil</span>)
-48:       <span class="ruby-constant">FederationManager</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span>)
-49:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 48</span>
+48:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span> = <span class="ruby-keyword kw">nil</span>)
+49:       <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">FederationManager</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">value</span>)
+50:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000357" class="method-detail">
-        <a name="M000357"></a>
+      <div id="method-M000310" class="method-detail">
+        <a name="M000310"></a>
 
         <div class="method-heading">
-          <a href="#M000357" class="method-signature">
+          <a href="#M000310" class="method-signature">
           <span class="method-name">save</span><span class="method-args">()</span>
           </a>
         </div>
@@ -470,79 +473,79 @@ been optimized so that if only one RDF backend is present it won&#8216;t do
 any copying around.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000357-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000357-source">
+            onclick="toggleCode('M000310-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000310-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 110</span>
-110:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save</span>
-111:       <span class="ruby-keyword kw">if</span>((<span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">read_adapters</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>) <span class="ruby-operator">&amp;&amp;</span>
-112:             (<span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">write_adapter</span> <span class="ruby-operator">==</span> <span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">read_adapters</span>.<span class="ruby-identifier">first</span>))
-113:         <span class="ruby-identifier">save_default_types</span> <span class="ruby-comment cmt"># Only write the &quot;default&quot; types to the store</span>
-114:       <span class="ruby-keyword kw">else</span>
-115:         <span class="ruby-identifier">full_save</span> <span class="ruby-comment cmt"># Do the full save operation</span>
-116:       <span class="ruby-keyword kw">end</span>
-117:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 111</span>
+111:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save</span>
+112:       <span class="ruby-keyword kw">if</span>((<span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">read_adapters</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>) <span class="ruby-operator">&amp;&amp;</span>
+113:             (<span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">write_adapter</span> <span class="ruby-operator">==</span> <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">ConnectionPool</span>.<span class="ruby-identifier">read_adapters</span>.<span class="ruby-identifier">first</span>))
+114:         <span class="ruby-identifier">save_default_types</span> <span class="ruby-comment cmt"># Only write the &quot;default&quot; types to the store</span>
+115:       <span class="ruby-keyword kw">else</span>
+116:         <span class="ruby-identifier">full_save</span> <span class="ruby-comment cmt"># Do the full save operation</span>
+117:       <span class="ruby-keyword kw">end</span>
+118:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000358" class="method-detail">
-        <a name="M000358"></a>
+      <div id="method-M000311" class="method-detail">
+        <a name="M000311"></a>
 
         <div class="method-heading">
-          <a href="#M000358" class="method-signature">
+          <a href="#M000311" class="method-signature">
           <span class="method-name">types</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns the <a href="RdfResource.html#M000358">types</a> of this resource
+Returns the <a href="RdfResource.html#M000311">types</a> of this resource
 as N::SourceClass objects
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000358-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000358-source">
+            onclick="toggleCode('M000311-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000311-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 120</span>
-120:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">types</span>
-121:       <span class="ruby-identifier">types</span> = <span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">SourceClass</span>).<span class="ruby-identifier">distinct</span>(<span class="ruby-identifier">:t</span>).<span class="ruby-identifier">where</span>(<span class="ruby-keyword kw">self</span>,<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">RDF</span><span class="ruby-operator">::</span><span class="ruby-identifier">type</span>,<span class="ruby-identifier">:t</span>).<span class="ruby-identifier">execute</span>
-122:       <span class="ruby-comment cmt"># Add the &quot;default&quot; types if necessary</span>
-123:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">default_types</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">def_type</span><span class="ruby-operator">|</span>
-124:         <span class="ruby-identifier">types</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">def_type</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">types</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">def_type</span>))
-125:       <span class="ruby-keyword kw">end</span>
-126:       
-127:       <span class="ruby-comment cmt"># Make a property list for the types.</span>
-128:       <span class="ruby-constant">PropertyList</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">RDF</span><span class="ruby-operator">::</span><span class="ruby-identifier">type</span>, <span class="ruby-identifier">types</span>, <span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">source_exists?</span>)
-129:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 121</span>
+121:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">types</span>
+122:       <span class="ruby-identifier">types</span> = <span class="ruby-constant">ActiveRDF</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">SourceClass</span>).<span class="ruby-identifier">distinct</span>(<span class="ruby-identifier">:t</span>).<span class="ruby-identifier">where</span>(<span class="ruby-keyword kw">self</span>,<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">RDF</span><span class="ruby-operator">::</span><span class="ruby-identifier">type</span>,<span class="ruby-identifier">:t</span>).<span class="ruby-identifier">execute</span>
+123:       <span class="ruby-comment cmt"># Add the &quot;default&quot; types if necessary</span>
+124:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">default_types</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">def_type</span><span class="ruby-operator">|</span>
+125:         <span class="ruby-identifier">types</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">def_type</span> <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">types</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">def_type</span>))
+126:       <span class="ruby-keyword kw">end</span>
+127:       
+128:       <span class="ruby-comment cmt"># Make a property list for the types.</span>
+129:       <span class="ruby-constant">PropertyList</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">N</span><span class="ruby-operator">::</span><span class="ruby-constant">RDF</span><span class="ruby-operator">::</span><span class="ruby-identifier">type</span>, <span class="ruby-identifier">types</span>, <span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">source_exists?</span>)
+130:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000354" class="method-detail">
-        <a name="M000354"></a>
+      <div id="method-M000307" class="method-detail">
+        <a name="M000307"></a>
 
         <div class="method-heading">
-          <a href="#M000354" class="method-signature">
+          <a href="#M000307" class="method-signature">
           <span class="method-name">uri</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns the <a href="RdfResource.html#M000354">uri</a> of this resource as
+Returns the <a href="RdfResource.html#M000307">uri</a> of this resource as
 a string
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000354-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000354-source">
+            onclick="toggleCode('M000307-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000307-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 90</span>
-90:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">uri</span>
-91:       <span class="ruby-ivar">@uri</span>.<span class="ruby-identifier">to_s</span>
-92:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/rdf_resource.rb, line 91</span>
+91:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">uri</span>
+92:       <span class="ruby-ivar">@uri</span>.<span class="ruby-identifier">to_s</span>
+93:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

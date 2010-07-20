@@ -80,7 +80,31 @@
 
     <div id="description">
       <p>
-ActiveRecord interface to the data record in the database
+Base class for all data records in Talia. This only contains a basic
+interface, without much functionality. All data-related methods will return
+a NotImplementedError
+</p>
+<p>
+The <a href="DataRecord.html">DataRecord</a> provides an interface to
+access a generic array/buffer of bytes, with the base class not making any
+assumptions on how these bytes are stored.
+</p>
+<p>
+Subclasses should usually provide the inferface of this class, which is
+more or less like the standard file interface.
+</p>
+<p>
+Each data record has a &quot;location&quot; field, which is roughly
+equivalent to the file name, and a MIME type. The default behaviour is
+that, if not set manually, the MIME type is automatically set before
+saving. It will be determined by the &quot;file extension&quot; of the
+location field.
+</p>
+<p>
+Each data record must belong to an <a
+href="../ActiveSource.html">ActiveSource</a>. For more information on how
+to handle records with files, see the <a
+href="FileRecord.html">FileRecord</a> class
 </p>
 
     </div>
@@ -92,17 +116,17 @@ ActiveRecord interface to the data record in the database
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000224">all_bytes</a>&nbsp;&nbsp;
-      <a href="#M000225">content_string</a>&nbsp;&nbsp;
-      <a href="#M000231">extract_mime_type</a>&nbsp;&nbsp;
-      <a href="#M000234">find_by_type_and_location!</a>&nbsp;&nbsp;
-      <a href="#M000233">find_data_records</a>&nbsp;&nbsp;
-      <a href="#M000226">get_byte</a>&nbsp;&nbsp;
-      <a href="#M000232">mime_type</a>&nbsp;&nbsp;
-      <a href="#M000227">position</a>&nbsp;&nbsp;
-      <a href="#M000230">reset</a>&nbsp;&nbsp;
-      <a href="#M000228">seek</a>&nbsp;&nbsp;
-      <a href="#M000229">size</a>&nbsp;&nbsp;
+      <a href="#M000169">all_bytes</a>&nbsp;&nbsp;
+      <a href="#M000170">content_string</a>&nbsp;&nbsp;
+      <a href="#M000176">extract_mime_type</a>&nbsp;&nbsp;
+      <a href="#M000179">find_by_type_and_location!</a>&nbsp;&nbsp;
+      <a href="#M000178">find_data_records</a>&nbsp;&nbsp;
+      <a href="#M000171">get_byte</a>&nbsp;&nbsp;
+      <a href="#M000177">mime_type</a>&nbsp;&nbsp;
+      <a href="#M000172">position</a>&nbsp;&nbsp;
+      <a href="#M000175">reset</a>&nbsp;&nbsp;
+      <a href="#M000173">seek</a>&nbsp;&nbsp;
+      <a href="#M000174">size</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -137,43 +161,43 @@ ActiveRecord interface to the data record in the database
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000234" class="method-detail">
-        <a name="M000234"></a>
+      <div id="method-M000179" class="method-detail">
+        <a name="M000179"></a>
 
         <div class="method-heading">
-          <a href="#M000234" class="method-signature">
+          <a href="#M000179" class="method-signature">
           <span class="method-name">find_by_type_and_location!</span><span class="method-args">(source_data_type, location)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000234-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000234-source">
+            onclick="toggleCode('M000179-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000179-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 71</span>
-71:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_by_type_and_location!</span>(<span class="ruby-identifier">source_data_type</span>, <span class="ruby-identifier">location</span>)
-72:           <span class="ruby-comment cmt"># TODO: Should it directly instantiate the STI sub-class?</span>
-73:           <span class="ruby-comment cmt"># In this case we should use the following line instead.</span>
-74:           <span class="ruby-comment cmt">#</span>
-75:           <span class="ruby-comment cmt"># source_data = source_data_type.classify.constantize.find_by_location(location, :limit =&gt; 1)</span>
-76:           <span class="ruby-comment cmt">#</span>
-77:           <span class="ruby-identifier">data_type</span> = <span class="ruby-node">&quot;TaliaCore::DataTypes::#{source_data_type.camelize}&quot;</span>
-78:           <span class="ruby-identifier">source_data</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:first</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">&quot;type = ? AND location = ?&quot;</span>, <span class="ruby-identifier">data_type</span>, <span class="ruby-identifier">location</span>])
-79:           
-80:           <span class="ruby-identifier">raise</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">source_data</span>.<span class="ruby-identifier">nil?</span>
-81:           <span class="ruby-identifier">source_data</span>
-82:         <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 93</span>
+ 93:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_by_type_and_location!</span>(<span class="ruby-identifier">source_data_type</span>, <span class="ruby-identifier">location</span>)
+ 94:           <span class="ruby-comment cmt"># TODO: Should it directly instantiate the STI sub-class?</span>
+ 95:           <span class="ruby-comment cmt"># In this case we should use the following line instead.</span>
+ 96:           <span class="ruby-comment cmt">#</span>
+ 97:           <span class="ruby-comment cmt"># source_data = source_data_type.classify.constantize.find_by_location(location, :limit =&gt; 1)</span>
+ 98:           <span class="ruby-comment cmt">#</span>
+ 99:           <span class="ruby-identifier">data_type</span> = <span class="ruby-node">&quot;TaliaCore::DataTypes::#{source_data_type.camelize}&quot;</span>
+100:           <span class="ruby-identifier">source_data</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:first</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">&quot;type = ? AND location = ?&quot;</span>, <span class="ruby-identifier">data_type</span>, <span class="ruby-identifier">location</span>])
+101:           
+102:           <span class="ruby-identifier">raise</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">source_data</span>.<span class="ruby-identifier">nil?</span>
+103:           <span class="ruby-identifier">source_data</span>
+104:         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000233" class="method-detail">
-        <a name="M000233"></a>
+      <div id="method-M000178" class="method-detail">
+        <a name="M000178"></a>
 
         <div class="method-heading">
-          <a href="#M000233" class="method-signature">
+          <a href="#M000178" class="method-signature">
           <span class="method-name">find_data_records</span><span class="method-args">(id)</span>
           </a>
         </div>
@@ -183,13 +207,13 @@ ActiveRecord interface to the data record in the database
 Find all data records about a specified source
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000233-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000233-source">
+            onclick="toggleCode('M000178-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000178-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 67</span>
-67:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_data_records</span>(<span class="ruby-identifier">id</span>)
-68:           <span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:source_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span> })
-69:         <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 89</span>
+89:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_data_records</span>(<span class="ruby-identifier">id</span>)
+90:           <span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:source_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span> })
+91:         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -197,11 +221,11 @@ Find all data records about a specified source
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000224" class="method-detail">
-        <a name="M000224"></a>
+      <div id="method-M000169" class="method-detail">
+        <a name="M000169"></a>
 
         <div class="method-heading">
-          <a href="#M000224" class="method-signature">
+          <a href="#M000169" class="method-signature">
           <span class="method-name">all_bytes</span><span class="method-args">()</span>
           </a>
         </div>
@@ -211,74 +235,75 @@ Find all data records about a specified source
 returns all bytes in the object as an array of unsigned integers
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000224-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000224-source">
+            onclick="toggleCode('M000169-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000169-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 22</span>
-22:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_bytes</span>
-23:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 39</span>
+39:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_bytes</span>
+40:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>
+41:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000225" class="method-detail">
-        <a name="M000225"></a>
+      <div id="method-M000170" class="method-detail">
+        <a name="M000170"></a>
 
         <div class="method-heading">
-          <a href="#M000225" class="method-signature">
+          <a href="#M000170" class="method-signature">
           <span class="method-name">content_string</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns <a href="DataRecord.html#M000224">all_bytes</a> as an binary string
+Returns <a href="DataRecord.html#M000169">all_bytes</a> as an binary string
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000225-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000225-source">
+            onclick="toggleCode('M000170-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000170-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 26</span>
-26:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content_string</span>
-27:         <span class="ruby-identifier">all_bytes</span>.<span class="ruby-identifier">pack</span>(<span class="ruby-value str">'C*'</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">all_bytes</span>)
-28:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 44</span>
+44:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content_string</span>
+45:         <span class="ruby-identifier">all_bytes</span>.<span class="ruby-identifier">pack</span>(<span class="ruby-value str">'C*'</span>) <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">all_bytes</span>)
+46:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000231" class="method-detail">
-        <a name="M000231"></a>
+      <div id="method-M000176" class="method-detail">
+        <a name="M000176"></a>
 
         <div class="method-heading">
-          <a href="#M000231" class="method-signature">
+          <a href="#M000176" class="method-signature">
           <span class="method-name">extract_mime_type</span><span class="method-args">(location)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000231-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000231-source">
+            onclick="toggleCode('M000176-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000176-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 50</span>
-50:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_mime_type</span>(<span class="ruby-identifier">location</span>)
-51:         <span class="ruby-comment cmt"># Lookup the mime type for the extension (removing the dot</span>
-52:         <span class="ruby-comment cmt"># in front of the file extension) Works only for the file</span>
-53:         <span class="ruby-comment cmt"># types supported by Rails' Mime class.</span>
-54:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup_by_extension</span>((<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>).<span class="ruby-identifier">downcase</span>)[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]).<span class="ruby-identifier">to_s</span>
-55:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 72</span>
+72:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_mime_type</span>(<span class="ruby-identifier">location</span>)
+73:         <span class="ruby-comment cmt"># Lookup the mime type for the extension (removing the dot</span>
+74:         <span class="ruby-comment cmt"># in front of the file extension) Works only for the file</span>
+75:         <span class="ruby-comment cmt"># types supported by Rails' Mime class.</span>
+76:         <span class="ruby-constant">Mime</span><span class="ruby-operator">::</span><span class="ruby-constant">Type</span>.<span class="ruby-identifier">lookup_by_extension</span>((<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>).<span class="ruby-identifier">downcase</span>)[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]).<span class="ruby-identifier">to_s</span>
+77:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000226" class="method-detail">
-        <a name="M000226"></a>
+      <div id="method-M000171" class="method-detail">
+        <a name="M000171"></a>
 
         <div class="method-heading">
-          <a href="#M000226" class="method-signature">
+          <a href="#M000171" class="method-signature">
           <span class="method-name">get_byte</span><span class="method-args">(close_after_single_read=false)</span>
           </a>
         </div>
@@ -288,138 +313,142 @@ Returns <a href="DataRecord.html#M000224">all_bytes</a> as an binary string
 returns the next byte from the object, or nil at EOS
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000226-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000226-source">
+            onclick="toggleCode('M000171-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000171-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 31</span>
-31:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_byte</span>(<span class="ruby-identifier">close_after_single_read</span>=<span class="ruby-keyword kw">false</span>)
-32:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 49</span>
+49:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_byte</span>(<span class="ruby-identifier">close_after_single_read</span>=<span class="ruby-keyword kw">false</span>)
+50:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>
+51:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000232" class="method-detail">
-        <a name="M000232"></a>
+      <div id="method-M000177" class="method-detail">
+        <a name="M000177"></a>
 
         <div class="method-heading">
-          <a href="#M000232" class="method-signature">
+          <a href="#M000177" class="method-signature">
           <span class="method-name">mime_type</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000232-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000232-source">
+            onclick="toggleCode('M000177-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000177-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 57</span>
-57:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_type</span>
-58:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">mime</span>
-59:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 79</span>
+79:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_type</span>
+80:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">mime</span>
+81:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000227" class="method-detail">
-        <a name="M000227"></a>
+      <div id="method-M000172" class="method-detail">
+        <a name="M000172"></a>
 
         <div class="method-heading">
-          <a href="#M000227" class="method-signature">
+          <a href="#M000172" class="method-signature">
           <span class="method-name">position</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-returns the current <a href="DataRecord.html#M000227">position</a> of the
+returns the current <a href="DataRecord.html#M000172">position</a> of the
 read cursor
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000227-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000227-source">
+            onclick="toggleCode('M000172-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000172-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 35</span>
-35:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">position</span>
-36:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 54</span>
+54:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">position</span>
+55:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>
+56:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000230" class="method-detail">
-        <a name="M000230"></a>
+      <div id="method-M000175" class="method-detail">
+        <a name="M000175"></a>
 
         <div class="method-heading">
-          <a href="#M000230" class="method-signature">
+          <a href="#M000175" class="method-signature">
           <span class="method-name">reset</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="DataRecord.html#M000230">reset</a> the cursor to the initial state
+<a href="DataRecord.html#M000175">reset</a> the cursor to the initial state
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000230-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000230-source">
+            onclick="toggleCode('M000175-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000175-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 47</span>
-47:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>
-48:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 69</span>
+69:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>
+70:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000228" class="method-detail">
-        <a name="M000228"></a>
+      <div id="method-M000173" class="method-detail">
+        <a name="M000173"></a>
 
         <div class="method-heading">
-          <a href="#M000228" class="method-signature">
+          <a href="#M000173" class="method-signature">
           <span class="method-name">seek</span><span class="method-args">(new_position)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-adjust the <a href="DataRecord.html#M000227">position</a> of the read
+adjust the <a href="DataRecord.html#M000172">position</a> of the read
 cursor
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000228-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000228-source">
+            onclick="toggleCode('M000173-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000173-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 39</span>
-39:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seek</span>(<span class="ruby-identifier">new_position</span>)
-40:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 59</span>
+59:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seek</span>(<span class="ruby-identifier">new_position</span>)
+60:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>
+61:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000229" class="method-detail">
-        <a name="M000229"></a>
+      <div id="method-M000174" class="method-detail">
+        <a name="M000174"></a>
 
         <div class="method-heading">
-          <a href="#M000229" class="method-signature">
+          <a href="#M000174" class="method-signature">
           <span class="method-name">size</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-returns the <a href="DataRecord.html#M000229">size</a> of the object in
+returns the <a href="DataRecord.html#M000174">size</a> of the object in
 bytes
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000229-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000229-source">
+            onclick="toggleCode('M000174-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000174-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 43</span>
-43:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>
-44:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/data_record.rb, line 64</span>
+64:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>
+65:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>
+66:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

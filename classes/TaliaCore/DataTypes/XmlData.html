@@ -82,7 +82,8 @@
 
     <div id="description">
       <p>
-Class to manage XML and HTML data type
+<a href="FileRecord.html">FileRecord</a> class to store XML (or XHTML)
+files.
 </p>
 
     </div>
@@ -94,12 +95,12 @@ Class to manage XML and HTML data type
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000270">create_from_data</a>&nbsp;&nbsp;
-      <a href="#M000265">extract_mime_type</a>&nbsp;&nbsp;
-      <a href="#M000267">get_content</a>&nbsp;&nbsp;
-      <a href="#M000268">get_content_string</a>&nbsp;&nbsp;
-      <a href="#M000269">get_escaped_content_string</a>&nbsp;&nbsp;
-      <a href="#M000266">mime_subtype</a>&nbsp;&nbsp;
+      <a href="#M000216">create_from_data</a>&nbsp;&nbsp;
+      <a href="#M000211">extract_mime_type</a>&nbsp;&nbsp;
+      <a href="#M000213">get_content</a>&nbsp;&nbsp;
+      <a href="#M000214">get_content_string</a>&nbsp;&nbsp;
+      <a href="#M000215">get_escaped_content_string</a>&nbsp;&nbsp;
+      <a href="#M000212">mime_subtype</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -121,232 +122,254 @@ Class to manage XML and HTML data type
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000270" class="method-detail">
-        <a name="M000270"></a>
+      <div id="method-M000216" class="method-detail">
+        <a name="M000216"></a>
 
         <div class="method-heading">
-          <a href="#M000270" class="method-signature">
+          <a href="#M000216" class="method-signature">
           <span class="method-name">create_from_data</span><span class="method-args">(location, data, options = {:tidy =&gt; true})</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Add data as string into file
+See the <a href="FileStore.html">FileStore</a> module for details on how
+creation of data file objects works. This version differs from the
+superclass version in that it will (optionally) clean the HTML using the
+&quot;tidy&quot; tool. Also see <a
+href="http://tidy.rubyforge.org">tidy.rubyforge.org</a>/
+</p>
+<p>
+Tidy will be used under the following circumstances:
 </p>
 <ul>
-<li>location: location
+<li>The &quot;tidy&quot; option is given and
 
 </li>
-<li>data: data to write
+<li>The library itself is available and
 
 </li>
-<li>options: options
-
-</li>
-<li>options[:tidy]: enable or disable tidy (convert html into xhtml). Default
-value is true
+<li>The file appears to be a (X)HTML file
 
 </li>
 </ul>
+<p>
+*Options:*:
+</p>
+<dl>
+<dt><b>tidy</b></dt><dd>Use the &quot;tidy&quot; tool to clean up (X)HTML. Defaults to true if no
+options are given.
+
+</dd>
+</dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000270-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000270-source">
+            onclick="toggleCode('M000216-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000216-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 100</span>
-100:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_data</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span> = {<span class="ruby-identifier">:tidy</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>})
-101:         <span class="ruby-comment cmt"># check tidy option</span>
-102:         <span class="ruby-keyword kw">if</span> (((<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:tidy</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-constant">Tidy_enable</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span>)) <span class="ruby-keyword kw">and</span> 
-103:               ((<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">'.htm'</span>) <span class="ruby-keyword kw">or</span> (<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">'.html'</span>) <span class="ruby-keyword kw">or</span> (<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">'.xhtml'</span>)))        
-104:         
-105:           <span class="ruby-comment cmt"># apply tidy on data</span>
-106:           <span class="ruby-identifier">data_to_write</span> = <span class="ruby-constant">Tidy</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">:show_warnings</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tidy</span><span class="ruby-operator">|</span>
-107:             <span class="ruby-identifier">tidy</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">output_xhtml</span> = <span class="ruby-keyword kw">true</span>
-108:             <span class="ruby-identifier">tidy</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">tidy_mark</span> = <span class="ruby-keyword kw">false</span>
-109:             <span class="ruby-identifier">xhtml</span> = <span class="ruby-identifier">tidy</span>.<span class="ruby-identifier">clean</span>(<span class="ruby-identifier">data</span>)
-110:             <span class="ruby-identifier">xhtml</span>
-111:           <span class="ruby-keyword kw">end</span>
-112:         <span class="ruby-keyword kw">else</span>
-113:           <span class="ruby-identifier">data_to_write</span> = <span class="ruby-identifier">data</span>
-114:         <span class="ruby-keyword kw">end</span>
-115:       
-116:         <span class="ruby-comment cmt"># write data</span>
-117:         <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">data_to_write</span>, <span class="ruby-identifier">options</span>)
-118:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 120</span>
+120:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_from_data</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span> = {<span class="ruby-identifier">:tidy</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>})
+121:         <span class="ruby-comment cmt"># check tidy option</span>
+122:         <span class="ruby-keyword kw">if</span> (((<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:tidy</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-constant">Tidy_enable</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span>)) <span class="ruby-keyword kw">and</span> 
+123:               ((<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">'.htm'</span>) <span class="ruby-keyword kw">or</span> (<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">'.html'</span>) <span class="ruby-keyword kw">or</span> (<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">'.xhtml'</span>)))        
+124:         
+125:           <span class="ruby-comment cmt"># apply tidy on data</span>
+126:           <span class="ruby-identifier">data_to_write</span> = <span class="ruby-constant">Tidy</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">:show_warnings</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tidy</span><span class="ruby-operator">|</span>
+127:             <span class="ruby-identifier">tidy</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">output_xhtml</span> = <span class="ruby-keyword kw">true</span>
+128:             <span class="ruby-identifier">tidy</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">tidy_mark</span> = <span class="ruby-keyword kw">false</span>
+129:             <span class="ruby-identifier">xhtml</span> = <span class="ruby-identifier">tidy</span>.<span class="ruby-identifier">clean</span>(<span class="ruby-identifier">data</span>)
+130:             <span class="ruby-identifier">xhtml</span>
+131:           <span class="ruby-keyword kw">end</span>
+132:         <span class="ruby-keyword kw">else</span>
+133:           <span class="ruby-identifier">data_to_write</span> = <span class="ruby-identifier">data</span>
+134:         <span class="ruby-keyword kw">end</span>
+135:       
+136:         <span class="ruby-comment cmt"># write data</span>
+137:         <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">data_to_write</span>, <span class="ruby-identifier">options</span>)
+138:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000265" class="method-detail">
-        <a name="M000265"></a>
+      <div id="method-M000211" class="method-detail">
+        <a name="M000211"></a>
 
         <div class="method-heading">
-          <a href="#M000265" class="method-signature">
+          <a href="#M000211" class="method-signature">
           <span class="method-name">extract_mime_type</span><span class="method-args">(location)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-return the mime_type for a file
+MIME type should be one of &#8216;text/html&#8217; or
+&#8216;text/xml&#8217; (&#8216;text/hnml&#8217; is supported for legacy
+reasons)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000265-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000265-source">
+            onclick="toggleCode('M000211-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000211-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 34</span>
-34:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_mime_type</span>(<span class="ruby-identifier">location</span>)
-35:         <span class="ruby-keyword kw">case</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>).<span class="ruby-identifier">downcase</span>
-36:         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'.htm'</span>, <span class="ruby-value str">'.html'</span>,<span class="ruby-value str">'.xhtml'</span>
-37:           <span class="ruby-value str">'text/html'</span>
-38:         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'.hnml'</span>
-39:           <span class="ruby-value str">'text/hnml'</span>
-40:         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'.xml'</span>
-41:           <span class="ruby-value str">'text/xml'</span>
-42:         <span class="ruby-keyword kw">end</span>
-43:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 37</span>
+37:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_mime_type</span>(<span class="ruby-identifier">location</span>)
+38:         <span class="ruby-comment cmt"># TODO: Could probably use the Mime classes to get the</span>
+39:         <span class="ruby-comment cmt"># type, or move to the superclass</span>
+40:         <span class="ruby-keyword kw">case</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">location</span>).<span class="ruby-identifier">downcase</span>
+41:         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'.htm'</span>, <span class="ruby-value str">'.html'</span>,<span class="ruby-value str">'.xhtml'</span>
+42:           <span class="ruby-value str">'text/html'</span>
+43:         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'.hnml'</span>
+44:           <span class="ruby-value str">'text/hnml'</span>
+45:         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'.xml'</span>
+46:           <span class="ruby-value str">'text/xml'</span>
+47:         <span class="ruby-keyword kw">end</span>
+48:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000267" class="method-detail">
-        <a name="M000267"></a>
+      <div id="method-M000213" class="method-detail">
+        <a name="M000213"></a>
 
         <div class="method-heading">
-          <a href="#M000267" class="method-signature">
-          <span class="method-name">get_content</span><span class="method-args">(options = nil)</span>
+          <a href="#M000213" class="method-signature">
+          <span class="method-name">get_content</span><span class="method-args">(options = {})</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-return contect of the object as REXML::Elements
+The content of this document. This returns REXML elements for the document
+content. For plain XML files, this will return the children of the doucment
+root. For XHTML documents, this will return the children of the
+&quot;body&quot; tag.
+</p>
+<p>
+<b>Options</b>:
 </p>
 <ul>
-<li>options: Options for getting context. Default nil.
+<li>[<b>xsl_file</b>] If given, the document will be transformed using this
 
-</li>
-<li>options[:xsl_file]: xsl file path for transformation.
-
+<pre>
+             XSL file before the document is extracted
+</pre>
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000267-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000267-source">
+            onclick="toggleCode('M000213-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000213-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 53</span>
-53:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_content</span>(<span class="ruby-identifier">options</span> = <span class="ruby-keyword kw">nil</span>)
-54:         <span class="ruby-identifier">text_to_parse</span> = <span class="ruby-identifier">all_text</span>
-55:       
-56:         <span class="ruby-keyword kw">if</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">options</span>.<span class="ruby-identifier">nil?</span>)
-57:           <span class="ruby-comment cmt"># if xsl_file option is specified, execute transformation</span>
-58:           <span class="ruby-keyword kw">if</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xsl_file</span>].<span class="ruby-identifier">nil?</span>)
-59:             <span class="ruby-identifier">text_to_parse</span> = <span class="ruby-identifier">xslt_transform</span>(<span class="ruby-identifier">file_path</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xsl_file</span>])
-60:           <span class="ruby-keyword kw">end</span>
-61:         <span class="ruby-keyword kw">end</span>
-62:       
-63:         <span class="ruby-comment cmt"># create document object</span>
-64:         <span class="ruby-identifier">document</span> = <span class="ruby-constant">REXML</span><span class="ruby-operator">::</span><span class="ruby-constant">Document</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">text_to_parse</span>
-65:       
-66:         <span class="ruby-comment cmt"># get content</span>
-67:         <span class="ruby-keyword kw">if</span> ((<span class="ruby-identifier">mime_subtype</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;html&quot;</span>) <span class="ruby-keyword kw">or</span> 
-68:               ((<span class="ruby-identifier">mime_subtype</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;xml&quot;</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">options</span>.<span class="ruby-identifier">nil?</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xsl_file</span>].<span class="ruby-identifier">nil?</span>)))
-69:           <span class="ruby-identifier">content</span> = <span class="ruby-identifier">document</span>.<span class="ruby-identifier">elements</span>[<span class="ruby-value str">'//body'</span>].<span class="ruby-identifier">elements</span>
-70:         <span class="ruby-keyword kw">elsif</span> ((<span class="ruby-identifier">mime_subtype</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;xml&quot;</span>) <span class="ruby-keyword kw">or</span> (<span class="ruby-identifier">mime_subtype</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;hnml&quot;</span>))
-71:           <span class="ruby-identifier">content</span> = <span class="ruby-identifier">document</span>.<span class="ruby-identifier">root</span>.<span class="ruby-identifier">elements</span>
-72:         <span class="ruby-keyword kw">end</span>
-73:       
-74:         <span class="ruby-comment cmt"># adjust/replace items path</span>
-75:         <span class="ruby-identifier">content</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">wrapItem</span> <span class="ruby-identifier">i</span> }
-76:       
-77:         <span class="ruby-comment cmt"># return content</span>
-78:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">content</span>
-79:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 64</span>
+64:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_content</span>(<span class="ruby-identifier">options</span> = {})
+65:         <span class="ruby-comment cmt"># TODO: Maybe port this to hpricot/nokogiri too</span>
+66:         <span class="ruby-identifier">text_to_parse</span> = <span class="ruby-identifier">all_text</span>
+67:       
+68:         <span class="ruby-comment cmt"># if xsl_file option is specified, execute transformation</span>
+69:         <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xsl_file</span>])
+70:           <span class="ruby-identifier">text_to_parse</span> = <span class="ruby-identifier">xslt_transform</span>(<span class="ruby-identifier">file_path</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xsl_file</span>])
+71:         <span class="ruby-keyword kw">end</span>
+72: 
+73:         <span class="ruby-comment cmt"># create document object</span>
+74:         <span class="ruby-identifier">document</span> = <span class="ruby-constant">REXML</span><span class="ruby-operator">::</span><span class="ruby-constant">Document</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">text_to_parse</span>
+75:       
+76:         <span class="ruby-comment cmt"># get content</span>
+77:         <span class="ruby-keyword kw">if</span> ((<span class="ruby-identifier">mime_subtype</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;html&quot;</span>) <span class="ruby-keyword kw">or</span> 
+78:               ((<span class="ruby-identifier">mime_subtype</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;xml&quot;</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">options</span>.<span class="ruby-identifier">nil?</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:xsl_file</span>].<span class="ruby-identifier">nil?</span>)))
+79:           <span class="ruby-identifier">content</span> = <span class="ruby-identifier">document</span>.<span class="ruby-identifier">elements</span>[<span class="ruby-value str">'//body'</span>].<span class="ruby-identifier">elements</span>
+80:         <span class="ruby-keyword kw">elsif</span> ((<span class="ruby-identifier">mime_subtype</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;xml&quot;</span>) <span class="ruby-keyword kw">or</span> (<span class="ruby-identifier">mime_subtype</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;hnml&quot;</span>))
+81:           <span class="ruby-identifier">content</span> = <span class="ruby-identifier">document</span>.<span class="ruby-identifier">root</span>.<span class="ruby-identifier">elements</span>
+82:         <span class="ruby-keyword kw">end</span>
+83:       
+84:         <span class="ruby-comment cmt"># adjust/replace items path</span>
+85:         <span class="ruby-identifier">content</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">wrapItem</span> <span class="ruby-identifier">i</span> }
+86:       
+87:         <span class="ruby-comment cmt"># return content</span>
+88:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">content</span>
+89:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000268" class="method-detail">
-        <a name="M000268"></a>
+      <div id="method-M000214" class="method-detail">
+        <a name="M000214"></a>
 
         <div class="method-heading">
-          <a href="#M000268" class="method-signature">
+          <a href="#M000214" class="method-signature">
           <span class="method-name">get_content_string</span><span class="method-args">(options = nil)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns an xml string of the elements returned by <a
-href="XmlData.html#M000267">get_content</a>
+Same as <a href="XmlData.html#M000213">get_content</a>, but returns a
+string instead of the REXML documents
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000268-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000268-source">
+            onclick="toggleCode('M000214-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000214-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 82</span>
-82:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_content_string</span>(<span class="ruby-identifier">options</span> = <span class="ruby-keyword kw">nil</span>)
-83:         <span class="ruby-identifier">xml_str</span> = <span class="ruby-value str">''</span>
-84:         <span class="ruby-identifier">get_content</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span>
-85:           <span class="ruby-identifier">xml_str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">element</span>.<span class="ruby-identifier">to_s</span>
-86:         <span class="ruby-keyword kw">end</span>
-87:         <span class="ruby-identifier">xml_str</span>
-88:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 92</span>
+92:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_content_string</span>(<span class="ruby-identifier">options</span> = <span class="ruby-keyword kw">nil</span>)
+93:         <span class="ruby-identifier">xml_str</span> = <span class="ruby-value str">''</span>
+94:         <span class="ruby-identifier">get_content</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span>
+95:           <span class="ruby-identifier">xml_str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">element</span>.<span class="ruby-identifier">to_s</span>
+96:         <span class="ruby-keyword kw">end</span>
+97:         <span class="ruby-identifier">xml_str</span>
+98:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000269" class="method-detail">
-        <a name="M000269"></a>
+      <div id="method-M000215" class="method-detail">
+        <a name="M000215"></a>
 
         <div class="method-heading">
-          <a href="#M000269" class="method-signature">
+          <a href="#M000215" class="method-signature">
           <span class="method-name">get_escaped_content_string</span><span class="method-args">(options = nil)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns an xml string that is escaped for HTML inclusing
+Same as <a href="XmlData.html#M000214">get_content_string</a>, but with the
+XML escape for inclusion in HTML documents
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000269-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000269-source">
+            onclick="toggleCode('M000215-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000215-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 91</span>
-91:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_escaped_content_string</span>(<span class="ruby-identifier">options</span> = <span class="ruby-keyword kw">nil</span>)
-92:         <span class="ruby-identifier">get_content_string</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&lt;/</span>, <span class="ruby-value str">&quot;&amp;lt;&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&gt;/</span>, <span class="ruby-value str">&quot;&amp;gt;&quot;</span>)
-93:       <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 102</span>
+102:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_escaped_content_string</span>(<span class="ruby-identifier">options</span> = <span class="ruby-keyword kw">nil</span>)
+103:         <span class="ruby-identifier">get_content_string</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&lt;/</span>, <span class="ruby-value str">&quot;&amp;lt;&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&gt;/</span>, <span class="ruby-value str">&quot;&amp;gt;&quot;</span>)
+104:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000266" class="method-detail">
-        <a name="M000266"></a>
+      <div id="method-M000212" class="method-detail">
+        <a name="M000212"></a>
 
         <div class="method-heading">
-          <a href="#M000266" class="method-signature">
+          <a href="#M000212" class="method-signature">
           <span class="method-name">mime_subtype</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-return the mime subtype for this specified class
+The mime subtype for this specified class
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000266-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000266-source">
+            onclick="toggleCode('M000212-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000212-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 46</span>
-46:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_subtype</span>
-47:         <span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\//</span>)[<span class="ruby-value">1</span>]
-48:       <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_core/data_types/xml_data.rb, line 51</span>
+51:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mime_subtype</span>
+52:         <span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\//</span>)[<span class="ruby-value">1</span>]
+53:       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

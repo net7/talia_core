@@ -74,7 +74,64 @@
 
     <div id="description">
       <p>
-Mix-in for a class that wishes to use decoupled progress meters.
+Mix-in for a class that wishes to use decoupled progress meters. This
+creates an read/write accessor for a <a
+href="Progressable.html#M000396">progressor</a>, which is used to report
+progress to.
+</p>
+<p>
+Inside the object <a href="Progressable.html#M000398">run_with_progress</a>
+may be used to run a progress-reporting operation. If no <a
+href="Progressable.html#M000396">progressor</a> has been assigned, <a
+href="Progressable.html#M000398">run_with_progress</a> will still work as
+expected, providing a <a href="Progressable.html#M000396">progressor</a>
+object that will do nothing.
+</p>
+<h1>Example</h1>
+<pre>
+ class Foo
+
+   include Progressable
+
+   def long_thing
+     run_with_progress(&quot;doing long thing&quot;, 100) { |prog| (1..100).each { prog.inc } }
+   end
+ end
+
+ Foo.new.long_thing # Will do nothing
+ foo_real = Foo.new
+ foo_real.progressor = some_progressor
+ foo_real.long_thing # reports progress to some_progressor
+</pre>
+<h1>How a <a href="Progressable.html#M000396">progressor</a> must look like</h1>
+<p>
+A <a href="Progressable.html#M000396">progressor</a> is simply required to
+provide a method called &quot;<a
+href="Progressable.html#M000398">run_with_progress</a>(message,
+size)&quot;, with the first parameter being the progress message and the
+second the overall count of operations. The method <b>must</b> take a
+block, and call that block with an object which responds to a method calle
+&quot;inc&quot;, which increases the current count/progress.
+</p>
+<h1>Example <a href="Progressable.html#M000396">progressor</a></h1>
+<pre>
+ class DummyProgress
+   def inc
+     print '.'
+   end
+ end
+
+ class SimpleProgressor
+   def self.run_with_progress(message, size)
+     puts message
+     yield(DummyProgress.new)
+     puts &quot;Done&quot;
+   end
+ end
+</pre>
+<p>
+This will print a dot for each thing that is processed. See also the <a
+href="BarProgressor.html">BarProgressor</a> for another example
 </p>
 
     </div>
@@ -86,9 +143,9 @@ Mix-in for a class that wishes to use decoupled progress meters.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000424">progressor</a>&nbsp;&nbsp;
-      <a href="#M000425">progressor=</a>&nbsp;&nbsp;
-      <a href="#M000426">run_with_progress</a>&nbsp;&nbsp;
+      <a href="#M000396">progressor</a>&nbsp;&nbsp;
+      <a href="#M000397">progressor=</a>&nbsp;&nbsp;
+      <a href="#M000398">run_with_progress</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -110,11 +167,11 @@ Mix-in for a class that wishes to use decoupled progress meters.
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000424" class="method-detail">
-        <a name="M000424"></a>
+      <div id="method-M000396" class="method-detail">
+        <a name="M000396"></a>
 
         <div class="method-heading">
-          <a href="#M000424" class="method-signature">
+          <a href="#M000396" class="method-signature">
           <span class="method-name">progressor</span><span class="method-args">()</span>
           </a>
         </div>
@@ -124,53 +181,53 @@ Mix-in for a class that wishes to use decoupled progress meters.
 This is the object that will receive the progress messages
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000424-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000424-source">
+            onclick="toggleCode('M000396-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000396-source">
 <pre>
-   <span class="ruby-comment cmt"># File lib/talia_util/progressable.rb, line 7</span>
-7:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">progressor</span>
-8:       <span class="ruby-ivar">@progressor</span>
-9:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_util/progressable.rb, line 56</span>
+56:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">progressor</span>
+57:       <span class="ruby-ivar">@progressor</span>
+58:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000425" class="method-detail">
-        <a name="M000425"></a>
+      <div id="method-M000397" class="method-detail">
+        <a name="M000397"></a>
 
         <div class="method-heading">
-          <a href="#M000425" class="method-signature">
+          <a href="#M000397" class="method-signature">
           <span class="method-name">progressor=</span><span class="method-args">(progr)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Set the <a href="Progressable.html#M000424">progressor</a> class. The
+Set the <a href="Progressable.html#M000396">progressor</a> class. The
 progress class should simply respond to a <a
-href="Progressable.html#M000426">run_with_progress</a>(message, size,
+href="Progressable.html#M000398">run_with_progress</a>(message, size,
 &amp;block) class
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000425-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000425-source">
+            onclick="toggleCode('M000397-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000397-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_util/progressable.rb, line 13</span>
-13:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">progressor=</span>(<span class="ruby-identifier">progr</span>)
-14:       <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Illegal progressor&quot;</span>) <span class="ruby-keyword kw">unless</span>((<span class="ruby-identifier">progr</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">nil</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">progr</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:run_with_progress</span>))
-15:       <span class="ruby-ivar">@progressor</span> = <span class="ruby-identifier">progr</span>
-16:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_util/progressable.rb, line 62</span>
+62:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">progressor=</span>(<span class="ruby-identifier">progr</span>)
+63:       <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Illegal progressor&quot;</span>) <span class="ruby-keyword kw">unless</span>((<span class="ruby-identifier">progr</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">nil</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">progr</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:run_with_progress</span>))
+64:       <span class="ruby-ivar">@progressor</span> = <span class="ruby-identifier">progr</span>
+65:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000426" class="method-detail">
-        <a name="M000426"></a>
+      <div id="method-M000398" class="method-detail">
+        <a name="M000398"></a>
 
         <div class="method-heading">
-          <a href="#M000426" class="method-signature">
+          <a href="#M000398" class="method-signature">
           <span class="method-name">run_with_progress</span><span class="method-args">(message, size, progr = nil, &amp;block)</span>
           </a>
         </div>
@@ -181,26 +238,26 @@ Runs some block with a progress meter. The containing block will be passed
 an object on which inc can be called to increase the meter.
 </p>
 <p>
-If no <a href="Progressable.html#M000424">progressor</a> object is passed
+If no <a href="Progressable.html#M000396">progressor</a> object is passed
 in manually, the one configured in the class is used
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000426-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000426-source">
+            onclick="toggleCode('M000398-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000398-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/talia_util/progressable.rb, line 23</span>
-23:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_with_progress</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">size</span>, <span class="ruby-identifier">progr</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-24:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">progr_object</span> = (<span class="ruby-identifier">progr</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">progressor</span>))
-25:         <span class="ruby-identifier">progr_object</span>.<span class="ruby-identifier">run_with_progress</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">size</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-26:       <span class="ruby-keyword kw">else</span>
-27:         <span class="ruby-identifier">dummy_prog</span> = <span class="ruby-constant">Object</span>.<span class="ruby-identifier">new</span>
-28:         <span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">dummy_prog</span>
-29:           <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inc</span>
-30:           <span class="ruby-keyword kw">end</span>
-31:         <span class="ruby-keyword kw">end</span>
-32:         <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">dummy_prog</span>)
-33:       <span class="ruby-keyword kw">end</span>
-34:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/talia_util/progressable.rb, line 72</span>
+72:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_with_progress</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">size</span>, <span class="ruby-identifier">progr</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+73:       <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">progr_object</span> = (<span class="ruby-identifier">progr</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">progressor</span>))
+74:         <span class="ruby-identifier">progr_object</span>.<span class="ruby-identifier">run_with_progress</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">size</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+75:       <span class="ruby-keyword kw">else</span>
+76:         <span class="ruby-identifier">dummy_prog</span> = <span class="ruby-constant">Object</span>.<span class="ruby-identifier">new</span>
+77:         <span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">dummy_prog</span>
+78:           <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inc</span>
+79:           <span class="ruby-keyword kw">end</span>
+80:         <span class="ruby-keyword kw">end</span>
+81:         <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">dummy_prog</span>)
+82:       <span class="ruby-keyword kw">end</span>
+83:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

@@ -8,6 +8,7 @@ module TaliaCore
     
     def setup
       setup_once(:sources) {ActiveSourceParts::Rdf::RdfxmlReader.sources_from_url(TestHelper.fixture_file('rdf_test.rdf'))}
+      assert_kind_of(Array, @sources)
       @source = @sources.detect {|el| el['uri'] == 'http://foodonga.com'}
     end
 
@@ -33,6 +34,11 @@ module TaliaCore
     
     def test_type
       assert_equal('TaliaCore::Collection', @source['type'])
+    end
+    
+    # Test if everything has a type (otherwise there will be DummySources created)
+    def test_have_types
+      @sources.each { |s| assert(!s['type'].blank?, "No type for #{s['uri']}") }
     end
 
     def test_rdf_type

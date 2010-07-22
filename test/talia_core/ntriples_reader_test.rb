@@ -34,6 +34,11 @@ module TaliaCore
     def test_type
       assert_equal('TaliaCore::Collection', @source['type'])
     end
+    
+    # Test if everything has a type (otherwise there will be DummySources created)
+    def test_have_types
+      @sources.each { |s| assert(!s['type'].blank?, "No type for #{s['uri']}") }
+    end
 
     def test_rdf_type
       # While we know that we will have only one value for rdf type, remember that 

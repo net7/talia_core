@@ -331,7 +331,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<semantic_naming>, [">= 2.1.3"])
     s.add_dependency(%q<bjj>, [">= 1.0.2"])
     s.add_dependency(%q<hpricot>, [">= 0.6.1"])
-    s.add_dependency(%q<oai_talia>, [">= 0.0.15"])
+    s.add_dependency(%q<oai_talia>, [">= 0.0.16"])
     s.add_dependency(%q<builder>, [">= 2.1.2"])
     s.add_dependency(%q<optiflag>, [">= 0.6.5"])
     s.add_dependency(%q<rake>, [">= 0.7.1"])

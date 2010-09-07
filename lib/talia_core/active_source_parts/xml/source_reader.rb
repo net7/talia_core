@@ -1,3 +1,4 @@
+require 'guid'
 module TaliaCore
   module ActiveSourceParts
     module Xml
@@ -29,6 +30,7 @@ module TaliaCore
           # Use the content of the "file" tag as a URI/filename for loading a data
           # file
           add_file all_elements(:file)
+          @current.attributes["uri"] ||= Guid.new
         end
 
       end

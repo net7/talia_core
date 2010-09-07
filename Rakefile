@@ -58,6 +58,7 @@ begin
     s.add_dependency('builder', '>= 2.1.2')
     s.add_dependency('optiflag', '>= 0.6.5')
     s.add_dependency('rake', '>= 0.7.1')
+    s.add_dependency('guid', '>= 0.1.1')
     s.add_dependency('rdf', '>= 0.2.0.1')
     s.requirements << "rdflib (Redland RDF) + Ruby bindings (for Redland store)"
   end

@@ -180,7 +180,7 @@ module TaliaCore
       super(process_attributes(false, attributes))
     end
 
-    # As update_attributes, but uses save! to save the source
+    # As update_attributes, but uses save! to save the source 
     def update_attributes!(attributes)
       yield self if(block_given?)
       super(process_attributes(false, attributes))

@@ -46,7 +46,7 @@ module TaliaCore
             @reader.each_statement do |statement|
               source = (@sources[statement.subject.to_s] ||= {})
               source['uri'] ||= statement.subject.to_s
-              source['type'] ||= find_source_type statement
+              update_source_type(source, statement)
               source[statement.predicate.to_s] ||= []
               object = if(statement.object.literal?)
                          parsed_string = PropertyString.parse(statement.object.value)
@@ -59,19 +59,26 @@ module TaliaCore
               progress.inc
             end
           end
-          @sources.values
+          # Set all empty source types to ActiveSource, to prevent DummySource type objects to
+          # be created. (Reason: When we import RDF, we assume that all sources are "valid", and should
+          # never be marked as DummySource)
+          @sources = @sources.values
+          @sources.each { |s| s['type'] ||= 'TaliaCore::ActiveSource' }
+          @sources
         end
 
-        # Used to determine the source talia type. The type can be contained explicitly as object of a N::TALIA.type
+        # Update the Talia source type. The type can be contained explicitly as object of a N::TALIA.type
         # predicate or can be inferred from the rdf type if a N::RDF.type predicate is present.
-        def find_source_type(statement)
-          return nil if(statement.object.literal?)
-          if(statement.predicate.to_s == N::TALIA.type.to_s)
-            statement.object.to_s
-          elsif(statement.predicate.to_s == N::RDF.type.to_s)
-            rdf_to_talia_type statement.object.to_s            
-          else
-            nil
+        #
+        # The method works in the way that a N::TALIA type attribute always overwrites the type, while an
+        # N::RDF.type will only be used if no type has been set on the source
+        def update_source_type(source, statement)
+          return if(statement.object.literal?)
+          case(statement.predicate.to_s)
+          when N::TALIA.type.to_s
+            source['type'] = statement.object.to_s
+          when N::RDF.type.to_s
+            source['type'] ||= rdf_to_talia_type statement.object.to_s
           end
         end
 

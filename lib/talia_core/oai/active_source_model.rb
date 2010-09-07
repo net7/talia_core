@@ -40,7 +40,7 @@ module TaliaCore
         return select_partial(options[:resumption_token]) if(options[:resumption_token])
         
         conditions = sql_conditions(options)
-        
+       
         if(selector == :first)
           model_adapter.get_wrapper_for(ActiveSource.find(selector, :prefetch_relations => true, :conditions => conditions))
         elsif(selector == :all)
@@ -77,7 +77,9 @@ module TaliaCore
       def select_first_or_last(order, conditions = nil)
         select_options = { :select => "id, #{timestamp_field}", :order => "#{timestamp_field} #{order}" }
         select_options[:conditions] = conditions if(conditions)
-        TaliaCore::ActiveSource.find(:first, select_options)
+        result = TaliaCore::ActiveSource.find(:first, select_options)
+        raise OAI::NoMatchException if result.nil? 
+        result
       end
       
       # Sql condition for the given token

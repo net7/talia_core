@@ -56,17 +56,18 @@ module TaliaCore
       # Get the author/creator
       def creator
         @record[N::DCNS.creator].collect do |creator|
-          if(creator.is_a?(TaliaCore::ActiveSource))
-            author = ''
-            author_name = creator.hyper::author_name.first
-            author << author_name << ' ' if(author_name)
-            author_surname = creator.hyper::author_surname.first || ''
-            author << author_surname if(author_surname)
-            author = "No lookup. Author should be at #{creator.uri}" if(author == '')
-            author
-          else
-            creator
-          end
+          creator
+          # if(creator.is_a?(TaliaCore::ActiveSource))
+          #   author = ''
+          #   author_name = creator.hyper::author_name.first
+          #   author << author_name << ' ' if(author_name)
+          #   author_surname = creator.hyper::author_surname.first || ''
+          #   author << author_surname if(author_surname)
+          #   author = "No lookup. Author should be at #{creator.uri}" if(author == '')
+          #   author
+          # else
+          #   creator
+          # end
         end
       end
       
@@ -89,7 +90,7 @@ module TaliaCore
       # wrapper class that corresponds to the given record's class
       def self.get_wrapper_for(records)
         if(records.is_a?(ActiveSource))
-          self.new(record)
+          self.new(records)
         elsif(records.respond_to?(:collect))
           records.collect { |rec| self.new(rec) }
         elsif(records.nil?)

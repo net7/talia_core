@@ -118,6 +118,11 @@ module Swicky
         url = sanitize_sparql(url).to_uri
         select_annotations([:note, N::SWICKY.refersTo, url])
       end
+
+      def annotations_for_file(url)
+        url = sanitize_sparql(url).to_uri
+        select_annotations([:note, N::SWICKY.refersTo, :fragment], [:fragment, N::DISCOVERY.isPartOf, url])
+      end
       
       # Select all the annotations on the note that uses the fragment identified by the given XPOINTER
       # string
@@ -162,7 +167,6 @@ module Swicky
             additional_triples += ActiveRDF::Query.new(N::URI).select(:predicate, :object).distinct.where(trip.last, :predicate, :object).execute.collect { |result| [trip.last] + result }
           end
         end
-        
         # Return all results
         result_triples + additional_triples
       end

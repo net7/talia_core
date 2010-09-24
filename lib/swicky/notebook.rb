@@ -120,10 +120,20 @@ module Swicky
       end
 
       def annotations_for_file(url)
+        result = []
         url = sanitize_sparql(url).to_uri
-        select_annotations([:note, N::SWICKY.refersTo, :fragment], [:fragment, N::DISCOVERY.isPartOf, url])
+        q = ActiveRDF::Query.new(N::URI).select(:fragment).distinct.where(:fragment, N::DISCOVERY.isPartOf, url)
+        q.execute.each do |fragment|
+          result = {fragment.uri.to_s => {}}
+          q2 = ActiveRDF::Query.new(N::URI).select(:predicate, :object).distinct
+          q2.where fragment, :predicate, :object
+          q2.execute.each do |predicate, object|
+            result[fragment.uri.to_s][predicate.to_s] =object.to_s
+          end
+        end
+        result
       end
-      
+
       # Select all the annotations on the note that uses the fragment identified by the given XPOINTER
       # string
       def annotations_for_xpointer(xpointer)
@@ -158,6 +168,7 @@ module Swicky
         statement_triples_qry.where(:note, N::SWICKY.refersTo, :fragment)
         statement_triples_qry.where(:fragment, N::SWICKY.hasStatement, :statement)
         statement_triples_qry.where(:statement, :predicate, :object)
+
         result_triples += statement_triples_qry.execute
         # TODO: Fix this to better query once available in ActiveRDF
         additional_triples = []

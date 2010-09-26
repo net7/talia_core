@@ -100,14 +100,19 @@ module Swicky
       # Get the "coordinates" (an xpointer in the case of HTML fragments) for all the
       # fragments that are part of the element with the given url.
       def coordinates_for(url)
+        result = []
         url = sanitize_sparql(url).to_uri
-        frag_qry = ActiveRDF::Query.new(N::URI).select(:coordinates).distinct
+        frag_qry = ActiveRDF::Query.new(N::URI).select(:fragment, :coordinates).distinct
         frag_qry.where(:fragment, N::DISCOVERY.isPartOf, url)
         frag_qry.where(:fragment, N::SWICKY.hasCoordinates, :coordinates)
         frag_qry.where(:note, N::SWICKY.refersTo, :fragment)
-        frag_qry.execute.collect { |coord| coord.to_s }
+        #/**/
+        frag_qry.execute.each do |fragment, coordinates|
+          result << {'fragment' => fragment.to_s, 'coordinates' => coordinates.to_s}
+        end
+        result
       end
-      
+
       def annotation_list_for_url(url)
         qry = ActiveRDF::Query.new(N::URI).distinct.select(:note).where(:fragment, N::DISCOVERY.isPartOf, url.to_uri).where(:note, N::SWICKY.refersTo, :fragment).execute
       end
@@ -119,19 +124,21 @@ module Swicky
         select_annotations([:note, N::SWICKY.refersTo, url])
       end
 
-      def annotations_for_file(url)
-        result = []
+      def annotations_for_image(url)
         url = sanitize_sparql(url).to_uri
-        q = ActiveRDF::Query.new(N::URI).select(:fragment).distinct.where(:fragment, N::DISCOVERY.isPartOf, url)
-        q.execute.each do |fragment|
-          result = {fragment.uri.to_s => {}}
-          q2 = ActiveRDF::Query.new(N::URI).select(:predicate, :object).distinct
-          q2.where fragment, :predicate, :object
-          q2.execute.each do |predicate, object|
-            result[fragment.uri.to_s][predicate.to_s] =object.to_s
-          end
-        end
-        result
+        select_annotations([:note, N::SWICKY.refersTo, :fragment], [:fragment, N::DISCOVERY.isPartOf, url])
+        # result = []
+        # url = sanitize_sparql(url).to_uri
+        # q = ActiveRDF::Query.new(N::URI).select(:fragment).distinct.where(:fragment, N::DISCOVERY.isPartOf, url)
+        # q.execute.each do |fragment|
+        #   result = {fragment.uri.to_s => {}}
+        #   q2 = ActiveRDF::Query.new(N::URI).select(:predicate, :object).distinct
+        #   q2.where fragment, :predicate, :object
+        #   q2.execute.each do |predicate, object|
+        #     result[fragment.uri.to_s][predicate.to_s] = object.to_s
+        #   end
+        # end
+        # result
       end
 
       # Select all the annotations on the note that uses the fragment identified by the given XPOINTER

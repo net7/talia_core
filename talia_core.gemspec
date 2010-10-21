@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{talia_core}
-  s.version = "0.5.4"
+  s.version = "0.6.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
-  s.date = %q{2010-02-15}
+  s.date = %q{2010-10-21}
   s.default_executable = %q{talia}
   s.description = %q{This is the core plugin for building a digital library with Talia/Rails.}
   s.email = %q{ghub@limitedcreativity.org}
@@ -19,13 +19,10 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     "VERSION.yml",
-     "config/database.yml",
      "config/database.yml.example",
-     "config/rdfstore.yml",
      "config/rdfstore.yml.example",
      "config/rdfstore.yml.rdflite_example",
      "config/rdfstore.yml.redland_example",
-     "config/talia_core.yml",
      "config/talia_core.yml.example",
      "generators/generator_helpers.rb",
      "generators/talia_admin/USAGE",
@@ -121,7 +118,6 @@ Gem::Specification.new do |s|
      "generators/talia_base/templates/config/routes.rb",
      "generators/talia_base/templates/config/talia_initializer.rb",
      "generators/talia_base/templates/config/warble.rb",
-     "generators/talia_base/templates/migrations/bj_migration.rb",
      "generators/talia_base/templates/migrations/constraint_migration.rb",
      "generators/talia_base/templates/migrations/create_active_sources.rb",
      "generators/talia_base/templates/migrations/create_custom_templates.rb",
@@ -168,8 +164,19 @@ Gem::Specification.new do |s|
      "generators/talia_oai/talia_oai_generator.rb",
      "generators/talia_oai/templates/oai_controller.rb",
      "generators/talia_oai/templates/oai_initializer.rb",
-     "lib/JXslt/jxslt.rb",
+     "generators/talia_swicky/talia_swicky_generator.rb",
+     "generators/talia_swicky/templates/app/controllers/swicky_notebooks_controller.rb",
+     "generators/talia_swicky/templates/app/helpers/swicky_notebooks_helper.rb",
+     "generators/talia_swicky/templates/app/views/swicky_notebooks/index.builder",
+     "generators/talia_swicky/templates/app/views/swicky_notebooks/index.html.erb",
+     "generators/talia_swicky/templates/app/views/swicky_notebooks/show.html.erb",
+     "generators/talia_swicky/templates/test/fixtures/notebook.rdf",
+     "generators/talia_swicky/templates/test/functional/swicky_notebooks_controller_test.rb",
      "lib/core_ext.rb",
+     "lib/core_ext/boolean.rb",
+     "lib/core_ext/jdbc_rake_monkeypatch.rb",
+     "lib/core_ext/nil_class.rb",
+     "lib/core_ext/object.rb",
      "lib/core_ext/platform.rb",
      "lib/core_ext/string.rb",
      "lib/custom_template.rb",
@@ -177,22 +184,28 @@ Gem::Specification.new do |s|
      "lib/mysql.rb",
      "lib/progressbar.rb",
      "lib/swicky/api_result.rb",
-     "lib/swicky/json_encoder.rb",
+     "lib/swicky/exhibit_json/item.rb",
+     "lib/swicky/exhibit_json/item_collection.rb",
+     "lib/swicky/fragment.rb",
+     "lib/swicky/note.rb",
      "lib/swicky/notebook.rb",
      "lib/talia_core.rb",
      "lib/talia_core/active_source.rb",
      "lib/talia_core/active_source_parts/class_methods.rb",
      "lib/talia_core/active_source_parts/finders.rb",
      "lib/talia_core/active_source_parts/predicate_handler.rb",
-     "lib/talia_core/active_source_parts/rdf.rb",
+     "lib/talia_core/active_source_parts/rdf/ntriples_reader.rb",
+     "lib/talia_core/active_source_parts/rdf/rdf_reader.rb",
+     "lib/talia_core/active_source_parts/rdf/rdfxml_reader.rb",
+     "lib/talia_core/active_source_parts/rdf_handler.rb",
      "lib/talia_core/active_source_parts/sql_helper.rb",
      "lib/talia_core/active_source_parts/xml/generic_reader.rb",
+     "lib/talia_core/active_source_parts/xml/generic_reader_add_statements.rb",
+     "lib/talia_core/active_source_parts/xml/generic_reader_helpers.rb",
+     "lib/talia_core/active_source_parts/xml/generic_reader_import_statements.rb",
      "lib/talia_core/active_source_parts/xml/rdf_builder.rb",
      "lib/talia_core/active_source_parts/xml/source_builder.rb",
      "lib/talia_core/active_source_parts/xml/source_reader.rb",
-     "lib/talia_core/agent.rb",
-     "lib/talia_core/background_jobs/job.rb",
-     "lib/talia_core/background_jobs/progress_job.rb",
      "lib/talia_core/collection.rb",
      "lib/talia_core/data_types/data_loader.rb",
      "lib/talia_core/data_types/data_record.rb",
@@ -207,7 +220,6 @@ Gem::Specification.new do |s|
      "lib/talia_core/data_types/path_helpers.rb",
      "lib/talia_core/data_types/pdf_data.rb",
      "lib/talia_core/data_types/simple_text.rb",
-     "lib/talia_core/data_types/temp_file_handling.rb",
      "lib/talia_core/data_types/xml_data.rb",
      "lib/talia_core/dummy_handler.rb",
      "lib/talia_core/errors.rb",
@@ -215,19 +227,20 @@ Gem::Specification.new do |s|
      "lib/talia_core/oai/active_source_model.rb",
      "lib/talia_core/oai/active_source_oai_adapter.rb",
      "lib/talia_core/oai/active_source_oai_adapter/class_methods.rb",
-     "lib/talia_core/ordered_source.rb",
      "lib/talia_core/property_string.rb",
      "lib/talia_core/rdf_import.rb",
      "lib/talia_core/rdf_resource.rb",
-     "lib/talia_core/semantic_collection_item.rb",
      "lib/talia_core/semantic_collection_wrapper.rb",
      "lib/talia_core/semantic_property.rb",
      "lib/talia_core/semantic_relation.rb",
      "lib/talia_core/source.rb",
+     "lib/talia_core/source_fragment.rb",
      "lib/talia_core/source_transfer_object.rb",
-     "lib/talia_core/source_types/collection.rb",
+     "lib/talia_core/source_types/agent.rb",
      "lib/talia_core/source_types/dc_resource.rb",
      "lib/talia_core/source_types/dummy_source.rb",
+     "lib/talia_core/source_types/marcont_resource.rb",
+     "lib/talia_core/source_types/skos_concept.rb",
      "lib/talia_core/workflow.rb",
      "lib/talia_core/workflow/base.rb",
      "lib/talia_core/workflow/publication_workflow.rb",
@@ -241,7 +254,6 @@ Gem::Specification.new do |s|
      "lib/talia_util/import_job_helper.rb",
      "lib/talia_util/io_helper.rb",
      "lib/talia_util/progressable.rb",
-     "lib/talia_util/progressbar.rb",
      "lib/talia_util/rake_tasks.rb",
      "lib/talia_util/rdf_update.rb",
      "lib/talia_util/test_helpers.rb",
@@ -257,41 +269,46 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.required_ruby_version = Gem::Requirement.new(">= 1.8.6")
   s.requirements = ["rdflib (Redland RDF) + Ruby bindings (for Redland store)"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{The core elements of the Talia Digital Library system}
   s.test_files = [
-    "test/custom_template_test.rb",
-     "test/test_helper.rb",
-     "test/core_ext/string_test.rb",
-     "test/swicky/json_encoder_test.rb",
-     "test/swicky/notebook_test.rb",
-     "test/talia_core/active_source_predicate_test.rb",
-     "test/talia_core/active_source_rdf_test.rb",
-     "test/talia_core/active_source_test.rb",
-     "test/talia_core/generic_xml_test.rb",
-     "test/talia_core/initializer_test.rb",
-     "test/talia_core/ordered_source_test.rb",
-     "test/talia_core/property_string_test.rb",
-     "test/talia_core/rdf_resource_test.rb",
-     "test/talia_core/semantic_collection_item_test.rb",
-     "test/talia_core/source_reader_test.rb",
-     "test/talia_core/source_test.rb",
-     "test/talia_core/source_transfer_object_test.rb",
-     "test/talia_core/workflow_test.rb",
-     "test/talia_core/data_types/data_loader_test.rb",
-     "test/talia_core/data_types/data_record_test.rb",
-     "test/talia_core/data_types/file_record_test.rb",
-     "test/talia_core/data_types/iip_data_test.rb",
-     "test/talia_core/data_types/image_data_test.rb",
-     "test/talia_core/data_types/mime_mapping_test.rb",
-     "test/talia_core/data_types/pdf_data_test.rb",
-     "test/talia_core/data_types/xml_data_test.rb",
-     "test/talia_core/workflow/publication_workflow_test.rb",
-     "test/talia_core/workflow/user_class_for_workflow.rb",
-     "test/talia_core/workflow/workflow_base_test.rb",
+    "test/test_helper.rb",
+     "test/custom_template_test.rb",
      "test/talia_util/import_job_helper_test.rb",
      "test/talia_util/io_helper_test.rb",
-     "test/talia_util/rdf_builder_test.rb"
+     "test/talia_util/rdf_builder_test.rb",
+     "test/swicky/json_encoder_test.rb",
+     "test/swicky/notebook_test.rb",
+     "test/talia_core/source_transfer_object_test.rb",
+     "test/talia_core/active_source_test.rb",
+     "test/talia_core/source_reader_test.rb",
+     "test/talia_core/rdfxml_reader_test.rb",
+     "test/talia_core/active_source_rdf_test.rb",
+     "test/talia_core/generic_xml_test.rb",
+     "test/talia_core/property_string_test.rb",
+     "test/talia_core/ntriples_reader_test.rb",
+     "test/talia_core/active_source_finder_interface_test.rb",
+     "test/talia_core/initializer_test.rb",
+     "test/talia_core/rdf_resource_test.rb",
+     "test/talia_core/source_test.rb",
+     "test/talia_core/collection_test.rb",
+     "test/talia_core/active_source_predicate_test.rb",
+     "test/talia_core/workflow_test.rb",
+     "test/talia_core/workflow/user_class_for_workflow.rb",
+     "test/talia_core/workflow/workflow_base_test.rb",
+     "test/talia_core/workflow/publication_workflow_test.rb",
+     "test/talia_core/data_types/image_data_test.rb",
+     "test/talia_core/data_types/iip_data_test.rb",
+     "test/talia_core/data_types/file_record_test.rb",
+     "test/talia_core/data_types/mime_mapping_test.rb",
+     "test/talia_core/data_types/data_loader_test.rb",
+     "test/talia_core/data_types/xml_data_test.rb",
+     "test/talia_core/data_types/pdf_data_test.rb",
+     "test/talia_core/data_types/data_record_test.rb",
+     "test/core_ext/boolean_test.rb",
+     "test/core_ext/nil_class_test.rb",
+     "test/core_ext/string_test.rb",
+     "test/core_ext/object_test.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -299,42 +316,48 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activerecord>, [">= 2.0.5"])
-      s.add_runtime_dependency(%q<activesupport>, [">= 2.0.5"])
+      s.add_runtime_dependency(%q<activerecord>, ["= 2.3.8"])
+      s.add_runtime_dependency(%q<activesupport>, ["= 2.3.8"])
       s.add_runtime_dependency(%q<activerdf_net7>, [">= 1.7.0"])
       s.add_runtime_dependency(%q<assit>, [">= 0.1.2"])
-      s.add_runtime_dependency(%q<semantic_naming>, [">= 2.1.3"])
+      s.add_runtime_dependency(%q<semantic_naming>, [">= 2.2.0"])
       s.add_runtime_dependency(%q<bjj>, [">= 1.0.2"])
       s.add_runtime_dependency(%q<hpricot>, [">= 0.6.1"])
       s.add_runtime_dependency(%q<oai_talia>, [">= 0.0.15"])
       s.add_runtime_dependency(%q<builder>, [">= 2.1.2"])
       s.add_runtime_dependency(%q<optiflag>, [">= 0.6.5"])
       s.add_runtime_dependency(%q<rake>, [">= 0.7.1"])
+      s.add_runtime_dependency(%q<guid>, [">= 0.1.1"])
+      s.add_runtime_dependency(%q<rdf>, [">= 0.2.0.1"])
     else
-      s.add_dependency(%q<activerecord>, [">= 2.0.5"])
-      s.add_dependency(%q<activesupport>, [">= 2.0.5"])
+      s.add_dependency(%q<activerecord>, ["= 2.3.8"])
+      s.add_dependency(%q<activesupport>, ["= 2.3.8"])
       s.add_dependency(%q<activerdf_net7>, [">= 1.7.0"])
       s.add_dependency(%q<assit>, [">= 0.1.2"])
-      s.add_dependency(%q<semantic_naming>, [">= 2.1.3"])
+      s.add_dependency(%q<semantic_naming>, [">= 2.2.0"])
       s.add_dependency(%q<bjj>, [">= 1.0.2"])
       s.add_dependency(%q<hpricot>, [">= 0.6.1"])
       s.add_dependency(%q<oai_talia>, [">= 0.0.15"])
       s.add_dependency(%q<builder>, [">= 2.1.2"])
       s.add_dependency(%q<optiflag>, [">= 0.6.5"])
       s.add_dependency(%q<rake>, [">= 0.7.1"])
+      s.add_dependency(%q<guid>, [">= 0.1.1"])
+      s.add_dependency(%q<rdf>, [">= 0.2.0.1"])
     end
   else
-    s.add_dependency(%q<activerecord>, [">= 2.0.5"])
-    s.add_dependency(%q<activesupport>, [">= 2.0.5"])
+    s.add_dependency(%q<activerecord>, ["= 2.3.8"])
+    s.add_dependency(%q<activesupport>, ["= 2.3.8"])
     s.add_dependency(%q<activerdf_net7>, [">= 1.7.0"])
     s.add_dependency(%q<assit>, [">= 0.1.2"])
-    s.add_dependency(%q<semantic_naming>, [">= 2.1.3"])
+    s.add_dependency(%q<semantic_naming>, [">= 2.2.0"])
     s.add_dependency(%q<bjj>, [">= 1.0.2"])
     s.add_dependency(%q<hpricot>, [">= 0.6.1"])
-    s.add_dependency(%q<oai_talia>, [">= 0.0.16"])
+    s.add_dependency(%q<oai_talia>, [">= 0.0.15"])
     s.add_dependency(%q<builder>, [">= 2.1.2"])
     s.add_dependency(%q<optiflag>, [">= 0.6.5"])
     s.add_dependency(%q<rake>, [">= 0.7.1"])
+    s.add_dependency(%q<guid>, [">= 0.1.1"])
+    s.add_dependency(%q<rdf>, [">= 0.2.0.1"])
   end
 end
 

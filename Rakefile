@@ -47,8 +47,8 @@ begin
     s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
     s.files = FileList["{lib}/**/*", "{generators}/**/*", "{config}/**/*", "{tasks}/**/*", "VERSION.yml"]
     s.extra_rdoc_files = ["README.rdoc", "CHANGES", "LICENSE"]
-    s.add_dependency('activerecord', '>= 2.0.5')
-    s.add_dependency('activesupport', '>= 2.0.5')
+    s.add_dependency('activerecord', '= 2.3.8')
+    s.add_dependency('activesupport', '= 2.3.8')
     s.add_dependency('activerdf_net7', '>= 1.7.0')
     s.add_dependency('assit', '>= 0.1.2')
     s.add_dependency('semantic_naming', '>= 2.2.0')

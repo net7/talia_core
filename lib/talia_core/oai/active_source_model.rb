@@ -42,11 +42,13 @@ module TaliaCore
         conditions = sql_conditions(options)
        
         if(selector == :first)
-          model_adapter.get_wrapper_for(ActiveSource.find(selector, :prefetch_relations => true, :conditions => conditions))
+          #model_adapter.get_wrapper_for(ActiveSource.find(selector, :prefetch_relations => true, :conditions => conditions))
+          model_adapter.get_wrapper_for(Source.find(selector, :prefetch_relations => true, :conditions => conditions))
         elsif(selector == :all)
           select_partial(OAI::Provider::ResumptionToken.new(last_id(conditions), options.merge(:last => 0)))
         else
-          model_adapter.get_wrapper_for(ActiveSource.find(selector, :prefetch_relations => true, :conditions => conditions))
+          #model_adapter.get_wrapper_for(ActiveSource.find(selector, :prefetch_relations => true, :conditions => conditions))
+          model_adapter.get_wrapper_for(Source.find(selector, :prefetch_relations => true, :conditions => conditions))
         end
       rescue ActiveRecord::RecordNotFound
         nil
@@ -59,11 +61,13 @@ module TaliaCore
         token = OAI::Provider::ResumptionToken.parse(token) if(token.is_a?(String))
         
         conditions = token_conditions(token)
-        total = ActiveSource.count(:id, :conditions => conditions)
+        #total = ActiveSource.count(:id, :conditions => conditions)
+        total = Source.count(:id, :conditions => conditions)
         
         return [] if(total == 0)
         
-        records = ActiveSource.find(:all, :conditions => token_conditions(token),
+        #records = ActiveSource.find(:all, :conditions => token_conditions(token),
+        records = Source.find(:all, :conditions => token_conditions(token),
           :limit => @limit,
           :order => 'id asc',
           :prefetch_relations => true
@@ -77,7 +81,8 @@ module TaliaCore
       def select_first_or_last(order, conditions = nil)
         select_options = { :select => "id, #{timestamp_field}", :order => "#{timestamp_field} #{order}" }
         select_options[:conditions] = conditions if(conditions)
-        result = TaliaCore::ActiveSource.find(:first, select_options)
+        #result = TaliaCore::ActiveSource.find(:first, select_options)
+        result = TaliaCore::Source.find(:first, select_options)
         raise OAI::NoMatchException if result.nil? 
         result
       end

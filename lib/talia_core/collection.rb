@@ -25,6 +25,8 @@ module TaliaCore
   # the collection is saved, and not much checking is done when the array is
   # modified.
   #
+  # Important: it is required that no object in the list be present more than once.
+  #
   # In the RDF, the collection is represented as a seqContainer, using a predicate of
   # "http://www.w3.org/1999/02/22-rdf-syntax-ns#_[index of element x]" to connect an
   # element x with the collection.
@@ -87,9 +89,10 @@ module TaliaCore
     # The contained sources will appear in the sequential order in which they
     # are contained in the collection, but there is no direct relation between
     # the index in the collection and the index returned through this method.
+    # Repeated elements in the collection will be ignored.
     def elements
       # execute query
-      ordered_objects.compact
+      ordered_objects.compact.uniq
     end
       
     # See Collection.index_to_predicate
@@ -121,8 +124,21 @@ module TaliaCore
       ordered_objects
       super
     end
-    
-    private
+
+    # Returns the element next to the one passed as parameter.
+    # Returns nil if there is no next object.
+    # Requires that no object in the collection is present more than once.
+    def next(object)
+      elements[elements.index(object) + 1]
+    end
+
+    # Returns the element previous to the one passed as parameter.
+    # Returns nil if there is no previous object.
+    # Requires that no object in the collection is present more than once.
+    def prev(object)
+      return nil if elements.index(object) == 0
+      elements[elements.index(object) - 1]
+    end
 
     # Returns all the objects that are ordered in an array where the array
     # index equals the position of the object in the ordered set. The array

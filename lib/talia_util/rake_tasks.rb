@@ -53,7 +53,7 @@ namespace :talia_core do
     t.libs << 'lib'
     # This will always take the files from the talia_core directory
     t.test_files = FileList["#{File.dirname(__FILE__)}/../../test/**/*_test.rb"]
-    t.verbose = true
+    t.verbose = false
   end
 
   desc "Xml import. Options: [index=<indexfile>] [xml=<datafile>] [importer=<importclass>] [reset_store=true] [...]"

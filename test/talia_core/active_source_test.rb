@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require File.join(File.dirname(__FILE__), '..', 'test_helper')
 
 module TaliaCore
@@ -10,7 +11,7 @@ module TaliaCore
     multi_property :forcy, N::RDFS.forcy, :type => TaliaCore::Source, :dependent => :destroy
     manual_property :blinko
     
-    multi_property :optionated, N::RDFS.optionated, :force_relation => true
+    multi_property :optionated, N::RDFS.optionated, :type => TaliaCore::ActiveSource
     
     has_rdf_type N::TALIA.foo
     
@@ -21,7 +22,7 @@ module TaliaCore
     singular_property :title, N::RDFS.title
     
     property_options N::RDFS.optionated, :dependent => :destroy
-    multi_property :optionated2, N::RDFS.optionated2, :force_relation => true
+    multi_property :optionated2, N::RDFS.optionated2, :type => TaliaCore::ActiveSource
   end
   
   class DefinedAccessorSubNaked < DefinedAccessorTest
@@ -1193,8 +1194,5 @@ module TaliaCore
       data_source.save!
       data_source
     end
-    
-    
   end
-  
 end

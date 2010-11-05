@@ -106,7 +106,6 @@ module Swicky
         frag_qry.where(:fragment, N::DISCOVERY.isPartOf, url)
         frag_qry.where(:fragment, N::SWICKY.hasCoordinates, :coordinates)
         frag_qry.where(:note, N::SWICKY.refersTo, :fragment)
-        #/**/
         frag_qry.execute.each do |fragment, coordinates|
           result << {'fragment' => fragment.to_s, 'coordinates' => coordinates.to_s}
         end

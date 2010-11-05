@@ -11,6 +11,7 @@ module Swicky
       setup_once(:flush) { TaliaCore::TestHelper::flush_store }
       @notebook = Notebook.new('dan', 'booky')
       @testpointer = "http://dbin.org/swickynotes/demo/HanselAndGretel.htm#xpointer(start-point(string-range(//DIV[@id='http://dbin.org/swickynotes/demo/HG_1']/P[1]/SPAN[1]/text()[1],'',0))/range-to(string-range(//DIV[@id='http://dbin.org/swickynotes/demo/HG_1']/P[1]/SPAN[1]/text()[1],'',266)))"
+      @testfragment = "http://discovery-project.eu/ontologies/philoSpace/SourceFragment#ec9796a5349b290a7610763dcbc47af2"
     end
     
     def teardown
@@ -79,7 +80,7 @@ module Swicky
     def test_get_coordinates
       load_notebook
       coords = Notebook.coordinates_for("http://dbin.org/swickynotes/demo/HanselAndGretel.htm")
-      assert_equal([ @testpointer ], coords)
+      assert_equal([{"fragment" => @testfragment, "coordinates" => @testpointer}], coords)
     end
     
     def test_annotations_for_url

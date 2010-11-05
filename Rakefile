@@ -8,7 +8,7 @@ require 'rake/rdoctask'
 $: << File.join(File.dirname(__FILE__))
 
 # Load the "public" tasks
-load 'tasks/talia_core_tasks.rake'
+load 'lib/tasks/talia_core_tasks.rake'
 require 'version'
 
 desc "Setup the environment to test unless ENV['environment'] was already defined."

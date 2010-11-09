@@ -1,7 +1,8 @@
 class CustomTemplatesController < ApplicationController
   
   layout nil
-  session :off
+  # Deprecated, not needed anymore.
+  # session :off
   
   caches_page :xslt
   

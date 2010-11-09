@@ -153,8 +153,10 @@ module TaliaCore
       
       # Cleans out the RDF data before the source is destroyed
       def clear_rdf
-        ActiveRDF::FederationManager.delete(self, :predicate, :object)
-        ActiveRDF::FederationManager.delete(:subject, :predicate, self)
+        if autosave_rdf?
+          ActiveRDF::FederationManager.delete(self, :predicate, :object)
+          ActiveRDF::FederationManager.delete(:subject, :predicate, self)
+        end
       end
 
     end

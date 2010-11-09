@@ -1,7 +1,6 @@
 class TaliaCollection < ActiveRecord::Base
   hobo_model # Don't put anything above this
   
-  include DefaultPermissions
   include FakeSource
   extend FakeSource::ClassMethods
   
@@ -14,5 +13,20 @@ class TaliaCollection < ActiveRecord::Base
   end
   
   set_table_name "active_sources"
-  
+
+  def create_permitted?
+    acting_user.administrator?
+  end
+
+  def update_permitted?
+    acting_user.administrator?
+  end
+
+  def destroy_permitted?
+    acting_user.administrator?
+  end
+
+  def view_permitted?(field)
+    true
+  end
 end

@@ -187,6 +187,5 @@ module TaliaCore
       # execute query
       self.semantic_relations.find(scope, :conditions => 'rel_order IS NOT NULL', :order => :rel_order)
     end
-
   end
 end

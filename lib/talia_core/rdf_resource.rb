@@ -74,7 +74,7 @@ module TaliaCore
       inverseobj.instance_variable_set(:@obj_uri, self)
       inverseobj.instance_variable_set(:@obj_class, object_class)
       
-      class <<inverseobj     
+      class << inverseobj     
         
         def [](property)
           property = N::URI.new(property) unless(property.kind_of?(N::URI))

@@ -42,17 +42,21 @@ module TaliaCore
 
     before_save :rewrite_order_relations
     after_save :force_rdf_rewrite
-    
+
     singular_property :title, N::DCNS.title
+
+    def after_initialize
+      @autosave_rdf = false
+    end
 
     # Creates a new Collection. Takes the same parameters as
     # ActiveSource.new
     def self.new(*params)
       collection = super(*params)
-      collection.autosave_rdf = false # Will do this by ourselves
+      # collection.autosave_rdf = false # Will do this by ourselves
       collection
     end
-    
+
     # Many methods are directly forwarded to the underlying array
     [:+, :<<, :==, :[]=, :at, :clear, :collect, :delete_at, :delete, :each, 
     :each_index, :empty?, :include?, :index, :join, :last, :length, :size].each do |method|

@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{talia_core}
-  s.version = "0.6.0"
+  s.version = "0.6.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
-  s.date = %q{2010-10-21}
+  s.date = %q{2010-11-22}
   s.default_executable = %q{talia}
   s.description = %q{This is the core plugin for building a digital library with Talia/Rails.}
   s.email = %q{ghub@limitedcreativity.org}
@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
      "generators/talia_admin/templates/app/helpers/admin/front_helper.rb",
      "generators/talia_admin/templates/app/helpers/admin/talia_sources_helper.rb",
      "generators/talia_admin/templates/app/helpers/users_helper.rb",
+     "generators/talia_admin/templates/app/models/fake_source.rb",
      "generators/talia_admin/templates/app/models/guest.rb",
      "generators/talia_admin/templates/app/models/talia_collection.rb",
      "generators/talia_admin/templates/app/models/talia_source.rb",
@@ -261,8 +262,8 @@ Gem::Specification.new do |s|
      "lib/talia_util/util.rb",
      "lib/talia_util/xml/base_builder.rb",
      "lib/talia_util/xml/rdf_builder.rb",
-     "lib/version.rb",
-     "tasks/talia_core_tasks.rake"
+     "lib/tasks/talia_core_tasks.rake",
+     "lib/version.rb"
   ]
   s.homepage = %q{http://trac.talia.discovery-project.eu/}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -316,8 +317,8 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activerecord>, ["= 2.3.8"])
-      s.add_runtime_dependency(%q<activesupport>, ["= 2.3.8"])
+      s.add_runtime_dependency(%q<activerecord>, ["= 2.3.10"])
+      s.add_runtime_dependency(%q<activesupport>, ["= 2.3.10"])
       s.add_runtime_dependency(%q<activerdf_net7>, [">= 1.7.0"])
       s.add_runtime_dependency(%q<assit>, [">= 0.1.2"])
       s.add_runtime_dependency(%q<semantic_naming>, [">= 2.2.0"])
@@ -330,8 +331,8 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<guid>, [">= 0.1.1"])
       s.add_runtime_dependency(%q<rdf>, [">= 0.2.0.1"])
     else
-      s.add_dependency(%q<activerecord>, ["= 2.3.8"])
-      s.add_dependency(%q<activesupport>, ["= 2.3.8"])
+      s.add_dependency(%q<activerecord>, ["= 2.3.10"])
+      s.add_dependency(%q<activesupport>, ["= 2.3.10"])
       s.add_dependency(%q<activerdf_net7>, [">= 1.7.0"])
       s.add_dependency(%q<assit>, [">= 0.1.2"])
       s.add_dependency(%q<semantic_naming>, [">= 2.2.0"])
@@ -345,8 +346,8 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rdf>, [">= 0.2.0.1"])
     end
   else
-    s.add_dependency(%q<activerecord>, ["= 2.3.8"])
-    s.add_dependency(%q<activesupport>, ["= 2.3.8"])
+    s.add_dependency(%q<activerecord>, ["= 2.3.10"])
+    s.add_dependency(%q<activesupport>, ["= 2.3.10"])
     s.add_dependency(%q<activerdf_net7>, [">= 1.7.0"])
     s.add_dependency(%q<assit>, [">= 0.1.2"])
     s.add_dependency(%q<semantic_naming>, [">= 2.2.0"])

@@ -1,50 +1,51 @@
+sindice: false
 # TaliaCore configuration file
-
 # The domain URI that is the "local" domain of this installation
 local_uri: "http://test.dummy/"
 # The domain URI that is used as a default if no namespace is given
 default_namespace_uri: "http://default.dummy/"
-
 # The RDF store configuration can be read from a file
 rdf_connection_file: rdfstore
-# RDF configuration can also be given as a hash here
-# rdf_connection:
-
 # Set the logging level for ActiveRDF
 ardf_log_level: 0
-
 # If standalone_db is set, ActiveRecord will be configured for use
 # without the Rails environment
 standalone_db: true
 db_file: database
-# Database configuration can also be given as a hash here
-# db_connection: 
-# If unset, the databse log will end up in the default log directory
-# db_log: database.log
-
-# The location for data files (only set if you need to change
-# the default location)
-# data_directory_location: "/var/www/talia_data/"
-
-# Configure the namespaces for use with RDF
 namespaces:
-    # Default namespaces rdf, rdfs, xsd, owl are defined in the semantic_naming
-    # library.
-    # HyperNietzsche namespace
-    hyper: "http://www.hypernietzsche.org/ontology/"
-    # FOAF
-    foaf: http://xmlns.com/foaf/0.1/
-    # SKOS
-    skos: http://www.w3.org/2004/02/skos/core#
-    # DublinCore namespace
-    dct: http://purl.org/dc/terms/
-    dcmit: http://purl.org/dc/dcmitype/
-    dcns:     "http://purl.org/dc/elements/1.1/"
-    # Used in demo apps
-    luccadom: http://trac.talia.discovery-project.eu/wiki/LuccaOntology#
-    talias: http://trac.talia.discovery-project.eu/wiki/StructuralOntology#
-    taliadom: http://trac.talia.discovery-project.eu/wiki/SampleDomainOntology#
-    sesame: http://www.openrdf.org/schema/sesame#
-    swicky: http://discovery-project.eu/ontologies/philoSpace/
-    discovery: http://discovery-project.eu/ontologies/scholar/0.1/
-    marcont: http://www.marcont.org/ontology/2.1/
+  hyper: "http://www.hypernietzsche.org/ontology/"
+  foaf: "http://xmlns.com/foaf/0.1/"
+  skos: "http://www.w3.org/2004/02/skos/core#"
+  dct: "http://purl.org/dc/terms/"
+  dcmit: "http://purl.org/dc/dcmitype/"
+  dcns: "http://purl.org/dc/elements/1.1/"
+  luccadom: "http://trac.talia.discovery-project.eu/wiki/LuccaOntology#"
+  talias: "http://trac.talia.discovery-project.eu/wiki/StructuralOntology#"
+  taliadom: "http://trac.talia.discovery-project.eu/wiki/SampleDomainOntology#"
+  sesame: "http://www.openrdf.org/schema/sesame#"
+  swicky: "http://discovery-project.eu/ontologies/philoSpace/"
+  discovery: "http://discovery-project.eu/ontologies/scholar/0.1/"
+  marcont: "http://www.marcont.org/ontology/2.1/"
+  wordnet: "http://xmlns.com/wordnet/1.6/"
+  geo: "http://www.w3.org/2003/01/geo/wgs84_pos#"
+  demo: "http://ontologies.muruca.org/demo3#"
+  gnames: "http://www.geonames.org/ontology#"
+  frbr: "http://purl.org/vocab/frbr/core#"
+site_name: "Talia Tutorial Application"
+iip_root_directory_location:
+data_directory_location:
+iip_server_uri: "http://localhost:/fcgi-bin/iipsrv.fcgi"
+vips_command:
+convert_command:
+googlemap_key: "ABQIAAAAOY6Zv9NunttIT5fALwpiRhSPtRO-56uzZJvIGXQxlGNVk-r4kxRE8NIB3lUS5Sog8714vby5L9bupQ"
+oai:
+  prefix: "oai:talia"
+  repository_name: "Talia OAI Interface"
+shown_tabs:
+  - users
+  - talia_sources
+
+thumb_options:
+  height: "400"
+  width: "400"
+admin_email: "admin@example.com"

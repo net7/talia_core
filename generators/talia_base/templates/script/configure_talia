@@ -81,7 +81,7 @@ mysql_setup.host = 'localhost'
 mysql_setup.app_name = 'talia'
 mysql_setup.sock = sock_file
 
-print "Enter the mySQL root pasword: "
+print "Enter the mySQL root password: "
 root_pw = readl
 mysql_setup.root_credentials('root', root_pw)
 if(root_pw == '')

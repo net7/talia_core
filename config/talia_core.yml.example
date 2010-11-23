@@ -34,7 +34,7 @@ namespaces:
 site_name: "Talia Tutorial Application"
 iip_root_directory_location:
 data_directory_location:
-iip_server_uri: "http://localhost:/fcgi-bin/iipsrv.fcgi"
+iip_server_uri:
 vips_command:
 convert_command:
 googlemap_key: "ABQIAAAAOY6Zv9NunttIT5fALwpiRhSPtRO-56uzZJvIGXQxlGNVk-r4kxRE8NIB3lUS5Sog8714vby5L9bupQ"

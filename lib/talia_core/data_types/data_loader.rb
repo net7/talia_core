@@ -7,7 +7,7 @@ module TaliaCore
     module DataLoader
 
       # The create_from_url method will create a new FileRecord from a 
-      # data source (file or web URL). The exact mechansim for creating
+      # data source (file or web URL). The exact mechanism for creating
       # the record will depend on the MIME type of the data.
       #
       # =How the MIME type is determined

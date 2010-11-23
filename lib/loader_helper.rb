@@ -42,7 +42,7 @@ module TLoad
     require_module("actionpack", "action_controller", "/../../../rails/actionpack", RAILS_GEM_VERSION)
     # This sets the automatic loader path for Talia, allowing the ActiveSupport
     # classes to automatically load classes from this directory.
-    load_paths = ActiveSupport::Dependencies.load_paths
+    load_paths = ActiveSupport::Dependencies.autoload_paths
     load_paths << TLoad.start_dir unless(load_paths.include?(TLoad.start_dir))
     # Add the other plugins to the path, if we have a Rails root
     if(defined?(RAILS_ROOT))
@@ -58,7 +58,7 @@ module TLoad
     root_dir = File.expand_path(File.join(File.dirname(__FILE__), '..'))
     Kernel.const_set(:TALIA_CODE_ROOT, root_dir) unless(defined?(TALIA_CODE_ROOT))
     lib_dir = File.join(root_dir, 'lib')
-    ActiveSupport::Dependencies.load_paths << lib_dir unless(ActiveSupport::Dependencies.load_paths.include?(lib_dir))
+    ActiveSupport::Dependencies.autoload_paths << lib_dir unless(ActiveSupport::Dependencies.load_paths.include?(lib_dir))
   end
   
   private

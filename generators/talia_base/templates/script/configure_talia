@@ -19,35 +19,11 @@ talia_dir = TALIA_CODE_ROOT
 config_dir = File.join(rails_dir, 'config')
 config_template_dir = File.join(talia_dir, 'config')
 
-def check_result(value, regexp)
-  if(regexp && !regexp.match(value))
-    puts "Value does not have the right format (must match #{regexp})"
-    value = ''
-  end
-  value
-end
-
-def raw_read(default, regexp)
+def readl(required = false)
   result = gets.chomp.strip
-  result = default if(default && result == '')
-  check_result(result, regexp)
-end
-
-def readl(required_or_default = false, match_check = nil)
-  # Checks if we have a default value or a "required" bool
-  required = required_or_default
-  default = nil
-  if(required_or_default.is_a?(String))
-    reuqired = false
-    default = required_or_default
-  end
-  
-  match_check = Regexp.new(match_check) if(match_check.is_a?(String))
-  
-  result = raw_read(default, match_check)
   while(result == '' && required)
     print 'Must enter a value, retry: '
-    result = raw_read(default, match_check)
+    result = gets.chomp.strip
   end
   result
 end
@@ -81,7 +57,7 @@ mysql_setup.host = 'localhost'
 mysql_setup.app_name = 'talia'
 mysql_setup.sock = sock_file
 
-print "Enter the mySQL root password: "
+print "Enter the mySQL root pasword: "
 root_pw = readl
 mysql_setup.root_credentials('root', root_pw)
 if(root_pw == '')
@@ -134,7 +110,8 @@ puts " done."
 
 puts
 print "Enter the sql driver you want to use (e.g. jdbcmysql, mysql, ...) [jdbcmysql]: "
-adapter = readl('jdbcmysql')
+adapter = readl
+adapter = (adapter == '') ? 'jdbcmysql' : adapter
 
 
 db_config.set_adapter(adapter)
@@ -148,29 +125,17 @@ print "Enter the site name (it will appear in the window title): "
 talia_config.site_name = readl
 
 puts
-print "Enter the URI for your site: "
-site_url = readl(true, /\Ahttp:\/\/.+\/\Z/)
+print "Enter the URI for your site. The URI requires a final \"/\": "
+site_url = readl(true)
 
 if(read_yn('Do you want to use the IIP image server?'))
-  init_file = File.join(rails_dir, 'config', 'initializers', 'talia.rb')
-  if(File.exist?(init_file))
-    puts "Adding the creation handler to your talia_initializer. Note that you will need 'vips' installed."
-    File.open(init_file, 'a')  do |io|
-      io.puts ''
-      io.puts '# IIP creation handlers, added automatically'
-      %w(jpeg tiff png gif bmp).each { |t| io.puts "TaliaCore::DataTypes::MimeMapping.add_mapping(:#{t}, TaliaCore::DataTypes::ImageData, :create_iip)" }
-      io.puts ''
-    end
-  else
-    puts "WARNING: Initializer file for Talia not found. You will need to add the image handler for the MIME types manually."
-  end
   puts
   print "Enter the URL of your IIP server, or the port number (for default URL on localhost): "
-  iip_url = readl('', /\A\d{2,}\Z|\Ahttp:\/\/.*/)
-
+  iip_url = readl
   # If only numerals, we'll create the URL
-  if(iip_url =~ /^\d*$/)
-    iip_url = "http://localhost:#{iip_url}/fcgi-bin/iipsrv.fcgi"
+  if iip_url =~ /^\d*$/
+    iip_url = ":#{iip_url}" if iip_url != ''
+    iip_url = "http://localhost#{iip_url}/fcgi-bin/iipsrv.fcgi"
   end
   puts "Setting IIP URL to: #{iip_url}"
 
@@ -179,31 +144,27 @@ if(read_yn('Do you want to use the IIP image server?'))
   puts
   print "Enter the path to store the IIP image files (return for default): "
   iip_directory = readl
-  
+
   vips_default_command = `which vips`.gsub("\n", '')
   print "Enter the path to the vips command (default: #{vips_default_command.inspect}): "
-  vips_command = readl((vips_default_command == '') ? true : vips_default_command)
-  talia_config.vips_command = vips_command
-  
+  vips_command = readl
+  talia_config.vips_command = vips_command == '' ? vips_default_command : vips_command
+
+
   convert_default_command = `which convert`.gsub("\n", '')
   print "Enter the path to the convert command (default: #{convert_default_command.inspect}): "
-  convert_command = readl((convert_default_command == '') ? true : convert_default_command)
-  talia_config.convert_command = convert_command
-  
+  convert_command = readl
+  talia_config.convert_command = convert_command == '' ? convert_default_command : convert_command
 end
 
 puts
 puts "Configuring the Sesame RDF store (change the config by hand for stores other than Sesame)"
 puts
 backends = %w(native memory rdbms http)
-print "Enter the sesame backend to use (#{backends.join('|')}) (default: native): "
-backend = readl
-backend = 'native' if(backend.blank?)
-while(!(backends.include?(backend)))
+print "Enter the sesame backend to use (#{backends.join('|')}): "
+while(!(backends.include?(backend = readl)))
   puts "#{backend} is not a valid backend"
   print "Enter the backend (#{backends.join('|')}: )"
-  backend = readl
-  backend = 'native' if(backend.blank?)
 end
 
 %w(production test development).each do |env|
@@ -231,7 +192,7 @@ when 'rdbms':
     print "Enter the password for the connection: "
     pass = readl
   end
-  %w(production test development).each do |env|
+  %(production test development).each do |env|
     rdf_config[env]['driver'] = driver
     rdf_config[env]['user'] = user
     rdf_config[env]['pass'] = pass
@@ -246,11 +207,12 @@ when 'http':
     print "Enter the password for the connection: "
     pass = readl
   end
-  %w(production test development).each do |env|
-    rdf_config[env]['user'] = user unless(user.blank?)
-    rdf_config[env]['pass'] = pass unless(pass.blank?)
+  %(production test development).each do |env|
+    rdf_config[env]['driver'] = driver
+    rdf_config[env]['user'] = user
+    rdf_config[env]['pass'] = pass
     print "Enter the URL for the '#{env}' environment: "
-    rdf_config[env]['url'] = readl(true, /\Ahttp:\/\/.+\//)
+    rdf_config[env]['url'] = readl(true)
   end
 else
   puts "ERROR: ILLEGAL BACKEND #{backend} - you shouldn't see this..."
@@ -260,8 +222,7 @@ if(iip_directory != '')
   talia_config.iip_root_directory_location = iip_directory
 end
 
-puts ''
-print "Enter the path to store general data files (return for default): "
+print "Enter the path to store the data files (return for default): "
 data_directory = readl
 
 if(data_directory != '')
@@ -305,13 +266,36 @@ end
 puts 
 puts "Now migrating the databases"
 %w(test development production).each do |env|
-  puts "Init database for #{env}"
   raise("Error migrating #{env}") unless(system("rake db:migrate RAILS_ENV=#{env}"))
   # raise("Error creating globalize tables in #{env}") unless(system("rake globalize:setup RAILS_ENV=#{env}"))
-  puts "Importing ontologies for #{env}"
-  system("rake talia_core:rdf_import files=ontologies/*.owl rdf_syntax=rdfxml RAILS_ENV=#{env}")
-  system("rake talia_core:owl_to_rdfs_update RAILS_ENV=#{env}")
   puts "Migrated #{env}"
+end
+
+puts "Importing ontologies"
+system('rake talia_core:rdf_import files=ontologies/*.owl rdf_syntax=rdfxml')
+system('rake talia_core:owl_to_rdfs_update')
+
+# print "Importing language files..."
+# Dir[File.join(rails_dir, 'languages', '*_glob.csv')].each do |lang_file|
+#   language = File.basename(lang_file)[0..1] # first two chars are the lang code
+#   print " #{language}"
+#   raise("Error importing language #{language}") unless(system("rake discovery:import_language language=#{language} file=#{File.expand_path(lang_file)}"))
+# end
+# puts " ... done."
+# puts
+
+puts "Customize the start page. The following custom start pages are available:"
+cust_pages = Dir[File.join(rails_dir, 'customization_files', 'start_page', '_start_page_*.html.erb')]
+cust_pages.each do |cust_page|
+  # Get the descriptive name
+  md = /_start_page_(.*)\.html\.erb/.match(cust_page)
+  puts "#{cust_pages.index(cust_page)} - #{md[1]}"
+end
+
+if(read_yn('Do you want to build a war file now?'))
+  puts
+  puts "Building the war file"
+  system("warble")
 end
 
 puts

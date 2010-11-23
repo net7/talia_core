@@ -42,7 +42,13 @@ module TLoad
     require_module("actionpack", "action_controller", "/../../../rails/actionpack", RAILS_GEM_VERSION)
     # This sets the automatic loader path for Talia, allowing the ActiveSupport
     # classes to automatically load classes from this directory.
-    load_paths = ActiveSupport::Dependencies.autoload_paths
+    # From 2.3.9(?) onward a new method autoload_path is "suggested" but 2.3.8 does not know it and gives error.
+    # This is to avoid the error:
+    unless ActiveSupport::Dependencies.try.autoload_paths.nil?
+      load_paths = ActiveSupport::Dependencies.autoload_paths
+    else
+      load_paths = ActiveSupport::Dependencies.load_paths
+    end      
     load_paths << TLoad.start_dir unless(load_paths.include?(TLoad.start_dir))
     # Add the other plugins to the path, if we have a Rails root
     if(defined?(RAILS_ROOT))
@@ -58,7 +64,14 @@ module TLoad
     root_dir = File.expand_path(File.join(File.dirname(__FILE__), '..'))
     Kernel.const_set(:TALIA_CODE_ROOT, root_dir) unless(defined?(TALIA_CODE_ROOT))
     lib_dir = File.join(root_dir, 'lib')
-    ActiveSupport::Dependencies.autoload_paths << lib_dir unless(ActiveSupport::Dependencies.autoload_paths.include?(lib_dir))
+    # From 2.3.9(?) onward a new method autoload_path is "suggested" but 2.3.8 does not know it and gives error.
+    # This is to avoid the error:
+    unless ActiveSupport::Dependencies.try.autoload_paths.nil?
+      load_paths = ActiveSupport::Dependencies.autoload_paths
+    else
+      load_paths = ActiveSupport::Dependencies.load_paths
+    end      
+    load_paths << lib_dir unless(load_paths.include?(lib_dir))
   end
   
   private

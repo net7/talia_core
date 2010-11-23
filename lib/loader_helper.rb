@@ -58,7 +58,7 @@ module TLoad
     root_dir = File.expand_path(File.join(File.dirname(__FILE__), '..'))
     Kernel.const_set(:TALIA_CODE_ROOT, root_dir) unless(defined?(TALIA_CODE_ROOT))
     lib_dir = File.join(root_dir, 'lib')
-    ActiveSupport::Dependencies.autoload_paths << lib_dir unless(ActiveSupport::Dependencies.load_paths.include?(lib_dir))
+    ActiveSupport::Dependencies.autoload_paths << lib_dir unless(ActiveSupport::Dependencies.autoload_paths.include?(lib_dir))
   end
   
   private

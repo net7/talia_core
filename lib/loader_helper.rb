@@ -44,9 +44,9 @@ module TLoad
     # classes to automatically load classes from this directory.
     # From 2.3.9(?) onward a new method autoload_path is "suggested" but 2.3.8 does not know it and gives error.
     # This is to avoid the error:
-    unless ActiveSupport::Dependencies.try.autoload_paths.nil?
+    begin
       load_paths = ActiveSupport::Dependencies.autoload_paths
-    else
+    rescue NoMethodError
       load_paths = ActiveSupport::Dependencies.load_paths
     end      
     load_paths << TLoad.start_dir unless(load_paths.include?(TLoad.start_dir))
@@ -66,9 +66,9 @@ module TLoad
     lib_dir = File.join(root_dir, 'lib')
     # From 2.3.9(?) onward a new method autoload_path is "suggested" but 2.3.8 does not know it and gives error.
     # This is to avoid the error:
-    unless ActiveSupport::Dependencies.try.autoload_paths.nil?
+    begin
       load_paths = ActiveSupport::Dependencies.autoload_paths
-    else
+    rescue NoMethodError
       load_paths = ActiveSupport::Dependencies.load_paths
     end      
     load_paths << lib_dir unless(load_paths.include?(lib_dir))

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Giacomi", "Roberto Tofani", "Luca Guidi", "Michele Nucci", "Daniel Hahn"]
-  s.date = %q{2010-11-22}
+  s.date = %q{2010-11-23}
   s.default_executable = %q{talia}
   s.description = %q{This is the core plugin for building a digital library with Talia/Rails.}
   s.email = %q{ghub@limitedcreativity.org}

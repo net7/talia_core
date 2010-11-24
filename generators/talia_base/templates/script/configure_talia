@@ -57,7 +57,7 @@ mysql_setup.host = 'localhost'
 mysql_setup.app_name = 'talia'
 mysql_setup.sock = sock_file
 
-print "Enter the mySQL root pasword: "
+print "Enter the mySQL root password: "
 root_pw = readl
 mysql_setup.root_credentials('root', root_pw)
 if(root_pw == '')
@@ -103,7 +103,7 @@ end
 
 print "Loading the configuration templates..."
 db_config = TaliaUtil::Configuration::DatabaseConfig.new(File.join(config_template_dir, 'database.yml.example'))
-rdf_config = TaliaUtil::Configuration::ConfigFile.new(File.join(config_template_dir, 'rdfstore.yml.example'))
+ rdf_config = TaliaUtil::Configuration::ConfigFile.new(File.join(config_template_dir, 'rdfstore.yml.example'))
 talia_config = TaliaUtil::Configuration::ConfigFile.new(File.join(config_template_dir, 'talia_core.yml.example'))
 talia_test_config = TaliaUtil::Configuration::ConfigFile.new(File.join(talia_dir, 'test', 'config', 'talia_core.yml_example')) unless(from_gem)
 puts " done."
@@ -112,7 +112,6 @@ puts
 print "Enter the sql driver you want to use (e.g. jdbcmysql, mysql, ...) [jdbcmysql]: "
 adapter = readl
 adapter = (adapter == '') ? 'jdbcmysql' : adapter
-
 
 db_config.set_adapter(adapter)
 db_config.set_credentials(rails_user, rails_pw)
@@ -207,7 +206,7 @@ when 'http':
     print "Enter the password for the connection: "
     pass = readl
   end
-  %(production test development).each do |env|
+  %w(production test development).each do |env|
     rdf_config[env]['driver'] = driver
     rdf_config[env]['user'] = user
     rdf_config[env]['pass'] = pass

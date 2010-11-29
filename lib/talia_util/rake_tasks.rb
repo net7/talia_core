@@ -31,6 +31,8 @@ namespace :talia_core do
     Util::flush_db
     Util::flush_rdf
     puts "Flushed data store"
+    Util::clear_data
+    puts "All files removed"    
   end
 
   # Init for the unit tests

@@ -313,7 +313,7 @@ module TaliaCore
     end
     
     def test_reload
-      collection = Collection.new('http://testvalue.org/relaod_testing_for_collection')
+      collection = Collection.new('http://testvalue.org/reload_testing_for_collection')
       item1 = ActiveSource.new("http://testvalue.org/new_reload_item1")
       item1.save!
       collection << item1
@@ -328,5 +328,33 @@ module TaliaCore
       assert_equal(2, collection.size)
     end
 
+    # Tests '==' for TaliaSource::Collection
+    def test_compare
+      collection1 = Collection.new('http://testvalue.org/compare_testing_for_collection1')
+      item1 = ActiveSource.new("http://testvalue.org/new_compare_item1")
+      item2 = ActiveSource.new("http://testvalue.org/new_compare_item2")
+      item1.save!
+      item2.save!
+      collection1 << item1
+      collection1 << item2
+      collection1.save!
+      collection2 = Collection.new('http://testvalue.org/compare_testing_for_collection2')
+      item3 = ActiveSource.new("http://testvalue.org/new_compare_item3")
+      item3.save!
+      item4 = ActiveSource.new("http://testvalue.org/new_compare_item4")
+      item4.save!
+      collection2 << item3
+      collection2 << item4
+      collection2.save!
+
+      # Two different collections should not be equal to each other.
+      assert_not_equal collection1, collection2
+      # A collection should be equal to itself.
+      assert_equal collection1, collection1
+
+      collection2 = Collection.find 'http://testvalue.org/compare_testing_for_collection1'
+      # A collection should be equal to itself even if loaded differently.
+      assert_equal collection1, collection2
+    end
   end
 end

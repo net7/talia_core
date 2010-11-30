@@ -58,13 +58,20 @@ module TaliaCore
     end
 
     # Many methods are directly forwarded to the underlying array
-    [:+, :<<, :==, :[]=, :at, :clear, :collect, :delete_at, :delete, :each, 
+    [:+, :<<, :[]=, :at, :clear, :collect, :delete_at, :delete, :each, 
     :each_index, :empty?, :include?, :index, :join, :last, :length, :size].each do |method|
       eval <<-EOM
         def #{method}(*args, &block)
           ordered_objects.send(:#{method}, *args, &block)
         end
       EOM
+    end
+
+    # This method is also forwarded to the underlaying array, but we must ensure that
+    # it works even if the parameter is a Collection or array-like object.
+    def ==(value)
+      return false unless value.respond_to? :to_ary
+      ordered_objects == value.to_ary
     end
     
     # This accessor can be used for both collection items and predicates.
@@ -163,6 +170,7 @@ module TaliaCore
 
       @ordered_objects
     end
+    alias :to_ary :ordered_objects
 
     # This will be called before saving and will completely rewrite the relations
     # that make up the ordered store, based on the internal array

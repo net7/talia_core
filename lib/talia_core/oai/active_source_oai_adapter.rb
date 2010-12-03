@@ -1,3 +1,7 @@
+# Copyright (c) 2010 Net7 SRL, <http://www.netseven.it/>
+# This Software is released under the terms of the MIT License
+# See LICENSE.TXT for the full text of the license.
+
 require 'oai'
 require_or_load File.join(File.dirname(__FILE__), 'active_source_oai_adapter', 'class_methods')
 

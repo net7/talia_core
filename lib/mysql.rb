@@ -1,3 +1,7 @@
+# Copyright (c) 2010 Net7 SRL, <http://www.netseven.it/>
+# This Software is released under the terms of the MIT License
+# See LICENSE.TXT for the full text of the license.
+
 # $Id: mysql.rb,v 1.24 2005/02/12 11:37:15 tommy Exp $
 #
 # Copyright (C) 2003-2005 TOMITA Masahiro

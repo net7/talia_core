@@ -49,6 +49,12 @@ module TaliaCore
 
     singular_property :title, N::DCNS.title
 
+    # BY RIK
+    # This disables LOD representation of a Collection.
+    def self.lod?
+      false
+    end
+
     def after_initialize
       @autosave_rdf = false
     end

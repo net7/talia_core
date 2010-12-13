@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (c) 2010 Net7 SRL, <http://www.netseven.it/>
 # This Software is released under the terms of the MIT License
 # See LICENSE.TXT for the full text of the license.
@@ -13,6 +14,13 @@ module TaliaCore
     # * autofill_uri logic
     # * Various utility method
     module ClassMethods
+      # BY RIK
+      # This method determines if a particular source class can have a LOD RDF
+      # representation. Default is that a class can. Overwrite and return false 
+      # if you want otherwise.
+      def lod?
+        true
+      end
 
       # Accessor for additional rdf types that will automatically be added to each
       # object of that Source class
@@ -366,11 +374,15 @@ module TaliaCore
       def defined_props
         @defined_props ||= {}
       end
+      # BY RIK
+      public :defined_props
 
       # Hash that contains all options that are defined for the properties
       def my_property_options
         @my_property_options ||= {}
       end
+      # BY RIK 
+      public :my_property_options
 
       # Sets the options for handling semantic relations/properties with the predicate
       # #property. The options are:
@@ -399,6 +411,8 @@ module TaliaCore
         my_property_options[property.to_s] ||= {}
         my_property_options[property.to_s].merge!(options)
       end
+      # BY RIK
+
 
       # This gets the URI string from the given value. This will just return
       # the value if it's a string. It will return the result of value.uri, if
@@ -419,7 +433,6 @@ module TaliaCore
         result = result.to_s if result
         result
       end
-
     end
   end
 end

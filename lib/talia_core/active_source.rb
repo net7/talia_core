@@ -287,6 +287,22 @@ module TaliaCore
       rels.collect { |rel| N::Predicate.new(rel.predicate_uri) }
     end
     
+    # BY RIK
+    # Like #inverse_predicates, except it is a little more informative: for each triple where this object's
+    # URI is the object, returns predicate and subject URIs and the subject type.
+    def inverse_triples
+      raise(ActiveRecord::RecordNotFound, "Cannot do this on unsaved record.") if(new_record?)
+      query  = "SELECT * FROM semantic_relations A INNER JOIN active_sources B ON A.subject_id=B.id "
+      query << "WHERE A.object_id='#{self.id}';"
+      SemanticRelation.find_by_sql(query).collect do |r|
+        {
+          :subject => r.subject.uri, 
+          :subject_class => r.subject.type.constantize,
+          :predicate => N::Predicate.new(r.predicate_uri)
+        }
+      end
+    end
+
     # True if the given attribute is a database attribute
     def db_attr?(attribute)
       ActiveSource.db_attr?(attribute)
@@ -330,11 +346,33 @@ module TaliaCore
       ActiveSourceParts::Xml::SourceBuilder.build_source(self)
     end
 
-    # Creates an RDF/XML resprentation of the source. The object is saved if
+    # Creates an RDF/XML reprentation of the source. The object is saved if
     # this is a new record.
     def to_rdf
       save! if(new_record?)
       ActiveSourceParts::Xml::RdfBuilder.build_source(self) 
+    end
+
+    # BY RIK
+    #
+    # TODO: how to automate "metadata"(4), especially license?
+    #
+    # Creates a LOD compatible RDF/XML representations of the source.
+    # Reference: http://www4.wiwiss.fu-berlin.de/bizer/pub/LinkedDataTutorial/#deref
+    # This method will build "backlinks" (2) automatically, and try to deduce
+    # "related descriptions" (3) by the model multi_property declarations.
+    #
+    # Extend this method wherever you need special data treatment. 
+    # If you don't want a particular Source type to have a lod representation,
+    # Overwrite the class #lod? method and make it return false. This also means that 
+    # URIs of sources of that type will never be shown in the backlinks section of another
+    # source's rdf.
+    #
+    # The object is saved if this is a new record.
+    def to_lod_rdf(check_predicates=true)
+      return '' unless self.class.lod?
+      save! if new_record?
+      ActiveSourceParts::Xml::LodRdfBuilder.build_source(self, check_predicates)
     end
 
     # Add the additional types to the source that were configured in the class.

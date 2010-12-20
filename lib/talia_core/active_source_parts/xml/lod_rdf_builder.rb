@@ -31,7 +31,8 @@ module TaliaCore
         def write_description(source)
           @builder.rdf :Description, 'rdf:about' => source.uri.to_s do
             source.direct_predicates.each do |predicate|
-              write_predicate(predicate, source[predicate], @check_predicates)
+              values = source[predicate].respond_to?(:each) ? source[predicate] : [source[predicate]]
+              write_predicate(predicate, values, @check_predicates)
             end
           end
         end

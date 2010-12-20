@@ -22,7 +22,8 @@ module TaliaCore
           @builder.rdf :Description, 'rdf:about' => source.uri.to_s do # Element describing this resource
             # loop through the predicates
             source.direct_predicates.each do |predicate|
-              write_predicate(predicate, source[predicate])
+              values = source[predicate].respond_to?(:each) ? source[predicate] : [source[predicate]]
+              write_predicate(predicate, values)
             end
           end
 
@@ -32,13 +33,11 @@ module TaliaCore
           source.inverse_predicates.each do |predicate|
             source.inverse[predicate].each do |inverse_subject|
               @builder.rdf :Description, 'rdf:about' => inverse_subject do
-                write_predicate(predicate, [source])
+                write_predicate(predicate, [[inverse_subject, predicate, source.to_uri]])
               end
             end
           end
         end
-
-
       end
     end
   end

@@ -2,12 +2,14 @@ module TaliaCore
   module Oai
     class SourceOaiFields < ActiveRecord::Base
 
+      # Need the type colum to do other things
+      set_inheritance_column :not_used
+
       def self.for(klass)
         configuration = {}
         configuration.merge! for_all.compact
         configuration.merge! for_klass(klass).compact
 
-        configuration = configuration.to_options!
         [:updated_at, :created_at, :klass, :id].each do |field|
           configuration.delete(field)
         end
@@ -66,12 +68,12 @@ module TaliaCore
 
         def self.for_all
           result = find_by_klass('_all')
-          result ? result.attributes : {}
+          result ? result.attributes.to_options : {}
         end
 
         def self.for_klass(klass)
           result = find_by_klass(klass) if klass != '_all'
-          result ? result.attributes : {}
+          result ? result.attributes.to_options : {}
         end
 
       #end private

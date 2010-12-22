@@ -4,18 +4,24 @@
 
 module TaliaCore
   module Oai
-    
     module OaiAdapterClassMethods
-      
+
+      # BY RIK 20101221
+      # Using SourceOaiFields class for DC fields
       def namespaced_field(namespace, *fields)
         fields.each do |field|
-          define_method(field.to_sym) do
-            @record.predicate(namespace, field.to_s).values
+          field = field.to_sym
+          define_method(field) do            
+            if namespace == :dcns
+              return '' unless @record.class.oai_fields[field]
+              @record[@record.class.oai_fields[field]] || ''
+            else
+              @record.predicate(namespace, field.to_s).values
+            end
           end
         end
       end
-      
+
     end
-    
   end
 end

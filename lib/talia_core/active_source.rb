@@ -34,7 +34,8 @@ module TaliaCore
     extend ActiveSourceParts::PredicateHandler::ClassMethods
     include ActiveSourceParts::RdfHandler
     extend TaliaUtil::Progressable # Progress for import methods on class
-    
+    extend ActiveSourceParts::OaiFields
+
     # Set the handlers for the callbacks defined in the other modules. The
     # order matters here.
     after_update :auto_update_rdf
@@ -350,7 +351,7 @@ module TaliaCore
     # this is a new record.
     def to_rdf
       save! if(new_record?)
-      ActiveSourceParts::Xml::RdfBuilder.build_source(self) 
+      ActiveSourceParts::Xml::RdfBuilder.build_source(self)
     end
 
     # BY RIK

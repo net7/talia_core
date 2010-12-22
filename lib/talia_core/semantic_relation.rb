@@ -22,6 +22,18 @@ module TaliaCore
     before_destroy :destroy_dependent_object
     before_save :check_for_object
 
+    # BY RIK 20101221
+    # Utility method.
+    # Returns a list of all predicates currently used in any relation.
+    def self.all_predicates
+      @all_predicates ||= begin
+        sql  = "SELECT DISTINCT predicate_uri FROM semantic_relations"
+        @all_predicates = self.find_by_sql(sql).collect do |predicate|
+          predicate.predicate_uri
+        end.compact
+      end
+    end
+
     # Returns true if the Relation matches the given predicate URI (and value,
     # if given). A relation matches if the predicate of this relation is
     # them same as the predicate given (which can be a String or a Source or

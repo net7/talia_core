@@ -23,7 +23,18 @@ module TaliaCore
         @timestamp_field = "created_at"
         @limit = 20
       end
-      
+
+      # BY RIK 20101221
+      # Filter the types present in active_sources table returning only the ones
+      # that correspond to classes that answer correctly to a #oai? question.
+      def oai_types
+        @oai_types ||= begin
+          @oai_types = TaliaCore::ActiveSource.types.collect do |type|
+            type.name if type.respond_to? :oai? and type.oai?
+          end.compact
+        end
+      end
+
       def earliest
         select_first_or_last('asc').send(timestamp_field)
       end
@@ -98,15 +109,20 @@ module TaliaCore
         sql
       end
       
+      # BY RIK 20101221
+      # Added condition: always only load records whose class allows for oai
+      # (see #oai_types).
       # build a sql conditions statement from an OAI options hash
       def sql_conditions(opts)
         from = Time.parse(opts[:from].to_s).utc
         untl = Time.parse(opts[:until].to_s).utc
-        sql = ["#{timestamp_field} >= ? AND #{timestamp_field} <= ?", from, untl]
-        
-        return sql
+        sql = "#{timestamp_field} >= ? AND #{timestamp_field} <= ?"
+        # Assume that if no class is enabled for oai, we actually want all of them
+        # (unlikely situation, easiest fix).
+        sql += " AND type IN ('#{oai_types.join('\',\'')}')" if oai_types
+        return [sql, from, untl]
       end
-      
+
       # Adds the given fragment to the sql string and adds the vars to the
       # variables that are present for the sql. The old_fragment ist an array
       # with an SQL string template and following variables, as used by 

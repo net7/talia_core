@@ -10,6 +10,10 @@ module TaliaCore
     # the data store it may be a sign of an inconsistent or not completely initialized store.
     class DummySource < Source
 
+      def self.oai?
+        false
+      end
+
       # Converts the current source into one with a "real" klass. Returns the new, converted sourc
       def self.make_real(klass)
         assit_kind_of(Class, klass)

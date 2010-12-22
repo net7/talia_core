@@ -5,7 +5,6 @@
 
 module TaliaCore
   module ActiveSourceParts
-
     # Class methods for ActiveSource:
     #
     # * Property definitions for source classes (singular_property, multi_property, manual_property)
@@ -14,6 +13,34 @@ module TaliaCore
     # * autofill_uri logic
     # * Various utility method
     module ClassMethods
+      # BY RIK 20101221
+      # Utility method.
+      # Return a list of classes corresponding to the distinct values of "type" 
+      # from active_source table in the database.
+      # Corresponds to all different classes currently present as active_sources.
+      def types
+        @types ||= begin
+          @types = self.find_by_sql("SELECT DISTINCT type FROM active_sources").collect do |type|
+            type.class
+          end.compact
+        end
+      end
+
+      # BY RIK 20101221
+      # Utility method.
+      # Returns a list of predicates currently used in any relation regarding this class 
+      # (or a child class of course).
+      def all_predicates
+        @all_predicates ||= begin
+          sql  = "SELECT DISTINCT B.predicate_uri "
+          sql += "FROM active_sources A INNER JOIN semantic_relations B "
+          sql += "ON A.id = B.subject_id WHERE A.type='#{self.name}'"
+          @all_predicates = self.find_by_sql(sql).collect do |predicate|
+            predicate.predicate_uri
+          end.compact
+        end
+      end
+
       # BY RIK
       # This method determines if a particular source class can have a LOD RDF
       # representation. Default is that a class can. Overwrite and return false 

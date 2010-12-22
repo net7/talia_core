@@ -16,16 +16,12 @@ module TaliaCore
       end
 
       def self.describe
-        result = self.new.attributes.to_options!
-        [:updated_at, :created_at, :klass, :id].each do |field|
-          result.delete(field)
-        end
-        result.keys
+        [:title, :description, :creator, :subject, :date, :type, :identifier]
       end
 
       def self.guess_fields
         @guess_fields ||= {
-          :title       => [N::DCNS.title, N::RDFS.title],
+          :title       => [N::DCNS.title, N::RDFS.label, N::FOAF.name],
           :description => [N::DCNS.description, N::RDFS.description],
           :creator     => [N::DCNS.creator],
           :subject     => [N::DCNS.subject],
@@ -33,6 +29,37 @@ module TaliaCore
           :type        => [N::DCNS.type],
           :identifier  => [N::DCNS.identifier]
         }
+      end
+
+      def self.guess_default_fields
+        guesses = {}
+        oai_fields = self.guess_fields
+        # Guessing works like this: for each oai field, for each candidate, 
+        # count how many times the candidate is used as a predicate by any
+        # source. The one with the higher count wins.
+        # Ties are won by the earlier candidate in the list.
+        oai_fields.each {|oai_field, candidates| guesses[oai_field] = self.guess_default_field candidates}
+        guesses
+      end
+
+      def self.guess_default_field candidates
+        return candidates.first.to_s if candidates.size == 1
+        winner = nil
+        winner_score = 0
+        candidates.each do |candidate|
+          sql  = "SELECT COUNT(B.predicate_uri) AS count "
+          sql += "FROM active_sources A INNER JOIN semantic_relations B "
+          sql += "ON A.id = B.subject_id "
+          sql += "WHERE B.predicate_uri='#{candidate}';"
+
+          score = self.find_by_sql(sql).first.attributes['count']
+
+          if winner.nil? or score > winner_score
+            winner = candidate.to_s
+            winner_score = score
+          end
+        end
+        winner
       end
 
       private

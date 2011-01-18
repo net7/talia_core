@@ -19,13 +19,20 @@ module TaliaCore
 
         # Builds the RDF for a source. 
         def write_source(source)
-          # TODO: metadata should be added here.
+          write_metadata source
           # The description.
           write_description source
           # Backlinks
           write_backlinks source
           # Related descriptions
           write_related_descriptions source
+        end
+
+        def write_metadata(source)
+          # TODO: check if following rdfs:isDefinedBy is correct to find the information resource.
+          if metadata_source = source[N::RDFS.isDefinedBy].first
+            write_description metadata_source
+          end
         end
 
         def write_description(source)

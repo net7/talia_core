@@ -11,7 +11,7 @@ module TaliaCore
       end
 
       def oai_fields
-        @oai_fields || load_oai_fields
+        @oai_fields ||= load_oai_fields
       end
 
       def guess_oai_fields

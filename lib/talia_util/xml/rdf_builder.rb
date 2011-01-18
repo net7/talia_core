@@ -222,7 +222,11 @@ module TaliaUtil
       # will raise an error if the predicate cannot be represented as "namespace:name"
       def write_single_predicate(predicate, value, check_predicate = true)
         is_property = value.respond_to?(:uri)
-        value_properties = is_property ? { 'value' => value } : extract_values(value.to_s)
+        begin # FIXME
+          value_properties = is_property ? { 'value' => value } : extract_values(value)
+        rescue
+          value_properties = is_property ? { 'value' => value } : extract_values(value.to_s)
+        end
         value = value_properties.delete('value')
         predicate_name = predicate.to_name_s
         raise(ArgumentError, "Cannot turn predicate #{predicate} into namespace name") if(check_predicate && (predicate == predicate_name))
@@ -235,15 +239,14 @@ module TaliaUtil
         end
       end
 
-      # Splits up the value, extracting encoded language codes and RDF data types. The 
+      # Splits up the value, extracting encoded language codes and RDF data types. The
       # result will be returned as a hash, with the "true" value being "value"
       def extract_values(value)
-        prop_string = TaliaCore::PropertyString.parse(value)
+        prop_string = (value.is_a? TaliaCore::PropertyString) ? value : TaliaCore::PropertyString.parse(value)
         result = {}
         result['value'] = prop_string
         result['rdf:datatype'] = prop_string.type if(prop_string.type)
         result['xml:lang'] = prop_string.lang if(prop_string.lang)
-
         result
       end
 

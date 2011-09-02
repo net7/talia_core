@@ -5,7 +5,7 @@
 require 'tempfile'
 
 module Swicky
-  
+
   # Represents a SWicky Notebook in the RDF store. This wraps the queries to handle 
   # the SWicky annotations and user notebooks.
   #
@@ -14,15 +14,15 @@ module Swicky
   # All parameters for this class that end up in RDF queries will be sanitized 
   # automatically
   class Notebook
-    
+
     include TaliaUtil::UriHelper
     include ActiveRDF::ResourceLike
     extend TaliaUtil::UriHelper
-    
+
     attr_reader :user_url, :url
-    
+
     alias :uri :url
-    
+
     def initialize(user_name_or_uri, notebook_name = nil)
       if(notebook_name)
         @user_url = self.class.user_url(user_name_or_uri)
@@ -35,17 +35,17 @@ module Swicky
     def data
       @data ||= ActiveRDF::Query.new(N::URI).select(:s, :p, :o).distinct.where(:s, :p, :o, url).execute
     end
-    
+
     def xml_data
       TaliaUtil::Xml::RdfBuilder.xml_string_for_triples(data)
     end
-    
+
     def delete
       ActiveRDF::FederationManager.delete(nil, nil, nil, url)
       ActiveRDF::FederationManager.delete(user_url, N::TALIA.hasSwickyNotebook, url)
       ActiveRDF::FederationManager.delete(url, N::RDF.type, N::TALIA.SwickyNotebook)
     end
-    
+
     def load(xml_file)
       @data = nil
       begin
@@ -57,7 +57,7 @@ module Swicky
       ActiveRDF::FederationManager.add(user_url, N::TALIA.hasSwickyNotebook, url)
       ActiveRDF::FederationManager.add(url, N::RDF.type, N::TALIA.SwickyNotebook)
     end
-    
+
     def create(xml_data)
       # Make a temp file for the data
       tmpfile = Tempfile.new('xml_notebook')
@@ -68,21 +68,21 @@ module Swicky
       # remove the temp file
       tmpfile.unlink
     end
-    
+
     def exist?
       ActiveRDF::Query.new(N::URI).select(:user).where(:user, N::TALIA.hasSwickyNotebook, url).execute.size > 0
     end
-    
+
     def to_uri
       N::URI.new(uri)
     end
-    
+
     def ==(value)
       (value.class == self.class) && (value.uri == self.uri)
     end
-    
+
     class << self
-      
+
       # Find all notebooks for the given user
       def find_all(user_name = nil)
         nb_query = ActiveRDF::Query.new(Notebook).select(:notebook).distinct
@@ -90,17 +90,17 @@ module Swicky
         nb_query.where(user_url(user_name), N::TALIA.hasSwickyNotebook, :notebook) if(user_name)
         nb_query.execute
       end
-      
+
       # Construct the "user" url for the given user name
       def user_url(user_name)
         sanitize_sparql(N::LOCAL + "users/#{user_name}").to_uri
       end
-      
+
       # Construct the URL for a notebook from the user and notebook name
       def notebook_url(user_name, notebook_name)
         sanitize_sparql(user_url(user_name) + '/swicky_notebooks/' + notebook_name).to_uri
       end
-      
+
       # Get the "coordinates" (an xpointer in the case of HTML fragments) for all the
       # fragments that are part of the element with the given url.
       def coordinates_for(url)
@@ -185,7 +185,8 @@ module Swicky
         result_triples.each do |trip|
           additional_triples += ActiveRDF::Query.new(N::URI).select(:predicate, :object).distinct.where(trip[1].to_uri, :predicate, :object).execute.collect { |result| [trip[1].to_uri] + result }
           if(trip.last.respond_to?(:uri))
-            additional_triples += ActiveRDF::Query.new(N::URI).select(:predicate, :object).distinct.where(trip.last, :predicate, :object).execute.collect { |result| [trip.last] + result }
+            temp_uri = N::URI.new sanitize_sparql(trip.last.uri)
+            additional_triples += ActiveRDF::Query.new(N::URI).select(:predicate, :object).distinct.where(temp_uri, :predicate, :object).execute.collect { |result| [trip.last] + result }
           end
         end
         # Return all results

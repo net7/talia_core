@@ -55,7 +55,8 @@ module TaliaUtil
       def create_thumb(source, destination)
         thumbnail_size = "#{thumb_options['width']}x#{thumb_options['height']}"
         thumbnail_force = %w(true yes).include?(thumb_options['force']) ? "-background transparent -gravity center -extent #{thumbnail_size}" : ''
-        thumbnail_command = "#{convert_command} \"#{source}\" -quality 85 -thumbnail \"#{thumbnail_size}>\" #{thumbnail_force} \"#{destination}\""
+        thumbnail_command = "#{convert_command} \"#{source}\" -quality 85 -thumbnail \"#{thumbnail_size}\" #{thumbnail_force} \"#{destination}\""
+
         execute_command(thumbnail_command, destination)
       end
 

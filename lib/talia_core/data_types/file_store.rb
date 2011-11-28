@@ -108,7 +108,7 @@ module TaliaCore
       # Callback for writing the data from create_from_data or create_from_file. If there is
       # a problem saving this file, only an internal assertion is thrown so that it won't crash
       # production environments.
-      def write_file_after_save 
+      def write_file_after_save(file_data_to_write=nil)
         # check if there are data to write
         return unless(@file_data_to_write)
     

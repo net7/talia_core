@@ -97,8 +97,8 @@ module TaliaCore
       # * Otherwise it will take the original file and pass it through the TaliaUtil::ImageConversions
       #   to create the thumbnail and pyramidal image.
       # * Any temporary files created in the process are cleaned up afterwards
-      def write_file_after_save
-        return unless(@file_data_to_write)
+      def write_file_after_save(file_data_to_write=nil)
+        return unless(@file_data_to_write || (@file_data_to_write=file_data_to_write))
         
         # Check if we have the converted images already. In this case we write
         # them to the appropriate directories directly and call the super method
@@ -117,7 +117,7 @@ module TaliaCore
             # Create the thumbnail at the temporary location
             TaliaUtil::ImageConversions::create_thumb(original_file_path, destination_thumbnail_file_path)
             # Create the pyramidal image from the original
-            create_pyramid(original_file_path)
+            create_pyramid(original_file_path) if orig_is_temp
         
             # Run the super implementation for the thumbnail, by using the temporary thumb file as the "data"
             @file_data_to_write = DataPath.new(destination_thumbnail_file_path)
